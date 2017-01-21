@@ -11,6 +11,7 @@ class Object
     protected:
 
     private:
+
 };
 
 #endif // OBJECT_H

@@ -9,11 +9,16 @@ GraphicsManager::~GraphicsManager()
 {
     //dtor
 }
+Texture *GraphicsManager::getTexture(const string &path)
+{
+    return getTexture(path.c_str());
+}
 
-Texture *GraphicsManager::getTexture(string path)
+Texture *GraphicsManager::getTexture(const char *path)
 {
     Texture *texture;
-    /* sprawdza czy jest, jesli nie to dodaje, jesli nie ma sciezki dodaje BLANK (wygenerowana) czy cos w tym stylu
+    texture = 0;
+    /* sprawdza czy jest, jesli nie to dodaje, jesli nie ma takiego pliku zwraca BLANK (wygenerowana) czy cos w tym stylu
 
 
 

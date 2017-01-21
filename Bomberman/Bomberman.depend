@@ -989,3 +989,55 @@
 
 1484939250 c:\users\user\desktop\sdl_test\bomberman\include\texture.h
 
+1484941271 source:c:\users\user\desktop\bomberman\bomberman\src\graphicsmanager.cpp
+	"GraphicsManager.h"
+
+1484994421 c:\users\user\desktop\bomberman\bomberman\include\graphicsmanager.h
+	<unordered_map>
+	"Texture.h"
+	"AppWindow.h"
+
+1484941271 c:\users\user\desktop\bomberman\bomberman\include\texture.h
+
+1484941271 source:c:\users\user\desktop\bomberman\bomberman\src\inputmanager.cpp
+	"InputManager.h"
+
+1484941271 c:\users\user\desktop\bomberman\bomberman\include\inputmanager.h
+
+1484941271 source:c:\users\user\desktop\bomberman\bomberman\src\object.cpp
+	"Object.h"
+
+1484941271 c:\users\user\desktop\bomberman\bomberman\include\object.h
+
+1484941271 source:c:\users\user\desktop\bomberman\bomberman\src\texture.cpp
+	"Texture.h"
+
+1484992076 source:c:\users\user\desktop\bomberman\bomberman\main.cpp
+	"GameInstance.h"
+
+1484994428 c:\users\user\desktop\bomberman\bomberman\include\gameinstance.h
+	"GraphicsManager.h"
+	"InputManager.h"
+	"LogicManager.h"
+
+1484992171 source:c:\users\user\desktop\bomberman\bomberman\src\gameinstance.cpp
+	"GameInstance.h"
+	<SDL.h>
+	<stdio.h>
+
+1484941271 source:c:\users\user\desktop\bomberman\bomberman\src\worldobject.cpp
+	"WorldObject.h"
+
+1484941271 c:\users\user\desktop\bomberman\bomberman\include\worldobject.h
+	<Object.h>
+
+1484993555 c:\users\user\desktop\bomberman\bomberman\include\appwindow.h
+
+1484993295 c:\users\user\desktop\bomberman\bomberman\include\logicmanager.h
+
+1484993555 source:c:\users\user\desktop\bomberman\bomberman\src\appwindow.cpp
+	"AppWindow.h"
+
+1484993295 source:c:\users\user\desktop\bomberman\bomberman\src\logicmanager.cpp
+	"LogicManager.h"
+
