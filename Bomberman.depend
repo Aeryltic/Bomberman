@@ -1041,3 +1041,80 @@
 1484993295 source:c:\users\user\desktop\bomberman\bomberman\src\logicmanager.cpp
 	"LogicManager.h"
 
+1484992076 source:c:\users\user\desktop\bomberman\main.cpp
+	"GameInstance.h"
+
+1485005453 c:\users\user\desktop\bomberman\include\gameinstance.h
+	"DisplayManager.h"
+	"InputManager.h"
+	"LogicManager.h"
+	"ObjectContainer.h"
+
+1485005453 c:\users\user\desktop\bomberman\include\graphicsmanager.h
+	<unordered_map>
+	"Texture.h"
+	"AppWindow.h"
+
+1484941271 c:\users\user\desktop\bomberman\include\texture.h
+
+1485003258 c:\users\user\desktop\bomberman\include\appwindow.h
+	<memory>
+	"SDL.h"
+
+1485005498 c:\users\user\desktop\bomberman\include\inputmanager.h
+
+1485007355 c:\users\user\desktop\bomberman\include\logicmanager.h
+	"ObjectContainer.h"
+
+1485003222 source:c:\users\user\desktop\bomberman\src\appwindow.cpp
+	"AppWindow.h"
+
+1485002123 source:c:\users\user\desktop\bomberman\src\graphicsmanager.cpp
+	"GraphicsManager.h"
+
+1485005554 source:c:\users\user\desktop\bomberman\src\inputmanager.cpp
+	"InputManager.h"
+
+1485007933 source:c:\users\user\desktop\bomberman\src\logicmanager.cpp
+	"LogicManager.h"
+
+1484941271 source:c:\users\user\desktop\bomberman\src\object.cpp
+	"Object.h"
+
+1485007245 c:\users\user\desktop\bomberman\include\object.h
+
+1484941271 source:c:\users\user\desktop\bomberman\src\texture.cpp
+	"Texture.h"
+
+1485007927 c:\users\user\desktop\bomberman\include\objectcontainer.h
+	<deque>
+	"Object.h"
+
+1485007245 source:c:\users\user\desktop\bomberman\src\abstractobject.cpp
+	"AbstractObject.h"
+
+1485007245 c:\users\user\desktop\bomberman\include\abstractobject.h
+	<Object.h>
+
+1485007338 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
+	"GameInstance.h"
+	<SDL.h>
+	<stdio.h>
+
+1484995826 source:c:\users\user\desktop\bomberman\src\objectcontainer.cpp
+	"ObjectContainer.h"
+
+1484996323 source:c:\users\user\desktop\bomberman\src\realobject.cpp
+	"RealObject.h"
+
+1485007245 c:\users\user\desktop\bomberman\include\realobject.h
+	<Object.h>
+
+1485006013 c:\users\user\desktop\bomberman\include\displaymanager.h
+	"AppWindow.h"
+	"GraphicsManager.h"
+	"ObjectContainer.h"
+
+1485005996 source:c:\users\user\desktop\bomberman\src\displaymanager.cpp
+	"DisplayManager.h"
+

@@ -9,3 +9,7 @@ InputManager::~InputManager()
 {
     //dtor
 }
+void InputManager::update()
+{
+
+}

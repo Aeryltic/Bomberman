@@ -3,31 +3,77 @@
 #include <SDL.h>
 #include <stdio.h>
 
-const int WINDOW_WIDTH = 640;
-const int WINDOW_HEIGHT = 480;
-
 GameInstance::GameInstance()
 {
-    //ctor
-    /** INITIALIZE */
+    /** INITIALIZE */ /* maybe not */
+
 }
 
 GameInstance::~GameInstance()
 {
-    //dtor
     /** DESTROY EVERYTHING */
+    SDL_Quit();
 }
 
-void GameInstance::run()
+int GameInstance::run()
 {
-    	//The window we'll be rendering to
+    if(init() < 0)
+    {
+        return -1;
+    }
+    DisplayManager      _displayManager;
+    InputManager        _inputManager;
+    LogicManager        _logicManager;
+    ObjectContainer     _objectContainer;
+    /// SCHEMAT
+    /*  double previous = getCurrentTime();
+        double lag = 0.0;
+        while (true)
+        {
+            double current = getCurrentTime();
+            double elapsed = current - previous;
+            previous = current;
+            lag += elapsed;
+
+            processInput();
+
+            while (lag >= MS_PER_UPDATE)
+            {
+                update();
+                lag -= MS_PER_UPDATE;
+            }
+
+            render();
+        }
+        */
+    double previous = SDL_GetTicks();
+    double lag = 0.0;
+    while(true)
+    {
+        double current = SDL_GetTicks();
+        double elapsed = current - previous;
+        previous = current;
+        lag += elapsed;
+
+        _inputManager.update(/* nie wiem co tu powinno byc */);
+        while (lag >= TIMESTEP)
+        {
+            _logicManager.update(_objectContainer, TIMESTEP);
+            lag -= TIMESTEP;
+        }
+
+        _displayManager.render(_objectContainer, lag / TIMESTEP);
+    }
+    SDL_Delay( 2000 );
+    /*
+    //The window we'll be rendering to
 	SDL_Window* window = NULL;
 
 	//The surface contained by the window
 	SDL_Surface* screenSurface = NULL;
 
-	//Initialize SDL
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+
+	if(SDL_Init( SDL_INIT_VIDEO ) < 0)
 	{
 		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
 	}
@@ -42,13 +88,13 @@ void GameInstance::run()
 		else
 		{
 			//Get window surface
-			screenSurface = SDL_GetWindowSurface( window );
+			screenSurface = SDL_GetWindowSurface(window);
 
 			//Fill the surface white
-			SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xAA, 0xFF, 0xFF ) );
+			SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xAA, 0xFF, 0xFF));
 
 			//Update the surface
-			SDL_UpdateWindowSurface( window );
+			SDL_UpdateWindowSurface(window);
 
 			//Wait two seconds
 			SDL_Delay( 2000 );
@@ -58,6 +104,35 @@ void GameInstance::run()
 	//Destroy window
 	SDL_DestroyWindow( window );
 
-	//Quit SDL subsystems
 	SDL_Quit();
+	*/
+}
+
+int GameInstance::init()
+{
+
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+	{
+		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+		return -1;
+	}
+	/*
+    if(_graphicsManager.init() < 0)
+    {
+        return -1;
+    }
+    if(_inputManager.init() < 0)
+    {
+        return -1;
+    }
+    if(_logicManager.init() < 0)
+    {
+        return -1;
+    }
+    if(_objectContainer.init() < 0)
+    {
+        return -1;
+    }
+    */
+    return 0;
 }
