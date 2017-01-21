@@ -3,7 +3,7 @@
 
 #include "AppWindow.h"
 #include "GraphicsManager.h"
-#include "ObjectContainer.h"
+#include "ObjectInstanceContainer.h"
 
 const int WINDOW_WIDTH = 640;
 const int WINDOW_HEIGHT = 480;
@@ -13,7 +13,7 @@ class DisplayManager
     public:
         DisplayManager();
         virtual ~DisplayManager();
-        void render(const ObjectContainer &object, double interpolation);
+        void render(const ObjectInstanceContainer &instance, double interpolation);
     protected:
 
     private:

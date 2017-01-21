@@ -51,9 +51,9 @@
 		<Unit filename="include/Object.h" />
 		<Unit filename="include/ObjectContainer.h" />
 		<Unit filename="include/ObjectInstance.h" />
+		<Unit filename="include/ObjectInstanceContainer.h" />
 		<Unit filename="include/RealObject.h" />
 		<Unit filename="include/Texture.h" />
-		<Unit filename="include/WorldObject.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/AbstractObject.cpp" />
 		<Unit filename="src/AppWindow.cpp" />
@@ -65,6 +65,7 @@
 		<Unit filename="src/Object.cpp" />
 		<Unit filename="src/ObjectContainer.cpp" />
 		<Unit filename="src/ObjectInstance.cpp" />
+		<Unit filename="src/ObjectInstanceContainer.cpp" />
 		<Unit filename="src/RealObject.cpp" />
 		<Unit filename="src/Texture.cpp" />
 		<Extensions>

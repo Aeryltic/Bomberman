@@ -21,12 +21,15 @@ int GameInstance::run()
     {
         return -1;
     }
-    DisplayManager      _displayManager;
-    InputManager        _inputManager;
-    LogicManager        _logicManager;
-    ObjectContainer     _objectContainer;
-    /// SCHEMAT
-    /*  double previous = getCurrentTime();
+    DisplayManager          _displayManager;
+    InputManager            _inputManager;
+    LogicManager            _logicManager;
+    ObjectContainer         _objectContainer;
+    ObjectInstanceContainer _objectInstanceContainer;
+    // load objects => load textures
+    // load instances
+    /** SCHEMAT
+        double previous = getCurrentTime();
         double lag = 0.0;
         while (true)
         {
@@ -55,14 +58,14 @@ int GameInstance::run()
         previous = current;
         lag += elapsed;
 
-        _inputManager.update(/* nie wiem co tu powinno byc */);
+        _inputManager.update(/* narazie nic tu nie bedzie */);
         while (lag >= TIMESTEP)
         {
             _logicManager.update(_objectContainer, TIMESTEP);
             lag -= TIMESTEP;
         }
 
-        _displayManager.render(_objectContainer, lag / TIMESTEP);
+        _displayManager.render(_objectInstanceContainer, lag / TIMESTEP);
     }
     SDL_Delay( 2000 );
     /*

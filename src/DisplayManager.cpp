@@ -10,7 +10,7 @@ DisplayManager::~DisplayManager()
     //dtor
 }
 
-void DisplayManager::render(const ObjectContainer &object, double interpolation)
+void DisplayManager::render(const ObjectInstanceContainer &instance, double interpolation)
 {
-
+   // for(auto ins : )
 }

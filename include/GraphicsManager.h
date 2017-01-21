@@ -15,7 +15,9 @@ class GraphicsManager
         virtual ~GraphicsManager();
         Texture *getTexture(const string &path);
         Texture *getTexture(const char *path);
-
+        int loadTextures(const char *reference_file_path);
+        void createBlankTexture();
+        int loadTexture(const char *tex_path);
     protected:
 
     private:
