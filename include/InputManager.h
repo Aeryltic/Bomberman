@@ -7,7 +7,7 @@ class InputManager
     public:
         InputManager();
         virtual ~InputManager();
-
+        void update();
     protected:
 
     private:

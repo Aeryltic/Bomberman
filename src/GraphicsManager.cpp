@@ -8,6 +8,7 @@ GraphicsManager::GraphicsManager()
 GraphicsManager::~GraphicsManager()
 {
     //dtor
+    textures.clear();
 }
 Texture *GraphicsManager::getTexture(const string &path)
 {

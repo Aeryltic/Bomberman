@@ -1,7 +1,7 @@
 #ifndef GRAPHICSMANAGER_H
 #define GRAPHICSMANAGER_H
 
-/* posiada i zarzadza ekranem, przechowuje tekstury, wyswietla */
+/* przechowuje i zarzadza teksturami */
 
 #include <unordered_map>
 #include "Texture.h"
@@ -15,11 +15,12 @@ class GraphicsManager
         virtual ~GraphicsManager();
         Texture *getTexture(const string &path);
         Texture *getTexture(const char *path);
+
     protected:
 
     private:
-        AppWindow window;
-        /* pierwsz¹ wygenerowaæ jako BLANK */
+
+        /* pierwsza wygenerowac jako BLANK */
         unordered_map <string,Texture> textures;
 };
 
