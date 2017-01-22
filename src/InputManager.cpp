@@ -1,8 +1,8 @@
 #include "InputManager.h"
-
+#include <cstdio>
 InputManager::InputManager()
 {
-    //SDL_EnableUNICODE(1);
+    //SDL_Ena
 }
 
 InputManager::~InputManager()
@@ -17,8 +17,25 @@ void InputManager::update(StatusFlags &buttonStatus)
         {
             case SDL_KEYDOWN:
             {
+                _key[_event.key.keysym.sym] = KEY_PRESSED;
+                printf("pressed: %s\n",SDL_GetKeyName(_event.key.keysym.sym));
+                break;
+            }
+            case SDL_KEYUP:
+            {
+                _key[_event.key.keysym.sym] = KEY_RELEASED;
+                printf("released: %s\n",SDL_GetKeyName(_event.key.keysym.sym));
+                break;
+            }
+        }
+        /* // obsolete
+        switch(_event.type)
+        {
+            case SDL_KEYDOWN:
+            {
                 switch(_event.key.keysym.sym)
                 {
+
                     case SDLK_LEFT:
                         buttonStatus._left = 1;
                         break;
@@ -40,6 +57,8 @@ void InputManager::update(StatusFlags &buttonStatus)
             }
             case SDL_KEYUP:
             {
+                switch(_event.key.keysym.sym)
+                {
                     case SDLK_LEFT:
                         buttonStatus._left = 0;
                         break;
@@ -57,7 +76,14 @@ void InputManager::update(StatusFlags &buttonStatus)
                         break;
                     default:
                         break;
+                }
             }
         }
+        */
     }
+}
+
+KeyStatus InputManager::keyStatus(SDL_Keycode keycode)
+{
+    return _key[keycode];
 }

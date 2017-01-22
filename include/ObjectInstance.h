@@ -20,6 +20,7 @@ class ObjectInstance
                                     /* jakis mechanizm zeby sie wzajemnie nie oparentowali */
         double _posX, _posY, _vX, _vY; /* trzeba to przerobic na jakies wektorki zeby bylo ladnie */
                                     /* _vX/_vY w pikselach na sekunde */
+        // Controller *_controller; // do kontroli, ale w jakim zakresie?
 };
 
 #endif // OBJECTINSTANCE_H

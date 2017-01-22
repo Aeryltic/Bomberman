@@ -1,0 +1,11 @@
+#ifndef ENUMERATIONS_H_INCLUDED
+#define ENUMERATIONS_H_INCLUDED
+
+enum KeyStatus
+{
+    KEY_NONE = 0,
+    KEY_PRESSED = 1,
+    KEY_RELEASED = 2
+};
+
+#endif // ENUMERATIONS_H_INCLUDED

@@ -34,32 +34,13 @@ int GameInstance::run()
     ObjectInstanceContainer _objectInstanceContainer;
     // load objects => load textures
     // load instances
-    /** SCHEMAT
-        double previous = getCurrentTime();
-        double lag = 0.0;
-        while (true)
-        {
-            double current = getCurrentTime();
-            double elapsed = current - previous;
-            previous = current;
-            lag += elapsed;
 
-            processInput();
-
-            while (lag >= MS_PER_UPDATE)
-            {
-                update();
-                lag -= MS_PER_UPDATE;
-            }
-
-            render();
-        }
-        */
     StatusFlags _buttonStatus;
     bool quit = false;
     double previous = SDL_GetTicks();
     double lag = 0.0;
-    while(!_buttonStatus._escape)
+   // SDL_Scancode quit_key = SDL_SCANCODE_ESCAPE;
+    while(_inputManager.keyStatus(SDLK_ESCAPE) != KEY_PRESSED)
     {
         double current = SDL_GetTicks();
         double elapsed = current - previous;

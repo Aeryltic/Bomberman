@@ -3,17 +3,24 @@
 
 #include <SDL.h>
 #include "Structures.h"
+#include "Enumerations.h"
+#include "Constants.h"
+#include <unordered_map>
+
 using namespace std;
+
 class InputManager
 {
     public:
         InputManager();
         virtual ~InputManager();
         void update(StatusFlags &buttonStatus);
+        KeyStatus keyStatus(SDL_Keycode keycode);
     protected:
 
     private:
         SDL_Event _event;
+        unordered_map <SDL_Keycode,KeyStatus> _key;
 };
 
 #endif // INPUTMANAGER_H

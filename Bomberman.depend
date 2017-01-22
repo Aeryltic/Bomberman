@@ -1065,9 +1065,12 @@
 	<memory>
 	"SDL.h"
 
-1485102539 c:\users\user\desktop\bomberman\include\inputmanager.h
+1485125421 c:\users\user\desktop\bomberman\include\inputmanager.h
 	<SDL.h>
 	"Structures.h"
+	"Enumerations.h"
+	"Constants.h"
+	<unordered_map>
 
 1485101566 c:\users\user\desktop\bomberman\include\logicmanager.h
 	"ObjectContainer.h"
@@ -1080,8 +1083,9 @@
 	"GraphicsManager.h"
 	<fstream>
 
-1485102788 source:c:\users\user\desktop\bomberman\src\inputmanager.cpp
+1485125554 source:c:\users\user\desktop\bomberman\src\inputmanager.cpp
 	"InputManager.h"
+	<cstdio>
 
 1485101565 source:c:\users\user\desktop\bomberman\src\logicmanager.cpp
 	"LogicManager.h"
@@ -1105,7 +1109,7 @@
 1485096311 c:\users\user\desktop\bomberman\include\abstractobject.h
 	<Object.h>
 
-1485102808 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
+1485125400 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
 	"GameInstance.h"
 	<SDL.h>
 	<stdio.h>
@@ -1132,7 +1136,7 @@
 1485099505 source:c:\users\user\desktop\bomberman\src\objectinstance.cpp
 	"ObjectInstance.h"
 
-1485099516 c:\users\user\desktop\bomberman\include\objectinstance.h
+1485119810 c:\users\user\desktop\bomberman\include\objectinstance.h
 	"Object.h"
 
 1485099529 c:\users\user\desktop\bomberman\include\objectinstancecontainer.h
@@ -1149,4 +1153,14 @@
 	"ObjectInstanceContainer.h"
 
 1485102501 c:\users\user\desktop\bomberman\include\structures.h
+
+1485124541 c:\users\user\desktop\bomberman\include\enumerations.h
+
+1485124197 c:\users\user\desktop\bomberman\include\constants.h
+	<SDL.h>
+
+1485121319 source:c:\users\user\desktop\bomberman\src\keyboardstatus.cpp
+	"KeyboardStatus.h"
+
+1485123820 c:\users\user\desktop\bomberman\include\keyboardstatus.h
 

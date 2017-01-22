@@ -5,11 +5,12 @@
 		<Option title="Bomberman" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
+		<Option virtualFolders="GraphicsModule\;ObjectInstances\;ObjectInstances\src\;ObjectInstances\include\;GraphicsModule\include\;GraphicsModule\src\;ObjectContainers\src\;ObjectContainers\include\;BaseObjects\src\;BaseObjects\include\;Other\;InputModule\;InputModule\src\;InputModule\include\;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/Bomberman" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
-				<Option type="0" />
+				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-Wall" />
@@ -41,34 +42,90 @@
 			<Add option="-lmingw32 -lSDL2main -lSDL2 -lSDL2_image" />
 			<Add directory="C:/Dev_Libs/x86_64-w64-mingw32/lib" />
 		</Linker>
-		<Unit filename="include/AbstractObject.h" />
-		<Unit filename="include/AppWindow.h" />
-		<Unit filename="include/DisplayManager.h" />
+		<Unit filename="include/AbstractObject.h">
+			<Option virtualFolder="BaseObjects/include/" />
+		</Unit>
+		<Unit filename="include/AppWindow.h">
+			<Option virtualFolder="GraphicsModule/include/" />
+		</Unit>
+		<Unit filename="include/Constants.h" />
+		<Unit filename="include/DisplayManager.h">
+			<Option virtualFolder="GraphicsModule/include/" />
+		</Unit>
+		<Unit filename="include/Enumerations.h">
+			<Option virtualFolder="Other/" />
+		</Unit>
 		<Unit filename="include/GameInstance.h" />
-		<Unit filename="include/GraphicsManager.h" />
-		<Unit filename="include/InputManager.h" />
+		<Unit filename="include/GraphicsManager.h">
+			<Option virtualFolder="GraphicsModule/include/" />
+		</Unit>
+		<Unit filename="include/InputManager.h">
+			<Option virtualFolder="InputModule/include/" />
+		</Unit>
+		<Unit filename="include/KeyboardStatus.h">
+			<Option virtualFolder="InputModule/include/" />
+		</Unit>
 		<Unit filename="include/LogicManager.h" />
-		<Unit filename="include/Object.h" />
-		<Unit filename="include/ObjectContainer.h" />
-		<Unit filename="include/ObjectInstance.h" />
-		<Unit filename="include/ObjectInstanceContainer.h" />
-		<Unit filename="include/RealObject.h" />
-		<Unit filename="include/Structures.h" />
-		<Unit filename="include/Texture.h" />
+		<Unit filename="include/Object.h">
+			<Option virtualFolder="BaseObjects/include/" />
+		</Unit>
+		<Unit filename="include/ObjectContainer.h">
+			<Option virtualFolder="ObjectContainers/include/" />
+		</Unit>
+		<Unit filename="include/ObjectInstance.h">
+			<Option virtualFolder="ObjectInstances/include/" />
+		</Unit>
+		<Unit filename="include/ObjectInstanceContainer.h">
+			<Option virtualFolder="ObjectContainers/include/" />
+		</Unit>
+		<Unit filename="include/RealObject.h">
+			<Option virtualFolder="BaseObjects/include/" />
+		</Unit>
+		<Unit filename="include/Structures.h">
+			<Option virtualFolder="Other/" />
+		</Unit>
+		<Unit filename="include/Texture.h">
+			<Option virtualFolder="GraphicsModule/include/" />
+		</Unit>
 		<Unit filename="main.cpp" />
-		<Unit filename="src/AbstractObject.cpp" />
-		<Unit filename="src/AppWindow.cpp" />
-		<Unit filename="src/DisplayManager.cpp" />
+		<Unit filename="src/AbstractObject.cpp">
+			<Option virtualFolder="BaseObjects/src/" />
+		</Unit>
+		<Unit filename="src/AppWindow.cpp">
+			<Option virtualFolder="GraphicsModule/src/" />
+		</Unit>
+		<Unit filename="src/DisplayManager.cpp">
+			<Option virtualFolder="GraphicsModule/src/" />
+		</Unit>
 		<Unit filename="src/GameInstance.cpp" />
-		<Unit filename="src/GraphicsManager.cpp" />
-		<Unit filename="src/InputManager.cpp" />
+		<Unit filename="src/GraphicsManager.cpp">
+			<Option virtualFolder="GraphicsModule/src/" />
+		</Unit>
+		<Unit filename="src/InputManager.cpp">
+			<Option virtualFolder="InputModule/src/" />
+		</Unit>
+		<Unit filename="src/KeyboardStatus.cpp">
+			<Option virtualFolder="InputModule/src/" />
+		</Unit>
 		<Unit filename="src/LogicManager.cpp" />
-		<Unit filename="src/Object.cpp" />
-		<Unit filename="src/ObjectContainer.cpp" />
-		<Unit filename="src/ObjectInstance.cpp" />
-		<Unit filename="src/ObjectInstanceContainer.cpp" />
-		<Unit filename="src/RealObject.cpp" />
-		<Unit filename="src/Texture.cpp" />
+		<Unit filename="src/Object.cpp">
+			<Option virtualFolder="BaseObjects/src/" />
+		</Unit>
+		<Unit filename="src/ObjectContainer.cpp">
+			<Option virtualFolder="ObjectContainers/src/" />
+		</Unit>
+		<Unit filename="src/ObjectInstance.cpp">
+			<Option virtualFolder="ObjectInstances/src/" />
+		</Unit>
+		<Unit filename="src/ObjectInstanceContainer.cpp">
+			<Option virtualFolder="ObjectContainers/src/" />
+		</Unit>
+		<Unit filename="src/RealObject.cpp">
+			<Option virtualFolder="BaseObjects/src/" />
+		</Unit>
+		<Unit filename="src/Texture.cpp">
+			<Option virtualFolder="GraphicsModule/src/" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<envvars />
