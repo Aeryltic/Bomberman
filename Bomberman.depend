@@ -1044,63 +1044,68 @@
 1484992076 source:c:\users\user\desktop\bomberman\main.cpp
 	"GameInstance.h"
 
-1485005453 c:\users\user\desktop\bomberman\include\gameinstance.h
+1485101452 c:\users\user\desktop\bomberman\include\gameinstance.h
 	"DisplayManager.h"
 	"InputManager.h"
 	"LogicManager.h"
 	"ObjectContainer.h"
+	"Structures.h"
 
 1485015264 c:\users\user\desktop\bomberman\include\graphicsmanager.h
 	<unordered_map>
 	"Texture.h"
 	"AppWindow.h"
 
-1485016038 c:\users\user\desktop\bomberman\include\texture.h
+1485095112 c:\users\user\desktop\bomberman\include\texture.h
 	<SDL.h>
 	<SDL_image.h>
+	<string>
 
-1485003258 c:\users\user\desktop\bomberman\include\appwindow.h
+1485095750 c:\users\user\desktop\bomberman\include\appwindow.h
 	<memory>
 	"SDL.h"
 
-1485005498 c:\users\user\desktop\bomberman\include\inputmanager.h
+1485102539 c:\users\user\desktop\bomberman\include\inputmanager.h
+	<SDL.h>
+	"Structures.h"
 
-1485007355 c:\users\user\desktop\bomberman\include\logicmanager.h
+1485101566 c:\users\user\desktop\bomberman\include\logicmanager.h
 	"ObjectContainer.h"
+	"Structures.h"
 
-1485003222 source:c:\users\user\desktop\bomberman\src\appwindow.cpp
+1485100247 source:c:\users\user\desktop\bomberman\src\appwindow.cpp
 	"AppWindow.h"
 
-1485013069 source:c:\users\user\desktop\bomberman\src\graphicsmanager.cpp
+1485094119 source:c:\users\user\desktop\bomberman\src\graphicsmanager.cpp
 	"GraphicsManager.h"
 	<fstream>
 
-1485005554 source:c:\users\user\desktop\bomberman\src\inputmanager.cpp
+1485102788 source:c:\users\user\desktop\bomberman\src\inputmanager.cpp
 	"InputManager.h"
 
-1485007933 source:c:\users\user\desktop\bomberman\src\logicmanager.cpp
+1485101565 source:c:\users\user\desktop\bomberman\src\logicmanager.cpp
 	"LogicManager.h"
 
 1484941271 source:c:\users\user\desktop\bomberman\src\object.cpp
 	"Object.h"
 
-1485012574 c:\users\user\desktop\bomberman\include\object.h
+1485099339 c:\users\user\desktop\bomberman\include\object.h
 	<string>
 
-1484941271 source:c:\users\user\desktop\bomberman\src\texture.cpp
+1485097667 source:c:\users\user\desktop\bomberman\src\texture.cpp
 	"Texture.h"
 
-1485007927 c:\users\user\desktop\bomberman\include\objectcontainer.h
-	<deque>
+1485099370 c:\users\user\desktop\bomberman\include\objectcontainer.h
+	<unordered_map>
 	"Object.h"
 
-1485007245 source:c:\users\user\desktop\bomberman\src\abstractobject.cpp
+1485096320 source:c:\users\user\desktop\bomberman\src\abstractobject.cpp
 	"AbstractObject.h"
 
-1485007245 c:\users\user\desktop\bomberman\include\abstractobject.h
+1485096311 c:\users\user\desktop\bomberman\include\abstractobject.h
 	<Object.h>
 
-1485007338 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
+1485102808 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
 	"GameInstance.h"
 	<SDL.h>
 	<stdio.h>
@@ -1108,30 +1113,40 @@
 1484995826 source:c:\users\user\desktop\bomberman\src\objectcontainer.cpp
 	"ObjectContainer.h"
 
-1484996323 source:c:\users\user\desktop\bomberman\src\realobject.cpp
+1485096327 source:c:\users\user\desktop\bomberman\src\realobject.cpp
 	"RealObject.h"
 
-1485008179 c:\users\user\desktop\bomberman\include\realobject.h
+1485096311 c:\users\user\desktop\bomberman\include\realobject.h
 	<Object.h>
 
-1485013768 c:\users\user\desktop\bomberman\include\displaymanager.h
+1485095741 c:\users\user\desktop\bomberman\include\displaymanager.h
 	"AppWindow.h"
 	"GraphicsManager.h"
 	"ObjectInstanceContainer.h"
 
-1485013766 source:c:\users\user\desktop\bomberman\src\displaymanager.cpp
+1485099897 source:c:\users\user\desktop\bomberman\src\displaymanager.cpp
 	"DisplayManager.h"
+	<SDL.h>
+	<SDL_image.h>
 
-1485007970 source:c:\users\user\desktop\bomberman\src\objectinstance.cpp
+1485099505 source:c:\users\user\desktop\bomberman\src\objectinstance.cpp
 	"ObjectInstance.h"
 
-1485008179 c:\users\user\desktop\bomberman\include\objectinstance.h
+1485099516 c:\users\user\desktop\bomberman\include\objectinstance.h
+	"Object.h"
 
-1485013384 c:\users\user\desktop\bomberman\include\objectinstancecontainer.h
+1485099529 c:\users\user\desktop\bomberman\include\objectinstancecontainer.h
+	"ObjectInstance.h"
+	<unordered_map>
 
 1451800386 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_image.h
 	"SDL.h"
 	"SDL_version.h"
 	"begin_code.h"
 	"close_code.h"
+
+1485013384 source:c:\users\user\desktop\bomberman\src\objectinstancecontainer.cpp
+	"ObjectInstanceContainer.h"
+
+1485102501 c:\users\user\desktop\bomberman\include\structures.h
 

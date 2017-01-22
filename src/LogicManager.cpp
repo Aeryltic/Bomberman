@@ -10,11 +10,11 @@ LogicManager::~LogicManager()
     //dtor
 }
 
-void LogicManager::update(ObjectContainer &object, int time_passed)
+void LogicManager::update(ObjectContainer &object, StatusFlags &buttonStatus, int time_passed)
 {
     /* time_passed - milliseconds */
     for(auto obj : object.obj())
     {
-        obj.update(time_passed);
+      //  obj.update(time_passed);
     }
 }

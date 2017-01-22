@@ -3,12 +3,13 @@
 
 #include <string>
 using namespace std;
+/** templates for in-game object instances */
 class Object
 {
     public:
         Object();
         virtual ~Object();
-        virtual void update(int time_passed);
+//        virtual void update(int time_passed);
     protected:
 
     private:

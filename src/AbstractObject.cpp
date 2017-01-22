@@ -9,8 +9,9 @@ AbstractObject::~AbstractObject()
 {
     //dtor
 }
-
+/*
 void AbstractObject::update(int time_passed)
 {
 
 }
+*/

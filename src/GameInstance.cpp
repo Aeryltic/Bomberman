@@ -6,7 +6,13 @@
 GameInstance::GameInstance()
 {
     /** INITIALIZE */ /* maybe not */
-
+    /*
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+	{
+		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+		return -1; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	}
+	*/
 }
 
 GameInstance::~GameInstance()
@@ -49,31 +55,35 @@ int GameInstance::run()
             render();
         }
         */
+    StatusFlags _buttonStatus;
+    bool quit = false;
     double previous = SDL_GetTicks();
     double lag = 0.0;
-    while(true)
+    while(!_buttonStatus._escape)
     {
         double current = SDL_GetTicks();
         double elapsed = current - previous;
         previous = current;
         lag += elapsed;
 
-        _inputManager.update(/* narazie nic tu nie bedzie */);
+        _inputManager.update(_buttonStatus);
         while (lag >= TIMESTEP)
         {
-            _logicManager.update(_objectContainer, TIMESTEP);
+            _logicManager.update(_objectContainer, _buttonStatus, TIMESTEP);
             lag -= TIMESTEP;
         }
 
         _displayManager.render(_objectInstanceContainer, lag / TIMESTEP);
+
+        SDL_Delay(1);
     }
-    SDL_Delay( 2000 );
+   // SDL_Delay(2000);
     /*
     //The window we'll be rendering to
-	SDL_Window* window = NULL;
+	SDL_Window* window = nullptr;
 
 	//The surface contained by the window
-	SDL_Surface* screenSurface = NULL;
+	SDL_Surface* screenSurface = nullptr;
 
 
 	if(SDL_Init( SDL_INIT_VIDEO ) < 0)
@@ -84,7 +94,7 @@ int GameInstance::run()
 	{
 		//Create window
 		window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN );
-		if( window == NULL )
+		if( window == nullptr )
 		{
 			printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
 		}
@@ -94,7 +104,7 @@ int GameInstance::run()
 			screenSurface = SDL_GetWindowSurface(window);
 
 			//Fill the surface white
-			SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xAA, 0xFF, 0xFF));
+			SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 0xAA, 0xFF, 0xFF));
 
 			//Update the surface
 			SDL_UpdateWindowSurface(window);
