@@ -3,8 +3,10 @@
 #include <memory>
 #include "SDL.h"
 using namespace std;
+class DisplayManager;
 class AppWindow
 {
+    friend DisplayManager;
     public:
         AppWindow(int w, int h);
         virtual ~AppWindow();
@@ -13,7 +15,7 @@ class AppWindow
 
     private:
         SDL_Window* _window;
-        SDL_Surface* _screenSurface;
+        SDL_Renderer* _renderer;
 };
 
 #endif // APPWINDOW_H

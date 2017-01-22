@@ -13,6 +13,7 @@ class DisplayManager
     public:
         DisplayManager();
         virtual ~DisplayManager();
+        void setup();
         void render(const ObjectInstanceContainer &instance, double interpolation);
     protected:
 

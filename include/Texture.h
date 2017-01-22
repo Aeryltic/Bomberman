@@ -3,18 +3,22 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
-
+#include <string>
+using namespace std;
 class Texture
 {
     public:
-        Texture(string path);
-        Texture(Uint32 color, int w, int h);
+        Texture();
+        Texture(SDL_Renderer *renderer);
+        Texture(SDL_Renderer *renderer, const string &path);
+        Texture(SDL_Renderer *renderer, Uint32 color, int w, int h);
         virtual ~Texture();
 
     protected:
 
     private:
-        SDL_Surface *surface;
+        SDL_Texture *_texture;
+     //   SDL_Surface *surface;
 };
 
 #endif // TEXTURE_H

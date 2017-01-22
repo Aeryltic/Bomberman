@@ -5,7 +5,7 @@
 #include "InputManager.h"
 #include "LogicManager.h"
 #include "ObjectContainer.h"
-
+#include "Structures.h"
 const int TICKS_PER_SECOND = 20;
 const int TIMESTEP = 1000/TICKS_PER_SECOND;
 
@@ -19,6 +19,7 @@ class GameInstance
     protected:
 
     private:
+
         /*
         GraphicsManager _graphicsManager;
         InputManager _inputManager;

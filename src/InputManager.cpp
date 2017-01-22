@@ -2,74 +2,62 @@
 
 InputManager::InputManager()
 {
-    //ctor
+    //SDL_EnableUNICODE(1);
 }
 
 InputManager::~InputManager()
 {
     //dtor
 }
-void InputManager::update()
+void InputManager::update(StatusFlags &buttonStatus)
 {
-/** PROPER MOVEMENT EXAMPLE
-
-    int alien_x=0, alien_y=0;
-    int alien_xvel=0, alien_yvel=0;
-
-    while( SDL_PollEvent( &event ) ){
-        switch( event.type ){
-
+    while(SDL_PollEvent(&_event))
+    {
+        switch(_event.type)
+        {
             case SDL_KEYDOWN:
-
-                switch( event.key.keysym.sym ){
+            {
+                switch(_event.key.keysym.sym)
+                {
                     case SDLK_LEFT:
-                        alien_xvel = -1;
+                        buttonStatus._left = 1;
                         break;
                     case SDLK_RIGHT:
-                        alien_xvel =  1;
+                        buttonStatus._right = 1;
                         break;
                     case SDLK_UP:
-                        alien_yvel = -1;
+                        buttonStatus._up = 1;
                         break;
                     case SDLK_DOWN:
-                        alien_yvel =  1;
+                        buttonStatus._down = 1;
+                        break;
+                    case SDLK_ESCAPE:
+                        buttonStatus._escape = 1;
                         break;
                     default:
                         break;
                 }
-                break;
-
+            }
             case SDL_KEYUP:
-                switch( event.key.keysym.sym ){
+            {
                     case SDLK_LEFT:
-
-                        if( alien_xvel < 0 )
-                            alien_xvel = 0;
+                        buttonStatus._left = 0;
                         break;
                     case SDLK_RIGHT:
-                        if( alien_xvel > 0 )
-                            alien_xvel = 0;
+                        buttonStatus._right = 0;
                         break;
                     case SDLK_UP:
-                        if( alien_yvel < 0 )
-                            alien_yvel = 0;
+                        buttonStatus._up = 0;
                         break;
                     case SDLK_DOWN:
-                        if( alien_yvel > 0 )
-                            alien_yvel = 0;
+                        buttonStatus._down = 0;
+                        break;
+                    case SDLK_ESCAPE:
+                        buttonStatus._escape = 0;
                         break;
                     default:
                         break;
-                }
-                break;
-
-            default:
-                break;
+            }
         }
     }
-
-    alien_x += alien_xvel;
-    alien_y += alien_yvel;
-
-    */
 }

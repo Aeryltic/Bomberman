@@ -38,7 +38,7 @@
 			<Add directory="include" />
 		</Compiler>
 		<Linker>
-			<Add option="-lmingw32 -lSDL2main -lSDL2" />
+			<Add option="-lmingw32 -lSDL2main -lSDL2 -lSDL2_image" />
 			<Add directory="C:/Dev_Libs/x86_64-w64-mingw32/lib" />
 		</Linker>
 		<Unit filename="include/AbstractObject.h" />
@@ -53,6 +53,7 @@
 		<Unit filename="include/ObjectInstance.h" />
 		<Unit filename="include/ObjectInstanceContainer.h" />
 		<Unit filename="include/RealObject.h" />
+		<Unit filename="include/Structures.h" />
 		<Unit filename="include/Texture.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/AbstractObject.cpp" />

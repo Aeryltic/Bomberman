@@ -9,3 +9,9 @@ RealObject::~RealObject()
 {
     //dtor
 }
+/*
+void RealObject::update(int time_passed)
+{
+
+}
+*/

@@ -2,13 +2,13 @@
 #define LOGICMANAGER_H
 
 #include "ObjectContainer.h"
-
+#include "Structures.h"
 class LogicManager
 {
     public:
         LogicManager();
         virtual ~LogicManager();
-        void update(ObjectContainer &object, int time_passed);
+        void update(ObjectContainer &object, StatusFlags &buttonStatus, int time_passed);
     protected:
 
     private:

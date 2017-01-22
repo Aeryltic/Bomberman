@@ -17,7 +17,7 @@ Texture *GraphicsManager::getTexture(const string &path)
     Texture *texture;
     texture = 0;
     unordered_map<string,Texture>::const_iterator found = textures.find(path);
-    if(found == textures.end()) texture = &textures["BLANK"];
+    if(found == textures.end()) texture = &(textures["BLANK"]);
     else texture = const_cast<Texture*>(&(found->second));
     return texture;
 }
