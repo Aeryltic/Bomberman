@@ -3,9 +3,10 @@ Texture::Texture()
 {
     _texture = nullptr;
 }
+/*
 Texture::Texture(SDL_Renderer *renderer)
 {
-    /** BLANK texture */
+    /// BLANK texture
     SDL_Surface *tmp;
     Uint32 rmask, gmask, bmask, amask;
     rmask = 0xff000000;
@@ -15,7 +16,7 @@ Texture::Texture(SDL_Renderer *renderer)
     tmp = SDL_CreateRGBSurface(0, 64, 64, 32, rmask, gmask, bmask, amask);
     if(tmp == nullptr)
     {
-        /** error */
+        /// error
     }
     else
     {
@@ -39,8 +40,9 @@ Texture::Texture(SDL_Renderer *renderer, const string &path)
 }
 Texture::Texture(SDL_Renderer *renderer, Uint32 color, int w, int h)
 {
-    /** creates texture filled with color */
+    /// creates texture filled with color
 }
+*/
 Texture::~Texture()
 {
     SDL_DestroyTexture(_texture);

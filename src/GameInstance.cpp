@@ -36,6 +36,8 @@ int GameInstance::run()
     // load instances
 
     StatusFlags _buttonStatus;
+    double last_check = SDL_GetTicks();
+    int frames = 0;
     bool quit = false;
     double previous = SDL_GetTicks();
     double lag = 0.0;
@@ -55,8 +57,16 @@ int GameInstance::run()
         }
 
         _displayManager.render(_objectInstanceContainer, lag / TIMESTEP);
+        frames++;
 
-        SDL_Delay(1);
+        if(SDL_GetTicks() - last_check >= 1000)
+        {
+            printf("FPS: %d\n",frames);
+            frames = 0;
+            last_check = SDL_GetTicks();
+        }
+
+        SDL_Delay(200);
     }
    // SDL_Delay(2000);
     /*
@@ -100,6 +110,7 @@ int GameInstance::run()
 
 	SDL_Quit();
 	*/
+	return 0;
 }
 
 int GameInstance::init()

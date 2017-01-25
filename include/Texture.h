@@ -9,11 +9,15 @@ class Texture
 {
     public:
         Texture();
+        Texture(SDL_Texture *texture) : _texture(texture) {}
+        /*
         Texture(SDL_Renderer *renderer);
         Texture(SDL_Renderer *renderer, const string &path);
         Texture(SDL_Renderer *renderer, Uint32 color, int w, int h);
+        */
+        SDL_Texture *SDL_Tex(){return _texture;}
         virtual ~Texture();
-
+        bool good(){return _texture != nullptr;}
     protected:
 
     private:

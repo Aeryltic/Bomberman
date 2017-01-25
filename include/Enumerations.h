@@ -5,7 +5,15 @@ enum KeyStatus
 {
     KEY_NONE = 0,
     KEY_PRESSED = 1,
-    KEY_RELEASED = 2
+    KEY_DOWN = 2,
+    KEY_RELEASED = 4,
+    KEY_UP = 8
 };
 
+enum ObjectType
+{
+    OBJECT_NONE = 0,
+    OBJECT_REAL,
+    OBJECT_ABSTRACT
+};
 #endif // ENUMERATIONS_H_INCLUDED

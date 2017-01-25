@@ -11,6 +11,7 @@ class AppWindow
         AppWindow(int w, int h);
         virtual ~AppWindow();
         bool isReady();
+        SDL_Renderer* getRenderer(){return _renderer;}
     protected:
 
     private:

@@ -5,7 +5,7 @@
 		<Option title="Bomberman" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="GraphicsModule\;ObjectInstances\;ObjectInstances\src\;ObjectInstances\include\;GraphicsModule\include\;GraphicsModule\src\;ObjectContainers\src\;ObjectContainers\include\;BaseObjects\src\;BaseObjects\include\;Other\;InputModule\;InputModule\src\;InputModule\include\;" />
+		<Option virtualFolders="GraphicsModule\;Object_Instances\;ObjectInstances\src\;ObjectInstances\include\;GraphicsModule\include\;GraphicsModule\src\;ObjectContainers\src\;ObjectContainers\include\;BaseObjects\src\;BaseObjects\include\;Other\;InputModule\;InputModule\src\;InputModule\include\;Object_Bases\;Object_Containers\;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/Bomberman" prefix_auto="1" extension_auto="1" />
@@ -43,7 +43,7 @@
 			<Add directory="C:/Dev_Libs/x86_64-w64-mingw32/lib" />
 		</Linker>
 		<Unit filename="include/AbstractObject.h">
-			<Option virtualFolder="BaseObjects/include/" />
+			<Option virtualFolder="Object_Bases/include/" />
 		</Unit>
 		<Unit filename="include/AppWindow.h">
 			<Option virtualFolder="GraphicsModule/include/" />
@@ -67,20 +67,21 @@
 		</Unit>
 		<Unit filename="include/LogicManager.h" />
 		<Unit filename="include/Object.h">
-			<Option virtualFolder="BaseObjects/include/" />
+			<Option virtualFolder="Object_Bases/include/" />
 		</Unit>
 		<Unit filename="include/ObjectContainer.h">
-			<Option virtualFolder="ObjectContainers/include/" />
+			<Option virtualFolder="Object_Containers/include/" />
 		</Unit>
 		<Unit filename="include/ObjectInstance.h">
-			<Option virtualFolder="ObjectInstances/include/" />
+			<Option virtualFolder="Object_Instances/include/" />
 		</Unit>
 		<Unit filename="include/ObjectInstanceContainer.h">
-			<Option virtualFolder="ObjectContainers/include/" />
+			<Option virtualFolder="Object_Containers/include/" />
 		</Unit>
 		<Unit filename="include/RealObject.h">
-			<Option virtualFolder="BaseObjects/include/" />
+			<Option virtualFolder="Object_Bases/include/" />
 		</Unit>
+		<Unit filename="include/Script.h" />
 		<Unit filename="include/Structures.h">
 			<Option virtualFolder="Other/" />
 		</Unit>
@@ -89,7 +90,7 @@
 		</Unit>
 		<Unit filename="main.cpp" />
 		<Unit filename="src/AbstractObject.cpp">
-			<Option virtualFolder="BaseObjects/src/" />
+			<Option virtualFolder="Object_Bases/src/" />
 		</Unit>
 		<Unit filename="src/AppWindow.cpp">
 			<Option virtualFolder="GraphicsModule/src/" />
@@ -109,20 +110,21 @@
 		</Unit>
 		<Unit filename="src/LogicManager.cpp" />
 		<Unit filename="src/Object.cpp">
-			<Option virtualFolder="BaseObjects/src/" />
+			<Option virtualFolder="Object_Bases/src/" />
 		</Unit>
 		<Unit filename="src/ObjectContainer.cpp">
-			<Option virtualFolder="ObjectContainers/src/" />
+			<Option virtualFolder="Object_Containers/src/" />
 		</Unit>
 		<Unit filename="src/ObjectInstance.cpp">
-			<Option virtualFolder="ObjectInstances/src/" />
+			<Option virtualFolder="Object_Instances/src/" />
 		</Unit>
 		<Unit filename="src/ObjectInstanceContainer.cpp">
-			<Option virtualFolder="ObjectContainers/src/" />
+			<Option virtualFolder="Object_Containers/src/" />
 		</Unit>
 		<Unit filename="src/RealObject.cpp">
-			<Option virtualFolder="BaseObjects/src/" />
+			<Option virtualFolder="Object_Bases/src/" />
 		</Unit>
+		<Unit filename="src/Script.cpp" />
 		<Unit filename="src/Texture.cpp">
 			<Option virtualFolder="GraphicsModule/src/" />
 		</Unit>

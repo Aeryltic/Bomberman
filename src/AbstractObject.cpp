@@ -2,16 +2,11 @@
 
 AbstractObject::AbstractObject()
 {
-    //ctor
+    _type = OBJECT_ABSTRACT;
 }
 
 AbstractObject::~AbstractObject()
 {
     //dtor
 }
-/*
-void AbstractObject::update(int time_passed)
-{
 
-}
-*/

@@ -9,9 +9,8 @@ RealObject::~RealObject()
 {
     //dtor
 }
-/*
-void RealObject::update(int time_passed)
-{
 
+Texture* RealObject::texture()
+{
+    return _tex;
 }
-*/

@@ -9,12 +9,13 @@ class RealObject : public Object
     public:
         RealObject();
         virtual ~RealObject();
-        //void update(int time_passed);
+        Texture* texture();
     protected:
 
     private:
         bool _static;
         bool _solid;
+        Texture* _tex;
 };
 
 #endif // REALOBJECT_H
