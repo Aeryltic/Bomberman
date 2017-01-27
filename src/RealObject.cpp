@@ -10,7 +10,3 @@ RealObject::~RealObject()
     //dtor
 }
 
-Texture* RealObject::texture()
-{
-    return _tex;
-}

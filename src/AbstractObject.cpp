@@ -2,7 +2,7 @@
 
 AbstractObject::AbstractObject()
 {
-    _type = OBJECT_ABSTRACT;
+
 }
 
 AbstractObject::~AbstractObject()

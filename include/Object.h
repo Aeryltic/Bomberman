@@ -6,21 +6,51 @@
 #include "Structures.h"
 #include "Enumerations.h"
 #include "Texture.h"
-
+#include "Controller.h"
+#include "GraphicsManager.h"
 using namespace std;
 /** templates for in-game object instances */
-
+/// na razie beda jedynym rodzajem obiektow, jak bedzie czas oddzieli sie bazy od instancji
+class Field;
 class Object
 {
     public:
         Object();
         virtual ~Object();
-        ObjectType type(){return _type;}
-        virtual Texture* texture();
+
+        virtual Texture* texture() const {return nullptr;}
+        virtual ObjectType type() const {return OBJECT_NONE;}
+        virtual void update(int ms_passed) {if(_moving) updatePosition(ms_passed);}
+        void updatePosition(int ms_passed) {_p.updatePosition(ms_passed);}
+        void setSpeed(const Vector2D &v) {_p.v = v;}
+        void setPos(const Vector2D &pos) {_p.pos = pos;}
+        void stop(){_moving = false;}
+        void start(){_moving = true;}
+        virtual void setController(Controller *controller) {}
+        virtual Field* field(int y, int x) const {return nullptr;}
+
+        virtual int width() const {return 0;}
+        virtual int height()const {return 0;}
+
+        static void setGraphicsManager(GraphicsManager *gManager){_gManager = gManager;}
+
+        virtual SDL_Rect rect(int ms_passed = 0) const
+        {
+            SDL_Rect r;
+            Vector2D v = _p.interpolated(ms_passed);
+            r.w = width();
+            r.h = height();
+
+            return r;
+        }
     protected:
-        ObjectType _type;
-        string _name;
+   //     string _name;
+        bool _moving;
+        PositionAndSpeed _p;
+    //    double _posX, _posY, _vX, _vY;
     private:
+        static GraphicsManager *_gManager;
+
      //   bool _printable;
 
     //    unordered_map<string, Variable> _var;

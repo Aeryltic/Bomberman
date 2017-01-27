@@ -6,10 +6,12 @@
 using namespace std;
 class ObjectContainer
 {
+    typedef unordered_map<unsigned,Object>::iterator ObjIterator;
     public:
         ObjectContainer();
         virtual ~ObjectContainer();
-        const unordered_map<unsigned,Object> &obj(){return _obj;}
+        const unordered_map<unsigned,Object> &obj() const{return _obj;}
+        const Object &getPlayer();
     protected:
 
     private:

@@ -9,6 +9,7 @@ class AbstractObject : public Object
     public:
         AbstractObject();
         virtual ~AbstractObject();
+        ObjectType type() { return OBJECT_ABSTRACT; }
     protected:
 
     private:

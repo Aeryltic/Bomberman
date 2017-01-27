@@ -9,8 +9,9 @@ InputManager::~InputManager()
 {
     //dtor
 }
-void InputManager::update(StatusFlags &buttonStatus)
+void InputManager::update()
 {
+    SDL_Event _event; /// powinien miec swoja osobna kolejke tylko z akcjami klawiatury i myszki
     for(auto &key : _key)
     {
         if(key.second == KEY_PRESSED) key.second = KEY_DOWN, printf("down: %s\n",SDL_GetKeyName(key.first));

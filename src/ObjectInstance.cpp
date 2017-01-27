@@ -1,7 +1,9 @@
 #include "ObjectInstance.h"
 
-ObjectInstance::ObjectInstance(const Object &base) : _base(base)
+ObjectInstance::ObjectInstance(const Object &base, int x, int y) : _base(base)
 {
+    _posX = x;
+    _posY = y;
     _parent = nullptr;
 }
 

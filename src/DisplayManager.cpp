@@ -2,10 +2,15 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
+#include <queue>
+
 DisplayManager::DisplayManager() : _window(WINDOW_WIDTH, WINDOW_HEIGHT)
 {
     IMG_Init(IMG_INIT_PNG);
     _graphicsManager = GraphicsManager(_window.getRenderer());
+    _windowRect.x = 0;
+    _windowRect.y = 0;
+    SDL_GetWindowSize(_window._window, &_windowRect.w, &_windowRect.h);
 }
 
 DisplayManager::~DisplayManager()
@@ -18,12 +23,13 @@ void DisplayManager::setup()
 {
 
 }
-void DisplayManager::render(const ObjectInstanceContainer &instance, double interpolation)
+void DisplayManager::render(const ObjectContainer &objects, double interpolation)
 {
    // for(auto ins : )
        //Clear screen
     SDL_RenderClear(_window._renderer);
 /// TEST
+/*
     SDL_Texture *t1 = _graphicsManager.getTexture("textures/player.png");
     SDL_Texture *t2 = _graphicsManager.getTexture("textures/floor.png");
     SDL_Texture *t3 = nullptr;
@@ -61,7 +67,6 @@ void DisplayManager::render(const ObjectInstanceContainer &instance, double inte
     SDL_Surface *s;
     s = SDL_CreateRGBSurface(0, 128, 128, 32, 0, 0, 0, 0);
 
-    /* Filling the surface with green color. */
     SDL_FillRect(s, NULL, SDL_MapRGBA(s->format, 0, 255, 0, 255));
         if(s == nullptr)
         {
@@ -105,6 +110,7 @@ void DisplayManager::render(const ObjectInstanceContainer &instance, double inte
     }
     SDL_DestroyTexture(t3);
     SDL_DestroyTexture(t4);
+    */
 /// KONIEC TESTU
 
     /** tworzy priority_queue
@@ -116,11 +122,53 @@ void DisplayManager::render(const ObjectInstanceContainer &instance, double inte
         dla kazdego w kolejce:
             wrzuca do renderera
     */
+    priority_queue<ToRender> trt;
+    for(auto &o : objects.obj())
+    {
+        const Object &r = o.second;
+        switch (r.type())
+        {
+            case OBJECT_REAL:
+                if(isVisible(r))
+                {
 
+                }
+                break;
+            case OBJECT_BOARD:
+                for(int i=0; i<r.height(); i++)
+                {
+                    for(int j=0; j<r.width(); j++)
+                    {
+                        Field *field = r.field(i,j);
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
     /// SDL_RenderCopyEx - do renderu z obrotem itp
     //Render texture to screen
     //SDL_RenderCopy(_window._renderer, gTexture, NULL, NULL );
 
     //Update screen
     SDL_RenderPresent(_window._renderer);
+}
+
+bool DisplayManager::isVisible(const Object &obj)
+{
+    /* SDL_bool SDL_IntersectRect(const SDL_Rect* A,
+                           const SDL_Rect* B,
+                           SDL_Rect*       result)
+    */
+    SDL_Point p;
+    p = obj.lt();
+    if(SDL_PointInRect(&p, &_windowRect)) return true;
+    p = obj.rt();
+    if(SDL_PointInRect(&p, &_windowRect)) return true;
+    p = obj.ld();
+    if(SDL_PointInRect(&p, &_windowRect)) return true;
+    p = obj.rd();
+    if(SDL_PointInRect(&p, &_windowRect)) return true;
+    return false;
 }

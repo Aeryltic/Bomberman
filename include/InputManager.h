@@ -14,12 +14,12 @@ class InputManager
     public:
         InputManager();
         virtual ~InputManager();
-        void update(StatusFlags &buttonStatus);
+        void update();
         KeyStatus keyStatus(SDL_Keycode keycode);
     protected:
 
     private:
-        SDL_Event _event;
+        //SDL_Event _event;
         unordered_map <SDL_Keycode,KeyStatus> _key;
 };
 

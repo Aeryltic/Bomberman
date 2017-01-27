@@ -2,16 +2,10 @@
 
 Object::Object()
 {
-    _type = OBJECT_NONE;
- //   _printable = false;
+    _moving = false;
 }
 
 Object::~Object()
 {
     //dtor
-}
-
-Texture* Object::texture()
-{
-    return nullptr;
 }

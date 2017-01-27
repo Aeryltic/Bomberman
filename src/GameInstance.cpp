@@ -31,32 +31,34 @@ int GameInstance::run()
     InputManager            _inputManager;
     LogicManager            _logicManager;
     ObjectContainer         _objectContainer;
-    ObjectInstanceContainer _objectInstanceContainer;
+
+    Object::setGraphicsManager(_displayManager.getGraphicsManager());
+//    ObjectInstanceContainer _objectInstanceContainer(_objectContainer);
     // load objects => load textures
     // load instances
 
-    StatusFlags _buttonStatus;
     double last_check = SDL_GetTicks();
     int frames = 0;
-    bool quit = false;
+//    bool quit = false;
     double previous = SDL_GetTicks();
     double lag = 0.0;
    // SDL_Scancode quit_key = SDL_SCANCODE_ESCAPE;
-    while(_inputManager.keyStatus(SDLK_ESCAPE) != KEY_PRESSED)
+    while(!(_inputManager.keyStatus(SDLK_ESCAPE) & (KEY_PRESSED|KEY_DOWN)))
     {
         double current = SDL_GetTicks();
         double elapsed = current - previous;
         previous = current;
         lag += elapsed;
 
-        _inputManager.update(_buttonStatus);
+        _inputManager.update(); /// przy duzym delay przyciski moga nie wspolpracowac - zmieniaja stan zanim gra zereaguje
         while (lag >= TIMESTEP)
         {
-            _logicManager.update(_objectContainer, _buttonStatus, TIMESTEP);
+            _logicManager.update(_objectContainer, TIMESTEP);
             lag -= TIMESTEP;
         }
 
-        _displayManager.render(_objectInstanceContainer, lag / TIMESTEP);
+       // _displayManager.render(_objectContainer, lag / TIMESTEP);
+        _displayManager.render(_objectContainer, lag);
         frames++;
 
         if(SDL_GetTicks() - last_check >= 1000)
@@ -66,9 +68,8 @@ int GameInstance::run()
             last_check = SDL_GetTicks();
         }
 
-        SDL_Delay(200);
+        SDL_Delay(200); /// tylko do testow
     }
-   // SDL_Delay(2000);
     /*
     //The window we'll be rendering to
 	SDL_Window* window = nullptr;
