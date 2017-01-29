@@ -24,6 +24,7 @@ struct Variable
 };
 */
 ///-------------------
+
 struct Vector2D
 {
     Vector2D() : x(0), y(0) {}
@@ -39,7 +40,7 @@ struct PositionAndSpeed
         pos.x += v.x * ms_passed / 1000.0;
         pos.y += v.y * ms_passed / 1000.0;
     }
-    Vector2D interpolated(int ms_passed) /// "interpolated"
+    Vector2D interpolated(int ms_passed) const /// "interpolated"
     {
         return Vector2D(pos.x + v.x * ms_passed / 1000.0, pos.y + v.y * ms_passed / 1000.0);
     }

@@ -12,6 +12,7 @@ class DisplayManager
 {
     struct ToRender
     {
+        ToRender(SDL_Texture *texture, const SDL_Rect &rect, int h) : texture(texture), rect(rect), h(h) {}
         SDL_Texture *texture;
         SDL_Rect rect;
         int h;
@@ -19,14 +20,15 @@ class DisplayManager
         {
             return a.h < b.h;
         }
+
     };
     public:
         DisplayManager();
         virtual ~DisplayManager();
         void setup();
         void render(const ObjectContainer &obj, double interpolation);
-
-        bool isVisible(const Object &obj);
+        GraphicsManager *getGraphicsManager(){return &_graphicsManager;}
+        bool isVisible(const SDL_Rect &rect);
     protected:
 
     private:

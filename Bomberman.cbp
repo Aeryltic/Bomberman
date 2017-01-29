@@ -5,7 +5,7 @@
 		<Option title="Bomberman" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="GraphicsModule\;GraphicsModule\include\;GraphicsModule\src\;Other\;InputModule\;InputModule\src\;InputModule\include\;Objects\;Object_Containers\;Object_Containers\include\;Object_Containers\src\;Objects\src\;Objects\include\;Controllers\;Controllers\src\;Controllers\include\;" />
+		<Option virtualFolders="GraphicsModule\;GraphicsModule\include\;GraphicsModule\src\;Other\;InputModule\;InputModule\src\;InputModule\include\;Objects\;Object_Containers\;Object_Containers\include\;Object_Containers\src\;Objects\src\;Objects\include\;Controllers\;Controllers\src\;Controllers\include\;GameObjects_v2\;GameObjects_v2\src\;GameObjects_v2\include\;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/Bomberman" prefix_auto="1" extension_auto="1" />
@@ -51,6 +51,9 @@
 		<Unit filename="include/Board.h">
 			<Option virtualFolder="Objects/include/" />
 		</Unit>
+		<Unit filename="include/Component.h">
+			<Option virtualFolder="GameObjects_v2/include/" />
+		</Unit>
 		<Unit filename="include/Constants.h">
 			<Option virtualFolder="Other/" />
 		</Unit>
@@ -59,6 +62,12 @@
 		</Unit>
 		<Unit filename="include/DisplayManager.h">
 			<Option virtualFolder="GraphicsModule/include/" />
+		</Unit>
+		<Unit filename="include/Entity.h">
+			<Option virtualFolder="GameObjects_v2/include/" />
+		</Unit>
+		<Unit filename="include/EntityManager.h">
+			<Option virtualFolder="GameObjects_v2/include/" />
 		</Unit>
 		<Unit filename="include/Enumerations.h">
 			<Option virtualFolder="Other/" />
@@ -78,6 +87,7 @@
 			<Option virtualFolder="Objects/include/" />
 		</Unit>
 		<Unit filename="include/LogicManager.h" />
+		<Unit filename="include/MiscFunctions.h" />
 		<Unit filename="include/NPCController.h">
 			<Option virtualFolder="Controllers/include/" />
 		</Unit>
@@ -113,11 +123,20 @@
 		<Unit filename="src/Board.cpp">
 			<Option virtualFolder="Objects/src/" />
 		</Unit>
+		<Unit filename="src/Component.cpp">
+			<Option virtualFolder="GameObjects_v2/src/" />
+		</Unit>
 		<Unit filename="src/Controller.cpp">
 			<Option virtualFolder="Controllers/src/" />
 		</Unit>
 		<Unit filename="src/DisplayManager.cpp">
 			<Option virtualFolder="GraphicsModule/src/" />
+		</Unit>
+		<Unit filename="src/Entity.cpp">
+			<Option virtualFolder="GameObjects_v2/src/" />
+		</Unit>
+		<Unit filename="src/EntityManager.cpp">
+			<Option virtualFolder="GameObjects_v2/src/" />
 		</Unit>
 		<Unit filename="src/Field.cpp" />
 		<Unit filename="src/GameInstance.cpp" />

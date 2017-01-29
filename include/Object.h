@@ -11,14 +11,14 @@
 using namespace std;
 /** templates for in-game object instances */
 /// na razie beda jedynym rodzajem obiektow, jak bedzie czas oddzieli sie bazy od instancji
-class Field;
+
 class Object
 {
     public:
         Object();
         virtual ~Object();
 
-        virtual Texture* texture() const {return nullptr;}
+        virtual SDL_Texture* texture() const {return nullptr;}
         virtual ObjectType type() const {return OBJECT_NONE;}
         virtual void update(int ms_passed) {if(_moving) updatePosition(ms_passed);}
         void updatePosition(int ms_passed) {_p.updatePosition(ms_passed);}
@@ -27,12 +27,13 @@ class Object
         void stop(){_moving = false;}
         void start(){_moving = true;}
         virtual void setController(Controller *controller) {}
-        virtual Field* field(int y, int x) const {return nullptr;}
+        virtual void* field(int y, int x) const {return nullptr;}
 
         virtual int width() const {return 0;}
         virtual int height()const {return 0;}
+        virtual int z() const {return 0;}
 
-        static void setGraphicsManager(GraphicsManager *gManager){_gManager = gManager;}
+//        static void setGraphicsManager(GraphicsManager *gManager){_gManager = gManager;}
 
         virtual SDL_Rect rect(int ms_passed = 0) const
         {
@@ -49,7 +50,7 @@ class Object
         PositionAndSpeed _p;
     //    double _posX, _posY, _vX, _vY;
     private:
-        static GraphicsManager *_gManager;
+    //    static GraphicsManager *_gManager;
 
      //   bool _printable;
 

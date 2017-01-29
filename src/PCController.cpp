@@ -9,8 +9,9 @@ PCController::~PCController()
 {
     //dtor
 }
-
+/*
 void PCController::control(Player *player)
 {
 
 }
+*/

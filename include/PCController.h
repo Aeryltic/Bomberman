@@ -2,15 +2,15 @@
 #define PCCONTROLLER_H
 
 #include <Controller.h>
-
+#include "InputManager.h"
 
 class PCController : public Controller
 {
     public:
         PCController();
         virtual ~PCController();
-        void setInputManager(InputManager *manager){_manager = manager;}
-        void control(Player *player);
+//        void setInputManager(InputManager *manager){_manager = manager;}
+//        void control(Player *player);
       //  void control()
     protected:
 

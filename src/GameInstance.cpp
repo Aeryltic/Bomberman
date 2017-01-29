@@ -13,6 +13,8 @@ GameInstance::GameInstance()
 		return -1; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	}
 	*/
+	_entityManager = make_shared<EntityManager>();
+	_inputManager = make_shared<InputManager>();
 }
 
 GameInstance::~GameInstance()
@@ -28,11 +30,11 @@ int GameInstance::run()
         return -1;
     }
     DisplayManager          _displayManager;
-    InputManager            _inputManager;
+   // InputManager            _inputManager;
     LogicManager            _logicManager;
     ObjectContainer         _objectContainer;
 
-    Object::setGraphicsManager(_displayManager.getGraphicsManager());
+//    Object::setGraphicsManager(_displayManager.getGraphicsManager());
 //    ObjectInstanceContainer _objectInstanceContainer(_objectContainer);
     // load objects => load textures
     // load instances
@@ -43,17 +45,19 @@ int GameInstance::run()
     double previous = SDL_GetTicks();
     double lag = 0.0;
    // SDL_Scancode quit_key = SDL_SCANCODE_ESCAPE;
-    while(!(_inputManager.keyStatus(SDLK_ESCAPE) & (KEY_PRESSED|KEY_DOWN)))
+    startGame();
+    while(!(_inputManager->keyStatus(SDLK_ESCAPE) & (KEY_PRESSED|KEY_DOWN)))
     {
         double current = SDL_GetTicks();
         double elapsed = current - previous;
         previous = current;
         lag += elapsed;
 
-        _inputManager.update(); /// przy duzym delay przyciski moga nie wspolpracowac - zmieniaja stan zanim gra zereaguje
+        _inputManager->update(); /// przy duzym delay przyciski moga nie wspolpracowac - zmieniaja stan zanim gra zereaguje
         while (lag >= TIMESTEP)
         {
-            _logicManager.update(_objectContainer, TIMESTEP);
+            //_logicManager.update(_objectContainer, TIMESTEP);
+            _logicManager.update(_entityManager, TIMESTEP);
             lag -= TIMESTEP;
         }
 
@@ -68,7 +72,7 @@ int GameInstance::run()
             last_check = SDL_GetTicks();
         }
 
-        SDL_Delay(200); /// tylko do testow
+        SDL_Delay(20); /// tylko do testow
     }
     /*
     //The window we'll be rendering to
@@ -140,5 +144,11 @@ int GameInstance::init()
         return -1;
     }
     */
+    return 0;
+}
+
+int GameInstance::startGame()
+{
+    _entityManager->createPlayer(320, 240, _inputManager);
     return 0;
 }

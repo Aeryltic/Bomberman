@@ -6,8 +6,9 @@
 #include "LogicManager.h"
 #include "ObjectContainer.h"
 #include "Structures.h"
-const int TICKS_PER_SECOND = 20;
-const int TIMESTEP = 1000/TICKS_PER_SECOND;
+/// v2 classes
+#include "EntityManager.h"
+
 
 class GameInstance
 {
@@ -16,10 +17,12 @@ class GameInstance
         virtual ~GameInstance();
         int run();
         int init(); /* 0 - ok , -1 - error */
+        int startGame();
     protected:
 
     private:
-
+        shared_ptr<EntityManager> _entityManager;
+        shared_ptr<InputManager> _inputManager;
         /*
         GraphicsManager _graphicsManager;
         InputManager _inputManager;

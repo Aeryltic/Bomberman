@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 
 #include <queue>
+#include "Field.h"
 
 DisplayManager::DisplayManager() : _window(WINDOW_WIDTH, WINDOW_HEIGHT)
 {
@@ -11,6 +12,7 @@ DisplayManager::DisplayManager() : _window(WINDOW_WIDTH, WINDOW_HEIGHT)
     _windowRect.x = 0;
     _windowRect.y = 0;
     SDL_GetWindowSize(_window._window, &_windowRect.w, &_windowRect.h);
+    printf("_windowRect: %d %d %d %d\n",_windowRect.x,_windowRect.y,_windowRect.w,_windowRect.h);
 }
 
 DisplayManager::~DisplayManager()
@@ -123,15 +125,17 @@ void DisplayManager::render(const ObjectContainer &objects, double interpolation
             wrzuca do renderera
     */
     priority_queue<ToRender> trt;
+    SDL_Rect rect;
     for(auto &o : objects.obj())
     {
         const Object &r = o.second;
         switch (r.type())
         {
             case OBJECT_REAL:
-                if(isVisible(r))
+                rect = r.rect();
+                if(isVisible(rect))
                 {
-
+                    trt.push(ToRender(r.texture(), rect, r.z()));
                 }
                 break;
             case OBJECT_BOARD:
@@ -139,13 +143,24 @@ void DisplayManager::render(const ObjectContainer &objects, double interpolation
                 {
                     for(int j=0; j<r.width(); j++)
                     {
-                        Field *field = r.field(i,j);
+                        Field *field = reinterpret_cast<Field*>(r.field(i,j)); /// !!!!!!!!!!!!!!!!!!!!!!
+                        rect = field->rect();
+                        if(isVisible(rect))
+                        {
+                            trt.push(ToRender(field->texture(),rect,field->z()));
+                        }
                     }
                 }
                 break;
             default:
                 break;
         }
+    }
+    while(!trt.empty())
+    {
+        auto &sth = trt.top();
+        SDL_RenderCopy(_window._renderer, sth.texture, NULL, &sth.rect);
+        trt.pop();
     }
     /// SDL_RenderCopyEx - do renderu z obrotem itp
     //Render texture to screen
@@ -155,20 +170,21 @@ void DisplayManager::render(const ObjectContainer &objects, double interpolation
     SDL_RenderPresent(_window._renderer);
 }
 
-bool DisplayManager::isVisible(const Object &obj)
+bool DisplayManager::isVisible(const SDL_Rect &rect)
 {
     /* SDL_bool SDL_IntersectRect(const SDL_Rect* A,
                            const SDL_Rect* B,
                            SDL_Rect*       result)
     */
     SDL_Point p;
-    p = obj.lt();
+    p.x = rect.x;
+    p.y = rect.y;
     if(SDL_PointInRect(&p, &_windowRect)) return true;
-    p = obj.rt();
+    p.x += rect.w;
     if(SDL_PointInRect(&p, &_windowRect)) return true;
-    p = obj.ld();
+    p.y += rect.h;
     if(SDL_PointInRect(&p, &_windowRect)) return true;
-    p = obj.rd();
+    p.x -= rect.w;
     if(SDL_PointInRect(&p, &_windowRect)) return true;
     return false;
 }

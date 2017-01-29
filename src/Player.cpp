@@ -1,8 +1,8 @@
 #include "Player.h"
 
-Player::Player()
+Player::Player()// : RealObject()
 {
-    //ctor
+    _z = 2;
 }
 
 Player::~Player()
