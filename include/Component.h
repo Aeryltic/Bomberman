@@ -19,16 +19,18 @@ class Component
         Component(Entity *target) : _target(target), _active(false) {}
         virtual ~Component() {}
 
-        virtual void update(int ms) {}
+        void update(int ms) {if(_active)work(ms);}
+
 
         virtual bool isActive() const {return _active;}
         virtual void setActive() {_active = true;}
         virtual void setTarget(entity_ptr target){_target = target; setActive();}
 
     protected:
+        virtual void work(int ms) { }
+
         entity_ptr _target;
         bool _active;
-
 
     private:
 
@@ -39,8 +41,10 @@ class Component
 class LifeComponent : public Component /// to indicate that if dies should be removed or something - should be handled externally (using events or sth)
 {
     public:
-        LifeComponent() {}
+        LifeComponent() {_alive = true;}
         virtual ~LifeComponent() {}
+    private:
+        bool _alive;
     /// SYSTEM NEEDED
 };
 
@@ -48,39 +52,64 @@ class PhysicalFormComponent : public Component
 {
     public:
         PhysicalFormComponent() {}
-        PhysicalFormComponent(double x, double y, double w, double h) : _position(x,y), _w(w), _h(h) {}
+        PhysicalFormComponent(double x, double y, double w, double h, double maxV) : Component(), _x(x), _y(y), _w(w), _h(h), _maxV(maxV) {_v = 0; _angle=0; _z = 0;}
         virtual ~PhysicalFormComponent() {}
-        void moveTo(double x, double y){_position.x = x; _position.y = y;}
-        void moveBy(double x, double y){_position.x += x; _position.y += y;}
-        void printPos() {printf("%lf x %lf\n",_position.x,_position.y);}
+
+        void moveTo(double x, double y){_x = x; _y = y;}
+        void moveBy(double dx, double dy){_x += dx; _y += dy;}
+        void printPos() const {printf("%.2lf x %.2lf\n",_x,_y);}
+
+        void setMovable() {_static = false;}
+        void setStatic() {_static = true;}
+
+        void setMaxSpeed(double maxV) {_maxV = maxV;}
+        void setSpeed(double v) {_v = v;}
+        void setAngle(double a) {_angle = a;}
+        void setSpeedToMax() {_v = _maxV;}
+
+        void setZ(int z){_z = z;}
+        int getZ(){return _z;}
+
+        SDL_Rect rect(int ms);
+
+    protected:
+        void work(int ms);
+
     private:
-        Vector2D _position;
+        //Vector2D _position;
+        bool _solid;
+        bool _static;
+
+        double _x, _y;
+        int _z; // wysokosc uzywana w renderowaniu
+        double _maxV, _v, _angle;
         double _w, _h;
 };
-
+/*
 class MovementComponent : public Component /// uses PhysicalFormComponent
 {
     public:
         MovementComponent() {_maxV = 50.0; _v = 0.0; _angle = 0.0; setActive();}
         MovementComponent(double maxV) {_maxV = maxV; _v = 0.0; _angle = 0.0; setActive();}
         virtual ~MovementComponent() {}
-        void update(int ms);
+        void work(int ms);
 
-        void setMaxSpeed(double maxV) {_maxV = maxV;}
-        void setSpeed(double v) {_v = v;}
-        void setAngle(double a) {_angle = a;}
-        void setSpeedToMax() {_v = _maxV;}
+
     private:
-        double _maxV, _v, _angle;
-};
 
+};
+*/
 class TextureComponent : public Component /// uses PhysicalFormComponent
 {
     public:
-        TextureComponent(SDL_Texture *texture) : _texture(texture) {}
+        TextureComponent(SDL_Texture *texture) : _texture(texture) {_source = nullptr;}
+        TextureComponent(SDL_Texture *texture, SDL_Rect *source) : _texture(texture), _source(source) {}
         virtual ~TextureComponent() {}
+
+        SDL_Texture *texture() {return _texture;}
     private:
         SDL_Texture *_texture;
+        SDL_Rect *_source;
 };
 
 class SolidComponent : public Component /// uses PhysicalFormComponent, sets collisions
@@ -91,26 +120,32 @@ class SolidComponent : public Component /// uses PhysicalFormComponent, sets col
     /// SYSTEM NEEDED
 };
 
-class PCControllerComponent : public Component /// uses MovementComponent
+class PCControllerComponent : public Component /// uses PhysicalFormComponent
 {
     public:
-      //  PCControllerComponent() : Component() {_iManager = nullptr;}
-        PCControllerComponent(shared_ptr<InputManager> iManager) : Component() {_iManager = iManager;}
+        PCControllerComponent(InputManager *iManager) : Component() {_iManager = iManager;}
         virtual ~PCControllerComponent() {}
 
-        void update(int ms);
-        //void setTarget(entity_ptr target){_target = target; _active = true;}
+        void setActive();
 
-        //void setActive();
     protected:
+        void work(int ms);
 
     private:
-        shared_ptr<InputManager> _iManager;
+        InputManager *_iManager;
+
 };
 
 class NPCControllerComponent : public Component /// uses MovementComponent
 {
+    NPCControllerComponent() : Component() {_hasDestination = false;}
     Vector2D _dest;
+    bool _hasDestination;
+};
+
+class Dangerous : public Component
+{
+
 };
 
 #endif // COMPONENT_H

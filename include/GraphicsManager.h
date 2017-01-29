@@ -18,7 +18,7 @@ class GraphicsManager
         SDL_Texture *getTexture(const char *path);
      //   int loadTextures(const char *reference_file_path);
         void createBlankTexture();
-        int loadTexture(string tex_path);
+        bool loadTexture(string tex_path);
         int copyTexToRenderer(const char *tex, SDL_Rect *rect);
     protected:
 
@@ -27,6 +27,7 @@ class GraphicsManager
         /* pierwsza wygenerowac jako BLANK */
        // unordered_map <string,Texture> textures;
        unordered_map <string,SDL_Texture*> textures;
+       /// unordered_map <string,shared_ptr<Texture>> _textures; /// tak to powinno wygladac
         SDL_Renderer *_renderer;
 };
 

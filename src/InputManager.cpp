@@ -2,12 +2,12 @@
 #include <cstdio>
 InputManager::InputManager()
 {
-    //SDL_Ena
+    printf("new InputManager\n");
 }
 
 InputManager::~InputManager()
 {
-    //dtor
+    printf("delete InputManager\n");
 }
 void InputManager::update()
 {

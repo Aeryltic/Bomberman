@@ -1,14 +1,16 @@
 #include "EntityManager.h"
 
 #include "Entity.h"
+#include "GraphicsManager.h"
+
 EntityManager::EntityManager()
 {
-    //ctor
+    printf("new EntityManager\n");
 }
 
 EntityManager::~EntityManager()
 {
-    //dtor
+    printf("delete EntityManager\n");
 }
 
 entity_ptr &EntityManager::createDefault()
@@ -22,15 +24,17 @@ entity_ptr &EntityManager::createMan(int x, int y)
 {
     entity_ptr &man = createDefault();
     man->addComponent(new LifeComponent);
-    man->addComponent(new PhysicalFormComponent(x,y,64,64));
-    man->addComponent(new MovementComponent);
+    man->addComponent(new PhysicalFormComponent(x,y,64,64,50));
+    man->getComponent<PhysicalFormComponent>()->setMovable();
     return man;
 }
 
-entity_ptr &EntityManager::createPlayer(int x, int y, shared_ptr<InputManager> iManager)
+entity_ptr &EntityManager::createPlayer(int x, int y, InputManager *iManager, GraphicsManager *gManager)
 {
     entity_ptr &player = createMan(x,y);
     player->addComponent(new PCControllerComponent(iManager));
+    player->addComponent(new TextureComponent(gManager->getTexture("textures/player.png")));
+
     player->setAsTarget();
     printf("player ready\n");
     return player;
@@ -38,7 +42,7 @@ entity_ptr &EntityManager::createPlayer(int x, int y, shared_ptr<InputManager> i
 
 void EntityManager::update(int ms)
 {
-    printf("updating: %llu\n", _entity.size());
+ //   printf("updating: %llu\n", _entity.size());
     for(auto &entity : _entity)
     {
         entity->update(ms);

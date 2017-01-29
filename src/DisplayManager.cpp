@@ -4,11 +4,14 @@
 
 #include <queue>
 #include "Field.h"
+#include "EntityManager.h"
 
 DisplayManager::DisplayManager() : _window(WINDOW_WIDTH, WINDOW_HEIGHT)
 {
+    printf("new DisplayManager\n");
     IMG_Init(IMG_INIT_PNG);
-    _graphicsManager = GraphicsManager(_window.getRenderer());
+    _graphicsManager = GraphicsManager(_window.getRenderer());//make_shared<GraphicsManager>(_window.getRenderer());
+    //_graphicsManager = GraphicsManager(_window.getRenderer());
     _windowRect.x = 0;
     _windowRect.y = 0;
     SDL_GetWindowSize(_window._window, &_windowRect.w, &_windowRect.h);
@@ -17,6 +20,7 @@ DisplayManager::DisplayManager() : _window(WINDOW_WIDTH, WINDOW_HEIGHT)
 
 DisplayManager::~DisplayManager()
 {
+    printf("delete DisplayManager\n");
     IMG_Quit();
     //dtor
 }
@@ -25,13 +29,119 @@ void DisplayManager::setup()
 {
 
 }
+void DisplayManager::render(const EntityManager *entityManager, int ms)
+{
+
+    SDL_RenderClear(_window._renderer);
+
+    /** tworzy priority_queue
+        dla kazdej instancji:
+            jesli na ekranie
+                oblicza pozycje
+                tworzy strukture { SDL_Rect rect, int h}
+                wrzuca do kolejki (priorytet po h)
+        dla kazdego w kolejce:
+            wrzuca do renderera
+    */
+    priority_queue<ToRender> trt;
+    SDL_Rect rect;
+    for(auto &entity : entityManager->entity())
+    {
+        if(entity->hasComponent<PhysicalFormComponent>() && entity->hasComponent<TextureComponent>())
+        {
+            SDL_Rect rect = entity->getComponent<PhysicalFormComponent>()->rect(ms);
+            if(isVisible(rect))
+            {
+                trt.push(ToRender(entity->getComponent<TextureComponent>()->texture(), rect, entity->getComponent<PhysicalFormComponent>()->getZ()));
+            }
+        }
+    }
+    while(!trt.empty())
+    {
+        auto &sth = trt.top();
+        SDL_RenderCopy(_window._renderer, sth.texture, NULL, &sth.rect);
+        trt.pop();
+    }
+    /// SDL_RenderCopyEx - do renderu z obrotem itp
+
+    SDL_RenderPresent(_window._renderer);
+}
 void DisplayManager::render(const ObjectContainer &objects, double interpolation)
 {
-   // for(auto ins : )
-       //Clear screen
-    SDL_RenderClear(_window._renderer);
-/// TEST
 /*
+    SDL_RenderClear(_window._renderer);
+
+
+    priority_queue<ToRender> trt;
+    SDL_Rect rect;
+    for(auto &o : objects.obj())
+    {
+        const Object &r = o.second;
+        switch (r.type())
+        {
+            case OBJECT_REAL:
+                rect = r.rect();
+                if(isVisible(rect))
+                {
+                    trt.push(ToRender(r.texture(), rect, r.z()));
+                }
+                break;
+            case OBJECT_BOARD:
+                for(int i=0; i<r.height(); i++)
+                {
+                    for(int j=0; j<r.width(); j++)
+                    {
+                        Field *field = reinterpret_cast<Field*>(r.field(i,j)); /// !!!!!!!!!!!!!!!!!!!!!!
+                        rect = field->rect();
+                        if(isVisible(rect))
+                        {
+                            trt.push(ToRender(field->texture(),rect,field->z()));
+                        }
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    while(!trt.empty())
+    {
+        auto &sth = trt.top();
+        SDL_RenderCopy(_window._renderer, sth.texture, NULL, &sth.rect);
+        trt.pop();
+    }
+    /// SDL_RenderCopyEx - do renderu z obrotem itp
+    //Render texture to screen
+    //SDL_RenderCopy(_window._renderer, gTexture, NULL, NULL );
+
+    //Update screen
+    SDL_RenderPresent(_window._renderer);
+    */
+}
+
+bool DisplayManager::isVisible(const SDL_Rect &rect)
+{
+    /* SDL_bool SDL_IntersectRect(const SDL_Rect* A,
+                           const SDL_Rect* B,
+                           SDL_Rect*       result)
+    */
+    SDL_Point p;
+    p.x = rect.x;
+    p.y = rect.y;
+    if(SDL_PointInRect(&p, &_windowRect)) return true;
+    p.x += rect.w;
+    if(SDL_PointInRect(&p, &_windowRect)) return true;
+    p.y += rect.h;
+    if(SDL_PointInRect(&p, &_windowRect)) return true;
+    p.x -= rect.w;
+    if(SDL_PointInRect(&p, &_windowRect)) return true;
+    return false;
+}
+
+void DisplayManager::test()
+{
+    /// TEST
+
     SDL_Texture *t1 = _graphicsManager.getTexture("textures/player.png");
     SDL_Texture *t2 = _graphicsManager.getTexture("textures/floor.png");
     SDL_Texture *t3 = nullptr;
@@ -112,79 +222,6 @@ void DisplayManager::render(const ObjectContainer &objects, double interpolation
     }
     SDL_DestroyTexture(t3);
     SDL_DestroyTexture(t4);
-    */
+
 /// KONIEC TESTU
-
-    /** tworzy priority_queue
-        dla kazdej instancji:
-            jesli na ekranie
-                oblicza pozycje
-                tworzy strukture { SDL_Rect rect, int h}
-                wrzuca do kolejki (priorytet po h)
-        dla kazdego w kolejce:
-            wrzuca do renderera
-    */
-    priority_queue<ToRender> trt;
-    SDL_Rect rect;
-    for(auto &o : objects.obj())
-    {
-        const Object &r = o.second;
-        switch (r.type())
-        {
-            case OBJECT_REAL:
-                rect = r.rect();
-                if(isVisible(rect))
-                {
-                    trt.push(ToRender(r.texture(), rect, r.z()));
-                }
-                break;
-            case OBJECT_BOARD:
-                for(int i=0; i<r.height(); i++)
-                {
-                    for(int j=0; j<r.width(); j++)
-                    {
-                        Field *field = reinterpret_cast<Field*>(r.field(i,j)); /// !!!!!!!!!!!!!!!!!!!!!!
-                        rect = field->rect();
-                        if(isVisible(rect))
-                        {
-                            trt.push(ToRender(field->texture(),rect,field->z()));
-                        }
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-    }
-    while(!trt.empty())
-    {
-        auto &sth = trt.top();
-        SDL_RenderCopy(_window._renderer, sth.texture, NULL, &sth.rect);
-        trt.pop();
-    }
-    /// SDL_RenderCopyEx - do renderu z obrotem itp
-    //Render texture to screen
-    //SDL_RenderCopy(_window._renderer, gTexture, NULL, NULL );
-
-    //Update screen
-    SDL_RenderPresent(_window._renderer);
-}
-
-bool DisplayManager::isVisible(const SDL_Rect &rect)
-{
-    /* SDL_bool SDL_IntersectRect(const SDL_Rect* A,
-                           const SDL_Rect* B,
-                           SDL_Rect*       result)
-    */
-    SDL_Point p;
-    p.x = rect.x;
-    p.y = rect.y;
-    if(SDL_PointInRect(&p, &_windowRect)) return true;
-    p.x += rect.w;
-    if(SDL_PointInRect(&p, &_windowRect)) return true;
-    p.y += rect.h;
-    if(SDL_PointInRect(&p, &_windowRect)) return true;
-    p.x -= rect.w;
-    if(SDL_PointInRect(&p, &_windowRect)) return true;
-    return false;
 }

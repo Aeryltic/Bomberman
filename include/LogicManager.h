@@ -10,7 +10,7 @@ class LogicManager
         LogicManager();
         virtual ~LogicManager();
         //void update(ObjectContainer &object, int time_passed);
-        void update(shared_ptr<EntityManager> &entityManager, int ms_passed);
+        void update(EntityManager *entityManager, int ms_passed);
     protected:
 
     private:

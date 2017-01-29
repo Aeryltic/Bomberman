@@ -6,20 +6,16 @@
 GameInstance::GameInstance()
 {
     /** INITIALIZE */ /* maybe not */
+    printf("new GameInstance\n");
     /*
-    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
-	{
-		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
-		return -1; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	}
+
 	*/
-	_entityManager = make_shared<EntityManager>();
-	_inputManager = make_shared<InputManager>();
 }
 
 GameInstance::~GameInstance()
 {
     /** DESTROY EVERYTHING */
+    printf("delete GameInstance\n");
     SDL_Quit();
 }
 
@@ -29,15 +25,6 @@ int GameInstance::run()
     {
         return -1;
     }
-    DisplayManager          _displayManager;
-   // InputManager            _inputManager;
-    LogicManager            _logicManager;
-    ObjectContainer         _objectContainer;
-
-//    Object::setGraphicsManager(_displayManager.getGraphicsManager());
-//    ObjectInstanceContainer _objectInstanceContainer(_objectContainer);
-    // load objects => load textures
-    // load instances
 
     double last_check = SDL_GetTicks();
     int frames = 0;
@@ -45,24 +32,28 @@ int GameInstance::run()
     double previous = SDL_GetTicks();
     double lag = 0.0;
    // SDL_Scancode quit_key = SDL_SCANCODE_ESCAPE;
-    startGame();
-    while(!(_inputManager->keyStatus(SDLK_ESCAPE) & (KEY_PRESSED|KEY_DOWN)))
+
+   /// TEST
+    _entityManager.createPlayer(320, 240, &_inputManager, _displayManager.getGraphicsManager());
+   /// KONIEC TESTU
+ //   startGame(_entityManager);
+    while(!(_inputManager.keyStatus(SDLK_ESCAPE) & (KEY_PRESSED|KEY_DOWN)))
     {
         double current = SDL_GetTicks();
         double elapsed = current - previous;
         previous = current;
         lag += elapsed;
 
-        _inputManager->update(); /// przy duzym delay przyciski moga nie wspolpracowac - zmieniaja stan zanim gra zereaguje
+        _inputManager.update(); /// przy duzym delay przyciski moga nie wspolpracowac - zmieniaja stan zanim gra zereaguje
         while (lag >= TIMESTEP)
         {
             //_logicManager.update(_objectContainer, TIMESTEP);
-            _logicManager.update(_entityManager, TIMESTEP);
+            _logicManager.update(&_entityManager, TIMESTEP);
             lag -= TIMESTEP;
         }
 
-       // _displayManager.render(_objectContainer, lag / TIMESTEP);
-        _displayManager.render(_objectContainer, lag);
+        //_displayManager.render(_objectContainer, lag);
+        _displayManager.render(&_entityManager, lag);
         frames++;
 
         if(SDL_GetTicks() - last_check >= 1000)
@@ -72,7 +63,7 @@ int GameInstance::run()
             last_check = SDL_GetTicks();
         }
 
-        SDL_Delay(20); /// tylko do testow
+        SDL_Delay(1); /// tylko do testow
     }
     /*
     //The window we'll be rendering to
@@ -146,9 +137,10 @@ int GameInstance::init()
     */
     return 0;
 }
-
-int GameInstance::startGame()
+/*
+int GameInstance::startGame(shared_ptr<EntityManager> _entityManager, shared_ptr<InputManager> _inputManager, shared_ptr<DisplayManager> _displayManager)
 {
-    _entityManager->createPlayer(320, 240, _inputManager);
+    _entityManager->createPlayer(320, 240, _inputManager, _displayManager->getGraphicsManager());
     return 0;
 }
+*/

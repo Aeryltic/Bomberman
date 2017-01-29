@@ -13,13 +13,6 @@ Entity::~Entity()
     }
 }
 
-template<class C>
-bool Entity::hasComponent() const
-{
-    int key = typeid(C).hash_code();
-    return _component.find(key) != _component.end();
-}
-
 inline bool Entity::hasComponent(int key) const
 {
     return _component.find(key) != _component.end();

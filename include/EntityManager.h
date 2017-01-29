@@ -5,11 +5,12 @@
 #include <vector>
 
 #include "Constants.h"
+#include "Entity.h"
 
 using namespace std;
 
-class Entity;
 class InputManager;
+class GraphicsManager;
 
 class EntityManager
 {
@@ -18,10 +19,10 @@ class EntityManager
         virtual ~EntityManager();
         entity_ptr &createDefault();
         entity_ptr &createMan(int x, int y);
-        entity_ptr &createPlayer(int x, int y, shared_ptr<InputManager> iManager);
+        entity_ptr &createPlayer(int x, int y, InputManager *iManager, GraphicsManager *gManager);
 
         void update(int ms);
-
+        const vector<entity_ptr> &entity() const{return _entity;}
     protected:
 
     private:

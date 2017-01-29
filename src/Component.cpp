@@ -11,56 +11,65 @@ void PCControllerComponent::setActive()
     }
 }
 */
-void PCControllerComponent::update(int ms)
+void PCControllerComponent::setActive()
 {
-    if(_active)
+    if(_target->hasComponent<PhysicalFormComponent>() && _iManager != nullptr)
+        _active = true;
+}
+void PCControllerComponent::work(int ms)
+{
+    if(_iManager->keyStatus(SDLK_w) & (KEY_PRESSED|KEY_DOWN))
     {
-        // movement
-        if(_iManager->keyStatus(SDLK_w) & (KEY_PRESSED|KEY_DOWN))
-        {
-            _target->getComponent<MovementComponent>()->setSpeedToMax();
-            _target->getComponent<MovementComponent>()->setAngle(M_PI/2);
-            /// go up
-        }
-        else if(_iManager->keyStatus(SDLK_s) & (KEY_PRESSED|KEY_DOWN))
-        {
-            _target->getComponent<MovementComponent>()->setSpeedToMax();
-            _target->getComponent<MovementComponent>()->setAngle(M_PI*3/2);
-            /// go down
-        }
-        else if(_iManager->keyStatus(SDLK_a) & (KEY_PRESSED|KEY_DOWN))
-        {
-            _target->getComponent<MovementComponent>()->setSpeedToMax();
-            _target->getComponent<MovementComponent>()->setAngle(M_PI);
-            /// go left
-        }
-        else if(_iManager->keyStatus(SDLK_d) & (KEY_PRESSED|KEY_DOWN))
-        {
-            _target->getComponent<MovementComponent>()->setSpeedToMax();
-            _target->getComponent<MovementComponent>()->setAngle(0);
-            /// go right
-        }
-        else _target->getComponent<MovementComponent>()->setSpeed(0);
-        // bomb dropping
-        if(_iManager->keyStatus(SDLK_SPACE) & (KEY_PRESSED))
-        {
-            /// drop bomb
-        }
+        _target->getComponent<PhysicalFormComponent>()->setSpeedToMax();
+        _target->getComponent<PhysicalFormComponent>()->setAngle(M_PI/2);
+        /// go up
     }
-    else printf("player controller not active\n");
+    else if(_iManager->keyStatus(SDLK_s) & (KEY_PRESSED|KEY_DOWN))
+    {
+        _target->getComponent<PhysicalFormComponent>()->setSpeedToMax();
+        _target->getComponent<PhysicalFormComponent>()->setAngle(M_PI*3/2);
+        /// go down
+    }
+    else if(_iManager->keyStatus(SDLK_a) & (KEY_PRESSED|KEY_DOWN))
+    {
+        _target->getComponent<PhysicalFormComponent>()->setSpeedToMax();
+        _target->getComponent<PhysicalFormComponent>()->setAngle(M_PI);
+        /// go left
+    }
+    else if(_iManager->keyStatus(SDLK_d) & (KEY_PRESSED|KEY_DOWN))
+    {
+        _target->getComponent<PhysicalFormComponent>()->setSpeedToMax();
+        _target->getComponent<PhysicalFormComponent>()->setAngle(0);
+        /// go right
+    }
+    else _target->getComponent<PhysicalFormComponent>()->setSpeed(0);
+    // bomb dropping
+    if(_iManager->keyStatus(SDLK_SPACE) & (KEY_PRESSED))
+    {
+        /// drop bomb
+    }
 }
 
-void MovementComponent::update(int ms)
+void PhysicalFormComponent::work(int ms)
 {
-    if(_active)
+    if(!_static)
     {
         if(_v >= 0.00001)
         {
             double  mx = cos(_angle) * _v / 1000.0 * ms,
                     my = sin(_angle) * _v / 1000.0 * ms;
-            _target->getComponent<PhysicalFormComponent>()->moveBy(mx,my);
-            _target->getComponent<PhysicalFormComponent>()->printPos();
+            moveBy(mx,my);
+            printPos();
         }
+       // else printf("not moving\n");
     }
+   // else printf("static\n");
+}
+SDL_Rect PhysicalFormComponent::rect(int ms)
+{
+    SDL_Rect rect = {.x = _x, .y = _y, .w = _w, .h = _h};
+    rect.x += cos(_angle) * _v / 1000.0 * ms;
+    rect.y += sin(_angle) * _v / 1000.0 * ms;
+    return rect;
 }
 

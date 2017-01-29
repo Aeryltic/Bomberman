@@ -2,10 +2,12 @@
 #include <fstream>
 GraphicsManager::GraphicsManager()
 {
+    printf("new GraphicsManager\n");
     _renderer = nullptr;
 }
 GraphicsManager::GraphicsManager(SDL_Renderer *renderer)
 {
+    printf("new GraphicsManager\n");
     _renderer = renderer;
     createBlankTexture();
     //ctor
@@ -17,9 +19,11 @@ GraphicsManager::~GraphicsManager()
     /*
     textures.clear();
     */
+    printf("delete GraphicsManager()\n");
     for(auto &tex : textures)
         SDL_DestroyTexture(tex.second);
     textures.clear();
+
 }
 SDL_Texture *GraphicsManager::getTexture(const string &path) ///nie powinien ladowac
 {
@@ -30,21 +34,11 @@ SDL_Texture *GraphicsManager::getTexture(const string &path) ///nie powinien lad
     if(found == textures.end())
     {
         printf("Texture: %s not found. Loading texture.\n", path.c_str());
-        if(loadTexture(path) == 0)
-        {
-            texture = textures[path];
-        }
-        else
-        {
-            //texture = &(textures["BLANK"]);
-            printf("Not found - giving BLANK.\n");
-            return textures["BLANK"];//.SDL_Tex();
-        }
+        loadTexture(path);
     }
-    else
-    {
-        texture = found->second;//&(found->second);
-    }
+    texture = textures[path];
+    if(texture == nullptr) texture = textures["BLANK"];
+
     return texture;//->SDL_Tex();
 }
 
@@ -81,13 +75,9 @@ int GraphicsManager::loadTextures(const char *reference_file_path) // NIE DZIALA
     return 0;
 }
 */
-int GraphicsManager::loadTexture(string texture_path)
+bool GraphicsManager::loadTexture(string texture_path)
 {
-    /*
-    if(textures.find(texture_path) == textures.end())
-        textures[texture_path] = Texture(_renderer, texture_path);
-        */
-
+    printf("Loading texture: %s\n",texture_path.c_str());
     //The final texture
     SDL_Texture* newTexture = NULL;
 
@@ -96,7 +86,8 @@ int GraphicsManager::loadTexture(string texture_path)
     if( loadedSurface == nullptr )
     {
         printf( "Unable to load image %s! SDL_image Error: %s\n", texture_path.c_str(), IMG_GetError() );
-        return -1;
+        textures.insert(make_pair(texture_path,nullptr));
+        return 0;
     }
     else
     {
@@ -106,12 +97,13 @@ int GraphicsManager::loadTexture(string texture_path)
         if( newTexture == NULL )
         {
             printf( "Unable to create texture from %s! SDL Error: %s\n", texture_path.c_str(), SDL_GetError() );
-            return -1;
+            textures.insert(make_pair(texture_path,nullptr));
+            return 0;
         }
     }
-    //textures[texture_path] = Texture(newTexture);
-    textures[texture_path] = newTexture;
-    return 0;
+    textures.insert(make_pair(texture_path,newTexture));
+    printf("Texture loaded.\n");
+    return 1;
 }
 
 void GraphicsManager::createBlankTexture()

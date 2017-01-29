@@ -2,12 +2,12 @@
 
 LogicManager::LogicManager()
 {
-    //ctor
+    printf("new LogicManager\n");
 }
 
 LogicManager::~LogicManager()
 {
-    //dtor
+    printf("delete LogicManager\n");
 }
 /*
 void LogicManager::update(ObjectContainer &object, int time_passed)
@@ -19,7 +19,7 @@ void LogicManager::update(ObjectContainer &object, int time_passed)
 }
 */
 
-void LogicManager::update(shared_ptr<EntityManager> &entityManager, int ms_passed)
+void LogicManager::update(EntityManager *entityManager, int ms_passed)
 {
     entityManager->update(ms_passed);
 }

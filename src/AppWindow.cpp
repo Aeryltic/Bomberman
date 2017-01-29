@@ -2,6 +2,7 @@
 
 AppWindow::AppWindow(int w, int h) /* to nie powinno byc tak - raczej po prostu przekazac gotowe window i renderer */
 {
+    printf("new AppWindow\n");
     _window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_SHOWN );
     _renderer = nullptr;
     if(_window)
@@ -13,6 +14,7 @@ AppWindow::AppWindow(int w, int h) /* to nie powinno byc tak - raczej po prostu 
 
 AppWindow::~AppWindow()
 {
+    printf("delete AppWindow\n");
     SDL_DestroyRenderer(_renderer);
     SDL_DestroyWindow(_window);
 }
