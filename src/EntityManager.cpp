@@ -24,7 +24,7 @@ entity_ptr &EntityManager::createMan(int x, int y)
 {
     entity_ptr &man = createDefault();
     man->addComponent(new LifeComponent);
-    man->addComponent(new PhysicalFormComponent(x,y,64,64,50));
+    man->addComponent(new PhysicalFormComponent(x,y,64,64,200));
     man->getComponent<PhysicalFormComponent>()->setMovable();
     return man;
 }

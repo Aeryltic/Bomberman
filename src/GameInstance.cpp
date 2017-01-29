@@ -25,13 +25,16 @@ int GameInstance::run()
     {
         return -1;
     }
+        DisplayManager          _displayManager;
+        InputManager            _inputManager;
+        LogicManager            _logicManager;
+        EntityManager           _entityManager;
 
     double last_check = SDL_GetTicks();
     int frames = 0;
 //    bool quit = false;
     double previous = SDL_GetTicks();
     double lag = 0.0;
-   // SDL_Scancode quit_key = SDL_SCANCODE_ESCAPE;
 
    /// TEST
     _entityManager.createPlayer(320, 240, &_inputManager, _displayManager.getGraphicsManager());
@@ -65,6 +68,7 @@ int GameInstance::run()
 
         SDL_Delay(1); /// tylko do testow
     }
+
     /*
     //The window we'll be rendering to
 	SDL_Window* window = nullptr;

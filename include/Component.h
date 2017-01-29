@@ -128,8 +128,7 @@ class PCControllerComponent : public Component /// uses PhysicalFormComponent
 
         void setActive();
 
-    protected:
-        void work(int ms);
+
 
     private:
         InputManager *_iManager;
@@ -148,4 +147,15 @@ class Dangerous : public Component
 
 };
 
+class TimerComponent : public Component
+{
+    public:
+        TimerComponent(int timer) : Component(), _msLeft(timer) {}
+        ~TimerComponent(){}
+        bool timeIsUp(){return _msLeft <= 0;}
+    protected:
+        void work(int ms) {_msLeft-=ms;}
+    private:
+        int _msLeft;
+};
 #endif // COMPONENT_H

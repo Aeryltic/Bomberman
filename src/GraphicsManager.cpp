@@ -15,15 +15,10 @@ GraphicsManager::GraphicsManager(SDL_Renderer *renderer)
 
 GraphicsManager::~GraphicsManager()
 {
-    //dtor
-    /*
-    textures.clear();
-    */
-    printf("delete GraphicsManager()\n");
+    printf("delete GraphicsManager\n");
     for(auto &tex : textures)
         SDL_DestroyTexture(tex.second);
     textures.clear();
-
 }
 SDL_Texture *GraphicsManager::getTexture(const string &path) ///nie powinien ladowac
 {

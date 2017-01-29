@@ -18,35 +18,31 @@ void PCControllerComponent::setActive()
 }
 void PCControllerComponent::work(int ms)
 {
-    if(_iManager->keyStatus(SDLK_w) & (KEY_PRESSED|KEY_DOWN))
-    {
-        _target->getComponent<PhysicalFormComponent>()->setSpeedToMax();
-        _target->getComponent<PhysicalFormComponent>()->setAngle(M_PI/2);
-        /// go up
-    }
-    else if(_iManager->keyStatus(SDLK_s) & (KEY_PRESSED|KEY_DOWN))
+    if(_iManager->keyStatus(SDLK_w) & (KEY_PRESSED|KEY_DOWN))   // go up
     {
         _target->getComponent<PhysicalFormComponent>()->setSpeedToMax();
         _target->getComponent<PhysicalFormComponent>()->setAngle(M_PI*3/2);
-        /// go down
     }
-    else if(_iManager->keyStatus(SDLK_a) & (KEY_PRESSED|KEY_DOWN))
+    else if(_iManager->keyStatus(SDLK_s) & (KEY_PRESSED|KEY_DOWN))  // go down
+    {
+        _target->getComponent<PhysicalFormComponent>()->setSpeedToMax();
+        _target->getComponent<PhysicalFormComponent>()->setAngle(M_PI/2);
+    }
+    else if(_iManager->keyStatus(SDLK_a) & (KEY_PRESSED|KEY_DOWN))  // go left
     {
         _target->getComponent<PhysicalFormComponent>()->setSpeedToMax();
         _target->getComponent<PhysicalFormComponent>()->setAngle(M_PI);
-        /// go left
     }
-    else if(_iManager->keyStatus(SDLK_d) & (KEY_PRESSED|KEY_DOWN))
+    else if(_iManager->keyStatus(SDLK_d) & (KEY_PRESSED|KEY_DOWN))  // go right
     {
         _target->getComponent<PhysicalFormComponent>()->setSpeedToMax();
         _target->getComponent<PhysicalFormComponent>()->setAngle(0);
-        /// go right
     }
     else _target->getComponent<PhysicalFormComponent>()->setSpeed(0);
     // bomb dropping
-    if(_iManager->keyStatus(SDLK_SPACE) & (KEY_PRESSED))
+    if(_iManager->keyStatus(SDLK_SPACE) & (KEY_PRESSED))    // drop bomb
     {
-        /// drop bomb
+
     }
 }
 

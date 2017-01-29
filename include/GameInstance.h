@@ -21,10 +21,7 @@ class GameInstance
     protected:
 
     private:
-        DisplayManager          _displayManager;
-        InputManager            _inputManager;
-        LogicManager            _logicManager;
-        EntityManager           _entityManager;
+
         //shared_ptr<GraphicsManager> _graphicsManager;
         /*
         GraphicsManager _graphicsManager;

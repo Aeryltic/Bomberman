@@ -50,16 +50,21 @@ void DisplayManager::render(const EntityManager *entityManager, int ms)
         if(entity->hasComponent<PhysicalFormComponent>() && entity->hasComponent<TextureComponent>())
         {
             SDL_Rect rect = entity->getComponent<PhysicalFormComponent>()->rect(ms);
+            //printf("rect: %d %d %d %d\n",rect.x, rect.y, rect.w, rect.h);
             if(isVisible(rect))
             {
                 trt.push(ToRender(entity->getComponent<TextureComponent>()->texture(), rect, entity->getComponent<PhysicalFormComponent>()->getZ()));
             }
         }
     }
+    //printf("rendering: %d\n",trt.size());
     while(!trt.empty())
     {
         auto &sth = trt.top();
-        SDL_RenderCopy(_window._renderer, sth.texture, NULL, &sth.rect);
+        if(SDL_RenderCopy(_window._renderer, sth.texture, NULL, &sth.rect) < 0)
+        {
+            printf("SDL_RenderCopy - Error\n");
+        }
         trt.pop();
     }
     /// SDL_RenderCopyEx - do renderu z obrotem itp
