@@ -4,14 +4,19 @@
 class GameInstance
 {
     public:
-        GameInstance();
+
         virtual ~GameInstance();
+        static GameInstance &getInstance();
         int run();
         int init();
         int startGame();
+
+        void quit();
     protected:
 
     private:
+        GameInstance();
+        bool _working;
 };
 
 #endif // GAMEINSTANCE_H

@@ -8,6 +8,7 @@
 #include "LogicManager.h"
 #include "EntityManager.h"
 #include "ObjectFactory.h"
+#include "EventManager.h"
 
 #include "Structures.h"
 
@@ -15,6 +16,7 @@ GameInstance::GameInstance()
 {
     /** INITIALIZE */ /* maybe not */
     printf("new GameInstance\n");
+    _working = true;
     /*
 
 	*/
@@ -35,8 +37,9 @@ int GameInstance::run()
     }
     DisplayManager  _displayManager;
     InputManager    _inputManager;
-    LogicManager    _logicManager;
+    LogicManager    _logicManager; /// to jemu sie przypisze te "systemy"
     EntityManager   _entityManager;
+    EventManager    _eventManager(&_inputManager);
 
     ObjectFactory   _objectFactory(&_entityManager, _displayManager.getGraphicsManager(), &_inputManager);
 
@@ -51,7 +54,8 @@ int GameInstance::run()
     if(!_objectFactory.createWorld("boards/lvl1")) return -1; /// przydaloby sie zeby sprawdzac czy gre faktycznie mozna zaczac
    /// KONIEC TESTU
  //   startGame(_entityManager);
-    while(!(_inputManager.keyStatus(SDLK_ESCAPE) & (KEY_PRESSED|KEY_DOWN)))
+    //while(!(_inputManager.keyStatus(SDLK_ESCAPE) & (KEY_PRESSED|KEY_DOWN)))
+    while(_working)
     {
         double current = SDL_GetTicks();
         double elapsed = current - previous;
@@ -59,6 +63,8 @@ int GameInstance::run()
         lag += elapsed;
 
         _inputManager.update(); /// przy duzym delay przyciski moga nie wspolpracowac - zmieniaja stan zanim gra zereaguje
+
+        _eventManager.update();
         while (lag >= TIMESTEP)
         {
             //_logicManager.update(_objectContainer, TIMESTEP);
@@ -151,6 +157,16 @@ int GameInstance::init()
     }
     */
     return 0;
+}
+void GameInstance::quit()
+{
+    _working = false;
+}
+
+GameInstance &GameInstance::getInstance()
+{
+    static GameInstance instance;
+    return instance;
 }
 /*
 int GameInstance::startGame(shared_ptr<EntityManager> _entityManager, shared_ptr<InputManager> _inputManager, shared_ptr<DisplayManager> _displayManager)

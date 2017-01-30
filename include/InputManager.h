@@ -15,7 +15,8 @@ class InputManager
         InputManager();
         virtual ~InputManager();
         void update();
-        KeyStatus keyStatus(SDL_Keycode keycode);
+        KeyStatus keyStatus(SDL_Keycode keycode) {return _key[keycode];}
+        void setKeyStatus(SDL_Keycode keycode, KeyStatus status);
     protected:
 
     private:

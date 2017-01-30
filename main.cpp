@@ -2,7 +2,6 @@
 
 int main( int argc, char* args[] )
 {
-    GameInstance game;
-    game.run();
+    GameInstance::getInstance().run();
 	return 0;
 }

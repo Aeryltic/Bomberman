@@ -1,16 +1,24 @@
-fix BLANK texture bug
+## WAØNE:
 
-naprawiÊ interpolacje (øeby zmieniac pozycje a potem predkosc - bo teraz jest na odwrÛt)
+	# naprawiÊ interpolacje (øeby zmieniac pozycje a potem predkosc - bo teraz jest na odwrÛt)
 
-EventManager oraz systemy i bedzie po sprawie
+	# EventManager oraz systemy i bedzie po sprawie
 
-Systemy:
-- kontrola bomb (sprawdzanie czy wybuchly, usuwanie ich, wysylanie eventa ze gdzies nastapila eksplozja)
-- sterowanie botami
-- updatowanie swiata (odbieranie eventow o eksplozjach, ktoú ginie, jakies klocki sa niszczone, itp)
-- ogÛlna fizyka - kolizje itp
-- ewentualnie - przemieszczanie korzystajace z NavNode'Ûw
+	# Systemy:
+		- kontrola bomb (sprawdzanie czy wybuchly, usuwanie ich, wysylanie eventa ze gdzies nastapila eksplozja)
+		- sterowanie botami
+		- updatowanie swiata (odbieranie eventow o eksplozjach, ktoú ginie, jakies klocki sa niszczone, itp)
+		- ogÛlna fizyka - kolizje itp
+		- ewentualnie - przemieszczanie korzystajace z NavNode'Ûw
+	
+	# multimapy do przechowywania komponentÛw? - "optymalizacja" przy korzystaniu z systemow
+	
+	# opakowaÊ tekstury w tπ klase (Texture), øeby nie martwiÊ sie zarzπdzaniem pamieciπ
+	
+## MNIEJ WAØNE:
 
-DèWI K?
+	# naprawiÊ tego buga z BLANK teksturπ
 
-multimapy do przechowywania komponentÛw?
+	# DèWI K?
+
+	# pousuwaÊ niepotrzebne pliki

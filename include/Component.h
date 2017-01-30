@@ -34,8 +34,8 @@ class Component
 
     private:
 
-        /// taki pomysl na optymalizacje, ale czy to rozsadne? - juz odpowiadam: to nie zadziala tak jak bys chcial
-        //static vector<int> _user;
+       /// static unordered_multimap<Component,Component> *_store;
+       /// klucz musi byæ jeden dla kazdego rodzaju komponentu
 };
 
 class LifeComponent : public Component /// to indicate that if dies should be removed or something - should be handled externally (using events or some system)

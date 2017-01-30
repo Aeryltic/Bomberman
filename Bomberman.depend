@@ -1041,10 +1041,10 @@
 1484993295 source:c:\users\user\desktop\bomberman\bomberman\src\logicmanager.cpp
 	"LogicManager.h"
 
-1484992076 source:c:\users\user\desktop\bomberman\main.cpp
+1485741825 source:c:\users\user\desktop\bomberman\main.cpp
 	"GameInstance.h"
 
-1485726843 c:\users\user\desktop\bomberman\include\gameinstance.h
+1485742041 c:\users\user\desktop\bomberman\include\gameinstance.h
 
 1485728635 c:\users\user\desktop\bomberman\include\graphicsmanager.h
 	<unordered_map>
@@ -1060,7 +1060,7 @@
 	<memory>
 	"SDL.h"
 
-1485553778 c:\users\user\desktop\bomberman\include\inputmanager.h
+1485742973 c:\users\user\desktop\bomberman\include\inputmanager.h
 	<SDL.h>
 	"Structures.h"
 	"Enumerations.h"
@@ -1077,7 +1077,7 @@
 	"GraphicsManager.h"
 	<fstream>
 
-1485737485 source:c:\users\user\desktop\bomberman\src\inputmanager.cpp
+1485741512 source:c:\users\user\desktop\bomberman\src\inputmanager.cpp
 	"InputManager.h"
 	<cstdio>
 
@@ -1109,7 +1109,7 @@
 1485549514 c:\users\user\desktop\bomberman\include\abstractobject.h
 	<Object.h>
 
-1485737070 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
+1485741892 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
 	"GameInstance.h"
 	<SDL.h>
 	<stdio.h>
@@ -1118,6 +1118,7 @@
 	"LogicManager.h"
 	"EntityManager.h"
 	"ObjectFactory.h"
+	"EventManager.h"
 	"Structures.h"
 
 1485549077 source:c:\users\user\desktop\bomberman\src\objectcontainer.cpp
@@ -1233,7 +1234,7 @@
 	"Entity.h"
 	<cmath>
 
-1485736386 c:\users\user\desktop\bomberman\include\component.h
+1485739969 c:\users\user\desktop\bomberman\include\component.h
 	<vector>
 	"Structures.h"
 	<SDL.h>
@@ -1257,8 +1258,7 @@
 	"Entity.h"
 	"GraphicsManager.h"
 
-1485725195 c:\users\user\desktop\bomberman\include\entitymanager.h
-	<unordered_map>
+1485739039 c:\users\user\desktop\bomberman\include\entitymanager.h
 	<vector>
 	"Constants.h"
 	"Entity.h"
@@ -1275,8 +1275,10 @@
 	"Constants.h"
 	"Entity.h"
 
-1485731493 source:c:\users\user\desktop\bomberman\src\eventmanager.cpp
+1485741837 source:c:\users\user\desktop\bomberman\src\eventmanager.cpp
 	"EventManager.h"
+	"GameInstance.h"
 
-1485731493 c:\users\user\desktop\bomberman\include\eventmanager.h
+1485741126 c:\users\user\desktop\bomberman\include\eventmanager.h
+	"InputManager.h"
 

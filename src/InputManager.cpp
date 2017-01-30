@@ -11,39 +11,17 @@ InputManager::~InputManager()
 }
 void InputManager::update()
 {
-    SDL_Event _event; /// powinien miec swoja osobna kolejke tylko z akcjami klawiatury i myszki
     for(auto &key : _key)
     {
+        //if((key.second)&(KEY_PRESSED|KEY_RELEASED))key.second<<=1; /// doesn't work with enums
         if(key.second == KEY_PRESSED) key.second = KEY_DOWN;//, printf("down: %s\n",SDL_GetKeyName(key.first));
         else if(key.second == KEY_RELEASED) key.second = KEY_UP;//, printf("up: %s\n",SDL_GetKeyName(key.first));
     }
-    while(SDL_PollEvent(&_event))
-    {
-        switch(_event.type)
-        {
-            case SDL_KEYDOWN:
-            {
-                if(_key[_event.key.keysym.sym] != KEY_DOWN)
-                {
-                    _key[_event.key.keysym.sym] = KEY_PRESSED;
-                    //printf("pressed: %s\n",SDL_GetKeyName(_event.key.keysym.sym));
-                }
-                break;
-            }
-            case SDL_KEYUP:
-            {
-                if(_key[_event.key.keysym.sym] != KEY_UP) // even tho it's practically impossible
-                {
-                    _key[_event.key.keysym.sym] = KEY_RELEASED;
-              //      printf("released: %s\n",SDL_GetKeyName(_event.key.keysym.sym));
-                }
-                break;
-            }
-        }
-    }
 }
 
-KeyStatus InputManager::keyStatus(SDL_Keycode keycode)
+void InputManager::setKeyStatus(SDL_Keycode keycode, KeyStatus status)
 {
-    return _key[keycode];
+    //if(!((_key[keycode]>>1) & status))_key[keycode] = status; /// doesn't work with enums
+    if((status == KEY_PRESSED) && (_key[keycode] != KEY_DOWN)) _key[keycode] = KEY_PRESSED;
+    else if(status == KEY_RELEASED) _key[keycode] = KEY_RELEASED;
 }
