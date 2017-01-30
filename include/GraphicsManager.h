@@ -20,6 +20,15 @@ class GraphicsManager
         void createBlankTexture();
         bool loadTexture(string tex_path);
         int copyTexToRenderer(const char *tex, SDL_Rect *rect);
+    /// USUNAC JESLI JUZ ZACZNIE DZIALAC
+        void test(AppWindow &_window)
+        {
+            if(SDL_RenderCopy(_window.getRenderer(), getTexture("BLANK"), NULL, NULL)<0)
+            {
+                printf("test failed!!!!!!!!!!\n");
+            }
+        }
+    ///-------------------------------
     protected:
 
     private:

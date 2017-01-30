@@ -1044,15 +1044,9 @@
 1484992076 source:c:\users\user\desktop\bomberman\main.cpp
 	"GameInstance.h"
 
-1485719290 c:\users\user\desktop\bomberman\include\gameinstance.h
-	"DisplayManager.h"
-	"InputManager.h"
-	"LogicManager.h"
-	"ObjectContainer.h"
-	"Structures.h"
-	"EntityManager.h"
+1485726843 c:\users\user\desktop\bomberman\include\gameinstance.h
 
-1485718754 c:\users\user\desktop\bomberman\include\graphicsmanager.h
+1485728635 c:\users\user\desktop\bomberman\include\graphicsmanager.h
 	<unordered_map>
 	"Texture.h"
 	"AppWindow.h"
@@ -1062,7 +1056,7 @@
 	<SDL_image.h>
 	<string>
 
-1485376586 c:\users\user\desktop\bomberman\include\appwindow.h
+1485728611 c:\users\user\desktop\bomberman\include\appwindow.h
 	<memory>
 	"SDL.h"
 
@@ -1079,11 +1073,11 @@
 1485716266 source:c:\users\user\desktop\bomberman\src\appwindow.cpp
 	"AppWindow.h"
 
-1485719386 source:c:\users\user\desktop\bomberman\src\graphicsmanager.cpp
+1485728237 source:c:\users\user\desktop\bomberman\src\graphicsmanager.cpp
 	"GraphicsManager.h"
 	<fstream>
 
-1485715971 source:c:\users\user\desktop\bomberman\src\inputmanager.cpp
+1485737485 source:c:\users\user\desktop\bomberman\src\inputmanager.cpp
 	"InputManager.h"
 	<cstdio>
 
@@ -1115,10 +1109,16 @@
 1485549514 c:\users\user\desktop\bomberman\include\abstractobject.h
 	<Object.h>
 
-1485719644 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
+1485737070 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
 	"GameInstance.h"
 	<SDL.h>
 	<stdio.h>
+	"DisplayManager.h"
+	"InputManager.h"
+	"LogicManager.h"
+	"EntityManager.h"
+	"ObjectFactory.h"
+	"Structures.h"
 
 1485549077 source:c:\users\user\desktop\bomberman\src\objectcontainer.cpp
 	"ObjectContainer.h"
@@ -1129,19 +1129,20 @@
 1485562293 c:\users\user\desktop\bomberman\include\realobject.h
 	<Object.h>
 
-1485717563 c:\users\user\desktop\bomberman\include\displaymanager.h
+1485737195 c:\users\user\desktop\bomberman\include\displaymanager.h
 	"AppWindow.h"
 	"GraphicsManager.h"
 	<memory>
 	<SDL.h>
 
-1485719724 source:c:\users\user\desktop\bomberman\src\displaymanager.cpp
+1485733259 source:c:\users\user\desktop\bomberman\src\displaymanager.cpp
 	"DisplayManager.h"
 	<SDL.h>
 	<SDL_image.h>
 	<queue>
 	"Field.h"
 	"EntityManager.h"
+	"MiscFunctions.h"
 
 1485512203 source:c:\users\user\desktop\bomberman\src\objectinstance.cpp
 	"ObjectInstance.h"
@@ -1163,11 +1164,11 @@
 1485013384 source:c:\users\user\desktop\bomberman\src\objectinstancecontainer.cpp
 	"ObjectInstanceContainer.h"
 
-1485642175 c:\users\user\desktop\bomberman\include\structures.h
+1485726425 c:\users\user\desktop\bomberman\include\structures.h
 
 1485555928 c:\users\user\desktop\bomberman\include\enumerations.h
 
-1485643320 c:\users\user\desktop\bomberman\include\constants.h
+1485737711 c:\users\user\desktop\bomberman\include\constants.h
 	<SDL.h>
 	<memory>
 
@@ -1226,20 +1227,20 @@
 	"Field.h"
 	<vector>
 
-1485717666 source:c:\users\user\desktop\bomberman\src\component.cpp
+1485737457 source:c:\users\user\desktop\bomberman\src\component.cpp
 	"Component.h"
 	"InputManager.h"
 	"Entity.h"
 	<cmath>
 
-1485717600 c:\users\user\desktop\bomberman\include\component.h
+1485736386 c:\users\user\desktop\bomberman\include\component.h
 	<vector>
 	"Structures.h"
 	<SDL.h>
 	<memory>
 	"Constants.h"
 
-1485709890 source:c:\users\user\desktop\bomberman\src\entity.cpp
+1485726067 source:c:\users\user\desktop\bomberman\src\entity.cpp
 	"Entity.h"
 
 1485708996 c:\users\user\desktop\bomberman\include\entity.h
@@ -1247,17 +1248,35 @@
 	<unordered_map>
 	<typeinfo>
 
-1485637705 c:\users\user\desktop\bomberman\include\miscfunctions.h
+1485733046 c:\users\user\desktop\bomberman\include\miscfunctions.h
 	<typeinfo>
+	<cmath>
 
-1485719675 source:c:\users\user\desktop\bomberman\src\entitymanager.cpp
+1485728587 source:c:\users\user\desktop\bomberman\src\entitymanager.cpp
 	"EntityManager.h"
 	"Entity.h"
 	"GraphicsManager.h"
 
-1485717686 c:\users\user\desktop\bomberman\include\entitymanager.h
+1485725195 c:\users\user\desktop\bomberman\include\entitymanager.h
 	<unordered_map>
 	<vector>
 	"Constants.h"
 	"Entity.h"
+
+1485737099 c:\users\user\desktop\bomberman\include\objectfactory.h
+	"Constants.h"
+	"EntityManager.h"
+	"GraphicsManager.h"
+	"InputManager.h"
+
+1485737695 source:c:\users\user\desktop\bomberman\src\objectfactory.cpp
+	"ObjectFactory.h"
+	<fstream>
+	"Constants.h"
+	"Entity.h"
+
+1485731493 source:c:\users\user\desktop\bomberman\src\eventmanager.cpp
+	"EventManager.h"
+
+1485731493 c:\users\user\desktop\bomberman\include\eventmanager.h
 

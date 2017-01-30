@@ -21,7 +21,6 @@ class Component
 
         void update(int ms) {if(_active)work(ms);}
 
-
         virtual bool isActive() const {return _active;}
         virtual void setActive() {_active = true;}
         virtual void setTarget(entity_ptr target){_target = target; setActive();}
@@ -30,6 +29,7 @@ class Component
         virtual void work(int ms) { }
 
         entity_ptr _target;
+        // unsigned long long _ownerID;
         bool _active;
 
     private:
@@ -38,7 +38,7 @@ class Component
         //static vector<int> _user;
 };
 
-class LifeComponent : public Component /// to indicate that if dies should be removed or something - should be handled externally (using events or sth)
+class LifeComponent : public Component /// to indicate that if dies should be removed or something - should be handled externally (using events or some system)
 {
     public:
         LifeComponent() {_alive = true;}
@@ -52,7 +52,9 @@ class PhysicalFormComponent : public Component
 {
     public:
         PhysicalFormComponent() {}
-        PhysicalFormComponent(double x, double y, double w, double h, double maxV) : Component(), _x(x), _y(y), _w(w), _h(h), _maxV(maxV) {_v = 0; _angle=0; _z = 0;}
+        PhysicalFormComponent(double x, double y, double w, double h, double maxV)
+            : Component(), _x(x), _y(y), _w(w), _h(h), _maxV(maxV)
+            {_v = 0; _angle=0; _z = 0; _destructible = false; _solid = false;}
         virtual ~PhysicalFormComponent() {}
 
         void moveTo(double x, double y){_x = x; _y = y;}
@@ -61,6 +63,7 @@ class PhysicalFormComponent : public Component
 
         void setMovable() {_static = false;}
         void setStatic() {_static = true;}
+        void setDestructible(bool d) {_destructible = d;}
 
         void setMaxSpeed(double maxV) {_maxV = maxV;}
         void setSpeed(double v) {_v = v;}
@@ -71,6 +74,13 @@ class PhysicalFormComponent : public Component
         int getZ(){return _z;}
 
         SDL_Rect rect(int ms);
+        double getAngle(){return _angle;}
+
+        Vector2D getPos(){return Vector2D(_x,_y);}
+        double getW(){return _w;}
+        double getH(){return _h;}
+
+        void setSolid(bool s){_solid = s;}
 
     protected:
         void work(int ms);
@@ -79,11 +89,12 @@ class PhysicalFormComponent : public Component
         //Vector2D _position;
         bool _solid;
         bool _static;
+        bool _destructible;
 
         double _x, _y;
-        int _z; // wysokosc uzywana w renderowaniu
-        double _maxV, _v, _angle;
         double _w, _h;
+        double _maxV, _v, _angle;
+        int _z; // wysokosc uzywana w renderowaniu
 };
 /*
 class MovementComponent : public Component /// uses PhysicalFormComponent
@@ -120,29 +131,33 @@ class SolidComponent : public Component /// uses PhysicalFormComponent, sets col
     /// SYSTEM NEEDED
 };
 
-class PCControllerComponent : public Component /// uses PhysicalFormComponent
+class PlayerControllerComponent : public Component /// uses PhysicalFormComponent
 {
     public:
-        PCControllerComponent(InputManager *iManager) : Component() {_iManager = iManager;}
-        virtual ~PCControllerComponent() {}
+        PlayerControllerComponent(InputManager *iManager) : Component() {_iManager = iManager;}
+        virtual ~PlayerControllerComponent() {}
 
         void setActive();
 
-
-
+    protected:
+        void work(int ms);
     private:
         InputManager *_iManager;
 
 };
 
-class NPCControllerComponent : public Component /// uses MovementComponent
+class NPCControllerComponent : public Component /// uses PhysicalFormComponent
 {
-    NPCControllerComponent() : Component() {_hasDestination = false;}
-    Vector2D _dest;
-    bool _hasDestination;
+    public:
+        NPCControllerComponent() : Component() {_hasDestination = false;}
+    protected:
+        void work(int ms);
+    private:
+        Vector2D _dest;
+        bool _hasDestination;
 };
 
-class Dangerous : public Component
+class Dangerous : public Component /// enemies will flee away from tiles with this component
 {
 
 };
@@ -157,5 +172,15 @@ class TimerComponent : public Component
         void work(int ms) {_msLeft-=ms;}
     private:
         int _msLeft;
+};
+
+class NavNode : public Component    /// uses PhysicalFormComponent
+{
+    public:
+        NavNode() : Component() {}
+        ~NavNode() {}
+        Vector2D coor();
+        // vector<NavNode *> v // neighbouring vertexes // not gut ajdija, to powinien zalatwiac system... chociaz moze...
+
 };
 #endif // COMPONENT_H

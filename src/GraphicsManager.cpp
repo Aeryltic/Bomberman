@@ -32,7 +32,7 @@ SDL_Texture *GraphicsManager::getTexture(const string &path) ///nie powinien lad
         loadTexture(path);
     }
     texture = textures[path];
-    if(texture == nullptr) texture = textures["BLANK"];
+    if(texture == nullptr) texture = textures["BLANK"]; // if doesnt exist
 
     return texture;//->SDL_Tex();
 }
@@ -70,35 +70,40 @@ int GraphicsManager::loadTextures(const char *reference_file_path) // NIE DZIALA
     return 0;
 }
 */
-bool GraphicsManager::loadTexture(string texture_path)
+bool GraphicsManager::loadTexture(string texture_path) /// uproscic to bo okropnie wyglada
 {
-    printf("Loading texture: %s\n",texture_path.c_str());
-    //The final texture
-    SDL_Texture* newTexture = NULL;
+    if(textures.find(texture_path) == textures.end())
+    {
+        printf("Loading texture: %s\n",texture_path.c_str());
+        SDL_Texture* newTexture = NULL;
 
-    //Load image at specified path
-    SDL_Surface* loadedSurface = IMG_Load( texture_path.c_str() );
-    if( loadedSurface == nullptr )
-    {
-        printf( "Unable to load image %s! SDL_image Error: %s\n", texture_path.c_str(), IMG_GetError() );
-        textures.insert(make_pair(texture_path,nullptr));
-        return 0;
-    }
-    else
-    {
-        //Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface( _renderer, loadedSurface );
-        SDL_FreeSurface( loadedSurface );
-        if( newTexture == NULL )
+        SDL_Surface* loadedSurface = IMG_Load(texture_path.c_str());
+        if(loadedSurface == nullptr)
         {
-            printf( "Unable to create texture from %s! SDL Error: %s\n", texture_path.c_str(), SDL_GetError() );
+            printf("Unable to load image %s! SDL_image Error: %s\n", texture_path.c_str(), IMG_GetError());
             textures.insert(make_pair(texture_path,nullptr));
             return 0;
         }
+        else
+        {
+            newTexture = SDL_CreateTextureFromSurface(_renderer, loadedSurface);
+            SDL_FreeSurface(loadedSurface);
+            if(newTexture == NULL)
+            {
+                printf("Unable to create texture from %s! SDL Error: %s\n", texture_path.c_str(), SDL_GetError());
+                textures.insert(make_pair(texture_path,nullptr));
+                return 0;
+            }
+        }
+        textures.insert(make_pair(texture_path,newTexture));
+        printf("Texture loaded.\n");
+        return 1;
     }
-    textures.insert(make_pair(texture_path,newTexture));
-    printf("Texture loaded.\n");
-    return 1;
+    else
+    {
+        printf("Can't load %s - already exists.\n",texture_path.c_str());
+        return 0;
+    }
 }
 
 void GraphicsManager::createBlankTexture()
@@ -109,10 +114,17 @@ void GraphicsManager::createBlankTexture()
 
         SDL_Texture *tex = nullptr;
         SDL_Surface *s;
-        s = SDL_CreateRGBSurface(0, 128, 128, 32, 0, 0, 0, 0);
 
-        /* Filling the surface with green color. */
+        s = SDL_CreateRGBSurface(0, 128, 128, 32, 0, 0, 0, 0);
         SDL_FillRect(s, NULL, SDL_MapRGBA(s->format, 255, 255, 255, 255));
+        /*
+        Uint32 rmask, gmask, bmask, amask;
+            rmask = 0xff000000;
+            gmask = 0x00ff0000;
+            bmask = 0x0000ff00;
+            amask = 0x000000ff;
+        s = SDL_CreateRGBSurface(0, 128, 128, 32, rmask, gmask, bmask, amask);
+        */
         if(s == nullptr)
         {
             printf("Error creating BLANK texture. Our last hope failed - nothing is gonna help us now!\n");
@@ -120,7 +132,7 @@ void GraphicsManager::createBlankTexture()
         }
         else
         {
-            if((tex = SDL_CreateTextureFromSurface(_renderer, s))==nullptr)
+            if((tex = SDL_CreateTextureFromSurface(_renderer, s)) == nullptr)
             {
                 printf("We DON'T have BLANK!!!!!\n");
             }
@@ -129,14 +141,7 @@ void GraphicsManager::createBlankTexture()
         }
         SDL_FreeSurface(s);
 
-       // textures["BLANK"] = Texture(tex);
-        textures["BLANK"] = tex;
-        /*
-        SDL_Surface *s;
-        s = SDL_CreateRGBSurface(0, 128, 128, 32, 0, 0, 0, 0);
-        SDL_FillRect(s, NULL, SDL_MapRGB(s->format, 255, 50, 50));
-        textures["BLANK"] = TextureSDL_CreateTextureFromSurface( _renderer, s );
-        */
+        textures.insert(make_pair("BLANK", tex));
     }
-
+    else printf("BLANK texture already exists\n");
 }

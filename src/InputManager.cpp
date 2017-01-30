@@ -26,7 +26,7 @@ void InputManager::update()
                 if(_key[_event.key.keysym.sym] != KEY_DOWN)
                 {
                     _key[_event.key.keysym.sym] = KEY_PRESSED;
-                    printf("pressed: %s\n",SDL_GetKeyName(_event.key.keysym.sym));
+                    //printf("pressed: %s\n",SDL_GetKeyName(_event.key.keysym.sym));
                 }
                 break;
             }

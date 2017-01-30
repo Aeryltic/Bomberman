@@ -12,7 +12,7 @@ EntityManager::~EntityManager()
 {
     printf("delete EntityManager\n");
 }
-
+/*
 entity_ptr &EntityManager::createDefault()
 {
     entity_ptr def = make_shared<Entity>();
@@ -32,14 +32,14 @@ entity_ptr &EntityManager::createMan(int x, int y)
 entity_ptr &EntityManager::createPlayer(int x, int y, InputManager *iManager, GraphicsManager *gManager)
 {
     entity_ptr &player = createMan(x,y);
-    player->addComponent(new PCControllerComponent(iManager));
+    player->addComponent(new PlayerControllerComponent(iManager));
     player->addComponent(new TextureComponent(gManager->getTexture("textures/player.png")));
 
     player->setAsTarget();
     printf("player ready\n");
     return player;
 }
-
+*/
 void EntityManager::update(int ms)
 {
  //   printf("updating: %llu\n", _entity.size());

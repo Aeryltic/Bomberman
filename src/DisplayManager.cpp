@@ -5,6 +5,7 @@
 #include <queue>
 #include "Field.h"
 #include "EntityManager.h"
+#include "MiscFunctions.h"
 
 DisplayManager::DisplayManager() : _window(WINDOW_WIDTH, WINDOW_HEIGHT)
 {
@@ -14,7 +15,7 @@ DisplayManager::DisplayManager() : _window(WINDOW_WIDTH, WINDOW_HEIGHT)
     //_graphicsManager = GraphicsManager(_window.getRenderer());
     _windowRect.x = 0;
     _windowRect.y = 0;
-    SDL_GetWindowSize(_window._window, &_windowRect.w, &_windowRect.h);
+    SDL_GetWindowSize(_window.getWindow(), &_windowRect.w, &_windowRect.h);
     printf("_windowRect: %d %d %d %d\n",_windowRect.x,_windowRect.y,_windowRect.w,_windowRect.h);
 }
 
@@ -29,12 +30,14 @@ void DisplayManager::setup()
 {
 
 }
-void DisplayManager::render(const EntityManager *entityManager, int ms)
+
+void DisplayManager::render(const EntityManager *entityManager, int ms) /// wlasciwie to jest prawie gotowa tylko testowac
 {
 
-    SDL_RenderClear(_window._renderer);
-
-    /** tworzy priority_queue
+    SDL_RenderClear(_window.getRenderer());
+  //  _graphicsManager.test(_window);
+   // test();
+    /*  tworzy priority_queue
         dla kazdej instancji:
             jesli na ekranie
                 oblicza pozycje
@@ -44,7 +47,6 @@ void DisplayManager::render(const EntityManager *entityManager, int ms)
             wrzuca do renderera
     */
     priority_queue<ToRender> trt;
-    SDL_Rect rect;
     for(auto &entity : entityManager->entity())
     {
         if(entity->hasComponent<PhysicalFormComponent>() && entity->hasComponent<TextureComponent>())
@@ -53,7 +55,10 @@ void DisplayManager::render(const EntityManager *entityManager, int ms)
             //printf("rect: %d %d %d %d\n",rect.x, rect.y, rect.w, rect.h);
             if(isVisible(rect))
             {
-                trt.push(ToRender(entity->getComponent<TextureComponent>()->texture(), rect, entity->getComponent<PhysicalFormComponent>()->getZ()));
+                SDL_Texture *texture = entity->getComponent<TextureComponent>()->texture();
+                int z = entity->getComponent<PhysicalFormComponent>()->getZ();
+                double angle = entity->getComponent<PhysicalFormComponent>()->getAngle();
+                trt.push(ToRender(texture, rect, z, angle));
             }
         }
     }
@@ -61,7 +66,8 @@ void DisplayManager::render(const EntityManager *entityManager, int ms)
     while(!trt.empty())
     {
         auto &sth = trt.top();
-        if(SDL_RenderCopy(_window._renderer, sth.texture, NULL, &sth.rect) < 0)
+        //if(sth.texture == nullptr) printf("nullptr texture - how?\n");
+        if(SDL_RenderCopyEx(_window.getRenderer(), sth.texture, NULL, &sth.rect, degrees(sth.angle), NULL, SDL_FLIP_NONE) < 0)
         {
             printf("SDL_RenderCopy - Error\n");
         }
@@ -69,67 +75,11 @@ void DisplayManager::render(const EntityManager *entityManager, int ms)
     }
     /// SDL_RenderCopyEx - do renderu z obrotem itp
 
-    SDL_RenderPresent(_window._renderer);
-}
-void DisplayManager::render(const ObjectContainer &objects, double interpolation)
-{
-/*
-    SDL_RenderClear(_window._renderer);
-
-
-    priority_queue<ToRender> trt;
-    SDL_Rect rect;
-    for(auto &o : objects.obj())
-    {
-        const Object &r = o.second;
-        switch (r.type())
-        {
-            case OBJECT_REAL:
-                rect = r.rect();
-                if(isVisible(rect))
-                {
-                    trt.push(ToRender(r.texture(), rect, r.z()));
-                }
-                break;
-            case OBJECT_BOARD:
-                for(int i=0; i<r.height(); i++)
-                {
-                    for(int j=0; j<r.width(); j++)
-                    {
-                        Field *field = reinterpret_cast<Field*>(r.field(i,j)); /// !!!!!!!!!!!!!!!!!!!!!!
-                        rect = field->rect();
-                        if(isVisible(rect))
-                        {
-                            trt.push(ToRender(field->texture(),rect,field->z()));
-                        }
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-    }
-    while(!trt.empty())
-    {
-        auto &sth = trt.top();
-        SDL_RenderCopy(_window._renderer, sth.texture, NULL, &sth.rect);
-        trt.pop();
-    }
-    /// SDL_RenderCopyEx - do renderu z obrotem itp
-    //Render texture to screen
-    //SDL_RenderCopy(_window._renderer, gTexture, NULL, NULL );
-
-    //Update screen
-    SDL_RenderPresent(_window._renderer);
-    */
+    SDL_RenderPresent(_window.getRenderer());
 }
 
-bool DisplayManager::isVisible(const SDL_Rect &rect)
+bool DisplayManager::isVisible(const SDL_Rect &rect) /// ta funckja powinna uwzgledniach obrot, bo tak obiekty na skraju moga sie niepojawic mimo ze powinny
 {
-    /* SDL_bool SDL_IntersectRect(const SDL_Rect* A,
-                           const SDL_Rect* B,
-                           SDL_Rect*       result)
-    */
     SDL_Point p;
     p.x = rect.x;
     p.y = rect.y;
@@ -145,8 +95,6 @@ bool DisplayManager::isVisible(const SDL_Rect &rect)
 
 void DisplayManager::test()
 {
-    /// TEST
-
     SDL_Texture *t1 = _graphicsManager.getTexture("textures/player.png");
     SDL_Texture *t2 = _graphicsManager.getTexture("textures/floor.png");
     SDL_Texture *t3 = nullptr;
@@ -171,7 +119,7 @@ void DisplayManager::test()
     else
     {
         //Create texture from surface pixels
-        t3 = SDL_CreateTextureFromSurface( _window._renderer, loadedSurface );
+        t3 = SDL_CreateTextureFromSurface( _window.getRenderer(), loadedSurface );
         SDL_FreeSurface( loadedSurface );
         if( t3 == NULL )
         {
@@ -191,31 +139,31 @@ void DisplayManager::test()
         }
         else
         {
-            tex = SDL_CreateTextureFromSurface(_window._renderer, s);
+            tex = SDL_CreateTextureFromSurface(_window.getRenderer(), s);
         }
         SDL_FreeSurface(s);
     t4 = tex;
-    if(SDL_RenderCopy( _window._renderer, t1, NULL, &a ))
+    if(SDL_RenderCopy( _window.getRenderer(), t1, NULL, &a ))
     {
         printf( "Unable to print texture1! SDL_image Error: %s\n", IMG_GetError() );
     }
     a.x+=128;
-    if(SDL_RenderCopy( _window._renderer, t2, NULL, &a ))
+    if(SDL_RenderCopy( _window.getRenderer(), t2, NULL, &a ))
     {
         printf( "Unable to print BLANK1! SDL_image Error: %s\n", IMG_GetError() );
     }
     a.x+=128;
-    if(SDL_RenderCopy( _window._renderer, t3, NULL, &a ))
+    if(SDL_RenderCopy( _window.getRenderer(), t3, NULL, &a ))
     {
         printf( "Unable to print texture2! SDL_image Error: %s\n", IMG_GetError() );
     }
     a.x+=128;
-    if(SDL_RenderCopy( _window._renderer, t4, NULL, &a ))
+    if(SDL_RenderCopy( _window.getRenderer(), t4, NULL, &a ))
     {
         printf( "Unable to print BLANK2! SDL_image Error: %s\n", IMG_GetError() );
     }
     a.x+=128;
-    if(SDL_RenderCopy( _window._renderer, t5, NULL, &a ))
+    if(SDL_RenderCopy( _window.getRenderer(), t5, NULL, &a ))
     {
         printf( "Unable to print BLANK3! SDL_image Error: %s\n", IMG_GetError() );
     }
@@ -227,6 +175,4 @@ void DisplayManager::test()
     }
     SDL_DestroyTexture(t3);
     SDL_DestroyTexture(t4);
-
-/// KONIEC TESTU
 }

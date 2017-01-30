@@ -27,7 +27,7 @@ bool Entity::addComponent(Component *component)
         _component.insert(make_pair(key,component));
         return 1;
     }
-    printf("can't add component (already exists)\n"); /** lepsza ta wiadomosc mogla byc */
+    printf("can't add component (already exists)\n"); /// lepsza ta wiadomosc mogla byc
     return 0;
 }
 

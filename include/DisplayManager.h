@@ -23,22 +23,24 @@ class DisplayManager
 {
     struct ToRender
     {
-        ToRender(SDL_Texture *texture, const SDL_Rect &rect, int h) : texture(texture), rect(rect), h(h) {}
+        ToRender(SDL_Texture *texture, const SDL_Rect &rect, int h, double angle = 0) : texture(texture), rect(rect), h(h), angle(angle) {}
         SDL_Texture *texture;
         SDL_Rect rect;
+        ///SDL_Rect src; tutaj chyba bylyby dobre te shared_ptr'y bo moze byc ten null i w ogole i nie chce mi sie pamietac zeby usuwac jakies pierdolowate protokaty
+        ///SDL_Rect dest;
         int h;
+        double angle;
         friend bool operator<(const ToRender &a, const ToRender &b)
         {
-            return a.h < b.h;
+            return a.h > b.h;
         }
-
     };
     public:
         DisplayManager();
         virtual ~DisplayManager();
         void setup();
 
-        void render(const ObjectContainer &obj, double interpolation);
+        //void render(const ObjectContainer &obj, double interpolation);
         void render(const EntityManager *entityManager, int ms);
 
         GraphicsManager *getGraphicsManager(){return &_graphicsManager;}

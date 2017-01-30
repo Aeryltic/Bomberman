@@ -3,6 +3,14 @@
 #include <SDL.h>
 #include <stdio.h>
 
+#include "DisplayManager.h"
+#include "InputManager.h"
+#include "LogicManager.h"
+#include "EntityManager.h"
+#include "ObjectFactory.h"
+
+#include "Structures.h"
+
 GameInstance::GameInstance()
 {
     /** INITIALIZE */ /* maybe not */
@@ -25,10 +33,12 @@ int GameInstance::run()
     {
         return -1;
     }
-        DisplayManager          _displayManager;
-        InputManager            _inputManager;
-        LogicManager            _logicManager;
-        EntityManager           _entityManager;
+    DisplayManager  _displayManager;
+    InputManager    _inputManager;
+    LogicManager    _logicManager;
+    EntityManager   _entityManager;
+
+    ObjectFactory   _objectFactory(&_entityManager, _displayManager.getGraphicsManager(), &_inputManager);
 
     double last_check = SDL_GetTicks();
     int frames = 0;
@@ -37,7 +47,8 @@ int GameInstance::run()
     double lag = 0.0;
 
    /// TEST
-    _entityManager.createPlayer(320, 240, &_inputManager, _displayManager.getGraphicsManager());
+    //_objectFactory.createPlayer(320, 240);
+    if(!_objectFactory.createWorld("boards/lvl1")) return -1; /// przydaloby sie zeby sprawdzac czy gre faktycznie mozna zaczac
    /// KONIEC TESTU
  //   startGame(_entityManager);
     while(!(_inputManager.keyStatus(SDLK_ESCAPE) & (KEY_PRESSED|KEY_DOWN)))

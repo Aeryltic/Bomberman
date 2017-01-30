@@ -1,0 +1,16 @@
+fix BLANK texture bug
+
+naprawiÊ interpolacje (øeby zmieniac pozycje a potem predkosc - bo teraz jest na odwrÛt)
+
+EventManager oraz systemy i bedzie po sprawie
+
+Systemy:
+- kontrola bomb (sprawdzanie czy wybuchly, usuwanie ich, wysylanie eventa ze gdzies nastapila eksplozja)
+- sterowanie botami
+- updatowanie swiata (odbieranie eventow o eksplozjach, ktoú ginie, jakies klocki sa niszczone, itp)
+- ogÛlna fizyka - kolizje itp
+- ewentualnie - przemieszczanie korzystajace z NavNode'Ûw
+
+DèWI K?
+
+multimapy do przechowywania komponentÛw?

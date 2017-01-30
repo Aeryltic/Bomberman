@@ -63,6 +63,7 @@
 		<Unit filename="include/Enumerations.h">
 			<Option virtualFolder="Other/" />
 		</Unit>
+		<Unit filename="include/EventManager.h" />
 		<Unit filename="include/GameInstance.h" />
 		<Unit filename="include/GraphicsManager.h">
 			<Option virtualFolder="GraphicsModule/include/" />
@@ -76,6 +77,9 @@
 		<Unit filename="include/LogicManager.h" />
 		<Unit filename="include/MiscFunctions.h">
 			<Option virtualFolder="Other/" />
+		</Unit>
+		<Unit filename="include/ObjectFactory.h">
+			<Option virtualFolder="GameObjects_v2/include/" />
 		</Unit>
 		<Unit filename="include/Script.h" />
 		<Unit filename="include/Structures.h">
@@ -100,6 +104,7 @@
 		<Unit filename="src/EntityManager.cpp">
 			<Option virtualFolder="GameObjects_v2/src/" />
 		</Unit>
+		<Unit filename="src/EventManager.cpp" />
 		<Unit filename="src/GameInstance.cpp" />
 		<Unit filename="src/GraphicsManager.cpp">
 			<Option virtualFolder="GraphicsModule/src/" />
@@ -111,6 +116,9 @@
 			<Option virtualFolder="InputModule/src/" />
 		</Unit>
 		<Unit filename="src/LogicManager.cpp" />
+		<Unit filename="src/ObjectFactory.cpp">
+			<Option virtualFolder="GameObjects_v2/src/" />
+		</Unit>
 		<Unit filename="src/Script.cpp" />
 		<Unit filename="src/Texture.cpp">
 			<Option virtualFolder="GraphicsModule/src/" />
