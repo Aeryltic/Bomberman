@@ -25,6 +25,7 @@ bool Entity::addComponent(Component *component)
     if(!hasComponent(key))
     {
         _component.insert(make_pair(key,component));
+        component->setTarget(shared_from_this());
         return 1;
     }
     printf("can't add component (already exists)\n"); /// lepsza ta wiadomosc mogla byc
@@ -39,10 +40,12 @@ void Entity::update(int ms)
     }
 }
 
-void Entity::setAsTarget()
+void Entity::activate()
 {
+    printf("Entity::activate()\n");
     for(auto &component : _component)
     {
-        component.second->setTarget(shared_from_this());
+ //       component.second->setTarget(shared_from_this());
+        component.second->setActive();
     }
 }

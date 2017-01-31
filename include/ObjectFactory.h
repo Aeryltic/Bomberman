@@ -16,14 +16,16 @@ class ObjectFactory
         entity_ptr createDefault();
         //entity_ptr createPhysical(int x, int y,)
 
-        entity_ptr createMan(int x, int y);
+        entity_ptr createMan(int x, int y, string tex_path);
         entity_ptr createPlayer(int x, int y);
         entity_ptr createEnemy(int x, int y);
 
         entity_ptr createBomb(int x, int y);
 
+        entity_ptr createExplosion(int x, int y);
+
         bool createWorld(string path); // laduje caly poziom uzywajac pliku pod sciezka: path
-        entity_ptr createWorldGrid(int x, int y, int t);
+        entity_ptr createWorldCell(int x, int y, int t);
     protected:
 
     private:

@@ -1,5 +1,6 @@
 #ifndef STRUCTURES_H_INCLUDED
 #define STRUCTURES_H_INCLUDED
+#include <cmath>
 /// na przyszlosc
 /*
 enum VarType
@@ -30,9 +31,21 @@ struct Vector2D
     Vector2D() : x(0), y(0) {}
     Vector2D(double x, double y) : x(x), y(y) {}
     double x,y;
+    const double operator-(const Vector2D &b) const
+    {
+        return sqrt((x-b.x)*(x-b.x)+(y-b.y)*(y-b.y));
+    }
+    const bool operator==(const Vector2D &b) const
+    {
+        return ((x==b.x) && (y==b.y));
+    }
+    const bool operator!=(const Vector2D &b) const
+    {
+        return !((*this)==b);
+    }
 };
 
-struct PositionAndSpeed
+struct PositionAndSpeed // obsolete
 {
     PositionAndSpeed(){}
     Vector2D pos,v;

@@ -26,15 +26,18 @@ class Entity : public std::enable_shared_from_this<Entity>
 
         void update(int ms);
 
-        void setAsTarget();
+        void activate();
 
         comp_map &components(){return _component;}
+
+        void setID(int id){printf("got ID: #%d\n",id);_id = id;}
+        int getID(){return _id;}
 
     protected:
 
     private:
         int _id;
-        unordered_map<int, Component*> _component; /* typeid(T).hash_code() */
+        comp_map _component; /* typeid(T).hash_code() */
         /** zamiast prostej mapy moze lepiej byloby zaimplementowac inteligentny kontener, ktory moglby uproscic odwolania do elementow
         * zeby nie musiec pisac calej tej dlugiej formulki z hasComponent i getComponent
         *
@@ -60,6 +63,18 @@ bool Entity::hasComponent() const
 {
     int key = typeid(C).hash_code();
     return _component.find(key) != _component.end();
+}
+
+template<class C>
+bool Entity::removeComponent()
+{
+    int key = typeid(C).hash_code();
+    if(_component.find(key) != _component.end())
+    {
+        _component.erase(key);
+        return true;
+    }
+    return false;
 }
 
 #endif // ENTITY_H

@@ -19,7 +19,8 @@ void LogicManager::update(ObjectContainer &object, int time_passed)
 }
 */
 
-void LogicManager::update(EntityManager *entityManager, int ms_passed)
+void LogicManager::update(EntityManager *entityManager, ObjectFactory *objectFactory, int ms_passed)
 {
     entityManager->update(ms_passed);
+    _controlSystem.update(entityManager, objectFactory, ms_passed);
 }

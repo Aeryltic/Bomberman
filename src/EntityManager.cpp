@@ -6,45 +6,91 @@
 EntityManager::EntityManager()
 {
     printf("new EntityManager\n");
+    _nextID = 0;
 }
 
 EntityManager::~EntityManager()
 {
     printf("delete EntityManager\n");
 }
-/*
-entity_ptr &EntityManager::createDefault()
+
+entity_ptr EntityManager::getWorld()
 {
-    entity_ptr def = make_shared<Entity>();
-    _entity.push_back(def);
-    return _entity.back();
+    if(!_world)
+    {
+        for(auto w : _entity)
+        {
+            if(w->hasComponent<World>())
+            {
+                _world = w;
+                break;
+            }
+        }
+    }
+    return _world;
 }
 
-entity_ptr &EntityManager::createMan(int x, int y)
+entity_ptr EntityManager::getPlayer()
 {
-    entity_ptr &man = createDefault();
-    man->addComponent(new LifeComponent);
-    man->addComponent(new PhysicalFormComponent(x,y,64,64,200));
-    man->getComponent<PhysicalFormComponent>()->setMovable();
-    return man;
+    if(!_player)
+    {
+        for(auto p : _entity)
+        {
+            if(p->hasComponent<PlayerControllerComponent_v2>())
+            {
+                _player = p;
+                break;
+            }
+        }
+    }
+    return _player;
 }
 
-entity_ptr &EntityManager::createPlayer(int x, int y, InputManager *iManager, GraphicsManager *gManager)
-{
-    entity_ptr &player = createMan(x,y);
-    player->addComponent(new PlayerControllerComponent(iManager));
-    player->addComponent(new TextureComponent(gManager->getTexture("textures/player.png")));
-
-    player->setAsTarget();
-    printf("player ready\n");
-    return player;
-}
-*/
 void EntityManager::update(int ms)
 {
  //   printf("updating: %llu\n", _entity.size());
+ /*
     for(auto &entity : _entity)
     {
         entity->update(ms);
+    }
+    */
+    while(!_toRemove.empty())
+    {
+        removeEntity(_toRemove.top());
+        _toRemove.pop();
+    }
+    while(!_toAdd.empty())
+    {
+        addEntity(_toAdd.top());
+        _toAdd.pop();
+    }
+}
+
+void EntityManager::removeEntity(int id)
+{
+    for(int i=0; i<_entity.size(); i++)
+    {
+        if(_entity[i]->getID() == id)
+        {
+            printf("removing entity #%d\n",_entity[i]->getID());
+            _entity.erase(_entity.begin()+i);
+            printf("ok\n");
+            break;
+        }
+    }
+}
+
+void EntityManager::removeEntity(entity_ptr entity)
+{
+    for(int i=0; i<_entity.size(); i++)
+    {
+        if(_entity[i] == entity)
+        {
+            printf("removing entity #%d\n",_entity[i]->getID());
+            _entity.erase(_entity.begin()+i);
+            printf("ok\n");
+            break;
+        }
     }
 }

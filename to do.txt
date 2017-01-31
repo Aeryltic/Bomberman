@@ -15,10 +15,17 @@
 	
 	# opakowaæ tekstury w t¹ klase (Texture), ¿eby nie martwiæ sie zarz¹dzaniem pamieci¹
 	
-## MNIEJ WA¯NE:
+	# crashe przy spamowaniu bombami
+	
+## ŒREDNIO WA¯NE:
+
+	# naprawiæ to chodzenie, zeby nie bylo tego glupiego buga napierajac na sciany
+
+## MA£O WA¯NE:
 
 	# naprawiæ tego buga z BLANK tekstur¹
 
 	# DWIÊK?
 
 	# pousuwaæ niepotrzebne pliki
+	

@@ -43,3 +43,15 @@ void EventManager::update()
     }
 
 }
+/*
+void EventManager::pushEvent(int eventNum, int eventCode, shared_ptr<Entity> publisher, shared_ptr<Entity> subscriber)
+{
+    SDL_Event event;
+    SDL_memset(&event, 0, sizeof(event));
+    event.type = eventBeginningNum + eventNum;
+    event.user.code = eventCode;
+    event.user.data1 = publisher.get();
+    event.user.data2 = subscriber.get();
+    SDL_PushEvent(&event);
+}
+*/

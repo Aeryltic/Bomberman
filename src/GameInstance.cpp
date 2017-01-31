@@ -12,6 +12,9 @@
 
 #include "Structures.h"
 
+#include <ctime>
+#include <cstdlib>
+
 GameInstance::GameInstance()
 {
     /** INITIALIZE */ /* maybe not */
@@ -43,6 +46,8 @@ int GameInstance::run()
 
     ObjectFactory   _objectFactory(&_entityManager, _displayManager.getGraphicsManager(), &_inputManager);
 
+    srand(time(NULL));
+
     double last_check = SDL_GetTicks();
     int frames = 0;
 //    bool quit = false;
@@ -68,7 +73,7 @@ int GameInstance::run()
         while (lag >= TIMESTEP)
         {
             //_logicManager.update(_objectContainer, TIMESTEP);
-            _logicManager.update(&_entityManager, TIMESTEP);
+            _logicManager.update(&_entityManager, &_objectFactory, TIMESTEP);
             lag -= TIMESTEP;
         }
 
@@ -83,7 +88,7 @@ int GameInstance::run()
             last_check = SDL_GetTicks();
         }
 
-        SDL_Delay(1); /// tylko do testow
+        SDL_Delay(10); /// tylko do testow
     }
 
     /*

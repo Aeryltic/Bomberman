@@ -20,4 +20,22 @@ enum ObjectType
     OBJECT_BOARD
 };
 
+enum Direction
+{
+    DIR_NONE = 0,
+    DIR_UP,
+    DIR_RIGHT,
+    DIR_DOWN,
+    DIR_LEFT,
+    DIR_MAX
+};
+
+enum WorldCellType
+{
+    CELL_NONE = 0,
+    CELL_FLOOR,
+    CELL_WALL,
+    CELL_DIRT
+};
+
 #endif // ENUMERATIONS_H_INCLUDED
