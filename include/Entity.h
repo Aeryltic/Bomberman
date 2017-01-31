@@ -30,7 +30,7 @@ class Entity : public std::enable_shared_from_this<Entity>
 
         comp_map &components(){return _component;}
 
-        void setID(int id){printf("got ID: #%d\n",id);_id = id;}
+        void setID(int id){/*printf("got ID: #%d\n",id);*/_id = id;}
         int getID(){return _id;}
 
     protected:

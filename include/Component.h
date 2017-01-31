@@ -57,9 +57,9 @@ class PhysicalFormComponent : public Component
 {
     public:
         PhysicalFormComponent() {}
-        PhysicalFormComponent(double x, double y, double w, double h, double maxV = 50, double acc = 80)
-            : Component(), _x(x), _y(y), _w(w), _h(h), _maxV(maxV), _a(acc)
-            {_v = 0; _angle=0; _z = 0; _destructible = false; _solid = false; _updated = false;}
+        PhysicalFormComponent(double x, double y, int z, double w, double h, double maxV = 50, double acc = 80)
+            : Component(), _x(x), _y(y), _z(z), _w(w), _h(h), _maxV(maxV), _a(acc)
+            {_v = 0; _angle=0; _destructible = false; _solid = false; _updated = false;}
         virtual ~PhysicalFormComponent() {}
 
         void moveTo(double x, double y){_x = x; _y = y;}
@@ -83,8 +83,8 @@ class PhysicalFormComponent : public Component
         SDL_Rect rect(int ms = 0);
         double getAngle(){return _angle;}
 
-        Vector2D getPos(){return Vector2D(_x,_y);}
-        Vector2D getGridPos(){return Vector2D(round(_x/GRID_SIZE),round(_y/GRID_SIZE));}
+        vector2d getPos(){return vector2d(_x,_y);}
+        int_vector2d getGridPos(){return int_vector2d(round(_x/GRID_SIZE),round(_y/GRID_SIZE));}
         double getW(){return _w;}
         double getH(){return _h;}
 
@@ -102,17 +102,17 @@ class PhysicalFormComponent : public Component
         void work(int ms);
 
     private:
-        //Vector2D _position;
+        //vector2d _position;
         bool _solid;
         bool _static;
         bool _destructible;
         bool _updated;
 
         double _x, _y;
+        int _z; // wysokosc uzywana narazie tylko w renderowaniu
         double _w, _h;
         double _maxV, _v, _angle;
         double _a; // acceleration pixels/(s^2)
-        int _z; // wysokosc uzywana w renderowaniu
 };
 /*
 class MovementComponent : public Component /// uses PhysicalFormComponent
@@ -154,11 +154,11 @@ class Dangerous : public Component /// enemies will flee away from tiles with th
 
 };
 
-class BombTimer : public Component
+class Timer : public Component
 {
     public:
-        BombTimer(int timer) : Component(), _msLeft(timer) {}
-        ~BombTimer(){}
+        Timer(int timer) : Component(), _msLeft(timer) {}
+        ~Timer(){}
         bool timeIsUp(){return _msLeft <= 0;}
     protected:
         void work(int ms) {_msLeft-=ms;}
@@ -171,7 +171,7 @@ class NavNode : public Component    /// uses PhysicalFormComponent
     public:
         NavNode() : Component() {}
         ~NavNode() {}
-        Vector2D coor();
+        vector2d coor();
         NavNode *getNeighbour(int dir);
         void setLink(int dir, NavNode *node);
         // vector<NavNode *> v // neighbouring vertexes // not gut ajdija, to powinien zalatwiac system... chociaz moze...
@@ -181,7 +181,7 @@ class NavNode : public Component    /// uses PhysicalFormComponent
 class SquareCell : public Component /// powinny byc przetwarzane jako instancje - za duza redundancja
 {
     public:
-        SquareCell() : Component() {_type = CELL_NONE;}
+        SquareCell(WorldCellType type = CELL_NONE) : Component() {_type = type;}
         ~SquareCell() {}
         void setType(WorldCellType type){_type = type;}
         WorldCellType getType(){return _type;}
@@ -199,9 +199,9 @@ class World : public Component
         bool addCell(entity_ptr cell, int x, int y);
 
         bool valid(int x, int y){ return ((x>=0) && (x<_w) && (y>=0) && (y<_h));}
-        Vector2D getNearestCellCoorFromGivenPosInGivenDirection(Vector2D pos, int dir);
+        vector2d getNearestCellCoorFromGivenPosInGivenDirection(vector2d pos, int dir);
 
-        entity_ptr getCell(int x, int y){return _square[y][x];}
+        entity_ptr getCell(int x, int y){if(valid(x,y))return _square[y][x]; return nullptr;}
 
         bool isDangerous(int x, int y);
 
@@ -252,11 +252,11 @@ class MovementController : public Component
         void setActive();
 
         // when active ....
-        Vector2D current();
+        vector2d current();
 
         void work(int ms);
 
-        void setDest(Vector2D dest);// {_dest = dest;}
+        void setDest(vector2d dest);// {_dest = dest;}
         bool destReached();
 
        // void setDest(int dir);
@@ -268,7 +268,7 @@ class MovementController : public Component
 
         //NavNode *_dest; /// wrong
         //NavNode *_current; /// wrong
-        Vector2D _dest; /// ok
+        vector2d _dest; /// ok
         PhysicalFormComponent *_physicalForm;
 
         bool _readyToStop;
@@ -284,7 +284,7 @@ class NPCControllerComponent : public Component /// uses PhysicalFormComponent
     protected:
         void work(int ms);
     private:
-        Vector2D _dest;
+        vector2d _dest;
         bool _hasDestination;
 };
 
@@ -300,8 +300,10 @@ class AIController : public Component
     public:
         AIController() : Component() {}
         ~AIController() {}
-
+        void setDir(int dir){_dir = dir;}
+        int getDir(){return _dir;}
     private:
+        int _dir;
 };
 
 class BombPlanter : public Component
@@ -309,11 +311,29 @@ class BombPlanter : public Component
     public:
         BombPlanter() : Component() {_lastPlant = 0;}
         ~BombPlanter() {}
-        bool canPlantNext(){return(SDL_GetTicks() - _lastPlant > 3000); }
-        void plant(){_lastPlant = SDL_GetTicks();}
+        bool canPlantNext() {return(SDL_GetTicks() - _lastPlant > 3000); }
+        void plant() {_lastPlant = SDL_GetTicks();}
 
     private:
         unsigned _lastPlant;
 };
 
+class Explosive : public Component
+{
+    public:
+        Explosive(int range) : Component(), _range(range) {}
+        ~Explosive() {}
+        int getRange() {return _range;}
+        void setRange(int range) {_range = range;}
+    private:
+        int _range;
+};
+
+class Destroyer : public Component
+{
+    public:
+        Destroyer() : Component() {}
+        ~Destroyer() {}
+    private:
+};
 #endif // COMPONENT_H

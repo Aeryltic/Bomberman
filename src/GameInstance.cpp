@@ -38,13 +38,13 @@ int GameInstance::run()
     {
         return -1;
     }
-    DisplayManager  _displayManager;
-    InputManager    _inputManager;
-    LogicManager    _logicManager; /// to jemu sie przypisze te "systemy"
-    EntityManager   _entityManager;
-    EventManager    _eventManager(&_inputManager);
+    shared_ptr<DisplayManager>  _displayManager = make_shared<DisplayManager>();
+    shared_ptr<InputManager>    _inputManager = make_shared<InputManager>();
+    shared_ptr<LogicManager>    _logicManager = make_shared<LogicManager>(); /// to jemu sie przypisze te "systemy"
+    shared_ptr<EntityManager>   _entityManager = make_shared<EntityManager>();
+    shared_ptr<EventManager>    _eventManager = make_shared<EventManager>(_inputManager.get());
 
-    ObjectFactory   _objectFactory(&_entityManager, _displayManager.getGraphicsManager(), &_inputManager);
+    shared_ptr<ObjectFactory>   _objectFactory  = make_shared<ObjectFactory>(_entityManager.get(), _displayManager->getGraphicsManager(), _inputManager.get());
 
     srand(time(NULL));
 
@@ -56,7 +56,7 @@ int GameInstance::run()
 
    /// TEST
     //_objectFactory.createPlayer(320, 240);
-    if(!_objectFactory.createWorld("boards/lvl1")) return -1; /// przydaloby sie zeby sprawdzac czy gre faktycznie mozna zaczac
+    if(!_objectFactory->createWorld("boards/lvl1")) return -1; /// przydaloby sie zeby sprawdzac czy gre faktycznie mozna zaczac
    /// KONIEC TESTU
  //   startGame(_entityManager);
     //while(!(_inputManager.keyStatus(SDLK_ESCAPE) & (KEY_PRESSED|KEY_DOWN)))
@@ -67,18 +67,18 @@ int GameInstance::run()
         previous = current;
         lag += elapsed;
 
-        _inputManager.update(); /// przy duzym delay przyciski moga nie wspolpracowac - zmieniaja stan zanim gra zereaguje
+        _inputManager->update(); /// przy duzym delay przyciski moga nie wspolpracowac - zmieniaja stan zanim gra zereaguje
 
-        _eventManager.update();
+        _eventManager->update();
         while (lag >= TIMESTEP)
         {
             //_logicManager.update(_objectContainer, TIMESTEP);
-            _logicManager.update(&_entityManager, &_objectFactory, TIMESTEP);
+            _logicManager->update(_entityManager.get(), _objectFactory.get(), TIMESTEP);
             lag -= TIMESTEP;
         }
 
         //_displayManager.render(_objectContainer, lag);
-        _displayManager.render(&_entityManager, lag);
+        _displayManager->render(_entityManager.get(), lag);
         frames++;
 
         if(SDL_GetTicks() - last_check >= 1000)

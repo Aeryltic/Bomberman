@@ -11,13 +11,13 @@ class ControllingSystem
         virtual ~ControllingSystem();
 
         void update(EntityManager *entityManager, ObjectFactory *objectFactory, int ms);
-        void collides(entity_ptr obj1, entity_ptr obj2, Vector2D &normal);
+        void collides(entity_ptr obj1, entity_ptr obj2, vector2d &normal);
 
-        void explosion(int x, int y);
+        void explosion(entity_ptr bomb, entity_ptr world_entity, ObjectFactory *objectFactory);
 
         bool itIsAGoodSpotToDropABomb(int x, int y, entity_ptr world);
 
-        Path pathFromTo(Vector2D from, Vector2D to);
+        Path pathFromTo(vector2d from, vector2d to);
     protected:
 
     private:

@@ -23,7 +23,7 @@ void PhysicalFormComponent::work(int ms)
 }
 SDL_Rect PhysicalFormComponent::rect(int ms)
 {
-    SDL_Rect rect = {.x = _x, .y = _y, .w = _w, .h = _h};
+    SDL_Rect rect = {.x = (int)_x, .y = (int)_y, .w = (int)_w, .h = (int)_h};
     rect.x += cos(_angle) * _v / 1000.0 * ms;
     rect.y += sin(_angle) * _v / 1000.0 * ms;
     return rect;
@@ -84,9 +84,9 @@ void NPCControllerComponent::work(int ms)
 
 }
 
-Vector2D NavNode::coor()
+vector2d NavNode::coor()
 {
-    Vector2D v = _target->getComponent<PhysicalFormComponent>()->getPos();
+    vector2d v = _target->getComponent<PhysicalFormComponent>()->getPos();
     /*
     v.x += _target->getComponent<PhysicalFormComponent>()->getW()/2;
     v.y += _target->getComponent<PhysicalFormComponent>()->getH()/2;
@@ -102,12 +102,13 @@ bool World::addCell(entity_ptr cell, int x, int y)
             _square[y][x] = cell;
             return true;
         }
+    return false;
 }
 
 bool MovementController::destReached()
 {
    // printf("MovementController::destReached()...\n");
-   Vector2D c = current();
+   vector2d c = current();
     if(_reached || (c - _dest < 5.0))
     {
         _reached = true;
@@ -136,7 +137,7 @@ void MovementController::work(int ms) // kierowanie ruchu postaci
     {
         if(!destReached())
         {
-            Vector2D c = current(),
+            vector2d c = current(),
                      d = _dest;
             _physicalForm->setAngle(atan2(d.y-c.y, d.x-c.x));
             //_physicalForm->accelerate(ms);
@@ -154,7 +155,7 @@ void MovementController::work(int ms) // kierowanie ruchu postaci
     }
 
 }
-void MovementController::setDest(Vector2D dest)
+void MovementController::setDest(vector2d dest)
 {
   //  printf("MovementController::setDest(%lfx%lf)...\n", dest.x, dest.y);
     if(destReached())
@@ -256,7 +257,7 @@ void World::setup()
         }
     }
 }
-Vector2D World::getNearestCellCoorFromGivenPosInGivenDirection(Vector2D pos, int dir)
+vector2d World::getNearestCellCoorFromGivenPosInGivenDirection(vector2d pos, int dir)
 {
    /* printf("getNearestCellCoorFromGivenPosInGivenDirection(%lfx%lf, %d)...\n",pos.x,pos.y,dir);*/
     int cx,cy;
@@ -281,7 +282,7 @@ Vector2D World::getNearestCellCoorFromGivenPosInGivenDirection(Vector2D pos, int
             }
         }
     }
-    return Vector2D(cx*GRID_SIZE,cy*GRID_SIZE);
+    return vector2d(cx*GRID_SIZE,cy*GRID_SIZE);
 }
 void NavNode::setLink(int dir, NavNode *node)
 {
@@ -289,7 +290,7 @@ void NavNode::setLink(int dir, NavNode *node)
     _linked.insert(make_pair(dir,node));
 }
 
-Vector2D MovementController::current(){/*printf("MovementController::current()\n");*/return _target->getComponent<PhysicalFormComponent>()->getPos();}
+vector2d MovementController::current(){/*printf("MovementController::current()\n");*/return _target->getComponent<PhysicalFormComponent>()->getPos();}
 
 bool World::isDangerous(int x, int y)
 {
@@ -300,17 +301,12 @@ void World::destroyDirt(int x, int y, EntityManager *entityManager, ObjectFactor
 {
     if(valid(x,y))
     {
-        /*
-        entity_ptr cell = _square[y][x];
-        PhysicalFormComponent *physicalForm = cell->getComponent<PhysicalFormComponent>();
-        physicalForm->setDestructible(false);
-        physicalForm->setSolid(false);
-
-        grid->removeComponent
-        grid->addComponent(new NavNode());
-        */
-        entityManager->addToRemoveList(_square[y][x]->getID());
-        _square[y][x].reset();
-        addCell(objectFactory->createWorldCell(x,y,0),x,y);
+        if(_square[y][x]->getComponent<SquareCell>()->getType()==CELL_DIRT)
+        {
+            entityManager->removeRequest(_square[y][x]->getID());
+            _square[y][x].reset();
+            addCell(objectFactory->createWorldCell(x,y,0),x,y);
+            setup(); /// niid tu optimajz dis ting
+        }
     }
 }

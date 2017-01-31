@@ -17,8 +17,8 @@ class EntityManager
 
         void update(int ms);
 
-        void addToRemoveList(int id){_toRemove.push(id);}
-        void addToAddList(entity_ptr entity){_toAdd.push(entity);}
+        void removeRequest(int id){_toRemove.push(id);}
+        void addRequest(entity_ptr entity){_toAdd.push(entity);}
 
         const vector<entity_ptr> &entity() const{return _entity;}
 
@@ -30,10 +30,10 @@ class EntityManager
         stack<int> _toRemove;
         stack<entity_ptr> _toAdd;
 
-        vector<entity_ptr> _entity;
+        vector<entity_ptr> _entity; /// przebudowac na unordered_map
 
-        entity_ptr  _world,
-                    _player;
+        weak_ptr<Entity>    _world, _player;
+       // entity_ptr    _world, _player;
         int _nextID;
 
         void removeEntity(int id);

@@ -1,7 +1,5 @@
 ## WA¯NE:
 
-	# naprawiæ interpolacje (¿eby zmieniac pozycje a potem predkosc - bo teraz jest na odwrót)
-
 	# EventManager oraz systemy i bedzie po sprawie
 
 	# Systemy:
@@ -13,19 +11,22 @@
 	
 	# multimapy do przechowywania komponentów? - "optymalizacja" przy korzystaniu z systemow
 	
-	# opakowaæ tekstury w t¹ klase (Texture), ¿eby nie martwiæ sie zarz¹dzaniem pamieci¹
+	# opakowaæ tekstury w t¹ klase Texture, ¿eby nie martwiæ sie zarz¹dzaniem pamieci¹
 	
-	# crashe przy spamowaniu bombami
+	# sprawic by bomby zabija³y
+	
+	# koñczyæ gre przy œmierci gracza -> powinien wysy³aæ eventa przy œmierci
+	
+	# dodaæ jakiœ cel (po zabiciu wszyskich przeciwników czy coœ)
 	
 ## ŒREDNIO WA¯NE:
-
-	# naprawiæ to chodzenie, zeby nie bylo tego glupiego buga napierajac na sciany
+	
+	# ulepszyc AI
+	
+	# crashe przy spamowaniu bombami
 
 ## MA£O WA¯NE:
 
 	# naprawiæ tego buga z BLANK tekstur¹
 
 	# DWIÊK?
-
-	# pousuwaæ niepotrzebne pliki
-	

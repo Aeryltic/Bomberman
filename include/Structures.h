@@ -26,18 +26,19 @@ struct Variable
 */
 ///-------------------
 
+template <class T = double>
 struct Vector2D
 {
     Vector2D() : x(0), y(0) {}
-    Vector2D(double x, double y) : x(x), y(y) {}
-    double x,y;
-    const double operator-(const Vector2D &b) const
+    Vector2D(T x, T y) : x(x), y(y) {}
+    T x,y;
+    const T operator-(const Vector2D &b) const
     {
         return sqrt((x-b.x)*(x-b.x)+(y-b.y)*(y-b.y));
     }
     const bool operator==(const Vector2D &b) const
     {
-        return ((x==b.x) && (y==b.y));
+        return ((abs(x*1.0-b.x*1.0)<0.001) && (abs(y*1.0-b.y*1.0)<0.001));
     }
     const bool operator!=(const Vector2D &b) const
     {
@@ -45,18 +46,20 @@ struct Vector2D
     }
 };
 
+typedef Vector2D<> vector2d;
+typedef Vector2D<int> int_vector2d;
 struct PositionAndSpeed // obsolete
 {
     PositionAndSpeed(){}
-    Vector2D pos,v;
+    vector2d pos,v;
     void updatePosition(int ms_passed)
     {
         pos.x += v.x * ms_passed / 1000.0;
         pos.y += v.y * ms_passed / 1000.0;
     }
-    Vector2D interpolated(int ms_passed) const /// "interpolated"
+    vector2d interpolated(int ms_passed) const /// "interpolated"
     {
-        return Vector2D(pos.x + v.x * ms_passed / 1000.0, pos.y + v.y * ms_passed / 1000.0);
+        return vector2d(pos.x + v.x * ms_passed / 1000.0, pos.y + v.y * ms_passed / 1000.0);
     }
 };
 

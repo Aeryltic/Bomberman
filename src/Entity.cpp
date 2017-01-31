@@ -42,7 +42,7 @@ void Entity::update(int ms)
 
 void Entity::activate()
 {
-    printf("Entity::activate()\n");
+    //printf("Entity::activate()\n");
     for(auto &component : _component)
     {
  //       component.second->setTarget(shared_from_this());

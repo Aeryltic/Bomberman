@@ -73,9 +73,6 @@
 		<Unit filename="include/InputManager.h">
 			<Option virtualFolder="InputModule/include/" />
 		</Unit>
-		<Unit filename="include/KeyboardStatus.h">
-			<Option virtualFolder="InputModule/include/" />
-		</Unit>
 		<Unit filename="include/LogicManager.h" />
 		<Unit filename="include/MiscFunctions.h">
 			<Option virtualFolder="Other/" />
@@ -114,9 +111,6 @@
 			<Option virtualFolder="GraphicsModule/src/" />
 		</Unit>
 		<Unit filename="src/InputManager.cpp">
-			<Option virtualFolder="InputModule/src/" />
-		</Unit>
-		<Unit filename="src/KeyboardStatus.cpp">
 			<Option virtualFolder="InputModule/src/" />
 		</Unit>
 		<Unit filename="src/LogicManager.cpp" />

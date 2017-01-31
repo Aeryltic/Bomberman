@@ -19,7 +19,9 @@ void ControllingSystem::update(EntityManager *entityManager, ObjectFactory *obje
     {
         if(object->hasComponent<PhysicalFormComponent>())
         {
+
             PhysicalFormComponent *physicalForm = object->getComponent<PhysicalFormComponent>();
+            int_vector2d grid_coor = physicalForm->getGridPos();
             physicalForm->update(ms);
             if(object->hasComponent<MovementController>())
             {
@@ -66,54 +68,98 @@ void ControllingSystem::update(EntityManager *entityManager, ObjectFactory *obje
                             BombPlanter *bombPlanter = object->getComponent<BombPlanter>();
                             if(bombPlanter->canPlantNext())
                             {
-                                Vector2D pos = physicalForm->getGridPos();
-                                objectFactory->createBomb(pos.x, pos.y);
+                                objectFactory->createBomb(grid_coor.x, grid_coor.y);
                                 bombPlanter->plant();
                             }
                         }
                     }
 
                 }
-                if(object->hasComponent<AIController>())
+                if(object->hasComponent<AIController>()) /// nie zamykac w klatce 1x1
                 {
-                    if(movementController->destReached()) /// need to fix this
+                    /// need cleverer AI
+                    AIController *controller = object->getComponent<AIController>();
+                    if(movementController->destReached())
                     {
-                        int dir = rand()%DIR_MAX;
-                        movementController->setDest(world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),dir));
+                        //int_vector2d curr_pos
+                        int dir = controller->getDir();
+                        vector2d curr_pos = physicalForm->getPos();
+                        vector<int>possible;
+                        //bool possible[DIR_MAX] = {false};
+                        for(int i=1; i<DIR_MAX; i++) // sprawdzanie gdzie mozna sie ruszyc
+                        {
+                            if(curr_pos!=world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),i))possible.push_back(i);
+                        }
+                        if(possible.size()==1)
+                        {
+                            dir = possible[0];
+                        }
+                        else
+                        {
+                            for(int i=0; i<possible.size(); i++) // nie chcemy sie cofac - bez padaczek
+                            {
+                                if(abs(possible[i]-dir)==2)
+                                {
+                                    possible.erase(possible.begin() + i);
+                                    break;
+                                }
+                            }
+                            dir = possible[rand()%possible.size()];
+                        }
+                        //bool up, down, right, left;
+                        //up = down = right = left = false;
+                       // if(world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),DIR_UP)!=grid_coor) up = true;
+                        vector2d new_dest = world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),dir);
+                        /*
+                        while(new_dest == curr_pos)
+                        {
+                            dir = rand()%(DIR_MAX-1)+1;
+                            new_dest = world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),dir);
+                        }
+                        */
+                        controller->setDir(dir);
+                        //world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),dir);
+                        //movementController->setDest(world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),dir));
+                        movementController->setDest(new_dest);
                     }
                     if(object->hasComponent<BombPlanter>())
                     {
-                        Vector2D pos = physicalForm->getGridPos();
-                        if(itIsAGoodSpotToDropABomb(pos.x, pos.y, world))
+                        if(itIsAGoodSpotToDropABomb(grid_coor.x, grid_coor.y, world))
                         {
                             BombPlanter *bombPlanter = object->getComponent<BombPlanter>();
                             if(bombPlanter->canPlantNext())
                             {
-                                objectFactory->createBomb(pos.x, pos.y);
+                                objectFactory->createBomb(grid_coor.x, grid_coor.y);
                                 bombPlanter->plant();
                             }
                         }
                     }
-
                 }
             }
 
-            if(object->hasComponent<BombTimer>())
+            if(object->hasComponent<Timer>())
             {
-                BombTimer *timer = object->getComponent<BombTimer>();
+                Timer *timer = object->getComponent<Timer>();
                 timer->update(ms);
                 if(timer->timeIsUp())
                 {
-                    Vector2D pos = physicalForm->getGridPos();
-                    explosion(pos.x, pos.y);
-                    entityManager->addToRemoveList(object->getID());
+ //                   int_vector2d pos = physicalForm->getGridPos();
+                    if(object->hasComponent<Explosive>())
+                    {
+                        explosion(object, world, objectFactory);
+                    }
+                    entityManager->removeRequest(object->getID());
                 }
+            }
+            if(object->hasComponent<Destroyer>())
+            {
+                world->getComponent<World>()->destroyDirt(grid_coor.x, grid_coor.y, entityManager, objectFactory);
             }
         }
     }
 }
 /*
-void ControllingSystem::collides(entity_ptr obj1, entity_ptr obj2, Vector2D &normal)
+void ControllingSystem::collides(entity_ptr obj1, entity_ptr obj2, vector2d &normal)
 {
     SDL_Rect r1 = obj1->getComponent<PhysicalFormComponent>()->rect(),
              r2 = obj2->getComponent<PhysicalFormComponent>()->rect(),
@@ -124,10 +170,54 @@ void ControllingSystem::collides(entity_ptr obj1, entity_ptr obj2, Vector2D &nor
      }
 }
 */
-void ControllingSystem::explosion(int x, int y)
+void ControllingSystem::explosion(entity_ptr bomb, entity_ptr world_entity, ObjectFactory *objectFactory)
 {
-    printf("BOOM at %dx%d\n",x,y);
+    int_vector2d pos = bomb->getComponent<PhysicalFormComponent>()->getGridPos();
+    World *world = world_entity->getComponent<World>();
+    printf("BOOM at %dx%d\n",pos.x,pos.y);
+    objectFactory->createExplosion(pos.x,pos.y);
+    int range = bomb->getComponent<Explosive>()->getRange();
+    bool up, down, left, right;
+    up = down = left = right = true;
+    for(int i=1; i<=range; i++)
+    {
+        entity_ptr cell = world->getCell(pos.x,pos.y-i);
+        if(up && cell && cell->getComponent<SquareCell>()->getType() != CELL_WALL)
+        {
+            if(cell->getComponent<SquareCell>()->getType() == CELL_DIRT)
+                up = false;
+            objectFactory->createExplosion(pos.x,pos.y-i);
+        }
+        else up = false;
 
+        cell = world->getCell(pos.x,pos.y+i);
+        if(down && cell && cell->getComponent<SquareCell>()->getType()!=CELL_WALL)
+        {
+            if(cell->getComponent<SquareCell>()->getType() == CELL_DIRT)
+                down = false;
+            objectFactory->createExplosion(pos.x,pos.y+i);
+        }
+        else down = false;
+
+        cell = world->getCell(pos.x-i,pos.y);
+        if(left && cell && world->getCell(pos.x-i,pos.y)->getComponent<SquareCell>()->getType()!=CELL_WALL)
+        {
+            if(cell->getComponent<SquareCell>()->getType() == CELL_DIRT)
+                left = false;
+            objectFactory->createExplosion(pos.x-i,pos.y);
+        }
+        else left = false;
+
+        cell = world->getCell(pos.x+i,pos.y);
+        if(right && cell && world->getCell(pos.x+i,pos.y)->getComponent<SquareCell>()->getType()!=CELL_WALL)
+        {
+            if(cell->getComponent<SquareCell>()->getType() == CELL_DIRT)
+                right = false;
+            objectFactory->createExplosion(pos.x+i,pos.y);
+        }
+        else right = false;
+    }
+    // to up
 
 }
 bool ControllingSystem::itIsAGoodSpotToDropABomb(int x, int y, entity_ptr world_entity) // sprawdza tylko czy nie stoi przypadkiem obok dirta
@@ -146,7 +236,7 @@ bool ControllingSystem::itIsAGoodSpotToDropABomb(int x, int y, entity_ptr world_
     if(world->valid(tx,ty) && world->getCell(tx,ty)->getComponent<PhysicalFormComponent>()->isDestructible()) result = true;
     return result;
 }
-Path ControllingSystem::pathFromTo(Vector2D from, Vector2D to) /// dodac mozliwosc wybierania czy szukac drog przez piach itd
+Path ControllingSystem::pathFromTo(vector2d from, vector2d to) /// dodac mozliwosc wybierania czy szukac drog na przelaj czy cus w ten desen
 {
     /// BFS
     Path path;

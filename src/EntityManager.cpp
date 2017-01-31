@@ -16,7 +16,7 @@ EntityManager::~EntityManager()
 
 entity_ptr EntityManager::getWorld()
 {
-    if(!_world)
+    if(!_world.lock())
     {
         for(auto w : _entity)
         {
@@ -27,12 +27,12 @@ entity_ptr EntityManager::getWorld()
             }
         }
     }
-    return _world;
+    return _world.lock();
 }
 
 entity_ptr EntityManager::getPlayer()
 {
-    if(!_player)
+    if(!_player.lock())
     {
         for(auto p : _entity)
         {
@@ -43,7 +43,7 @@ entity_ptr EntityManager::getPlayer()
             }
         }
     }
-    return _player;
+    return _player.lock();
 }
 
 void EntityManager::update(int ms)
@@ -69,7 +69,7 @@ void EntityManager::update(int ms)
 
 void EntityManager::removeEntity(int id)
 {
-    for(int i=0; i<_entity.size(); i++)
+    for(unsigned i=0; i<_entity.size(); i++)
     {
         if(_entity[i]->getID() == id)
         {
@@ -83,7 +83,7 @@ void EntityManager::removeEntity(int id)
 
 void EntityManager::removeEntity(entity_ptr entity)
 {
-    for(int i=0; i<_entity.size(); i++)
+    for(unsigned i=0; i<_entity.size(); i++)
     {
         if(_entity[i] == entity)
         {

@@ -11,7 +11,7 @@ ObjectFactory::~ObjectFactory()
 entity_ptr ObjectFactory::createDefault()
 {
     entity_ptr def = make_shared<Entity>();
-    _entityManager->addToAddList(def);
+    _entityManager->addRequest(def);
     //_entity.push_back(def);
     return def;
 }
@@ -20,7 +20,7 @@ entity_ptr ObjectFactory::createMan(int x, int y, string tex_path)
 {
     entity_ptr man = createDefault();
     man->addComponent(new LifeComponent);
-    man->addComponent(new PhysicalFormComponent((x)*GRID_SIZE ,(y)*GRID_SIZE, GRID_SIZE, GRID_SIZE, MAN_SPEED));
+    man->addComponent(new PhysicalFormComponent((x)*GRID_SIZE ,(y)*GRID_SIZE, 2, GRID_SIZE, GRID_SIZE, MAN_SPEED));
     man->getComponent<PhysicalFormComponent>()->setMovable();
     man->getComponent<PhysicalFormComponent>()->setSolid(true);
     man->getComponent<PhysicalFormComponent>()->setZ(2);
@@ -57,9 +57,10 @@ entity_ptr ObjectFactory::createBomb(int x, int y)
 {
     printf("creating bomb at %d x %d\n",x,y);
     entity_ptr bomb = createDefault();
-    bomb->addComponent(new PhysicalFormComponent((x)*GRID_SIZE ,(y)*GRID_SIZE, GRID_SIZE, GRID_SIZE, MAN_SPEED));
-    bomb->addComponent(new BombTimer(2000));
+    bomb->addComponent(new PhysicalFormComponent((x)*GRID_SIZE ,(y)*GRID_SIZE, 1, GRID_SIZE, GRID_SIZE, MAN_SPEED));
+    bomb->addComponent(new Timer(2000));
     bomb->addComponent(new TextureComponent(_graphicsManager->getTexture("textures/bomb.png")));
+    bomb->addComponent(new Explosive(4));
 
     bomb->getComponent<PhysicalFormComponent>()->setZ(1);
     bomb->activate();
@@ -70,7 +71,7 @@ entity_ptr ObjectFactory::createBomb(int x, int y)
 entity_ptr ObjectFactory::createWorldCell(int x, int y, int t)
 {
     entity_ptr grid = createDefault();
-    grid->addComponent(new PhysicalFormComponent(x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE, 0));
+    grid->addComponent(new PhysicalFormComponent(x * GRID_SIZE, y * GRID_SIZE, 0, GRID_SIZE, GRID_SIZE, 0));
     grid->getComponent<PhysicalFormComponent>()->setStatic();
 
     grid->addComponent(new SquareCell);
@@ -80,12 +81,14 @@ entity_ptr ObjectFactory::createWorldCell(int x, int y, int t)
         {
             grid->addComponent(new TextureComponent(_graphicsManager->getTexture("textures/floor.png")));
             grid->addComponent(new NavNode()); // do kierowania botami
+            grid->getComponent<SquareCell>()->setType(CELL_FLOOR);
             break;
         }
         case 1: // WALL
         {
             grid->addComponent(new TextureComponent(_graphicsManager->getTexture("textures/wall.png")));
             grid->getComponent<PhysicalFormComponent>()->setSolid(true);
+            grid->getComponent<SquareCell>()->setType(CELL_WALL);
             break;
         }
         case 2: // DIRT
@@ -93,6 +96,7 @@ entity_ptr ObjectFactory::createWorldCell(int x, int y, int t)
             grid->addComponent(new TextureComponent(_graphicsManager->getTexture("textures/dirt.png")));
             grid->getComponent<PhysicalFormComponent>()->setSolid(true);
             grid->getComponent<PhysicalFormComponent>()->setDestructible(true);
+            grid->getComponent<SquareCell>()->setType(CELL_DIRT);
             break;
         }
     }
@@ -103,6 +107,11 @@ entity_ptr ObjectFactory::createWorldCell(int x, int y, int t)
 entity_ptr ObjectFactory::createExplosion(int x, int y)
 {
     entity_ptr expl = createDefault();
+    expl->addComponent(new PhysicalFormComponent(x*GRID_SIZE,y*GRID_SIZE,3,GRID_SIZE,GRID_SIZE,0,0));
+    expl->addComponent(new TextureComponent(_graphicsManager->getTexture("textures/explosion.png")));
+    expl->addComponent(new Timer(1000));
+    expl->addComponent(new Destroyer);
+    return expl;
 }
 
 bool ObjectFactory::createWorld(string path) /// OBSLUGA BLEDOW, BLAGAM !!!
@@ -148,7 +157,7 @@ bool ObjectFactory::createWorld(string path) /// OBSLUGA BLEDOW, BLAGAM !!!
         }
         for(auto e: entity_buffer)
         {
-            _entityManager->addToAddList(e);
+            _entityManager->addRequest(e);
         }
         file.close();
         printf("INFO: World loaded successfully.\n");

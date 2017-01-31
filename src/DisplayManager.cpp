@@ -3,7 +3,6 @@
 #include <SDL_image.h>
 
 #include <queue>
-#include "Field.h"
 #include "EntityManager.h"
 #include "MiscFunctions.h"
 
