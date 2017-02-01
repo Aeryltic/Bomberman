@@ -42,7 +42,9 @@ enum EventType
 {
     EVENT_LOST = 0,
     EVENT_WON,
-
+    EVENT_REMOVE,
+    EVENT_ADD,
+    EVENT_PAUSE,
 
     NUMEVENTS
 };

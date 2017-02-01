@@ -11,7 +11,7 @@ class EventManager
 
         void update();
 
-        static void pushUserEvent(int eventnum);
+        static void pushUserEvent(int eventcode, void *data1, void *data2);
 
         //template <class T>
       // void EventManager::pushEvent(int eventNum, int eventCode, shared_ptr<Entity> publisher, shared_ptr<Entity> subscriber);

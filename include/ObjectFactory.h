@@ -20,7 +20,7 @@ class ObjectFactory
         entity_ptr createPlayer(int x, int y);
         entity_ptr createEnemy(int x, int y);
 
-        entity_ptr createBomb(int x, int y);
+        entity_ptr createBomb(int x, int y, unsigned range);
 
         entity_ptr createExplosion(int x, int y);
 

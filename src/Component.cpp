@@ -5,6 +5,7 @@
 #include "EntityManager.h"
 #include "ObjectFactory.h"
 #include "EventManager.h"
+#include "MiscFunctions.h"
 
 int _AliveCount=0;
 /// PhysicalFormComponent ---------------------------------------------------------------------------
@@ -26,21 +27,11 @@ void PhysicalFormComponent::work(int ms)
 SDL_Rect PhysicalFormComponent::rect(int ms)
 {
     SDL_Rect rect = {.x = (int)_x, .y = (int)_y, .w = (int)_w, .h = (int)_h};
-    rect.x += cos(_angle) * _v / 1000.0 * ms;
-    rect.y += sin(_angle) * _v / 1000.0 * ms;
+    rect.x += cos(_angle) * _v * ms / 1000.0;
+    rect.y += sin(_angle) * _v * ms / 1000.0;
     return rect;
 }
 /// PlayerControllerComponent ---------------------------------------------------------------------------
-
-/*
-void PlayerControllerComponent::setActive()
-{
-    if((_iManager != nullptr) && (_target->getComponent<MovementComponent>())) /// potrzebuje klawiatury i jego target musi umiec sie poruszac
-    {
-        _active = true;
-    }
-}
-*/
 void PlayerControllerComponent::setActive()
 {
     if(target()->hasComponent<PhysicalFormComponent>() && (_iManager != nullptr))
@@ -80,21 +71,6 @@ void PlayerControllerComponent::work(int ms)
             /// DROP THAT BOMB
     }
 }
-/// NPCControllerComponent ---------------------------------------------------------------------------
-void NPCControllerComponent::work(int ms)
-{
-
-}
-
-vector2d NavNode::coor()
-{
-    vector2d v = target()->getComponent<PhysicalFormComponent>()->getPos();
-    /*
-    v.x += _target->getComponent<PhysicalFormComponent>()->getW()/2;
-    v.y += _target->getComponent<PhysicalFormComponent>()->getH()/2;
-    */
-    return v;
-}
 
 bool World::addCell(entity_ptr cell)//, int x, int y)
 {
@@ -107,13 +83,6 @@ bool World::addCell(entity_ptr cell)//, int x, int y)
             return true;
         }
     }
-    /*
-    if(valid(x,y))
-        if(cell->hasComponent<SquareCell>())
-        {
-            _square[y][x] = cell;
-            return true;
-        }*/
     return false;
 }
 
@@ -121,7 +90,7 @@ bool MovementController::destReached()
 {
    // printf("MovementController::destReached()...\n");
    vector2d c = current();
-    if(_reached || (c - _dest < 5.0))
+    if(_reached || (c - _dest < 1.0))
     {
         _reached = true;
         return 1;
@@ -193,9 +162,85 @@ void KeyboardController::setActive()
     if(target()->hasComponent<PhysicalFormComponent>() && (_iManager != nullptr))
         _active = true;
 }
+
+int_vector2d World::getNearestCellCoorFromGivenPosInGivenDirection(int_vector2d pos, int dir)
+{
+    int_vector2d c =  pos;
+    if(valid(c.x,c.y))
+    {
+        int dx = c.x, dy = c.y;
+        if(dir == DIR_UP)
+            dy--;
+        else if(dir == DIR_DOWN)
+            dy++;
+        else if(dir == DIR_LEFT)
+            dx--;
+        else if(dir == DIR_RIGHT)
+            dx++;
+        if(valid(dx,dy))
+        {
+            if((_square[dy][dx].lock()->getComponent<SquareCell>()->getType() == CELL_FLOOR) && (_square[dy][dx].lock()->getComponent<SquareCell>()->available()))
+            {
+                return int_vector2d(dx,dy);//realFromGrid(dx,dy);
+            }
+        }
+    }
+    return pos;
+}
+bool World::isDangerous(int x, int y)
+{
+    return 0;//_square[y][x]->hasComponent<Dangerous>();
+}
+
+vector2d MovementController::current()
+{
+    /*printf("MovementController::current()\n");*/
+    return target()->getComponent<PhysicalFormComponent>()->getPos();
+}
+
+void World::destroyDirt(int x, int y, EntityManager *entityManager, ObjectFactory *objectFactory)
+{
+    if(valid(x,y))
+    {
+        if(_square[y][x].lock()->getComponent<SquareCell>()->getType() == CELL_DIRT)
+        {
+            //entityManager->removeRequest(_square[y][x]->getID());
+            _square[y][x].lock()->deactivate();
+           // EventManager::pushUserEvent(EVENT_ADD, _square[y][x].lock() )
+            _square[y][x].reset();
+            //entityManager->removeRequest(_square[y][x].lock()->getID());
+            addCell(objectFactory->createWorldCell(x, y, CELL_FLOOR));
+ //           setup(); /// niid tu optimajz dis ting
+        }
+    }
+}
+
+void World::setSafe(int x,int y){_square[y][x].lock()->getComponent<SquareCell>()->setSafe();}
+void World::setUnsafe(int x,int y){_square[y][x].lock()->getComponent<SquareCell>()->setUnsafe();}
+
+bool World::isSafe(int x, int y){if(valid(x,y))return _square[y][x].lock()->getComponent<SquareCell>()->isSafe();return false;}
+bool World::isSafe(int_vector2d p){if(valid(p.x,p.y))return _square[p.y][p.x].lock()->getComponent<SquareCell>()->isSafe();return false;}
+
+Player::~Player()
+{
+    printf("PRZEGRALES\n"); /// trzeba doprawcowac by nie wysylal zawsze jak koncze gre (bo wysyla nawet jak wygram)
+    EventManager::pushUserEvent(EVENT_LOST,nullptr,nullptr);
+}
+int Enemy::_count = 0;
+Enemy::~Enemy()
+{
+    _count--;
+    if(_count<=0)
+    {
+        printf("WYGRALES\n");
+        //EventManager::pushUserEvent(EVENT_WON);
+    }
+}
+
+/*
 void KeyboardController::work(int ms)
 {
-    /*
+
     Direction dir = DIR_NONE;
     if(_iManager->keyStatus(SDLK_w) & (KEY_PRESSED|KEY_DOWN))   // go up
     {
@@ -228,9 +273,10 @@ void KeyboardController::work(int ms)
     {
             /// DROP THAT BOMB
     }
-    */
-}
 
+}
+*/
+/*
 NavNode *NavNode::getNeighbour(int dir)
 {
     if(_linked.find(dir)!=_linked.end())
@@ -239,109 +285,61 @@ NavNode *NavNode::getNeighbour(int dir)
     }
     return nullptr;
 }
-
+*/
+/* // obsolete
 void World::setup()
 {
     printf("World::setup()...\n");
+
     for(int i=0; i<_h; i++)
     {
         for(int j=0; j<_w; j++)
         {
+            entity_ptr current_grid = _square[y][x].lock();
             int y = i, x = j;
-            if(_square[y][x]->hasComponent<NavNode>())
+//            if(_square[y][x]->hasComponent<NavNode>())
+            if(current_grid->getComponent<SquareCell>()->getType() == CELL_FLOOR)
             {
                 int ny = y-1, nx = x;
-                if(valid(nx,ny) && _square[ny][nx]->hasComponent<NavNode>())
-                    _square[y][x]->getComponent<NavNode>()->setLink(DIR_UP, _square[ny][nx]->getComponent<NavNode>());
+                if(valid(nx,ny) && _square[ny][nx].lock()->getComponent<SquareCell>()->available())
+                    _square[y][x]->getComponent<NavNode>()->setLink(DIR_UP, _square[ny][nx].lock()->getComponent<NavNode>());
 
                 ny = y+1, nx = x;
-                if(valid(nx,ny) && _square[ny][nx]->hasComponent<NavNode>())
-                    _square[y][x]->getComponent<NavNode>()->setLink(DIR_DOWN, _square[ny][nx]->getComponent<NavNode>());
+                if(valid(nx,ny) && _square[ny][nx].lock()->getComponent<SquareCell>()->available())
+                    _square[y][x]->getComponent<NavNode>()->setLink(DIR_DOWN, _square[ny][nx].lock()->getComponent<NavNode>());
 
                 ny = y, nx = x-1;
-                if(valid(nx,ny) && _square[ny][nx]->hasComponent<NavNode>())
-                    _square[y][x]->getComponent<NavNode>()->setLink(DIR_LEFT, _square[ny][nx]->getComponent<NavNode>());
+                if(valid(nx,ny) && _square[ny][nx].lock()->getComponent<SquareCell>()->available())
+                    _square[y][x]->getComponent<NavNode>()->setLink(DIR_LEFT, _square[ny][nx].lock()->getComponent<NavNode>());
 
                 ny = y, nx = x+1;
-                if(valid(nx,ny) && _square[ny][nx]->hasComponent<NavNode>())
-                    _square[y][x]->getComponent<NavNode>()->setLink(DIR_RIGHT, _square[ny][nx]->getComponent<NavNode>());
+                if(valid(nx,ny) && _square[ny][nx].lock()->getComponent<SquareCell>()->available())
+                    _square[y][x]->getComponent<NavNode>()->setLink(DIR_RIGHT, _square[ny][nx].lock()->getComponent<NavNode>());
             }
         }
     }
 }
-vector2d World::getNearestCellCoorFromGivenPosInGivenDirection(vector2d pos, int dir)
-{
-   /* printf("getNearestCellCoorFromGivenPosInGivenDirection(%lfx%lf, %d)...\n",pos.x,pos.y,dir);*/
-    int cx,cy;
-    cx = round(pos.x/GRID_SIZE);
-    cy = round(pos.y/GRID_SIZE);
-    if(valid(cx,cy))
-    {
-        int dx = cx, dy = cy;
-        if(dir == DIR_UP)
-            dy--;
-        else if(dir == DIR_DOWN)
-            dy++;
-        else if(dir == DIR_LEFT)
-            dx--;
-        else if(dir == DIR_RIGHT)
-            dx++;
-        if(valid(dx,dy))
-        {
-            if(_square[dy][dx]->hasComponent<NavNode>())
-            {
-                return _square[dy][dx]->getComponent<NavNode>()->coor(); /// it's sooooo bad, soooo wrong
-            }
-        }
-    }
-    return vector2d(cx*GRID_SIZE,cy*GRID_SIZE);
-}
-
+*/
+/*
 void NavNode::setLink(int dir, NavNode *node)
 {
-  /*  printf("setLink...\n");*/
     _linked.insert(make_pair(dir,node));
 }
-
-vector2d MovementController::current(){/*printf("MovementController::current()\n");*/return target()->getComponent<PhysicalFormComponent>()->getPos();}
-
-bool World::isDangerous(int x, int y)
+*/
+/*
+vector2d NavNode::coor()
 {
-    return _square[y][x]->hasComponent<Dangerous>();
+    vector2d v = target()->getComponent<PhysicalFormComponent>()->getPos();
+    return v;
 }
-
-bool World::replace(entity_ptr cell)
+*/
+/*
+void PlayerControllerComponent::setActive()
 {
-
-    return false;
-}
-void World::destroyDirt(int x, int y, EntityManager *entityManager, ObjectFactory *objectFactory)
-{
-    if(valid(x,y))
+    if((_iManager != nullptr) && (_target->getComponent<MovementComponent>())) /// potrzebuje klawiatury i jego target musi umiec sie poruszac
     {
-        if(_square[y][x]->getComponent<SquareCell>()->getType() == CELL_DIRT)
-        {
-            //entityManager->removeRequest(_square[y][x]->getID());
-            _square[y][x]->deactivate();
-            _square[y][x].reset();
-            addCell(objectFactory->createWorldCell(x, y, CELL_FLOOR));
-            setup(); /// niid tu optimajz dis ting
-        }
+        _active = true;
     }
 }
-Player::~Player()
-{
-    printf("PRZEGRALES\n"); /// trzeba doprawcowac by nie wysylal zawsze jak koncze gre (bo wysyla nawet jak wygram)
-    EventManager::pushUserEvent(EVENT_LOST);
-}
-int Enemy::_count = 0;
-Enemy::~Enemy()
-{
-    _count--;
-    if(_count<=0)
-    {
-        printf("WYGRALES\n");
-        EventManager::pushUserEvent(EVENT_WON);
-    }
-}
+*/
 //int Alive::_count=0;

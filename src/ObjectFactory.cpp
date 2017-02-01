@@ -27,20 +27,19 @@ entity_ptr ObjectFactory::createMan(int x, int y, string tex_path)
     man->getComponent<PhysicalFormComponent>()->setZ(2);
     man->addComponent(new MovementController);
     man->addComponent(new TextureComponent(_graphicsManager->getTexture(tex_path)));
-    man->addComponent(new BombPlanter);
+    man->addComponent(new BombPlanter(INITIAL_BOMB_RANGE));
     return man;
 }
 
 entity_ptr ObjectFactory::createPlayer(int x, int y)
 {
-    printf("creating player at %d x %d\n",x,y);
-    entity_ptr player = createMan(x,y,"textures/player.png");
-    //player->addComponent(new PlayerControllerComponent(_inputManager));
+    printf("creating player at %d x %d\n", x, y);
+    entity_ptr player = createMan(x, y, "textures/player.png");
     player->addComponent(new KeyboardController(_inputManager));
     player->addComponent(new Player);
 
     player->activate();
-    printf("player ready\n");
+    printf("PLAYER READY (ID:%d)\n", player->getID());
     return player;
 }
 
@@ -55,14 +54,14 @@ entity_ptr ObjectFactory::createEnemy(int x, int y)
     return enemy;
 }
 
-entity_ptr ObjectFactory::createBomb(int x, int y)
+entity_ptr ObjectFactory::createBomb(int x, int y, unsigned range)
 {
     printf("creating bomb at %d x %d\n",x,y);
     entity_ptr bomb = createDefault();
     bomb->addComponent(new PhysicalFormComponent((x)*GRID_SIZE ,(y)*GRID_SIZE, 1, GRID_SIZE, GRID_SIZE, MAN_SPEED));
     bomb->addComponent(new Timer(2000));
     bomb->addComponent(new TextureComponent(_graphicsManager->getTexture("textures/bomb.png")));
-    bomb->addComponent(new Explosive(2));
+    bomb->addComponent(new Explosive(range));
 
     bomb->getComponent<PhysicalFormComponent>()->setZ(1);
     bomb->activate();
@@ -83,13 +82,17 @@ entity_ptr ObjectFactory::createWorldCell(int x, int y, int t)
         case CELL_FLOOR: // FLOOR
         {
             grid->addComponent(new TextureComponent(_graphicsManager->getTexture("textures/floor.png")));
-            grid->addComponent(new NavNode());
+            //grid->addComponent(new NavNode());
+            grid->getComponent<SquareCell>()->unlock();
+            grid->getComponent<SquareCell>()->setSafe();
+            grid->getComponent<PhysicalFormComponent>()->setDestructible(false);
             break;
         }
         case CELL_WALL: // WALL
         {
             grid->addComponent(new TextureComponent(_graphicsManager->getTexture("textures/wall.png")));
             grid->getComponent<PhysicalFormComponent>()->setSolid(true);
+            grid->getComponent<PhysicalFormComponent>()->setDestructible(false);
             break;
         }
         case CELL_DIRT: // DIRT
@@ -141,7 +144,7 @@ bool ObjectFactory::createWorld(string path) /// OBSLUGA BLEDOW, BLAGAM !!!
                 world->getComponent<World>()->addCell(createWorldCell(j,i,t));
             }
         }
-        world->getComponent<World>()->setup();
+//        world->getComponent<World>()->setup();
         int xp, yp;
         file>>xp>>yp;
         entity_buffer.push_back(createPlayer(xp,yp));

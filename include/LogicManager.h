@@ -10,7 +10,7 @@
 class LogicManager
 {
     public:
-        LogicManager();
+        LogicManager(ObjectFactory *objectFactory);
         virtual ~LogicManager();
         //void update(ObjectContainer &object, int time_passed);
         void update(EntityManager *entityManager, ObjectFactory *objectFactory, int ms_passed);

@@ -20,6 +20,7 @@ GameInstance::GameInstance()
     /** INITIALIZE */ /* maybe not */
     printf("new GameInstance\n");
     _working = true;
+    _paused = false;
     /*
 
 	*/
@@ -40,11 +41,13 @@ int GameInstance::run()
     }
     shared_ptr<DisplayManager>  _displayManager = make_shared<DisplayManager>();
     shared_ptr<InputManager>    _inputManager = make_shared<InputManager>();
-    shared_ptr<LogicManager>    _logicManager = make_shared<LogicManager>(); /// to jemu sie przypisze te "systemy"
     shared_ptr<EntityManager>   _entityManager = make_shared<EntityManager>();
+    shared_ptr<ObjectFactory>   _objectFactory  = make_shared<ObjectFactory>(_entityManager.get(), _displayManager->getGraphicsManager(), _inputManager.get());
+    shared_ptr<LogicManager>    _logicManager = make_shared<LogicManager>(_objectFactory.get());
+
     shared_ptr<EventManager>    _eventManager = make_shared<EventManager>(_inputManager.get());
 
-    shared_ptr<ObjectFactory>   _objectFactory  = make_shared<ObjectFactory>(_entityManager.get(), _displayManager->getGraphicsManager(), _inputManager.get());
+
 
     srand(time(NULL));
 
@@ -60,16 +63,23 @@ int GameInstance::run()
    /// KONIEC TESTU
  //   startGame(_entityManager);
     //while(!(_inputManager.keyStatus(SDLK_ESCAPE) & (KEY_PRESSED|KEY_DOWN)))
+
     while(_working)
     {
         double current = SDL_GetTicks();
         double elapsed = current - previous;
         previous = current;
-        lag += elapsed;
+        if(!_paused)
+        {
+            lag += elapsed;
+        }
+
 
         _inputManager->update(); /// przy duzym delay przyciski moga nie wspolpracowac - zmieniaja stan zanim gra zereaguje
 
         _eventManager->update();
+
+        if(!_paused)
         while (lag >= TIMESTEP)
         {
             //_logicManager.update(_objectContainer, TIMESTEP);
@@ -83,7 +93,7 @@ int GameInstance::run()
 
         if(SDL_GetTicks() - last_check >= 1000)
         {
-            printf("FPS: %d\n",frames);
+            //printf("FPS: %d\n",frames);
             frames = 0;
             last_check = SDL_GetTicks();
         }

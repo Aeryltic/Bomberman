@@ -8,6 +8,7 @@
 #include "Constants.h"
 #include <unordered_map>
 #include "Enumerations.h"
+#include "Typedefs.h"
 
 class EntityManager;
 class ObjectFactory;
@@ -171,7 +172,7 @@ class Timer : public Component
     private:
         int _msLeft;
 };
-
+/* // for later use
 class NavNode : public Component    /// uses PhysicalFormComponent
 {
     public:
@@ -183,16 +184,29 @@ class NavNode : public Component    /// uses PhysicalFormComponent
         // vector<NavNode *> v // neighbouring vertexes // not gut ajdija, to powinien zalatwiac system... chociaz moze...
     unordered_map<int, NavNode*> _linked; // int = Direction (do nawigacji)
 };
-
+*/
 class SquareCell : public Component /// powinny byc przetwarzane jako instancje - za duza redundancja
 {
     public:
-        SquareCell(WorldCellType type = CELL_NONE) : Component() {_type = type;}
+        SquareCell(WorldCellType type = CELL_NONE) : Component() {_type = type; _safe = true;}
         ~SquareCell() {}
+
         void setType(WorldCellType type){_type = type;}
         WorldCellType getType(){return _type;}
+
+        void lock(){_available = false;}
+        void unlock(){_available = true;}
+        bool available(){return _available;}
+
+        bool isSafe() {return _safe;}
+       // void setDanger(bool danger) {_dangerous = danger;}
+        void setSafe(){_safe = true;}
+        void setUnsafe(){_safe = false;}
+
     private:
         WorldCellType _type;
+        bool _available;
+        bool _safe;
 };
 
 class World : public Component
@@ -206,16 +220,24 @@ class World : public Component
         bool replace(entity_ptr cell);
 
         bool valid(int x, int y){ return ((x>=0) && (x<_w) && (y>=0) && (y<_h));}
-        vector2d getNearestCellCoorFromGivenPosInGivenDirection(vector2d pos, int dir);
+        int_vector2d getNearestCellCoorFromGivenPosInGivenDirection(int_vector2d pos, int dir); /// need fixing
 
-        entity_ptr getCell(int x, int y){if(valid(x,y))return _square[y][x]; return nullptr;}
+        entity_ptr getCell(int x, int y){if(valid(x,y))return _square[y][x].lock(); return nullptr;}
 
         bool isDangerous(int x, int y);
 
         void destroyDirt(int x, int y, EntityManager *entityManager, ObjectFactory *objectFactory);
+
+        void setSafe(int x, int y);
+        void setUnsafe(int x, int y);
+        bool isSafe(int x, int y);
+        bool isSafe(int_vector2d p);
+
+        int width(){return _w;}
+        int height(){return _h;}
     private:
         int _w, _h;
-        vector<vector<entity_ptr>> _square;
+        vector<vector<weak_ptr<Entity>>> _square;
 };
 
 class PlayerControllerComponent : public Component /// uses PhysicalFormComponent
@@ -233,7 +255,7 @@ class PlayerControllerComponent : public Component /// uses PhysicalFormComponen
 
 };
 
-class KeyboardController : public Component /// uses PhysicalFormComponent
+class KeyboardController : public Component
 {
     public:
         KeyboardController(InputManager *iManager) : Component() {_iManager = iManager;}
@@ -243,10 +265,27 @@ class KeyboardController : public Component /// uses PhysicalFormComponent
 
         InputManager *getInputManager() {return _iManager;}
     protected:
-        void work(int ms);
+       // void work(int ms);
     private:
         InputManager *_iManager;
 
+};
+
+class AIController : public Component
+{
+    public:
+        AIController() : Component() {}
+        ~AIController() {}
+        void setDir(int dir){_dir = dir;}
+        int getDir(){return _dir;}
+        void setPath(Path path){_path = path;}
+        bool hasPath(){return !_path.empty();}
+        void clearPath(){_path.clear();}
+        int_vector2d nextStop(){int_vector2d next = _path.front(); _path.pop_front(); printf("nextStop()=%dx%d\n",next.x,next.y);return next;}
+        void print(){printf("path: ");for(auto p:_path)printf("%dx%d ",p.x,p.y);printf("\n");}
+    private:
+        int _dir;
+        Path _path;
 };
 
 class MovementController : public Component
@@ -283,7 +322,7 @@ class MovementController : public Component
         bool _moving;
  //       bool _moving;
 };
-
+/*
 class NPCControllerComponent : public Component /// uses PhysicalFormComponent
 {
     public:
@@ -294,28 +333,23 @@ class NPCControllerComponent : public Component /// uses PhysicalFormComponent
         vector2d _dest;
         bool _hasDestination;
 };
+*/
 
-class AIController : public Component
-{
-    public:
-        AIController() : Component() {}
-        ~AIController() {}
-        void setDir(int dir){_dir = dir;}
-        int getDir(){return _dir;}
-    private:
-        int _dir;
-};
 
 class BombPlanter : public Component
 {
     public:
-        BombPlanter() : Component() {_lastPlant = 0;}
+        BombPlanter(unsigned range) : Component() { _range = range; _toNextPlant=0;_active = true;}
         ~BombPlanter() {}
-        bool canPlantNext() {return(SDL_GetTicks() - _lastPlant > 3000); }
-        void plant() {_lastPlant = SDL_GetTicks();}
-
+        bool canPlantNext() {return _toNextPlant<=0; }
+        void plant() {/*_lastPlant = SDL_GetTicks();*/ _toNextPlant = 3000;}
+        unsigned getRange(){return _range;}
+    protected:
+        void work(int ms){if(_toNextPlant>=0)_toNextPlant-=ms;}
     private:
-        unsigned _lastPlant;
+
+        int _toNextPlant;
+        unsigned _range;
 };
 
 class Explosive : public Component

@@ -6,10 +6,20 @@
 #include <unordered_map>
 #include "Texture.h"
 #include "AppWindow.h"
+#include "Constants.h"
 
 using namespace std;
 class GraphicsManager
 {
+    class Texture
+    {
+        public:
+            Texture(SDL_Texture *texture = nullptr) {printf("new Texture\n"); _texture = texture;}
+            ~Texture(){/*printf("delete Texture\n");*/SDL_DestroyTexture(_texture);}
+            SDL_Texture *texture(){return _texture;}
+        private:
+            SDL_Texture *_texture;
+    };
     public:
         GraphicsManager();
         GraphicsManager(SDL_Renderer *renderer);
@@ -23,7 +33,7 @@ class GraphicsManager
     /// USUNAC JESLI JUZ ZACZNIE DZIALAC
         void test(AppWindow &_window)
         {
-            if(SDL_RenderCopy(_window.getRenderer(), getTexture("BLANK"), NULL, NULL)<0)
+            if(SDL_RenderCopy(_window.getRenderer(), getTexture(BLANK_TEX), NULL, NULL)<0)
             {
                 printf("test failed!!!!!!!!!!\n");
             }
@@ -35,7 +45,8 @@ class GraphicsManager
 
         /* pierwsza wygenerowac jako BLANK */
        // unordered_map <string,Texture> textures;
-       unordered_map <string,SDL_Texture*> textures;
+       //unordered_map <string,SDL_Texture*> textures;
+       unordered_map <string, shared_ptr<Texture>> textures;
        /// unordered_map <string,shared_ptr<Texture>> _textures; /// tak to powinno wygladac (powinno?)
         SDL_Renderer *_renderer;
 };

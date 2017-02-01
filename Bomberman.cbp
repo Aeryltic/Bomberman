@@ -34,7 +34,9 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-O2" />
 			<Add option="-Wall" />
+			<Add option="-std=c++14" />
 			<Add directory="C:/Dev_Libs/x86_64-w64-mingw32/include/SDL2" />
 			<Add directory="include" />
 		</Compiler>
@@ -87,9 +89,7 @@
 		<Unit filename="include/Structures.h">
 			<Option virtualFolder="Other/" />
 		</Unit>
-		<Unit filename="include/Texture.h">
-			<Option virtualFolder="GraphicsModule/include/" />
-		</Unit>
+		<Unit filename="include/Typedefs.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/AppWindow.cpp">
 			<Option virtualFolder="GraphicsModule/src/" />
@@ -121,11 +121,9 @@
 		<Unit filename="src/LogicManager.cpp">
 			<Option virtualFolder="LogicModule/src/" />
 		</Unit>
+		<Unit filename="src/MiscFunctions.cpp" />
 		<Unit filename="src/ObjectFactory.cpp">
 			<Option virtualFolder="GameObjects_v2/src/" />
-		</Unit>
-		<Unit filename="src/Texture.cpp">
-			<Option virtualFolder="GraphicsModule/src/" />
 		</Unit>
 		<Extensions>
 			<code_completion />

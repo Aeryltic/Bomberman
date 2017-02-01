@@ -17,8 +17,6 @@
 	
 	# multimapy do przechowywania komponentów? - "optymalizacja" przy korzystaniu z systemow
 	
-	# opakowaæ tekstury w t¹ klase Texture, ¿eby nie martwiæ sie zarz¹dzaniem pamieci¹
-	
 	# dodaæ jakiœ cel (po zabiciu wszyskich przeciwników czy coœ)
 	
 	# uproœciæ œwiat

@@ -12,11 +12,13 @@ class GameInstance
         int startGame();
 
         void quit();
+        void pause(){_paused = !_paused;}
     protected:
 
     private:
         GameInstance();
         bool _working;
+        bool _paused;
 };
 
 #endif // GAMEINSTANCE_H

@@ -6,11 +6,11 @@
 #include "EntityManager.h"
 #include "MiscFunctions.h"
 
-DisplayManager::DisplayManager() : _window(WINDOW_WIDTH, WINDOW_HEIGHT)
+DisplayManager::DisplayManager() : _window(WINDOW_WIDTH, WINDOW_HEIGHT), _graphicsManager(GraphicsManager(_window.getRenderer()))
 {
     printf("new DisplayManager\n");
     IMG_Init(IMG_INIT_PNG);
-    _graphicsManager = GraphicsManager(_window.getRenderer());//make_shared<GraphicsManager>(_window.getRenderer());
+   //_graphicsManager = GraphicsManager(_window.getRenderer());//make_shared<GraphicsManager>(_window.getRenderer());
     //_graphicsManager = GraphicsManager(_window.getRenderer());
     _windowRect.x = 0;
     _windowRect.y = 0;
@@ -172,10 +172,12 @@ void DisplayManager::test()
     }
     a.x=0;
     a.y=128;
+    /*
     if(_graphicsManager.copyTexToRenderer("BLANK",&a))
     {
         printf( "Unable to print BLANK4! SDL_image Error: %s\n", IMG_GetError() );
     }
+    */
     SDL_DestroyTexture(t3);
     SDL_DestroyTexture(t4);
 }

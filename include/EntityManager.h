@@ -17,7 +17,6 @@ class EntityManager
 
         void update(int ms);
 
-
         void addRequest(entity_ptr entity){_toAdd.push(entity);}
 
         const unordered_map<int,entity_ptr> &entity() const{return _entity;}
@@ -39,13 +38,14 @@ class EntityManager
        // entity_ptr    _world, _player;
         int _nextID;
 
-        void removeEntity(int id);
-        void removeEntity(entity_ptr entity);
+  //      void removeEntity(int id);
+  //      void removeEntity(entity_ptr entity);
 
         void addEntity(entity_ptr entity) {entity->setID(_nextID);/*_entity.push_back(entity);*/ _entity.insert({_nextID++, entity});}
 
-        //void removeRequest(int id){_toRemove.push(id);/*for(int i=0;i<_entity.size();i++)if(_entity[i]->getID()==id)_entity[i]->deactivate();*/if(exists(id))_entity[id]->deactivate();}
-        //void removeRequest(entity_ptr entity){_toRemove.push(entity->getID());entity->deactivate();}
+//        void removeRequest(int id){printf("to remove %d\n",id);_toRemove.push(id); if(exists(id))_entity[id]->deactivate();}
+//        void removeRequest(entity_ptr entity){_toRemove.push(entity->getID());entity->deactivate();}
+
 };
 
 #endif // ENTITYMANAGER_H

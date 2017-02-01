@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-Entity::Entity()
+Entity::Entity() /// zmienic obsluge zeby moglobyc false
 {
     _active = true;
 }

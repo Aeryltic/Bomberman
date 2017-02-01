@@ -27,6 +27,10 @@ void EventManager::update()
                     pushed.type = SDL_QUIT;
                     SDL_PushEvent(&pushed);
                 }
+                if(keycode == SDLK_p)
+                {
+                    pushUserEvent(EVENT_PAUSE,NULL,NULL);
+                }
                 break;
             }
             case SDL_KEYUP:
@@ -56,20 +60,33 @@ void EventManager::update()
                         pushed.type = SDL_QUIT;
                         SDL_PushEvent(&pushed);
                         break;
+                    case EVENT_PAUSE:
+                        GameInstance::getInstance().pause();
+                        /*
+                    case EVENT_DELETE:
+                        _entityManager->removeRequest(static_cast<Entity *>(data1)->getID());
+                        break;
+                        */
+                    //case EVENT_ADD:
+                    //    _entityManager->addRequest(/*eeehh*/);
+                    //    break;
+
                 }
+                //if(data1)delete data1;
+                //if(data2)delete data2;
             }
         }
     }
 }
 
 Uint32 EventManager::eventBeginningNum=0;
-void EventManager::pushUserEvent(int eventcode)
+void EventManager::pushUserEvent(int eventcode, void *data1, void *data2)
 {
     SDL_Event event;
     SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
     event.type = eventBeginningNum;
     event.user.code = eventcode;
-    event.user.data1 = 0;
-    event.user.data2 = 0;
+    event.user.data1 = data1;
+    event.user.data2 = data2;
     SDL_PushEvent(&event);
 }

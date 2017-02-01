@@ -57,11 +57,13 @@ void EntityManager::update(int ms)
         entity->update(ms);
     }
     */
+
     for (auto it = _entity.begin(); it != _entity.end(); )
     {
         if (!it->second->isActive()) _entity.erase(it++);
         else ++it;
     }
+
     /*
     for(auto entity_m : _entity)
     {
@@ -72,12 +74,14 @@ void EntityManager::update(int ms)
             removeRequest(entity->getID());
         }
     }
+    */
+    /*
     while(!_toRemove.empty())
     {
         removeEntity(_toRemove.front());
         _toRemove.pop();
     }
-    */
+*/
     while(!_toAdd.empty())
     {
         addEntity(_toAdd.front());
@@ -85,43 +89,15 @@ void EntityManager::update(int ms)
     }
 
 }
-
+/*
 void EntityManager::removeEntity(int id)
 {
-    if(exists(id))_entity[id].reset();
-    printf("removing %d\n", id);
-    _entity.erase(id);
-    /*
-    for(unsigned i=0; i<_entity.size(); i++)
-    {
-        if(_entity[i]->getID() == id)
-        {
-            //printf("removing entity #%d\n",_entity[i]->getID());
-            _entity.erase(_entity.begin()+i);
-//            printf("ok\n");
-            break;
-        }
-    }
-    */
+    auto it = _entity.find(id);
+    if(it != _entity.end()) _entity.erase(it);
 }
 
 void EntityManager::removeEntity(entity_ptr entity)
 {
     removeEntity(entity->getID());
-    /*
-    if(exists(entity->getID()))_entity[id].reset();
-    _entity.erase(entity->getID());
-    */
-    /*
-    for(unsigned i=0; i<_entity.size(); i++)
-    {
-        if(_entity[i] == entity)
-        {
-            //printf("removing entity #%d\n",_entity[i]->getID());
-            _entity.erase(_entity.begin()+i);
-//            printf("ok\n");
-            break;
-        }
-    }
-    */
 }
+*/
