@@ -5,7 +5,7 @@
 
 #include "Constants.h"
 #include "Entity.h"
-#include <stack>
+#include <queue>
 
 using namespace std;
 
@@ -17,20 +17,23 @@ class EntityManager
 
         void update(int ms);
 
-        void removeRequest(int id){_toRemove.push(id);}
+
         void addRequest(entity_ptr entity){_toAdd.push(entity);}
 
-        const vector<entity_ptr> &entity() const{return _entity;}
+        const unordered_map<int,entity_ptr> &entity() const{return _entity;}
 
         entity_ptr getWorld();
         entity_ptr getPlayer();
+
+        bool exists(int id){return _entity.find(id) != _entity.end();}
     protected:
 
     private:
-        stack<int> _toRemove;
-        stack<entity_ptr> _toAdd;
+        //queue<int> _toRemove;
+        queue<entity_ptr> _toAdd;
 
-        vector<entity_ptr> _entity; /// przebudowac na unordered_map
+        //vector<entity_ptr> _entity; /// przebudowac na unordered_map
+        unordered_map<int,entity_ptr> _entity;
 
         weak_ptr<Entity>    _world, _player;
        // entity_ptr    _world, _player;
@@ -39,7 +42,10 @@ class EntityManager
         void removeEntity(int id);
         void removeEntity(entity_ptr entity);
 
-        void addEntity(entity_ptr entity) {entity->setID(_nextID++);_entity.push_back(entity);}
+        void addEntity(entity_ptr entity) {entity->setID(_nextID);/*_entity.push_back(entity);*/ _entity.insert({_nextID++, entity});}
+
+        //void removeRequest(int id){_toRemove.push(id);/*for(int i=0;i<_entity.size();i++)if(_entity[i]->getID()==id)_entity[i]->deactivate();*/if(exists(id))_entity[id]->deactivate();}
+        //void removeRequest(entity_ptr entity){_toRemove.push(entity->getID());entity->deactivate();}
 };
 
 #endif // ENTITYMANAGER_H

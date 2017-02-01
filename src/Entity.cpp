@@ -2,7 +2,7 @@
 
 Entity::Entity()
 {
-    //ctor
+    _active = true;
 }
 
 Entity::~Entity()
@@ -11,6 +11,7 @@ Entity::~Entity()
     {
         delete component.second;
     }
+    //printf("DELETING ENTITY #%d\n",_id);
 }
 
 inline bool Entity::hasComponent(int key) const
@@ -48,4 +49,5 @@ void Entity::activate()
  //       component.second->setTarget(shared_from_this());
         component.second->setActive();
     }
+
 }

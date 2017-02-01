@@ -27,17 +27,21 @@ class Entity : public std::enable_shared_from_this<Entity>
         void update(int ms);
 
         void activate();
+        void deactivate(){_active = false;}
 
         comp_map &components(){return _component;}
 
         void setID(int id){/*printf("got ID: #%d\n",id);*/_id = id;}
         int getID(){return _id;}
 
+        bool isActive(){return _active;}
+
     protected:
 
     private:
         int _id;
         comp_map _component; /* typeid(T).hash_code() */
+        bool _active;
         /** zamiast prostej mapy moze lepiej byloby zaimplementowac inteligentny kontener, ktory moglby uproscic odwolania do elementow
         * zeby nie musiec pisac calej tej dlugiej formulki z hasComponent i getComponent
         *

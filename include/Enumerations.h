@@ -38,4 +38,13 @@ enum WorldCellType
     CELL_DIRT
 };
 
+enum EventType
+{
+    EVENT_LOST = 0,
+    EVENT_WON,
+
+
+    NUMEVENTS
+};
+
 #endif // ENUMERATIONS_H_INCLUDED

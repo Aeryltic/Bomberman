@@ -1,5 +1,7 @@
 #include "InputManager.h"
 #include <cstdio>
+//#include "Component.h"
+
 InputManager::InputManager()
 {
     printf("new InputManager\n");
@@ -17,6 +19,7 @@ void InputManager::update()
         if(key.second == KEY_PRESSED) key.second = KEY_DOWN;//, printf("down: %s\n",SDL_GetKeyName(key.first));
         else if(key.second == KEY_RELEASED) key.second = KEY_UP;//, printf("up: %s\n",SDL_GetKeyName(key.first));
     }
+    if(_key[SDLK_0] == KEY_DOWN) printf("ALIVE_COUNT: %d\n", _AliveCount);
 }
 
 void InputManager::setKeyStatus(SDL_Keycode keycode, KeyStatus status)

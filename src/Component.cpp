@@ -4,7 +4,9 @@
 #include <cmath>
 #include "EntityManager.h"
 #include "ObjectFactory.h"
+#include "EventManager.h"
 
+int _AliveCount=0;
 /// PhysicalFormComponent ---------------------------------------------------------------------------
 void PhysicalFormComponent::work(int ms)
 {
@@ -41,7 +43,7 @@ void PlayerControllerComponent::setActive()
 */
 void PlayerControllerComponent::setActive()
 {
-    if(_target->hasComponent<PhysicalFormComponent>() && (_iManager != nullptr))
+    if(target()->hasComponent<PhysicalFormComponent>() && (_iManager != nullptr))
         _active = true;
 }
 void PlayerControllerComponent::work(int ms)
@@ -67,11 +69,11 @@ void PlayerControllerComponent::work(int ms)
 
     if(up_down || left_right)
     {
-        _target->getComponent<PhysicalFormComponent>()->setAngle(atan2(up_down,left_right));
+        target()->getComponent<PhysicalFormComponent>()->setAngle(atan2(up_down,left_right));
         //_target->getComponent<PhysicalFormComponent>()->setSpeedToMax();
-        _target->getComponent<PhysicalFormComponent>()->accelerate(ms);
+        target()->getComponent<PhysicalFormComponent>()->accelerate(ms);
     }
-    else _target->getComponent<PhysicalFormComponent>()->deccelerate(ms);//_target->getComponent<PhysicalFormComponent>()->setSpeed(0);
+    else target()->getComponent<PhysicalFormComponent>()->deccelerate(ms);//_target->getComponent<PhysicalFormComponent>()->setSpeed(0);
     // bomb dropping
     if(_iManager->keyStatus(SDLK_SPACE) & (KEY_PRESSED))    // drop bomb
     {
@@ -86,7 +88,7 @@ void NPCControllerComponent::work(int ms)
 
 vector2d NavNode::coor()
 {
-    vector2d v = _target->getComponent<PhysicalFormComponent>()->getPos();
+    vector2d v = target()->getComponent<PhysicalFormComponent>()->getPos();
     /*
     v.x += _target->getComponent<PhysicalFormComponent>()->getW()/2;
     v.y += _target->getComponent<PhysicalFormComponent>()->getH()/2;
@@ -94,14 +96,24 @@ vector2d NavNode::coor()
     return v;
 }
 
-bool World::addCell(entity_ptr cell, int x, int y)
+bool World::addCell(entity_ptr cell)//, int x, int y)
 {
+    if(cell->hasComponent<SquareCell>() && cell->getComponent<PhysicalFormComponent>())
+    {
+        int_vector2d pos = cell->getComponent<PhysicalFormComponent>()->getGridPos();
+        if(valid(pos.x,pos.y))
+        {
+            _square[pos.y][pos.x] = cell;
+            return true;
+        }
+    }
+    /*
     if(valid(x,y))
         if(cell->hasComponent<SquareCell>())
         {
             _square[y][x] = cell;
             return true;
-        }
+        }*/
     return false;
 }
 
@@ -121,9 +133,9 @@ bool MovementController::destReached()
 void MovementController::setActive()
 {
  //   printf("MovementController::setActive()\n");
-    if(_target->hasComponent<PhysicalFormComponent>())
+    if(target()->hasComponent<PhysicalFormComponent>())
     {
-        _physicalForm = _target->getComponent<PhysicalFormComponent>();
+        _physicalForm = target()->getComponent<PhysicalFormComponent>();
         _dest = _physicalForm->getPos();
         _active = true;
       //  printf("----Movement Controller Active\n");
@@ -176,12 +188,12 @@ void MovementController::setDest(vector2d dest)
        // printf("dest SET\n");
     }
 }
-void PlayerControllerComponent_v2::setActive()
+void KeyboardController::setActive()
 {
-    if(_target->hasComponent<PhysicalFormComponent>() && (_iManager != nullptr))
+    if(target()->hasComponent<PhysicalFormComponent>() && (_iManager != nullptr))
         _active = true;
 }
-void PlayerControllerComponent_v2::work(int ms)
+void KeyboardController::work(int ms)
 {
     /*
     Direction dir = DIR_NONE;
@@ -284,29 +296,52 @@ vector2d World::getNearestCellCoorFromGivenPosInGivenDirection(vector2d pos, int
     }
     return vector2d(cx*GRID_SIZE,cy*GRID_SIZE);
 }
+
 void NavNode::setLink(int dir, NavNode *node)
 {
   /*  printf("setLink...\n");*/
     _linked.insert(make_pair(dir,node));
 }
 
-vector2d MovementController::current(){/*printf("MovementController::current()\n");*/return _target->getComponent<PhysicalFormComponent>()->getPos();}
+vector2d MovementController::current(){/*printf("MovementController::current()\n");*/return target()->getComponent<PhysicalFormComponent>()->getPos();}
 
 bool World::isDangerous(int x, int y)
 {
     return _square[y][x]->hasComponent<Dangerous>();
 }
 
+bool World::replace(entity_ptr cell)
+{
+
+    return false;
+}
 void World::destroyDirt(int x, int y, EntityManager *entityManager, ObjectFactory *objectFactory)
 {
     if(valid(x,y))
     {
-        if(_square[y][x]->getComponent<SquareCell>()->getType()==CELL_DIRT)
+        if(_square[y][x]->getComponent<SquareCell>()->getType() == CELL_DIRT)
         {
-            entityManager->removeRequest(_square[y][x]->getID());
+            //entityManager->removeRequest(_square[y][x]->getID());
+            _square[y][x]->deactivate();
             _square[y][x].reset();
-            addCell(objectFactory->createWorldCell(x,y,0),x,y);
+            addCell(objectFactory->createWorldCell(x, y, CELL_FLOOR));
             setup(); /// niid tu optimajz dis ting
         }
     }
 }
+Player::~Player()
+{
+    printf("PRZEGRALES\n"); /// trzeba doprawcowac by nie wysylal zawsze jak koncze gre (bo wysyla nawet jak wygram)
+    EventManager::pushUserEvent(EVENT_LOST);
+}
+int Enemy::_count = 0;
+Enemy::~Enemy()
+{
+    _count--;
+    if(_count<=0)
+    {
+        printf("WYGRALES\n");
+        EventManager::pushUserEvent(EVENT_WON);
+    }
+}
+//int Alive::_count=0;

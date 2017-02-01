@@ -11,13 +11,15 @@ class EventManager
 
         void update();
 
+        static void pushUserEvent(int eventnum);
+
         //template <class T>
       // void EventManager::pushEvent(int eventNum, int eventCode, shared_ptr<Entity> publisher, shared_ptr<Entity> subscriber);
     protected:
 
     private:
         InputManager *_inputManager;
-        Uint32 eventBeginningNum;
+        static Uint32 eventBeginningNum;
 };
 
 #endif // EVENTMANAGER_H

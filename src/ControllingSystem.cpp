@@ -15,147 +15,171 @@ ControllingSystem::~ControllingSystem()
 void ControllingSystem::update(EntityManager *entityManager, ObjectFactory *objectFactory, int ms)
 {
     entity_ptr world = entityManager->getWorld();
-    for(auto object : entityManager->entity())
+    entity_ptr player = entityManager->getPlayer();
+    //printf("player.count() = %ld\n",player.use_count());
+    for(auto object_m : entityManager->entity())
     {
-        if(object->hasComponent<PhysicalFormComponent>())
+        entity_ptr object = object_m.second;
+       // if(object->isActive())
         {
-
-            PhysicalFormComponent *physicalForm = object->getComponent<PhysicalFormComponent>();
-            int_vector2d grid_coor = physicalForm->getGridPos();
-            physicalForm->update(ms);
-            if(object->hasComponent<MovementController>())
+            if(object->hasComponent<PhysicalFormComponent>())
             {
-                MovementController *movementController = object->getComponent<MovementController>();
-                movementController->update(ms);
-
-                if(object->hasComponent<PlayerControllerComponent_v2>())
+                PhysicalFormComponent *physicalForm = object->getComponent<PhysicalFormComponent>();
+                int_vector2d grid_coor = physicalForm->getGridPos();
+                physicalForm->update(ms);
+                if(object->hasComponent<MovementController>())
                 {
-                    PlayerControllerComponent_v2 *controller = object->getComponent<PlayerControllerComponent_v2>();
-                    InputManager *_iManager = controller->getInputManager();
-                   // physicalForm->update(ms);
-                    Direction dir = DIR_NONE;
-                    if(_iManager->keyStatus(SDLK_w) & (KEY_PRESSED|KEY_DOWN))   // go up
-                    {
-                        dir = DIR_UP;
-                      //  printf("going up\n");
-                    }
-                    else if(_iManager->keyStatus(SDLK_s) & (KEY_PRESSED|KEY_DOWN))  // go down
-                    {
-                        dir = DIR_DOWN;
-                     //   printf("going down\n");
-                    }
-                    if(_iManager->keyStatus(SDLK_a) & (KEY_PRESSED|KEY_DOWN))  // go left
-                    {
-                        dir = DIR_LEFT;
-                      //  printf("going left\n");
-                    }
-                    else if(_iManager->keyStatus(SDLK_d) & (KEY_PRESSED|KEY_DOWN))  // go right
-                    {
-                        dir = DIR_RIGHT;
-                     //   printf("going right\n");
-                    }
+                    MovementController *movementController = object->getComponent<MovementController>();
+                    movementController->update(ms);
 
-                    if(dir)
+                    if(object->hasComponent<KeyboardController>())
                     {
-                        movementController->setDest(world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),dir));
-                    }
-                    //else _target->getComponent<PhysicalFormComponent>()->deccelerate(ms);//_target->getComponent<PhysicalFormComponent>()->setSpeed(0);
-                    // bomb dropping
-                    if(object->hasComponent<BombPlanter>())
-                    {
-                        if(_iManager->keyStatus(SDLK_SPACE) & (KEY_PRESSED|KEY_DOWN))    // drop bomb
+                        KeyboardController *controller = object->getComponent<KeyboardController>();
+                        InputManager *_iManager = controller->getInputManager();
+                       // physicalForm->update(ms);
+                        Direction dir = DIR_NONE;
+                        if(_iManager->keyStatus(SDLK_w) & (KEY_PRESSED|KEY_DOWN))   // go up
                         {
-                            BombPlanter *bombPlanter = object->getComponent<BombPlanter>();
-                            if(bombPlanter->canPlantNext())
-                            {
-                                objectFactory->createBomb(grid_coor.x, grid_coor.y);
-                                bombPlanter->plant();
-                            }
+                            dir = DIR_UP;
+                          //  printf("going up\n");
                         }
-                    }
+                        else if(_iManager->keyStatus(SDLK_s) & (KEY_PRESSED|KEY_DOWN))  // go down
+                        {
+                            dir = DIR_DOWN;
+                         //   printf("going down\n");
+                        }
+                        if(_iManager->keyStatus(SDLK_a) & (KEY_PRESSED|KEY_DOWN))  // go left
+                        {
+                            dir = DIR_LEFT;
+                          //  printf("going left\n");
+                        }
+                        else if(_iManager->keyStatus(SDLK_d) & (KEY_PRESSED|KEY_DOWN))  // go right
+                        {
+                            dir = DIR_RIGHT;
+                         //   printf("going right\n");
+                        }
 
-                }
-                if(object->hasComponent<AIController>()) /// nie zamykac w klatce 1x1
-                {
-                    /// need cleverer AI
-                    AIController *controller = object->getComponent<AIController>();
-                    if(movementController->destReached())
-                    {
-                        //int_vector2d curr_pos
-                        int dir = controller->getDir();
-                        vector2d curr_pos = physicalForm->getPos();
-                        vector<int>possible;
-                        //bool possible[DIR_MAX] = {false};
-                        for(int i=1; i<DIR_MAX; i++) // sprawdzanie gdzie mozna sie ruszyc
+                        if(dir)
                         {
-                            if(curr_pos!=world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),i))possible.push_back(i);
+                            movementController->setDest(world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),dir));
                         }
-                        if(possible.size()==1)
+                        //else _target->getComponent<PhysicalFormComponent>()->deccelerate(ms);//_target->getComponent<PhysicalFormComponent>()->setSpeed(0);
+                        // bomb dropping
+                        if(object->hasComponent<BombPlanter>())
                         {
-                            dir = possible[0];
-                        }
-                        else
-                        {
-                            for(int i=0; i<possible.size(); i++) // nie chcemy sie cofac - bez padaczek
+                            if(_iManager->keyStatus(SDLK_SPACE) & (KEY_PRESSED|KEY_DOWN))    // drop bomb
                             {
-                                if(abs(possible[i]-dir)==2)
+                                BombPlanter *bombPlanter = object->getComponent<BombPlanter>();
+                                if(bombPlanter->canPlantNext())
                                 {
-                                    possible.erase(possible.begin() + i);
-                                    break;
+                                    objectFactory->createBomb(grid_coor.x, grid_coor.y);
+                                    bombPlanter->plant();
                                 }
                             }
-                            dir = possible[rand()%possible.size()];
                         }
-                        //bool up, down, right, left;
-                        //up = down = right = left = false;
-                       // if(world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),DIR_UP)!=grid_coor) up = true;
-                        vector2d new_dest = world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),dir);
-                        /*
-                        while(new_dest == curr_pos)
-                        {
-                            dir = rand()%(DIR_MAX-1)+1;
-                            new_dest = world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),dir);
-                        }
-                        */
-                        controller->setDir(dir);
-                        //world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),dir);
-                        //movementController->setDest(world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),dir));
-                        movementController->setDest(new_dest);
+
                     }
-                    if(object->hasComponent<BombPlanter>())
+                    /// AIController BEGIN
+                    if(object->hasComponent<AIController>()) /// nie zamykac w klatce 1x1
                     {
-                        if(itIsAGoodSpotToDropABomb(grid_coor.x, grid_coor.y, world))
+                        /// need cleverer AI
+                        AIController *controller = object->getComponent<AIController>();
+                        if(movementController->destReached())
                         {
-                            BombPlanter *bombPlanter = object->getComponent<BombPlanter>();
-                            if(bombPlanter->canPlantNext())
+                            //int_vector2d curr_pos
+                            int dir = controller->getDir();
+                            vector2d curr_pos = physicalForm->getPos();
+                            vector<int>possible;
+                            //bool possible[DIR_MAX] = {false};
+                            for(int i=1; i<DIR_MAX; i++) // sprawdzanie gdzie mozna sie ruszyc
                             {
-                                objectFactory->createBomb(grid_coor.x, grid_coor.y);
-                                bombPlanter->plant();
+                                if(curr_pos!=world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),i))possible.push_back(i);
+                            }
+                            if(possible.size() == 1)
+                            {
+                                dir = possible[0];
+                            }
+                            else
+                            {
+                                int opposite = DIR_NONE;
+                                if(dir == DIR_DOWN)opposite = DIR_UP;
+                                else if(dir == DIR_UP)opposite = DIR_DOWN;
+                                else if(dir == DIR_LEFT)opposite = DIR_RIGHT;
+                                else if(dir == DIR_RIGHT)opposite = DIR_LEFT;
+                                for(unsigned i=0; i<possible.size(); i++) // wolimy nie cofac (chociaz i tak to nie dziala)
+                                {
+                                    if(possible[i] == opposite)
+                                    {
+                                        possible.erase(possible.begin() + i);
+                                        break;
+                                    }
+                                }
+                                dir = possible[rand()%possible.size()];
+                            }
+                            vector2d new_dest = world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),dir);
+                            controller->setDir(dir);
+                            movementController->setDest(new_dest);
+                        }
+                        if(object->hasComponent<BombPlanter>())
+                        {
+                            if(itIsAGoodSpotToDropABomb(grid_coor.x, grid_coor.y, world))
+                            {
+                                BombPlanter *bombPlanter = object->getComponent<BombPlanter>();
+                                if(bombPlanter->canPlantNext()) /* plant a bomb  */
+                                {
+                                    objectFactory->createBomb(grid_coor.x, grid_coor.y);
+                                    bombPlanter->plant();
+                                }
+                            }
+                        }
+                    }
+                    /// AIController END
+                }
+
+                if(object->hasComponent<Timer>())
+                {
+                    Timer *timer = object->getComponent<Timer>();
+                    timer->update(ms);
+                    if(timer->timeIsUp())
+                    {
+                        if(object->hasComponent<Explosive>())
+                        {
+                            explosion(object, world, objectFactory);
+                        }
+                        object->deactivate();
+                    }
+                }
+                if(object->hasComponent<Destroyer>() && !object->getComponent<Destroyer>()->isDone())
+                {
+                    object->getComponent<Destroyer>()->done();
+                    if(world->getComponent<World>()->getCell(grid_coor.x, grid_coor.y)->getComponent<SquareCell>()->getType() == CELL_DIRT)
+                    {
+                        world->getComponent<World>()->destroyDirt(grid_coor.x, grid_coor.y, entityManager, objectFactory);
+                    }
+                    else
+                    {
+                        //printf("looking for targets for %d\n", object->getID());
+                        for(auto obj_m : entityManager->entity())
+                        {
+                            entity_ptr obj = obj_m.second;
+                            if(obj->getID() == object->getID()) continue;
+                            if(obj->hasComponent<PhysicalFormComponent>())
+                            {
+                                if(obj->getComponent<PhysicalFormComponent>()->getGridPos() == grid_coor)
+                                {
+                                    if(obj->getComponent<PhysicalFormComponent>()->isDestructible())
+                                    {
+                                        //printf("DESTRUCTION: %d destroys %d\n", object->getID(), obj->getID());
+                                        obj->deactivate();
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
-
-            if(object->hasComponent<Timer>())
-            {
-                Timer *timer = object->getComponent<Timer>();
-                timer->update(ms);
-                if(timer->timeIsUp())
-                {
- //                   int_vector2d pos = physicalForm->getGridPos();
-                    if(object->hasComponent<Explosive>())
-                    {
-                        explosion(object, world, objectFactory);
-                    }
-                    entityManager->removeRequest(object->getID());
-                }
-            }
-            if(object->hasComponent<Destroyer>())
-            {
-                world->getComponent<World>()->destroyDirt(grid_coor.x, grid_coor.y, entityManager, objectFactory);
-            }
         }
+
     }
 }
 /*
@@ -279,3 +303,7 @@ Path ControllingSystem::pathFromTo(vector2d from, vector2d to) /// dodac mozliwo
     return path;
 }
 
+void plantBomb(int x, int y, BombPlanter *planter)
+{
+
+}

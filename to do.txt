@@ -1,4 +1,10 @@
+## G£ÓWNY CEL:
+
+	# ulepszyc AI !!!!!!!!!!!!!!!!!!!
+	
 ## WA¯NE:
+
+	# jakies menu czy cos, bo bez to lipa troche
 
 	# EventManager oraz systemy i bedzie po sprawie
 
@@ -13,15 +19,11 @@
 	
 	# opakowaæ tekstury w t¹ klase Texture, ¿eby nie martwiæ sie zarz¹dzaniem pamieci¹
 	
-	# sprawic by bomby zabija³y
-	
-	# koñczyæ gre przy œmierci gracza -> powinien wysy³aæ eventa przy œmierci
-	
 	# dodaæ jakiœ cel (po zabiciu wszyskich przeciwników czy coœ)
 	
-## ŒREDNIO WA¯NE:
+	# uproœciæ œwiat
 	
-	# ulepszyc AI
+## ŒREDNIO WA¯NE:
 	
 	# crashe przy spamowaniu bombami
 

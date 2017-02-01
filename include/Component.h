@@ -20,8 +20,8 @@ using namespace std;
 class Component
 {
     public:
-        Component() {_target = nullptr; _active = false;}
-        Component(Entity *target) : _target(target), _active(false) {}
+        Component() { _active = false;}
+        //Component(Entity *target) : _target(target), _active(false) {}
         virtual ~Component() {}
 
         void update(int ms) {if(_active)work(ms);}
@@ -30,10 +30,12 @@ class Component
         virtual void setActive() {/*printf("Component::setActive()\n");*/_active = true;}
         virtual void setTarget(entity_ptr target){_target = target; setActive();}
 
+        entity_ptr target(){return _target.lock();}
+
     protected:
         virtual void work(int ms) { }
 
-        entity_ptr _target;
+        weak_ptr<Entity> _target;
         // unsigned long long _ownerID;
         bool _active;
 
@@ -43,13 +45,17 @@ class Component
        /// klucz musi byc jeden dla kazdego rodzaju komponentu
 };
 
-class LifeComponent : public Component /// to indicate that if dies should be removed or something - should be handled externally (using events or some system)
+class Alive : public Component /// to indicate that if dies should be removed or something - should be handled externally (using events or some system)
 {
     public:
-        LifeComponent() {_alive = true;}
-        virtual ~LifeComponent() {}
+        Alive() {_alive = true;_AliveCount++;}
+        virtual ~Alive() {_AliveCount--;}
+        //static int getCount(){return _count;}
     private:
         bool _alive;
+        int _type;
+
+       // static int _count;
     /// SYSTEM NEEDED
 };
 
@@ -84,7 +90,7 @@ class PhysicalFormComponent : public Component
         double getAngle(){return _angle;}
 
         vector2d getPos(){return vector2d(_x,_y);}
-        int_vector2d getGridPos(){return int_vector2d(round(_x/GRID_SIZE),round(_y/GRID_SIZE));}
+        int_vector2d getGridPos(){return int_vector2d(round(_x/GRID_SIZE),round(_y/GRID_SIZE));} // instant crash with +0.5
         double getW(){return _w;}
         double getH(){return _h;}
 
@@ -196,7 +202,8 @@ class World : public Component
         ~World() {}
 
         void setup();
-        bool addCell(entity_ptr cell, int x, int y);
+        bool addCell(entity_ptr cell);//, int x, int y);
+        bool replace(entity_ptr cell);
 
         bool valid(int x, int y){ return ((x>=0) && (x<_w) && (y>=0) && (y<_h));}
         vector2d getNearestCellCoorFromGivenPosInGivenDirection(vector2d pos, int dir);
@@ -226,12 +233,12 @@ class PlayerControllerComponent : public Component /// uses PhysicalFormComponen
 
 };
 
-class PlayerControllerComponent_v2 : public Component /// uses PhysicalFormComponent
+class KeyboardController : public Component /// uses PhysicalFormComponent
 {
     public:
-        PlayerControllerComponent_v2(InputManager *iManager) : Component() {_iManager = iManager;}
-        virtual ~PlayerControllerComponent_v2() {}
-        void setTarget(entity_ptr target){/*printf("PlayerControllerComponent_v2::setTarget()\n");*/_target = target; setActive();}
+        KeyboardController(InputManager *iManager) : Component() {_iManager = iManager;}
+        virtual ~KeyboardController() {}
+        void setTarget(entity_ptr target){_target = target; setActive();}
         void setActive();
 
         InputManager *getInputManager() {return _iManager;}
@@ -288,13 +295,6 @@ class NPCControllerComponent : public Component /// uses PhysicalFormComponent
         bool _hasDestination;
 };
 
-class KeyboardController : public Component
-{
-    public:
-        KeyboardController() : Component() {}
-        ~KeyboardController() {}
-};
-
 class AIController : public Component
 {
     public:
@@ -332,8 +332,29 @@ class Explosive : public Component
 class Destroyer : public Component
 {
     public:
-        Destroyer() : Component() {}
+        Destroyer() : Component() {_done = false;}
         ~Destroyer() {}
+        void done(){_done = true;}
+        bool isDone(){return _done;}
     private:
+        bool _done;
+};
+
+class Player : public Component
+{
+    public:
+        Player() : Component() {}
+        ~Player();
+    private:
+};
+
+class Enemy : public Component
+{
+    public:
+        Enemy() : Component() {_count++;}
+        ~Enemy();
+
+    private:
+        static int _count;
 };
 #endif // COMPONENT_H

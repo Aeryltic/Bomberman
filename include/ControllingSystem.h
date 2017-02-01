@@ -13,6 +13,7 @@ class ControllingSystem
         void update(EntityManager *entityManager, ObjectFactory *objectFactory, int ms);
         void collides(entity_ptr obj1, entity_ptr obj2, vector2d &normal);
 
+        void plantBomb(int x, int y, BombPlanter *planter);
         void explosion(entity_ptr bomb, entity_ptr world_entity, ObjectFactory *objectFactory);
 
         bool itIsAGoodSpotToDropABomb(int x, int y, entity_ptr world);

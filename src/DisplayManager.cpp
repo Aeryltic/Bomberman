@@ -46,18 +46,22 @@ void DisplayManager::render(const EntityManager *entityManager, int ms) /// wlas
             wrzuca do renderera
     */
     priority_queue<ToRender> trt;
-    for(auto &entity : entityManager->entity())
+    for(auto &entity_m : entityManager->entity())
     {
-        if(entity->hasComponent<PhysicalFormComponent>() && entity->hasComponent<TextureComponent>())
+        entity_ptr entity = entity_m.second;
+        //if(entity->isActive())
         {
-            SDL_Rect rect = entity->getComponent<PhysicalFormComponent>()->rect(ms);
-            //printf("rect: %d %d %d %d\n",rect.x, rect.y, rect.w, rect.h);
-            if(isVisible(rect))
+            if(entity->hasComponent<PhysicalFormComponent>() && entity->hasComponent<TextureComponent>())
             {
-                SDL_Texture *texture = entity->getComponent<TextureComponent>()->texture();
-                int z = entity->getComponent<PhysicalFormComponent>()->getZ();
-                double angle = entity->getComponent<PhysicalFormComponent>()->getAngle();
-                trt.push(ToRender(texture, rect, z, angle));
+                SDL_Rect rect = entity->getComponent<PhysicalFormComponent>()->rect(ms);
+                //printf("rect: %d %d %d %d\n",rect.x, rect.y, rect.w, rect.h);
+                if(isVisible(rect))
+                {
+                    SDL_Texture *texture = entity->getComponent<TextureComponent>()->texture();
+                    int z = entity->getComponent<PhysicalFormComponent>()->getZ();
+                    double angle = entity->getComponent<PhysicalFormComponent>()->getAngle();
+                    trt.push(ToRender(texture, rect, z, angle));
+                }
             }
         }
     }

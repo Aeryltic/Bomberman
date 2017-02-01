@@ -4,7 +4,7 @@
 #include <SDL.h>
 #include <memory>
 #include "Structures.h"
-#include <vector>
+#include <deque>
 
 using namespace std;
 
@@ -19,13 +19,13 @@ class Component;
 typedef shared_ptr<Entity>  entity_ptr;
 typedef shared_ptr<Component>  component_ptr;
 
-typedef vector<vector2d> Path;
+typedef deque<vector2d> Path;
 
 const unsigned GRID_SIZE = 32;
 const double MAN_SPEED_MULTIPLIER = 3;
 const double MAN_SPEED = MAN_SPEED_MULTIPLIER * GRID_SIZE; // 3 gridi na sekunde
 
-const int NUMEVENTS = 1;
+//const int NUMEVENTS = 1;
 
 /*
 typedef make_shared<Entity> new_entity;

@@ -56,7 +56,7 @@ int GameInstance::run()
 
    /// TEST
     //_objectFactory.createPlayer(320, 240);
-    if(!_objectFactory->createWorld("boards/lvl1")) return -1; /// przydaloby sie zeby sprawdzac czy gre faktycznie mozna zaczac
+    if(!_objectFactory->createWorld("maps/lvl1")) return -1; /// przydaloby sie zeby sprawdzac czy gre faktycznie mozna zaczac
    /// KONIEC TESTU
  //   startGame(_entityManager);
     //while(!(_inputManager.keyStatus(SDLK_ESCAPE) & (KEY_PRESSED|KEY_DOWN)))

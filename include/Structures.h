@@ -25,29 +25,47 @@ struct Variable
 };
 */
 ///-------------------
-
-template <class T = double>
-struct Vector2D
+extern int _AliveCount;
+struct Vector2D_double
 {
-    Vector2D() : x(0), y(0) {}
-    Vector2D(T x, T y) : x(x), y(y) {}
-    T x,y;
-    const T operator-(const Vector2D &b) const
+    Vector2D_double() : x(0), y(0) {}
+    Vector2D_double(double x, double y) : x(x), y(y) {}
+    double x,y;
+    const double operator-(const Vector2D_double &b) const
     {
         return sqrt((x-b.x)*(x-b.x)+(y-b.y)*(y-b.y));
     }
-    const bool operator==(const Vector2D &b) const
+    const bool operator==(const Vector2D_double &b) const
     {
-        return ((abs(x*1.0-b.x*1.0)<0.001) && (abs(y*1.0-b.y*1.0)<0.001));
+        return ((abs(x-b.x) < 0.0001) && (abs(y-b.y) < 0.0001));
     }
-    const bool operator!=(const Vector2D &b) const
+    const bool operator!=(const Vector2D_double &b) const
     {
         return !((*this)==b);
     }
 };
 
-typedef Vector2D<> vector2d;
-typedef Vector2D<int> int_vector2d;
+struct Vector2D_int
+{
+    Vector2D_int() : x(0), y(0) {}
+    Vector2D_int(int x, int y) : x(x), y(y) {}
+    int x,y;
+    const double operator-(const Vector2D_int &b) const
+    {
+        return sqrt((x-b.x)*(x-b.x)+(y-b.y)*(y-b.y));
+    }
+    const bool operator==(const Vector2D_int &b) const
+    {
+        return ((x==b.x) && (y==b.y));
+    }
+    const bool operator!=(const Vector2D_int &b) const
+    {
+        return !((*this)==b);
+    }
+};
+
+typedef Vector2D_double vector2d;
+typedef Vector2D_int int_vector2d;
 struct PositionAndSpeed // obsolete
 {
     PositionAndSpeed(){}

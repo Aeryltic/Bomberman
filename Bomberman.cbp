@@ -5,7 +5,7 @@
 		<Option title="Bomberman" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="GraphicsModule\;GraphicsModule\include\;GraphicsModule\src\;Other\;InputModule\;InputModule\src\;InputModule\include\;GameObjects_v2\;GameObjects_v2\src\;GameObjects_v2\include\;" />
+		<Option virtualFolders="GraphicsModule\;GraphicsModule\include\;GraphicsModule\src\;Other\;InputModule\;InputModule\src\;InputModule\include\;GameObjects_v2\;GameObjects_v2\src\;GameObjects_v2\include\;LogicModule\;LogicModule\src\;LogicModule\include\;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/Bomberman" prefix_auto="1" extension_auto="1" />
@@ -51,7 +51,9 @@
 		<Unit filename="include/Constants.h">
 			<Option virtualFolder="Other/" />
 		</Unit>
-		<Unit filename="include/ControllingSystem.h" />
+		<Unit filename="include/ControllingSystem.h">
+			<Option virtualFolder="LogicModule/include/" />
+		</Unit>
 		<Unit filename="include/DisplayManager.h">
 			<Option virtualFolder="GraphicsModule/include/" />
 		</Unit>
@@ -73,14 +75,15 @@
 		<Unit filename="include/InputManager.h">
 			<Option virtualFolder="InputModule/include/" />
 		</Unit>
-		<Unit filename="include/LogicManager.h" />
+		<Unit filename="include/LogicManager.h">
+			<Option virtualFolder="LogicModule/include/" />
+		</Unit>
 		<Unit filename="include/MiscFunctions.h">
 			<Option virtualFolder="Other/" />
 		</Unit>
 		<Unit filename="include/ObjectFactory.h">
 			<Option virtualFolder="GameObjects_v2/include/" />
 		</Unit>
-		<Unit filename="include/Script.h" />
 		<Unit filename="include/Structures.h">
 			<Option virtualFolder="Other/" />
 		</Unit>
@@ -94,7 +97,9 @@
 		<Unit filename="src/Component.cpp">
 			<Option virtualFolder="GameObjects_v2/src/" />
 		</Unit>
-		<Unit filename="src/ControllingSystem.cpp" />
+		<Unit filename="src/ControllingSystem.cpp">
+			<Option virtualFolder="LogicModule/src/" />
+		</Unit>
 		<Unit filename="src/DisplayManager.cpp">
 			<Option virtualFolder="GraphicsModule/src/" />
 		</Unit>
@@ -113,11 +118,12 @@
 		<Unit filename="src/InputManager.cpp">
 			<Option virtualFolder="InputModule/src/" />
 		</Unit>
-		<Unit filename="src/LogicManager.cpp" />
+		<Unit filename="src/LogicManager.cpp">
+			<Option virtualFolder="LogicModule/src/" />
+		</Unit>
 		<Unit filename="src/ObjectFactory.cpp">
 			<Option virtualFolder="GameObjects_v2/src/" />
 		</Unit>
-		<Unit filename="src/Script.cpp" />
 		<Unit filename="src/Texture.cpp">
 			<Option virtualFolder="GraphicsModule/src/" />
 		</Unit>
