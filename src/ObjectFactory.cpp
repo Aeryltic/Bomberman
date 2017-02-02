@@ -83,7 +83,7 @@ entity_ptr ObjectFactory::createWorldCell(int x, int y, int t)
         {
             grid->addComponent(new TextureComponent(_graphicsManager->getTexture("textures/floor.png")));
             //grid->addComponent(new NavNode());
-            grid->getComponent<SquareCell>()->unlock();
+            grid->getComponent<SquareCell>()->unblock();
             grid->getComponent<SquareCell>()->setSafe();
             grid->getComponent<PhysicalFormComponent>()->setDestructible(false);
             break;
@@ -91,6 +91,7 @@ entity_ptr ObjectFactory::createWorldCell(int x, int y, int t)
         case CELL_WALL: // WALL
         {
             grid->addComponent(new TextureComponent(_graphicsManager->getTexture("textures/wall.png")));
+            grid->getComponent<SquareCell>()->block();
             grid->getComponent<PhysicalFormComponent>()->setSolid(true);
             grid->getComponent<PhysicalFormComponent>()->setDestructible(false);
             break;
@@ -98,6 +99,7 @@ entity_ptr ObjectFactory::createWorldCell(int x, int y, int t)
         case CELL_DIRT: // DIRT
         {
             grid->addComponent(new TextureComponent(_graphicsManager->getTexture("textures/dirt.png")));
+            grid->getComponent<SquareCell>()->block();
             grid->getComponent<PhysicalFormComponent>()->setSolid(true);
             grid->getComponent<PhysicalFormComponent>()->setDestructible(true);
             break;

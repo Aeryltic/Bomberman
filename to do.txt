@@ -1,32 +1,35 @@
 ## G£ÓWNY CEL:
 
-	# ulepszyc AI !!!!!!!!!!!!!!!!!!!
+	# ulepszyc AI - sprawiæ by przestali sie zatrzymywac bez powodu
 	
 ## WA¯NE:
 
-	# jakies menu czy cos, bo bez to lipa troche
+	# naprawiæ buga z wychodz¹cymi za mapê wrogami
 
-	# EventManager oraz systemy i bedzie po sprawie
+	# przebudowaæ sterowanie na bardziej elastyczne (wiêcej fizyki, mniej logiki)
 
-	# Systemy:
-		- kontrola bomb (sprawdzanie czy wybuchly, usuwanie ich, wysylanie eventa ze gdzies nastapila eksplozja)
-		- sterowanie botami
-		- updatowanie swiata (odbieranie eventow o eksplozjach, ktoœ ginie, jakies klocki sa niszczone, itp)
-		- ogólna fizyka - kolizje itp
-		- ewentualnie - przemieszczanie korzystajace z NavNode'ów
+	# OCZYŒCIÆ KOD
 	
-	# multimapy do przechowywania komponentów? - "optymalizacja" przy korzystaniu z systemow
+	# wydajniejsze przechowywanie obiektów gry
+	
+	# rozbudowaæ obs³ugê zdarzeñ (ale do tego potrzeba przekontruowaæ czêœæ silnika - uproœciæ komunikacjê miêdzy systemami, itp)
+
+	# OBS£UGA WYJ¥TKÓW (mniej crashy, prostszy kod)
+	
+	# jakies menu czy cos, bo bez to lipa troche
 	
 	# dodaæ jakiœ cel (po zabiciu wszyskich przeciwników czy coœ)
 	
-	# uproœciæ œwiat
-	
 ## ŒREDNIO WA¯NE:
 	
-	# crashe przy spamowaniu bombami
+	# optymalizacja
 
 ## MA£O WA¯NE:
+
+	# multimapy do przechowywania komponentów? - "optymalizacja" przy korzystaniu z systemow
 
 	# naprawiæ tego buga z BLANK tekstur¹
 
 	# DWIÊK?
+	
+	# crashe przy spamowaniu bombami - nie zaobserwowane od dawna

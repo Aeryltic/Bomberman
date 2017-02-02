@@ -93,12 +93,12 @@ int GameInstance::run()
 
         if(SDL_GetTicks() - last_check >= 1000)
         {
-            //printf("FPS: %d\n",frames);
+            printf("FPS: %d\n",frames);
             frames = 0;
             last_check = SDL_GetTicks();
         }
 
-        SDL_Delay(10); /// tylko do testow
+        SDL_Delay(1); /// tylko do testow
     }
 
     /*

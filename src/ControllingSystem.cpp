@@ -79,16 +79,6 @@ void ControllingSystem::update(EntityManager *entityManager, int ms)
                                 if(bombPlanter->canPlantNext())
                                 {
                                     plantBomb(grid_coor.x, grid_coor.y, bombPlanter, world->getComponent<World>());
-                                    /*
-                                    for(int i=0;i<world->getComponent<World>()->width();i++)
-                                    {
-                                        for(int j=0;j<world->getComponent<World>()->height();j++)
-                                        {
-                                            printf("%d ",world->getComponent<World>()->isSafe(j,i));
-                                        }
-                                        printf("\n");
-                                    }
-                                    */
                                 }
                             }
                         }
@@ -111,7 +101,7 @@ void ControllingSystem::update(EntityManager *entityManager, int ms)
                                 //printf("%d at %dx%d is not safe, looking for escape plan!\n",object->getID(),grid_coor.x,grid_coor.y);
                                 if(!controller->hasPath())
                                 {
-                                    setRunaway(grid_coor.x, grid_coor.y, controller, world->getComponent<World>());
+                                    setRunawayPath(grid_coor.x, grid_coor.y, controller, world->getComponent<World>());
                                     controller->print();
                                 }
 
@@ -141,7 +131,7 @@ void ControllingSystem::update(EntityManager *entityManager, int ms)
                                     else if(dir == DIR_UP)opposite = DIR_DOWN;
                                     else if(dir == DIR_LEFT)opposite = DIR_RIGHT;
                                     else if(dir == DIR_RIGHT)opposite = DIR_LEFT;
-                                    for(unsigned i=0; i<possible.size(); i++)
+                                    for(unsigned i=0; i<possible.size(); i++) // nie wchodzimy gdzie niebezpiecznie
                                     {
                                         if(!world->getComponent<World>()->isSafe(world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(grid_coor,dir)))
                                         {
@@ -149,7 +139,7 @@ void ControllingSystem::update(EntityManager *entityManager, int ms)
                                             i--;
                                         }
                                     }
-                                    if(possible.size()>1)
+                                    if(possible.size()>1) // nie cofamy sie bez potrzeby
                                     {
                                         for(unsigned i=0; i<possible.size(); i++)
                                         {
@@ -175,31 +165,19 @@ void ControllingSystem::update(EntityManager *entityManager, int ms)
                                     if(world->getComponent<World>()->isSafe(gridFromReal(new_dest)))movementController->setDest(new_dest);
                                     if(object->hasComponent<BombPlanter>())
                                     {
-                                        if(itIsAGoodSpotToDropABomb(grid_coor.x, grid_coor.y, world))
+                                        if(itIsAGoodSpotToDropABomb(grid_coor.x, grid_coor.y, world, player))
                                         {
                                             BombPlanter *bombPlanter = object->getComponent<BombPlanter>();
                                             if(bombPlanter->canPlantNext()) /* plant a bomb  */
                                             {
                                                 plantBomb(grid_coor.x, grid_coor.y, bombPlanter, world->getComponent<World>());
-                                                /*
-                                                for(int i=0;i<world->getComponent<World>()->width();i++)
-                                                {
-                                                    for(int j=0;j<world->getComponent<World>()->height();j++)
-                                                    {
-                                                        printf("%d ",world->getComponent<World>()->isSafe(j,i));
-                                                    }
-                                                    printf("\n");
-                                                }
-                                                */
                                             }
                                         }
                                     }
                                 }
 
                             }
-
                         }
-
                     }
                     /// END
                 }
@@ -228,7 +206,7 @@ void ControllingSystem::update(EntityManager *entityManager, int ms)
                     else
                     {
                         //printf("looking for targets for %d\n", object->getID());
-                        for(auto obj_m : entityManager->entity())
+                        for(auto obj_m : entityManager->entity()) /// ZOPTYMALIZOWAC
                         {
                             entity_ptr obj = obj_m.second;
                             if(obj->getID() == object->getID()) continue;
@@ -266,6 +244,7 @@ void ControllingSystem::plantBomb(int x, int y, BombPlanter *bombPlanter, World 
     _objectFactory->createBomb(x, y, range);
     bombPlanter->plant();
     world->setUnsafe(x,y);
+    world->blockCell(x,y);
     //printf("%dx%d set as unsafe (%d)\n",x,y,(int)world->isSafe(x,y));
     bool av[4];
     for(int i=0;i<4;i++)
@@ -290,12 +269,23 @@ void ControllingSystem::plantBomb(int x, int y, BombPlanter *bombPlanter, World 
             else av[j] = false;
         }
     }
+    /*
+    for(int i=0;i<world->width();i++)
+    {
+        for(int j=0;j<world->height();j++)
+        {
+            printf("%d ",(int)world->getCell(j,i)->getComponent<SquareCell>()->available());
+        }
+        printf("\n");
+    }
+    */
+
 }
 void ControllingSystem::explosion(entity_ptr bomb, entity_ptr world_entity)
 {
     int_vector2d pos = bomb->getComponent<PhysicalFormComponent>()->getGridPos();
     World *world = world_entity->getComponent<World>();
-    printf("BOOM at %dx%d\n",pos.x,pos.y);
+    //printf("BOOM at %dx%d\n",pos.x,pos.y);
 
     int range = bomb->getComponent<Explosive>()->getRange();
 
@@ -305,6 +295,7 @@ void ControllingSystem::explosion(entity_ptr bomb, entity_ptr world_entity)
 
     _objectFactory->createExplosion(pos.x,pos.y);
     world->setSafe(pos.x,pos.y);
+    world->unblockCell(pos.x,pos.y);
 
     for(int i=1;i<=range;i++)
     {
@@ -329,10 +320,11 @@ void ControllingSystem::explosion(entity_ptr bomb, entity_ptr world_entity)
 
 
 }
-bool ControllingSystem::itIsAGoodSpotToDropABomb(int x, int y, entity_ptr world_entity) // sprawdza tylko czy nie stoi przypadkiem obok dirta
+bool ControllingSystem::itIsAGoodSpotToDropABomb(int x, int y, entity_ptr world_entity, entity_ptr player) // sprawdza tylko czy nie stoi przypadkiem obok dirta
 {
     bool result = false;
     World *world = world_entity->getComponent<World>();
+    int_vector2d ppos = player->getComponent<PhysicalFormComponent>()->getGridPos();
     int tx = x, ty = y;
     for(int i=0;i<4;i++)
     {
@@ -342,22 +334,21 @@ bool ControllingSystem::itIsAGoodSpotToDropABomb(int x, int y, entity_ptr world_
         if(i==3)ty = y + 1;
         if(world->valid(tx,ty) && world->getCell(tx,ty)->getComponent<PhysicalFormComponent>()->isDestructible()) result = true;
     }
+    if((abs(ppos.x-x)<=1) && (abs(ppos.y-y)<=1)) result = true;
     return result;
 }
-void ControllingSystem::setRunaway(int x, int y, AIController *controller, World *world)
+void ControllingSystem::setRunawayPath(int x, int y, AIController *controller, World *world)
 {
     Path path;
     pathFromTo(int_vector2d(x, y), int_vector2d(x, y), world, path);
     controller->setPath(path);
 }
 
-Path ControllingSystem::pathFromTo(int_vector2d from, int_vector2d to, World *world, Path &path) // jesli to==from szuka najblizszego bezpiecznego punktu
+Path ControllingSystem::pathFromTo(int_vector2d from, int_vector2d to, World *world, Path &path)
 {
     /// BFS
-//    Path path;
-    printf("pathFromTo(%dx%d)\n",from.x,from.y);
-    bool lookingForClosestSafe = (from == to);
-
+    //printf("pathFromTo(%dx%d)\n",from.x,from.y);
+    bool lookingForClosestSafe = (from == to); // jesli to==from szuka najblizszego bezpiecznego punktu
 
     queue<int_vector2d> to_check;
 
@@ -377,7 +368,6 @@ Path ControllingSystem::pathFromTo(int_vector2d from, int_vector2d to, World *wo
     }
 
     previous[from.y][from.x] = from;
-
 	to_check.push(from);
 
 	while(!to_check.empty())
@@ -387,17 +377,17 @@ Path ControllingSystem::pathFromTo(int_vector2d from, int_vector2d to, World *wo
 
 		V[current.y][current.x] = true;
 
-		printf("BFS at %dx%d\n",current.x,current.y);
+		//printf("BFS at %dx%d\n",current.x,current.y);
 		if(lookingForClosestSafe)
         {
             if(world->valid(current.x,current.y) && world->isSafe(current.x,current.y))
             {
                 to = current;
-                printf("found safe place at %dx%d\n",to.x,to.y);
+                //printf("found safe place at %dx%d\n",to.x,to.y);
                 break;
             }
         }
-        else if(current == to) break;
+        else if(current == to) break; /// nie testowane jeszcze wcale
 
         for(int i=0; i<4; i++)
         {
@@ -409,7 +399,9 @@ Path ControllingSystem::pathFromTo(int_vector2d from, int_vector2d to, World *wo
             //printf("checking neighbour %dx%d\n",neighbour.x,neighbour.y);
             if(world->valid(neighbour.x,neighbour.y))
             {
-                if((V[neighbour.y][neighbour.x]==false) && (world->getCell(neighbour.x,neighbour.y)->getComponent<SquareCell>()->getType() == CELL_FLOOR))
+                if((V[neighbour.y][neighbour.x]==false) &&
+                    world->getCell(neighbour.x,neighbour.y)->getComponent<SquareCell>()->available() &&
+                    (world->getCell(neighbour.x,neighbour.y)->getComponent<SquareCell>()->getType() == CELL_FLOOR))
                 {
                     to_check.push(neighbour);
                     previous[neighbour.y][neighbour.x] = current;
@@ -420,10 +412,10 @@ Path ControllingSystem::pathFromTo(int_vector2d from, int_vector2d to, World *wo
 	//printf("checked all neighbours\n");
 	while(to!=from)
     {
-        printf("+%dx%d ",to.x,to.y);
+        //printf("+%dx%d ",to.x,to.y);
         path.push_front(to);
         to = previous[to.y][to.x];
     }
-    printf("path found\n");
+    //printf("path found\n");
     return path;
 }

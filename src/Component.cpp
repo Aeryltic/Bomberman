@@ -204,13 +204,9 @@ void World::destroyDirt(int x, int y, EntityManager *entityManager, ObjectFactor
     {
         if(_square[y][x].lock()->getComponent<SquareCell>()->getType() == CELL_DIRT)
         {
-            //entityManager->removeRequest(_square[y][x]->getID());
             _square[y][x].lock()->deactivate();
-           // EventManager::pushUserEvent(EVENT_ADD, _square[y][x].lock() )
             _square[y][x].reset();
-            //entityManager->removeRequest(_square[y][x].lock()->getID());
             addCell(objectFactory->createWorldCell(x, y, CELL_FLOOR));
- //           setup(); /// niid tu optimajz dis ting
         }
     }
 }
@@ -220,6 +216,9 @@ void World::setUnsafe(int x,int y){_square[y][x].lock()->getComponent<SquareCell
 
 bool World::isSafe(int x, int y){if(valid(x,y))return _square[y][x].lock()->getComponent<SquareCell>()->isSafe();return false;}
 bool World::isSafe(int_vector2d p){if(valid(p.x,p.y))return _square[p.y][p.x].lock()->getComponent<SquareCell>()->isSafe();return false;}
+
+void World::blockCell(int x, int y){if(valid(x,y))getCell(x,y)->getComponent<SquareCell>()->block();}
+void World::unblockCell(int x, int y){if(valid(x,y))getCell(x,y)->getComponent<SquareCell>()->unblock();}
 
 Player::~Player()
 {
@@ -233,7 +232,7 @@ Enemy::~Enemy()
     if(_count<=0)
     {
         printf("WYGRALES\n");
-        //EventManager::pushUserEvent(EVENT_WON);
+        EventManager::pushUserEvent(EVENT_WON, nullptr, nullptr);
     }
 }
 

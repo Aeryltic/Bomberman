@@ -16,9 +16,9 @@ class ControllingSystem
         void plantBomb(int x, int y, BombPlanter *bombPlanter, World *world);
         void explosion(entity_ptr bomb, entity_ptr world_entity);
 
-        bool itIsAGoodSpotToDropABomb(int x, int y, entity_ptr world);
+        bool itIsAGoodSpotToDropABomb(int x, int y, entity_ptr world, entity_ptr player);
 
-        void setRunaway(int x, int y, AIController *controller, World *world);
+        void setRunawayPath(int x, int y, AIController *controller, World *world);
 
        // Path pathToClosestSafePlace(int x, int y, World *world);
 

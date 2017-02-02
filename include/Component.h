@@ -188,14 +188,14 @@ class NavNode : public Component    /// uses PhysicalFormComponent
 class SquareCell : public Component /// powinny byc przetwarzane jako instancje - za duza redundancja
 {
     public:
-        SquareCell(WorldCellType type = CELL_NONE) : Component() {_type = type; _safe = true;}
+        SquareCell(WorldCellType type = CELL_NONE) : Component() {_type = type; _safe = true; _available = true;}
         ~SquareCell() {}
 
         void setType(WorldCellType type){_type = type;}
         WorldCellType getType(){return _type;}
 
-        void lock(){_available = false;}
-        void unlock(){_available = true;}
+        void block(){_available = false;}
+        void unblock(){_available = true;}
         bool available(){return _available;}
 
         bool isSafe() {return _safe;}
@@ -235,6 +235,9 @@ class World : public Component
 
         int width(){return _w;}
         int height(){return _h;}
+
+        void blockCell(int x, int y);
+        void unblockCell(int x, int y);
     private:
         int _w, _h;
         vector<vector<weak_ptr<Entity>>> _square;
