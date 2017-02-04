@@ -5,6 +5,7 @@
 InputManager::InputManager()
 {
     printf("new InputManager\n");
+    _active = true;
 }
 
 InputManager::~InputManager()

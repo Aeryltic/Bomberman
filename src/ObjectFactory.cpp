@@ -2,7 +2,13 @@
 #include <fstream>
 #include "Constants.h"
 #include "Entity.h"
-
+#include "EntityManager.h"
+ObjectFactory::ObjectFactory(EntityManager *entityManager, GraphicsManager *graphicsManager, InputManager *inputManager) :
+                _entityManager(entityManager), _graphicsManager(graphicsManager), _inputManager(inputManager)
+{
+    if(_graphicsManager->isActive() && _inputManager->isActive()) _active = true;
+    else _active = false;
+}
 ObjectFactory::~ObjectFactory()
 {
     printf("delete ObjectFactory\n");
@@ -20,11 +26,11 @@ entity_ptr ObjectFactory::createMan(int x, int y, string tex_path)
 {
     entity_ptr man = createDefault();
     man->addComponent(new Alive);
-    man->addComponent(new PhysicalFormComponent((x)*GRID_SIZE ,(y)*GRID_SIZE, 2, GRID_SIZE, GRID_SIZE, MAN_SPEED));
-    man->getComponent<PhysicalFormComponent>()->setMovable();
-    man->getComponent<PhysicalFormComponent>()->setDestructible(true);
-    man->getComponent<PhysicalFormComponent>()->setSolid(true);
-    man->getComponent<PhysicalFormComponent>()->setZ(2);
+    man->addComponent(new PhysicalForm((x)*GRID_SIZE ,(y)*GRID_SIZE, 2, GRID_SIZE, GRID_SIZE, MAN_SPEED));
+    man->getComponent<PhysicalForm>()->setMovable();
+    man->getComponent<PhysicalForm>()->setDestructible(true);
+    man->getComponent<PhysicalForm>()->setSolid(true);
+    man->getComponent<PhysicalForm>()->setZ(2);
     man->addComponent(new MovementController);
     man->addComponent(new TextureComponent(_graphicsManager->getTexture(tex_path)));
     man->addComponent(new BombPlanter(INITIAL_BOMB_RANGE));
@@ -33,37 +39,37 @@ entity_ptr ObjectFactory::createMan(int x, int y, string tex_path)
 
 entity_ptr ObjectFactory::createPlayer(int x, int y)
 {
-    printf("creating player at %d x %d\n", x, y);
+    //printf("creating player at %d x %d\n", x, y);
     entity_ptr player = createMan(x, y, "textures/player.png");
     player->addComponent(new KeyboardController(_inputManager));
     player->addComponent(new Player);
 
     player->activate();
-    printf("PLAYER READY (ID:%d)\n", player->getID());
+    //printf("PLAYER READY (ID:%d)\n", player->getID());
     return player;
 }
 
 entity_ptr ObjectFactory::createEnemy(int x, int y)
 {
-    printf("creating enemy at %d x %d\n",x,y);
+    //printf("creating enemy at %d x %d\n",x,y);
     entity_ptr enemy = createMan(x,y,"textures/enemy.png");
     enemy->addComponent(new AIController());
     enemy->addComponent(new Enemy);
     enemy->activate();
-    printf("enemy ready\n");
+    //printf("enemy ready\n");
     return enemy;
 }
 
 entity_ptr ObjectFactory::createBomb(int x, int y, unsigned range)
 {
-    printf("creating bomb at %d x %d\n",x,y);
+    //printf("creating bomb at %d x %d\n",x,y);
     entity_ptr bomb = createDefault();
-    bomb->addComponent(new PhysicalFormComponent((x)*GRID_SIZE ,(y)*GRID_SIZE, 1, GRID_SIZE, GRID_SIZE, MAN_SPEED));
+    bomb->addComponent(new PhysicalForm((x)*GRID_SIZE ,(y)*GRID_SIZE, 1, GRID_SIZE, GRID_SIZE, MAN_SPEED));
     bomb->addComponent(new Timer(2000));
     bomb->addComponent(new TextureComponent(_graphicsManager->getTexture("textures/bomb.png")));
     bomb->addComponent(new Explosive(range));
 
-    bomb->getComponent<PhysicalFormComponent>()->setZ(1);
+    bomb->getComponent<PhysicalForm>()->setZ(1);
     bomb->activate();
     /// bomb components
     return bomb;
@@ -72,8 +78,8 @@ entity_ptr ObjectFactory::createBomb(int x, int y, unsigned range)
 entity_ptr ObjectFactory::createWorldCell(int x, int y, int t)
 {
     entity_ptr grid = createDefault();
-    grid->addComponent(new PhysicalFormComponent(x * GRID_SIZE, y * GRID_SIZE, 0, GRID_SIZE, GRID_SIZE, 0));
-    grid->getComponent<PhysicalFormComponent>()->setStatic();
+    grid->addComponent(new PhysicalForm(x * GRID_SIZE, y * GRID_SIZE, 0, GRID_SIZE, GRID_SIZE, 0));
+    grid->getComponent<PhysicalForm>()->setStatic();
 
     grid->addComponent(new SquareCell);
     grid->getComponent<SquareCell>()->setType((WorldCellType)t);
@@ -85,23 +91,23 @@ entity_ptr ObjectFactory::createWorldCell(int x, int y, int t)
             //grid->addComponent(new NavNode());
             grid->getComponent<SquareCell>()->unblock();
             grid->getComponent<SquareCell>()->setSafe();
-            grid->getComponent<PhysicalFormComponent>()->setDestructible(false);
+            grid->getComponent<PhysicalForm>()->setDestructible(false);
             break;
         }
         case CELL_WALL: // WALL
         {
             grid->addComponent(new TextureComponent(_graphicsManager->getTexture("textures/wall.png")));
             grid->getComponent<SquareCell>()->block();
-            grid->getComponent<PhysicalFormComponent>()->setSolid(true);
-            grid->getComponent<PhysicalFormComponent>()->setDestructible(false);
+            grid->getComponent<PhysicalForm>()->setSolid(true);
+            grid->getComponent<PhysicalForm>()->setDestructible(false);
             break;
         }
         case CELL_DIRT: // DIRT
         {
             grid->addComponent(new TextureComponent(_graphicsManager->getTexture("textures/dirt.png")));
             grid->getComponent<SquareCell>()->block();
-            grid->getComponent<PhysicalFormComponent>()->setSolid(true);
-            grid->getComponent<PhysicalFormComponent>()->setDestructible(true);
+            grid->getComponent<PhysicalForm>()->setSolid(true);
+            grid->getComponent<PhysicalForm>()->setDestructible(true);
             break;
         }
     }
@@ -112,7 +118,7 @@ entity_ptr ObjectFactory::createWorldCell(int x, int y, int t)
 entity_ptr ObjectFactory::createExplosion(int x, int y)
 {
     entity_ptr expl = createDefault();
-    expl->addComponent(new PhysicalFormComponent(x*GRID_SIZE,y*GRID_SIZE,3,GRID_SIZE,GRID_SIZE,0,0));
+    expl->addComponent(new PhysicalForm(x*GRID_SIZE,y*GRID_SIZE,3,GRID_SIZE,GRID_SIZE,0,0));
     expl->addComponent(new TextureComponent(_graphicsManager->getTexture("textures/explosion.png")));
     expl->addComponent(new Timer(1000));
     expl->addComponent(new Destroyer);

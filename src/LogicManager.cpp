@@ -1,8 +1,9 @@
 #include "LogicManager.h"
 
-LogicManager::LogicManager(ObjectFactory *objectFactory) : _controlSystem(objectFactory)
+LogicManager::LogicManager(EntityManager *entityManager) : _controlSystem(entityManager)
 {
     printf("new LogicManager\n");
+    _entityManager = entityManager;
 }
 
 LogicManager::~LogicManager()
@@ -19,8 +20,8 @@ void LogicManager::update(ObjectContainer &object, int time_passed)
 }
 */
 
-void LogicManager::update(EntityManager *entityManager, ObjectFactory *objectFactory, int ms_passed)
+void LogicManager::update(int ms_passed)
 {
-    entityManager->update(ms_passed);
-    _controlSystem.update(entityManager, ms_passed);
+    _entityManager->update(ms_passed);
+    _controlSystem.update(ms_passed);
 }

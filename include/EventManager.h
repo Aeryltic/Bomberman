@@ -6,7 +6,7 @@
 class EventManager
 {
     public:
-        EventManager(InputManager *inputManager) : _inputManager(inputManager) {eventBeginningNum = SDL_RegisterEvents(NUMEVENTS);}
+        EventManager(InputManager *inputManager);
         virtual ~EventManager();
 
         void update();
@@ -15,9 +15,11 @@ class EventManager
 
         //template <class T>
       // void EventManager::pushEvent(int eventNum, int eventCode, shared_ptr<Entity> publisher, shared_ptr<Entity> subscriber);
+      bool isActive(){if(!_active)printf("EventManageris not active\n");return _active;}
     protected:
 
     private:
+        bool _active;
         InputManager *_inputManager;
         static Uint32 eventBeginningNum;
 };

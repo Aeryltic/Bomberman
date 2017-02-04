@@ -1,35 +1,69 @@
-## G£ÓWNY CEL:
+KWESTIE SILNIKA
 
-	# ulepszyc AI - sprawiæ by przestali sie zatrzymywac bez powodu
+	1. G£ÓWNY CEL:
 	
-## WA¯NE:
+		# SERIALIZACJA I SKRYPTY
 
-	# naprawiæ buga z wychodz¹cymi za mapê wrogami
+		# USPRAWNIÆ KOMUNIKACJÊ MIÊDZY SYSTEMAMI (mniej przekazywania systemów - niech siê znaj¹, ale te¿ ¿eby by³y w miarê niezale¿ne od siebie i najlepiej czym mniej znajomoœci tym lepiej)
+		
+		# nie ma gwarancji, ¿e hashe s¹ unikalne - trzeba u¿yæ czegoœ innego (typeid() powinno byæ lepsze)
+		
+		# rozbudowaæ obs³ugê zdarzeñ (ale do tego potrzeba przekontruowaæ czêœæ silnika - uproœciæ komunikacjê miêdzy systemami, itp)
 
-	# przebudowaæ sterowanie na bardziej elastyczne (wiêcej fizyki, mniej logiki)
-
-	# OCZYŒCIÆ KOD
+		# OBS£UGA WYJ¥TKÓW (mniej crashy, prostszy kod)
+		
+	2. WA¯NE:
+			
+		# dodaæ system obiektów bazowych i ich instancji
 	
-	# wydajniejsze przechowywanie obiektów gry
+		# funkcja getComponent powinna wyrzucaæ wyj¹tek przy próbie uzyskania komponentu którego nie ma zamiast zwracaæ nullptr
 	
-	# rozbudowaæ obs³ugê zdarzeñ (ale do tego potrzeba przekontruowaæ czêœæ silnika - uproœciæ komunikacjê miêdzy systemami, itp)
+		# rozszerzyæ/przebudowaæ komponent TextureComponent, tak by mo¿na by³o u¿ywaæ animacji
 
-	# OBS£UGA WYJ¥TKÓW (mniej crashy, prostszy kod)
-	
-	# jakies menu czy cos, bo bez to lipa troche
-	
-	# dodaæ jakiœ cel (po zabiciu wszyskich przeciwników czy coœ)
-	
-## ŒREDNIO WA¯NE:
-	
-	# optymalizacja
+		# wszystkie systemy dziedzicz¹ z jednego metasystemu i maj¹ listê systemów od których s¹ zale¿ne, a ich aktywnoœæ jest sprawdzana przy wywo³aniu isActive() (³atwiejsza rozbudowa)
 
-## MA£O WA¯NE:
-
-	# multimapy do przechowywania komponentów? - "optymalizacja" przy korzystaniu z systemow
-
-	# naprawiæ tego buga z BLANK tekstur¹
-
-	# DWIÊK?
+		# OCZYŒCIÆ KOD
+		
+		# wydajniejsze przechowywanie obiektów gry
+		
+	3. ŒREDNIO WA¯NE:
 	
-	# crashe przy spamowaniu bombami - nie zaobserwowane od dawna
+		# obs³uga tekstu
+	
+		# dodaæ kamerê - jako klasa powinna byæ jednakowa w ka¿dym projekcie, ale jej obs³uga to ju¿ kwestia ka¿dego przypadku z osobna
+	
+		# zacz¹æ wprowadzaæ jakiœ standard (komponenty, których nie powinno siê zastêpowaæ - zupe³nie podstawowe jak PhysicalForm, TextureComponent i pewnie coœ jeszcze)
+
+		# optymalizacja dzia³ania systemów
+		
+	4. MA£O WA¯NE:
+	
+		# zredukowaæ liczbê wywo³añ printf()
+
+		# multimapy do przechowywania komponentów? - "optymalizacja" przy korzystaniu z systemow
+
+		# DWIÊK
+		
+		# crashe przy spamowaniu bombami - nie zaobserwowane od dawna
+		
+KWESTIE GRY
+
+	1. WA¯NE:
+	
+		# optymalizacja le¿y i kwiczy - jeden przeciwnik z¿era 100fps'ów
+	
+	2. ŒREDNIO WA¯NE:
+	
+		# ulepszyc AI - sprawiæ by przestali sie zatrzymywac bez powodu
+	
+		# przebudowaæ sterowanie na bardziej elastyczne (wiêcej fizyki, mniej logiki)
+	
+		# power-up'y
+		
+		# dodaæ jakiœ cel/nastêpne poziomy/zbieranie kluczy
+	
+	3. MA£O WA¯NE:
+
+		# jakies menu czy cos, bo bez to lipa troche
+		
+		

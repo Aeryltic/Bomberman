@@ -11,7 +11,12 @@ GraphicsManager::GraphicsManager(SDL_Renderer *renderer)
 {
     printf("new GraphicsManager\n");
     _renderer = renderer;
-    createBlankTexture();
+    if(_renderer)
+    {
+        _active = true;
+        createBlankTexture();
+    }
+    else _active = false;
     //ctor
 }
 

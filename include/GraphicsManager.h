@@ -14,14 +14,14 @@ class GraphicsManager
     class Texture
     {
         public:
-            Texture(SDL_Texture *texture = nullptr) {printf("new Texture\n"); _texture = texture;}
+            Texture(SDL_Texture *texture = nullptr) {/*printf("new Texture\n"); */_texture = texture;}
             ~Texture(){/*printf("delete Texture\n");*/SDL_DestroyTexture(_texture);}
             SDL_Texture *texture(){return _texture;}
         private:
             SDL_Texture *_texture;
     };
     public:
-        GraphicsManager();
+       // GraphicsManager();
         GraphicsManager(SDL_Renderer *renderer);
         virtual ~GraphicsManager();
         SDL_Texture *getTexture(const string &path);
@@ -30,19 +30,12 @@ class GraphicsManager
         void createBlankTexture();
         bool loadTexture(string tex_path);
         int copyTexToRenderer(const char *tex, SDL_Rect *rect);
-    /// USUNAC JESLI JUZ ZACZNIE DZIALAC
-        void test(AppWindow &_window)
-        {
-            if(SDL_RenderCopy(_window.getRenderer(), getTexture(BLANK_TEX), NULL, NULL)<0)
-            {
-                printf("test failed!!!!!!!!!!\n");
-            }
-        }
-    ///-------------------------------
+
+        bool isActive(){return _active;}
     protected:
 
     private:
-
+        bool _active;
         /* pierwsza wygenerowac jako BLANK */
        // unordered_map <string,Texture> textures;
        //unordered_map <string,SDL_Texture*> textures;

@@ -1046,7 +1046,7 @@
 
 1485987147 c:\users\user\desktop\bomberman\include\gameinstance.h
 
-1485971867 c:\users\user\desktop\bomberman\include\graphicsmanager.h
+1486163718 c:\users\user\desktop\bomberman\include\graphicsmanager.h
 	<unordered_map>
 	"Texture.h"
 	"AppWindow.h"
@@ -1057,34 +1057,34 @@
 	<SDL_image.h>
 	<string>
 
-1485972252 c:\users\user\desktop\bomberman\include\appwindow.h
-	<memory>
+1486228364 c:\users\user\desktop\bomberman\include\appwindow.h
 	"SDL.h"
 
-1485742973 c:\users\user\desktop\bomberman\include\inputmanager.h
+1486163109 c:\users\user\desktop\bomberman\include\inputmanager.h
 	<SDL.h>
 	"Structures.h"
 	"Enumerations.h"
 	"Constants.h"
 	<unordered_map>
 
-1485976545 c:\users\user\desktop\bomberman\include\logicmanager.h
+1486163109 c:\users\user\desktop\bomberman\include\logicmanager.h
 	"EntityManager.h"
 	"ControllingSystem.h"
 	"ObjectFactory.h"
 
-1485716266 source:c:\users\user\desktop\bomberman\src\appwindow.cpp
+1486228397 source:c:\users\user\desktop\bomberman\src\appwindow.cpp
 	"AppWindow.h"
+	<stdio.h>
 
-1485983315 source:c:\users\user\desktop\bomberman\src\graphicsmanager.cpp
+1486162056 source:c:\users\user\desktop\bomberman\src\graphicsmanager.cpp
 	"GraphicsManager.h"
 	<fstream>
 
-1485905759 source:c:\users\user\desktop\bomberman\src\inputmanager.cpp
+1486162128 source:c:\users\user\desktop\bomberman\src\inputmanager.cpp
 	"InputManager.h"
 	<cstdio>
 
-1485976688 source:c:\users\user\desktop\bomberman\src\logicmanager.cpp
+1486161780 source:c:\users\user\desktop\bomberman\src\logicmanager.cpp
 	"LogicManager.h"
 
 1485553898 source:c:\users\user\desktop\bomberman\src\object.cpp
@@ -1112,7 +1112,7 @@
 1485549514 c:\users\user\desktop\bomberman\include\abstractobject.h
 	<Object.h>
 
-1485994172 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
+1486162531 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
 	"GameInstance.h"
 	<SDL.h>
 	<stdio.h>
@@ -1135,13 +1135,13 @@
 1485562293 c:\users\user\desktop\bomberman\include\realobject.h
 	<Object.h>
 
-1485737195 c:\users\user\desktop\bomberman\include\displaymanager.h
+1486227854 c:\users\user\desktop\bomberman\include\displaymanager.h
 	"AppWindow.h"
 	"GraphicsManager.h"
 	<memory>
 	<SDL.h>
 
-1485972252 source:c:\users\user\desktop\bomberman\src\displaymanager.cpp
+1486227709 source:c:\users\user\desktop\bomberman\src\displaymanager.cpp
 	"DisplayManager.h"
 	<SDL.h>
 	<SDL_image.h>
@@ -1234,7 +1234,7 @@
 	"Field.h"
 	<vector>
 
-1485993896 source:c:\users\user\desktop\bomberman\src\component.cpp
+1486163718 source:c:\users\user\desktop\bomberman\src\component.cpp
 	"Component.h"
 	"InputManager.h"
 	"Entity.h"
@@ -1244,7 +1244,7 @@
 	"EventManager.h"
 	"MiscFunctions.h"
 
-1485993830 c:\users\user\desktop\bomberman\include\component.h
+1486229074 c:\users\user\desktop\bomberman\include\component.h
 	<vector>
 	"Structures.h"
 	<SDL.h>
@@ -1268,41 +1268,43 @@
 	<SDL.h>
 	<Structures.h>
 
-1485976064 source:c:\users\user\desktop\bomberman\src\entitymanager.cpp
+1486161426 source:c:\users\user\desktop\bomberman\src\entitymanager.cpp
 	"EntityManager.h"
 	"Entity.h"
 	"GraphicsManager.h"
 
-1485976064 c:\users\user\desktop\bomberman\include\entitymanager.h
+1486163109 c:\users\user\desktop\bomberman\include\entitymanager.h
 	<vector>
 	"Constants.h"
+	"ObjectFactory.h"
 	"Entity.h"
 	<queue>
 
-1485970123 c:\users\user\desktop\bomberman\include\objectfactory.h
+1486163173 c:\users\user\desktop\bomberman\include\objectfactory.h
 	"Constants.h"
-	"EntityManager.h"
 	"GraphicsManager.h"
 	"InputManager.h"
+	"Typedefs.h"
 
-1485993931 source:c:\users\user\desktop\bomberman\src\objectfactory.cpp
+1486163220 source:c:\users\user\desktop\bomberman\src\objectfactory.cpp
 	"ObjectFactory.h"
 	<fstream>
 	"Constants.h"
 	"Entity.h"
+	"EntityManager.h"
 
-1485989245 source:c:\users\user\desktop\bomberman\src\eventmanager.cpp
+1486162825 source:c:\users\user\desktop\bomberman\src\eventmanager.cpp
 	"EventManager.h"
 	"GameInstance.h"
 
-1485975094 c:\users\user\desktop\bomberman\include\eventmanager.h
+1486163109 c:\users\user\desktop\bomberman\include\eventmanager.h
 	"InputManager.h"
 
-1485994279 c:\users\user\desktop\bomberman\include\controllingsystem.h
+1486161144 c:\users\user\desktop\bomberman\include\controllingsystem.h
 	"EntityManager.h"
 	"ObjectFactory.h"
 
-1485994505 source:c:\users\user\desktop\bomberman\src\controllingsystem.cpp
+1486163519 source:c:\users\user\desktop\bomberman\src\controllingsystem.cpp
 	"ControllingSystem.h"
 	"InputManager.h"
 	"MiscFunctions.h"

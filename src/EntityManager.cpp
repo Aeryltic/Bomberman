@@ -3,9 +3,13 @@
 #include "Entity.h"
 #include "GraphicsManager.h"
 
-EntityManager::EntityManager()
+EntityManager::EntityManager(GraphicsManager *graphicsManager, InputManager *inputManager)
+                            : _objectFactory(this, graphicsManager, inputManager)
 {
     printf("new EntityManager\n");
+    if(_objectFactory.isActive()) _active = true;
+    else _active = false;
+
     _nextID = 0;
 }
 
@@ -89,6 +93,7 @@ void EntityManager::update(int ms)
     }
 
 }
+/// dlaczego to usuwanie nie dziala?
 /*
 void EntityManager::removeEntity(int id)
 {

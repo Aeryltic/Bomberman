@@ -11,7 +11,6 @@
 #include "Typedefs.h"
 
 class EntityManager;
-class ObjectFactory;
 
 class Entity;
 class InputManager;
@@ -60,14 +59,14 @@ class Alive : public Component /// to indicate that if dies should be removed or
     /// SYSTEM NEEDED
 };
 
-class PhysicalFormComponent : public Component
+class PhysicalForm : public Component
 {
     public:
-        PhysicalFormComponent() {}
-        PhysicalFormComponent(double x, double y, int z, double w, double h, double maxV = 50, double acc = 80)
+        PhysicalForm() {}
+        PhysicalForm(double x, double y, int z, double w, double h, double maxV = 50, double acc = 80)
             : Component(), _x(x), _y(y), _z(z), _w(w), _h(h), _maxV(maxV), _a(acc)
             {_v = 0; _angle=0; _destructible = false; _solid = false; _updated = false;}
-        virtual ~PhysicalFormComponent() {}
+        virtual ~PhysicalForm() {}
 
         void moveTo(double x, double y){_x = x; _y = y;}
         void moveBy(double dx, double dy){_x += dx; _y += dy;}
@@ -122,7 +121,7 @@ class PhysicalFormComponent : public Component
         double _a; // acceleration pixels/(s^2)
 };
 /*
-class MovementComponent : public Component /// uses PhysicalFormComponent
+class MovementComponent : public Component /// uses PhysicalForm
 {
     public:
         MovementComponent() {_maxV = 50.0; _v = 0.0; _angle = 0.0; setActive();}
@@ -135,7 +134,7 @@ class MovementComponent : public Component /// uses PhysicalFormComponent
 
 };
 */
-class TextureComponent : public Component /// uses PhysicalFormComponent
+class TextureComponent : public Component /// uses PhysicalForm
 {
     public:
         TextureComponent(SDL_Texture *texture) : _texture(texture) {_source = nullptr;}
@@ -148,7 +147,7 @@ class TextureComponent : public Component /// uses PhysicalFormComponent
         SDL_Rect *_source;
 };
 
-class SolidComponent : public Component /// uses PhysicalFormComponent, sets collisions
+class SolidComponent : public Component /// uses PhysicalForm, sets collisions
 {
     public:
         SolidComponent() {}
@@ -173,7 +172,7 @@ class Timer : public Component
         int _msLeft;
 };
 /* // for later use
-class NavNode : public Component    /// uses PhysicalFormComponent
+class NavNode : public Component    /// uses PhysicalForm
 {
     public:
         NavNode() : Component() {}
@@ -226,7 +225,7 @@ class World : public Component
 
         bool isDangerous(int x, int y);
 
-        void destroyDirt(int x, int y, EntityManager *entityManager, ObjectFactory *objectFactory);
+        void destroyDirt(int x, int y, EntityManager *entityManager);
 
         void setSafe(int x, int y);
         void setUnsafe(int x, int y);
@@ -242,13 +241,13 @@ class World : public Component
         int _w, _h;
         vector<vector<weak_ptr<Entity>>> _square;
 };
-
-class PlayerControllerComponent : public Component /// uses PhysicalFormComponent
+/*
+class PlayerControllerComponent : public Component /// uses PhysicalForm
 {
     public:
         PlayerControllerComponent(InputManager *iManager) : Component() {_iManager = iManager;}
         virtual ~PlayerControllerComponent() {}
-        void setTarget(entity_ptr target){/*printf("PlayerControllerComponent::setTarget()\n");*/_target = target; setActive();}
+        void setTarget(entity_ptr target){_target = target; setActive();}
         void setActive();
 
     protected:
@@ -257,7 +256,7 @@ class PlayerControllerComponent : public Component /// uses PhysicalFormComponen
         InputManager *_iManager;
 
 };
-
+*/
 class KeyboardController : public Component
 {
     public:
@@ -284,7 +283,7 @@ class AIController : public Component
         void setPath(Path path){_path = path;}
         bool hasPath(){return !_path.empty();}
         void clearPath(){_path.clear();}
-        int_vector2d nextStop(){int_vector2d next = _path.front(); _path.pop_front(); printf("nextStop()=%dx%d\n",next.x,next.y);return next;}
+        int_vector2d nextStop(){int_vector2d next = _path.front(); _path.pop_front();/* printf("nextStop()=%dx%d\n",next.x,next.y);*/return next;}
         void print(){printf("path: ");for(auto p:_path)printf("%dx%d ",p.x,p.y);printf("\n");}
     private:
         int _dir;
@@ -318,7 +317,7 @@ class MovementController : public Component
         //NavNode *_dest; /// wrong
         //NavNode *_current; /// wrong
         vector2d _dest; /// ok
-        PhysicalFormComponent *_physicalForm;
+        PhysicalForm *_physicalForm;
 
         bool _readyToStop;
         bool _reached;
@@ -326,7 +325,7 @@ class MovementController : public Component
  //       bool _moving;
 };
 /*
-class NPCControllerComponent : public Component /// uses PhysicalFormComponent
+class NPCControllerComponent : public Component /// uses PhysicalForm
 {
     public:
         NPCControllerComponent() : Component() {_hasDestination = false;}

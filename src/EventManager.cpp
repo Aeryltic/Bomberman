@@ -2,7 +2,14 @@
 
 #include "GameInstance.h"
 //#include "Component.h"
-
+EventManager::EventManager(InputManager *inputManager) : _inputManager(inputManager)
+{
+    if((eventBeginningNum = SDL_RegisterEvents(NUMEVENTS)) != (Uint32)-1)
+    {
+        _active = true;
+    }
+    else _active = false;
+}
 EventManager::~EventManager()
 {
     //dtor

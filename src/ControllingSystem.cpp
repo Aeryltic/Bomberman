@@ -3,9 +3,15 @@
 #include "InputManager.h"
 #include "MiscFunctions.h"
 
-ControllingSystem::ControllingSystem(ObjectFactory *objectFactory)
+ControllingSystem::ControllingSystem(EntityManager *entityManager)
 {
-    _objectFactory = objectFactory;
+    _entityManager = entityManager;
+    _objectFactory = entityManager->getFactory(); // bo czesto z tego korzysta
+    if(_entityManager->isActive())
+    {
+        _active = true;
+    }
+    else _active = false;
 }
 
 ControllingSystem::~ControllingSystem()
@@ -13,22 +19,22 @@ ControllingSystem::~ControllingSystem()
     //dtor
 }
 
-void ControllingSystem::update(EntityManager *entityManager, int ms)
+void ControllingSystem::update(/*EntityManager *entityManager, */int ms)
 {
-    entity_ptr world = entityManager->getWorld();
-    entity_ptr player = entityManager->getPlayer();
+    entity_ptr world = _entityManager->getWorld();
+    entity_ptr player = _entityManager->getPlayer();
     //printf("player.getID() = %d\n",player->getID());
-    for(auto object_m : entityManager->entity())
+    for(auto object_m : _entityManager->entity())
     {
         entity_ptr object = object_m.second;
        // if(object->isActive())
         {
-            if(object->hasComponent<PhysicalFormComponent>())
+            if(object->hasComponent<PhysicalForm>())
             {
                 if(object->hasComponent<BombPlanter>())
                     object->getComponent<BombPlanter>()->update(ms);
 
-                PhysicalFormComponent *physicalForm = object->getComponent<PhysicalFormComponent>();
+                PhysicalForm *physicalForm = object->getComponent<PhysicalForm>();
                 int_vector2d grid_coor = physicalForm->getGridPos();
                 physicalForm->update(ms);
                 if(object->hasComponent<MovementController>())
@@ -69,7 +75,7 @@ void ControllingSystem::update(EntityManager *entityManager, int ms)
                             }
                         }
 
-                        //else _target->getComponent<PhysicalFormComponent>()->deccelerate(ms);//_target->getComponent<PhysicalFormComponent>()->setSpeed(0);
+                        //else _target->getComponent<PhysicalForm>()->deccelerate(ms);//_target->getComponent<PhysicalForm>()->setSpeed(0);
                         // bomb dropping
                         if(object->hasComponent<BombPlanter>())
                         {
@@ -78,7 +84,7 @@ void ControllingSystem::update(EntityManager *entityManager, int ms)
                                 BombPlanter *bombPlanter = object->getComponent<BombPlanter>();
                                 if(bombPlanter->canPlantNext())
                                 {
-                                    plantBomb(grid_coor.x, grid_coor.y, bombPlanter, world->getComponent<World>());
+                                    plantBomb(grid_coor.x, grid_coor.y, bombPlanter/*, world->getComponent<World>()*/);
                                 }
                             }
                         }
@@ -87,7 +93,13 @@ void ControllingSystem::update(EntityManager *entityManager, int ms)
                     /// END
 
                     /// AIController BEGIN
-                    if(object->hasComponent<AIController>()) /// nie zamykac w klatce 1x1
+                    /* CEL:
+                        - AI nie zastawia sobie przejscia - zanim postawi bombe sprawdza czy moze gdzies uciec przed nia -> ustawia droge ucieczki zanim ja pusci
+                        - AI nie chodzi jakby miala padaczke
+                        - nie sledzi bez przerwy gracza
+                        - sprawdza czy nie ma lepszej drogi kiedy sytuacja na mapie sie zmienia
+                    */
+                    if(object->hasComponent<AIController>())
                     {
                         /// need cleverer AI
                         AIController *controller = object->getComponent<AIController>();
@@ -96,20 +108,24 @@ void ControllingSystem::update(EntityManager *entityManager, int ms)
                             //int_vector2d curr_pos
                             int dir = controller->getDir();
                             //printf("%d is at %dx%d (%d)\n",object->getID(),grid_coor.x,grid_coor.y,world->getComponent<World>()->isSafe(grid_coor.x,grid_coor.y));
+                            /// trzeba to inaczej zrobic, bo czasem wyruszaja w jakims kierunku i zastawiaja sobie droge ucieczki
                             if(!world->getComponent<World>()->isSafe(grid_coor.x,grid_coor.y)) /// run away
                             {
                                 //printf("%d at %dx%d is not safe, looking for escape plan!\n",object->getID(),grid_coor.x,grid_coor.y);
-                                if(!controller->hasPath())
+                                if(!controller->hasPath()) /// nie wywoływac jak juz raz nie znalazl drogi ucieczki
                                 {
-                                    setRunawayPath(grid_coor.x, grid_coor.y, controller, world->getComponent<World>());
-                                    controller->print();
+                                    setRunawayPath(grid_coor.x, grid_coor.y, controller/*, world->getComponent<World>()*/); /// powinno zwracac czy udalo sie wyznaczyc droge
+                                    //controller->print();
+                                }
+                                else /// to naprawia buga z wychodzeniem za mape
+                                {
+                                    vector2d new_dest = realFromGrid(controller->nextStop());//world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),dir);
+                                    controller->setDir(dir);
+                                    movementController->setDest(new_dest);
                                 }
 
-                                vector2d new_dest = realFromGrid(controller->nextStop());//world->getComponent<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),dir);
-                                controller->setDir(dir);
-                                movementController->setDest(new_dest);
                             }
-                            else /// go anywhere safe
+                            else /// go anywhere safe - tego trzeba by sie pozbyc
                             {
                                 controller->clearPath();
                                 //printf("free roam at %dx%d\n", grid_coor.x, grid_coor.y);
@@ -165,12 +181,12 @@ void ControllingSystem::update(EntityManager *entityManager, int ms)
                                     if(world->getComponent<World>()->isSafe(gridFromReal(new_dest)))movementController->setDest(new_dest);
                                     if(object->hasComponent<BombPlanter>())
                                     {
-                                        if(itIsAGoodSpotToDropABomb(grid_coor.x, grid_coor.y, world, player))
+                                        if(itIsAGoodSpotToDropABomb(grid_coor.x, grid_coor.y/*, world, player*/))
                                         {
                                             BombPlanter *bombPlanter = object->getComponent<BombPlanter>();
                                             if(bombPlanter->canPlantNext()) /* plant a bomb  */
                                             {
-                                                plantBomb(grid_coor.x, grid_coor.y, bombPlanter, world->getComponent<World>());
+                                                plantBomb(grid_coor.x, grid_coor.y, bombPlanter/*, world->getComponent<World>()*/);
                                             }
                                         }
                                     }
@@ -190,7 +206,7 @@ void ControllingSystem::update(EntityManager *entityManager, int ms)
                     {
                         if(object->hasComponent<Explosive>())
                         {
-                            explosion(object, world);
+                            explosion(object/*, world*/);
                         }
                         object->deactivate();
                         //entityManager->removeRequest(object->getID());
@@ -201,18 +217,18 @@ void ControllingSystem::update(EntityManager *entityManager, int ms)
                     object->getComponent<Destroyer>()->done();
                     if(world->getComponent<World>()->getCell(grid_coor.x, grid_coor.y)->getComponent<SquareCell>()->getType() == CELL_DIRT)
                     {
-                        world->getComponent<World>()->destroyDirt(grid_coor.x, grid_coor.y, entityManager, _objectFactory); /// to nie powinno tak dzialac
+                        world->getComponent<World>()->destroyDirt(grid_coor.x, grid_coor.y, _entityManager); /// to nie powinno tak dzialac - powinno byc zrealizowane przez kontroler
                     }
                     else
                     {
                         //printf("looking for targets for %d\n", object->getID());
-                        for(auto obj_m : entityManager->entity()) /// ZOPTYMALIZOWAC
+                        for(auto obj_m : _entityManager->entity()) /// ZOPTYMALIZOWAC
                         {
                             entity_ptr obj = obj_m.second;
                             if(obj->getID() == object->getID()) continue;
-                            if((obj->hasComponent<PhysicalFormComponent>()) &&
-                               (obj->getComponent<PhysicalFormComponent>()->getGridPos() == grid_coor) &&
-                               (obj->getComponent<PhysicalFormComponent>()->isDestructible()))
+                            if((obj->hasComponent<PhysicalForm>()) &&
+                               (obj->getComponent<PhysicalForm>()->getGridPos() == grid_coor) &&
+                               (obj->getComponent<PhysicalForm>()->isDestructible()))
                             {
                                         obj->deactivate();
                                        // entityManager->removeRequest(obj->getID());
@@ -228,8 +244,8 @@ void ControllingSystem::update(EntityManager *entityManager, int ms)
 /*
 void ControllingSystem::collides(entity_ptr obj1, entity_ptr obj2, vector2d &normal)
 {
-    SDL_Rect r1 = obj1->getComponent<PhysicalFormComponent>()->rect(),
-             r2 = obj2->getComponent<PhysicalFormComponent>()->rect(),
+    SDL_Rect r1 = obj1->getComponent<PhysicalForm>()->rect(),
+             r2 = obj2->getComponent<PhysicalForm>()->rect(),
              intersection;
      if(SDL_IntersectRect(&r1,&r2,&intersection))
      {
@@ -237,11 +253,12 @@ void ControllingSystem::collides(entity_ptr obj1, entity_ptr obj2, vector2d &nor
      }
 }
 */
-void ControllingSystem::plantBomb(int x, int y, BombPlanter *bombPlanter, World *world)
+void ControllingSystem::plantBomb(int x, int y, BombPlanter *bombPlanter/*, World *world*/)
 {
     int range = bombPlanter->getRange();
     int_vector2d pos = int_vector2d(x,y);
     _objectFactory->createBomb(x, y, range);
+    World *world = _entityManager->getWorld()->getComponent<World>(); /// wyjatki
     bombPlanter->plant();
     world->setUnsafe(x,y);
     world->blockCell(x,y);
@@ -281,10 +298,10 @@ void ControllingSystem::plantBomb(int x, int y, BombPlanter *bombPlanter, World 
     */
 
 }
-void ControllingSystem::explosion(entity_ptr bomb, entity_ptr world_entity)
+void ControllingSystem::explosion(entity_ptr bomb/*, entity_ptr world_entity*/)
 {
-    int_vector2d pos = bomb->getComponent<PhysicalFormComponent>()->getGridPos();
-    World *world = world_entity->getComponent<World>();
+    int_vector2d pos = bomb->getComponent<PhysicalForm>()->getGridPos();
+    World *world = _entityManager->getWorld()->getComponent<World>(); /// wyjatki
     //printf("BOOM at %dx%d\n",pos.x,pos.y);
 
     int range = bomb->getComponent<Explosive>()->getRange();
@@ -320,11 +337,11 @@ void ControllingSystem::explosion(entity_ptr bomb, entity_ptr world_entity)
 
 
 }
-bool ControllingSystem::itIsAGoodSpotToDropABomb(int x, int y, entity_ptr world_entity, entity_ptr player) // sprawdza tylko czy nie stoi przypadkiem obok dirta
+bool ControllingSystem::itIsAGoodSpotToDropABomb(int x, int y/*, entity_ptr world_entity, entity_ptr player*/) // sprawdza tylko czy nie stoi przypadkiem obok dirta
 {
     bool result = false;
-    World *world = world_entity->getComponent<World>();
-    int_vector2d ppos = player->getComponent<PhysicalFormComponent>()->getGridPos();
+    World *world = _entityManager->getWorld()->getComponent<World>(); /// wyjatki
+    int_vector2d ppos = _entityManager->getPlayer()->getComponent<PhysicalForm>()->getGridPos();
     int tx = x, ty = y;
     for(int i=0;i<4;i++)
     {
@@ -332,24 +349,26 @@ bool ControllingSystem::itIsAGoodSpotToDropABomb(int x, int y, entity_ptr world_
         if(i==1)tx = x + 1;
         if(i==2)tx = x, ty = y - 1;
         if(i==3)ty = y + 1;
-        if(world->valid(tx,ty) && world->getCell(tx,ty)->getComponent<PhysicalFormComponent>()->isDestructible()) result = true;
+        if(world->valid(tx,ty) && world->getCell(tx,ty)->getComponent<PhysicalForm>()->isDestructible()) result = true;
     }
     if((abs(ppos.x-x)<=1) && (abs(ppos.y-y)<=1)) result = true;
     return result;
 }
-void ControllingSystem::setRunawayPath(int x, int y, AIController *controller, World *world)
+bool ControllingSystem::setRunawayPath(int x, int y, AIController *controller/*, World *world*/)
 {
     Path path;
-    pathFromTo(int_vector2d(x, y), int_vector2d(x, y), world, path);
+    pathFromTo(int_vector2d(x, y), int_vector2d(x, y), path);
     controller->setPath(path);
+    return controller->hasPath();
 }
 
-Path ControllingSystem::pathFromTo(int_vector2d from, int_vector2d to, World *world, Path &path)
+Path ControllingSystem::pathFromTo(int_vector2d from, int_vector2d to/*, World *world*/, Path &path)
 {
     /// BFS
     //printf("pathFromTo(%dx%d)\n",from.x,from.y);
     bool lookingForClosestSafe = (from == to); // jesli to==from szuka najblizszego bezpiecznego punktu
 
+    World *world = _entityManager->getWorld()->getComponent<World>(); /// wyjatki
     queue<int_vector2d> to_check;
 
     int w = world->width(),

@@ -10,74 +10,61 @@ DisplayManager::DisplayManager() : _window(WINDOW_WIDTH, WINDOW_HEIGHT), _graphi
 {
     printf("new DisplayManager\n");
     IMG_Init(IMG_INIT_PNG);
-   //_graphicsManager = GraphicsManager(_window.getRenderer());//make_shared<GraphicsManager>(_window.getRenderer());
-    //_graphicsManager = GraphicsManager(_window.getRenderer());
-    _windowRect.x = 0;
-    _windowRect.y = 0;
-    SDL_GetWindowSize(_window.getWindow(), &_windowRect.w, &_windowRect.h);
-    printf("_windowRect: %d %d %d %d\n",_windowRect.x,_windowRect.y,_windowRect.w,_windowRect.h);
+
+    if(_window.isReady() && _graphicsManager.isActive())
+    {
+        _windowRect.x = 0;
+        _windowRect.y = 0;
+        SDL_GetWindowSize(_window.getWindow(), &_windowRect.w, &_windowRect.h);
+        printf("_windowRect: %d %d %d %d\n",_windowRect.x,_windowRect.y,_windowRect.w,_windowRect.h);
+        _active = true;
+    }
+    else _active = false;
 }
 
 DisplayManager::~DisplayManager()
 {
     printf("delete DisplayManager\n");
     IMG_Quit();
-    //dtor
 }
 
-void DisplayManager::setup()
-{
-
-}
-
+/*  tworzy priority_queue
+    dla kazdej instancji:
+        jesli na ekranie
+            oblicza pozycje
+            tworzy strukture { SDL_Rect rect, int h}
+            wrzuca do kolejki (priorytet po h)
+    dla kazdego w kolejce:
+        wrzuca do renderera
+*/
 void DisplayManager::render(const EntityManager *entityManager, int ms) /// wlasciwie to jest prawie gotowa tylko testowac
 {
-
     SDL_RenderClear(_window.getRenderer());
-  //  _graphicsManager.test(_window);
-   // test();
-    /*  tworzy priority_queue
-        dla kazdej instancji:
-            jesli na ekranie
-                oblicza pozycje
-                tworzy strukture { SDL_Rect rect, int h}
-                wrzuca do kolejki (priorytet po h)
-        dla kazdego w kolejce:
-            wrzuca do renderera
-    */
     priority_queue<ToRender> trt;
     for(auto &entity_m : entityManager->entity())
     {
         entity_ptr entity = entity_m.second;
-        //if(entity->isActive())
+        if(entity->hasComponent<PhysicalForm>() && entity->hasComponent<TextureComponent>())
         {
-            if(entity->hasComponent<PhysicalFormComponent>() && entity->hasComponent<TextureComponent>())
+            SDL_Rect rect = entity->getComponent<PhysicalForm>()->rect(ms);
+            if(isVisible(rect))
             {
-                SDL_Rect rect = entity->getComponent<PhysicalFormComponent>()->rect(ms);
-                //printf("rect: %d %d %d %d\n",rect.x, rect.y, rect.w, rect.h);
-                if(isVisible(rect))
-                {
-                    SDL_Texture *texture = entity->getComponent<TextureComponent>()->texture();
-                    int z = entity->getComponent<PhysicalFormComponent>()->getZ();
-                    double angle = entity->getComponent<PhysicalFormComponent>()->getAngle();
-                    trt.push(ToRender(texture, rect, z, angle));
-                }
+                SDL_Texture *texture = entity->getComponent<TextureComponent>()->texture();
+                int z = entity->getComponent<PhysicalForm>()->getZ();
+                double angle = entity->getComponent<PhysicalForm>()->getAngle();
+                trt.push(ToRender(texture, rect, z, angle));
             }
         }
     }
-    //printf("rendering: %d\n",trt.size());
     while(!trt.empty())
     {
         auto &sth = trt.top();
-        //if(sth.texture == nullptr) printf("nullptr texture - how?\n");
         if(SDL_RenderCopyEx(_window.getRenderer(), sth.texture, NULL, &sth.rect, degrees(sth.angle), NULL, SDL_FLIP_NONE) < 0)
         {
             printf("SDL_RenderCopy - Error\n");
         }
         trt.pop();
     }
-    /// SDL_RenderCopyEx - do renderu z obrotem itp
-
     SDL_RenderPresent(_window.getRenderer());
 }
 
@@ -95,7 +82,7 @@ bool DisplayManager::isVisible(const SDL_Rect &rect) /// ta funckja powinna uwzg
     if(SDL_PointInRect(&p, &_windowRect)) return true;
     return false;
 }
-
+/*
 void DisplayManager::test()
 {
     SDL_Texture *t1 = _graphicsManager.getTexture("textures/player.png");
@@ -172,12 +159,7 @@ void DisplayManager::test()
     }
     a.x=0;
     a.y=128;
-    /*
-    if(_graphicsManager.copyTexToRenderer("BLANK",&a))
-    {
-        printf( "Unable to print BLANK4! SDL_image Error: %s\n", IMG_GetError() );
-    }
-    */
     SDL_DestroyTexture(t3);
     SDL_DestroyTexture(t4);
 }
+*/

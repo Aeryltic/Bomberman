@@ -2,15 +2,14 @@
 #define OBJECTFACTORY_H
 
 #include "Constants.h"
-#include "EntityManager.h"
 #include "GraphicsManager.h"
 #include "InputManager.h"
-
+#include "Typedefs.h"
+class EntityManager;
 class ObjectFactory
 {
     public:
-        ObjectFactory(EntityManager *entityManager, GraphicsManager *graphicsManager, InputManager *inputManager) :
-                _entityManager(entityManager), _graphicsManager(graphicsManager), _inputManager(inputManager) {}
+        ObjectFactory(EntityManager *entityManager, GraphicsManager *graphicsManager, InputManager *inputManager);
         virtual ~ObjectFactory();
 
         entity_ptr createDefault();
@@ -26,12 +25,15 @@ class ObjectFactory
 
         bool createWorld(string path); // laduje caly poziom uzywajac pliku pod sciezka: path
         entity_ptr createWorldCell(int x, int y, int t);
+
+        bool isActive(){return _active;}
     protected:
 
     private:
         EntityManager *_entityManager;
         GraphicsManager *_graphicsManager;
         InputManager *_inputManager;
+        bool _active;
 };
 
 #endif // OBJECTFACTORY_H

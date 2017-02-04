@@ -17,9 +17,11 @@ class InputManager
         void update();
         KeyStatus keyStatus(SDL_Keycode keycode) {return _key[keycode];}
         void setKeyStatus(SDL_Keycode keycode, KeyStatus status);
+        bool isActive(){if(!_active)printf("InputManager is not active\n");return _active;}
     protected:
 
     private:
+        bool _active;
         //SDL_Event _event;
         unordered_map <SDL_Keycode,KeyStatus> _key;
 };

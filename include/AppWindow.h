@@ -1,10 +1,10 @@
 #ifndef APPWINDOW_H
 #define APPWINDOW_H
-#include <memory>
+
 #include "SDL.h"
+
 using namespace std;
-//class DisplayManager;
-//class GraphicsManager; /// test only
+
 class AppWindow
 {
     public:

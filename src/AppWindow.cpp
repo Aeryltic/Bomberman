@@ -1,5 +1,5 @@
 #include "AppWindow.h"
-
+#include <stdio.h>
 AppWindow::AppWindow(int w, int h) /* to nie powinno byc tak - raczej po prostu przekazac gotowe window i renderer */
 {
     printf("new AppWindow\n");
@@ -21,5 +21,5 @@ AppWindow::~AppWindow()
 
 bool AppWindow::isReady()
 {
-    return !((_window == 0) || (_renderer == 0));
+    return _window && _renderer;
 }
