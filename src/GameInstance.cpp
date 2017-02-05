@@ -17,18 +17,13 @@
 
 GameInstance::GameInstance()
 {
-    /** INITIALIZE */ /* maybe not */
     printf("new GameInstance\n");
     _working = true;
     _paused = false;
-    /*
-
-	*/
 }
 
 GameInstance::~GameInstance()
 {
-    /** DESTROY EVERYTHING */
     printf("delete GameInstance\n");
     SDL_Quit();
 }
@@ -57,23 +52,23 @@ int GameInstance::run()
 
     srand(time(NULL));
 
-    double last_check = SDL_GetTicks();
-    int frames = 0;
-    double previous = SDL_GetTicks();
-    double lag = 0.0;
+    unsigned last_check = SDL_GetTicks();
+    unsigned frames = 0;
+    unsigned previous = SDL_GetTicks();
+    unsigned lag = 0.0;
 
    /// TEST
-    if(!_entityManager->getFactory()->createWorld("maps/lvl1")) return -1; /// przydaloby sie zeby sprawdzac czy gre faktycznie mozna zaczac
+    if(!_entityManager->getFactory()->createWorld("maps/lvl1")) return -1; /// przydaloby sie zeby lepiej sprawdzac czy gre faktycznie mozna zaczac
    /// KONIEC TESTU
 
     while(_working)
     {
-        double current = SDL_GetTicks();
-        double elapsed = current - previous;
+        unsigned current = SDL_GetTicks();
+        unsigned elapsed = current - previous;
         previous = current;
 
         _inputManager->update();
-        _eventManager->update();
+        _eventManager->handleEvents();
         if(!_paused)
         {
             lag += elapsed;
@@ -94,7 +89,7 @@ int GameInstance::run()
             last_check = SDL_GetTicks();
         }
 
-        SDL_Delay(1); /// tylko do testow
+        SDL_Delay(1); /// tylko do testow - we wlasciwym silniku bylaby to strzala w kolano
     }
 	return 0;
 }
@@ -109,6 +104,7 @@ int GameInstance::init()
 	}
     return 0;
 }
+
 void GameInstance::quit()
 {
     _working = false;

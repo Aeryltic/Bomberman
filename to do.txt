@@ -1,8 +1,8 @@
 KWESTIE SILNIKA
 
-	1. G£ÓWNY CEL:
+	1. G£ÓWNE CELE:
 	
-		# SERIALIZACJA I SKRYPTY
+		# SERIALIZACJA I SKRYPTY (Cereal i Lua)
 
 		# USPRAWNIÆ KOMUNIKACJÊ MIÊDZY SYSTEMAMI (mniej przekazywania systemów - niech siê znaj¹, ale te¿ ¿eby by³y w miarê niezale¿ne od siebie i najlepiej czym mniej znajomoœci tym lepiej)
 		

@@ -4,7 +4,6 @@
 /* przechowuje i zarzadza teksturami */
 
 #include <unordered_map>
-#include "Texture.h"
 #include "AppWindow.h"
 #include "Constants.h"
 
@@ -14,14 +13,13 @@ class GraphicsManager
     class Texture
     {
         public:
-            Texture(SDL_Texture *texture = nullptr) {/*printf("new Texture\n"); */_texture = texture;}
-            ~Texture(){/*printf("delete Texture\n");*/SDL_DestroyTexture(_texture);}
+            Texture(SDL_Texture *texture = nullptr) {_texture = texture;}
+            ~Texture(){SDL_DestroyTexture(_texture);}
             SDL_Texture *texture(){return _texture;}
         private:
             SDL_Texture *_texture;
     };
     public:
-       // GraphicsManager();
         GraphicsManager(SDL_Renderer *renderer);
         virtual ~GraphicsManager();
         SDL_Texture *getTexture(const string &path);
@@ -36,11 +34,7 @@ class GraphicsManager
 
     private:
         bool _active;
-        /* pierwsza wygenerowac jako BLANK */
-       // unordered_map <string,Texture> textures;
-       //unordered_map <string,SDL_Texture*> textures;
-       unordered_map <string, shared_ptr<Texture>> textures;
-       /// unordered_map <string,shared_ptr<Texture>> _textures; /// tak to powinno wygladac (powinno?)
+        unordered_map <string, shared_ptr<Texture>> _textures;
         SDL_Renderer *_renderer;
 };
 

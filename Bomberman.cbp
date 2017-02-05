@@ -5,7 +5,7 @@
 		<Option title="Bomberman" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="GraphicsModule\;GraphicsModule\include\;GraphicsModule\src\;Other\;InputModule\;InputModule\src\;InputModule\include\;GameObjects_v2\;GameObjects_v2\src\;GameObjects_v2\include\;LogicModule\;LogicModule\src\;LogicModule\include\;" />
+		<Option virtualFolders="GraphicsModule\;GraphicsModule\include\;GraphicsModule\src\;Others\;InputModule\;InputModule\src\;InputModule\include\;GameObjects_v2\;GameObjects_v2\src\;GameObjects_v2\include\;LogicModule\;LogicModule\src\;LogicModule\include\;Other\;Other\src\;Other\include\;EventModule\;MainModule\;MainModule\src\;MainModule\include\;EventModule\include\;EventModule\src\;AudioModule\;AudioModule\include\;AudioModule\src\;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/Bomberman" prefix_auto="1" extension_auto="1" />
@@ -39,6 +39,8 @@
 			<Add option="-std=c++14" />
 			<Add directory="C:/Dev_Libs/x86_64-w64-mingw32/include/SDL2" />
 			<Add directory="include" />
+			<Add directory="C:/Dev_Libs/cereal-1.2.1/include" />
+			<Add directory="C:/Dev_Libs/lua-5.3.4/src" />
 		</Compiler>
 		<Linker>
 			<Add option="-lmingw32 -lSDL2main -lSDL2 -lSDL2_image" />
@@ -51,7 +53,7 @@
 			<Option virtualFolder="GameObjects_v2/include/" />
 		</Unit>
 		<Unit filename="include/Constants.h">
-			<Option virtualFolder="Other/" />
+			<Option virtualFolder="Other/include/" />
 		</Unit>
 		<Unit filename="include/ControllingSystem.h">
 			<Option virtualFolder="LogicModule/include/" />
@@ -66,11 +68,14 @@
 			<Option virtualFolder="GameObjects_v2/include/" />
 		</Unit>
 		<Unit filename="include/Enumerations.h">
-			<Option virtualFolder="Other/" />
+			<Option virtualFolder="Other/include/" />
 		</Unit>
-		<Unit filename="include/Event.h" />
-		<Unit filename="include/EventManager.h" />
-		<Unit filename="include/GameInstance.h" />
+		<Unit filename="include/EventManager.h">
+			<Option virtualFolder="EventModule/include/" />
+		</Unit>
+		<Unit filename="include/GameInstance.h">
+			<Option virtualFolder="MainModule/include/" />
+		</Unit>
 		<Unit filename="include/GraphicsManager.h">
 			<Option virtualFolder="GraphicsModule/include/" />
 		</Unit>
@@ -81,15 +86,17 @@
 			<Option virtualFolder="LogicModule/include/" />
 		</Unit>
 		<Unit filename="include/MiscFunctions.h">
-			<Option virtualFolder="Other/" />
+			<Option virtualFolder="Other/include/" />
 		</Unit>
 		<Unit filename="include/ObjectFactory.h">
 			<Option virtualFolder="GameObjects_v2/include/" />
 		</Unit>
 		<Unit filename="include/Structures.h">
-			<Option virtualFolder="Other/" />
+			<Option virtualFolder="Other/include/" />
 		</Unit>
-		<Unit filename="include/Typedefs.h" />
+		<Unit filename="include/Typedefs.h">
+			<Option virtualFolder="Other/include/" />
+		</Unit>
 		<Unit filename="main.cpp" />
 		<Unit filename="src/AppWindow.cpp">
 			<Option virtualFolder="GraphicsModule/src/" />
@@ -109,9 +116,12 @@
 		<Unit filename="src/EntityManager.cpp">
 			<Option virtualFolder="GameObjects_v2/src/" />
 		</Unit>
-		<Unit filename="src/Event.cpp" />
-		<Unit filename="src/EventManager.cpp" />
-		<Unit filename="src/GameInstance.cpp" />
+		<Unit filename="src/EventManager.cpp">
+			<Option virtualFolder="EventModule/src/" />
+		</Unit>
+		<Unit filename="src/GameInstance.cpp">
+			<Option virtualFolder="MainModule/src/" />
+		</Unit>
 		<Unit filename="src/GraphicsManager.cpp">
 			<Option virtualFolder="GraphicsModule/src/" />
 		</Unit>
@@ -121,7 +131,9 @@
 		<Unit filename="src/LogicManager.cpp">
 			<Option virtualFolder="LogicModule/src/" />
 		</Unit>
-		<Unit filename="src/MiscFunctions.cpp" />
+		<Unit filename="src/MiscFunctions.cpp">
+			<Option virtualFolder="Other/src/" />
+		</Unit>
 		<Unit filename="src/ObjectFactory.cpp">
 			<Option virtualFolder="GameObjects_v2/src/" />
 		</Unit>
