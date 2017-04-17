@@ -1075,9 +1075,10 @@
 	"AppWindow.h"
 	<stdio.h>
 
-1486230940 source:c:\users\user\desktop\bomberman\src\graphicsmanager.cpp
+1486252958 source:c:\users\user\desktop\bomberman\src\graphicsmanager.cpp
 	"GraphicsManager.h"
 	<fstream>
+	<SDL_image.h>
 
 1486230940 source:c:\users\user\desktop\bomberman\src\inputmanager.cpp
 	"InputManager.h"
@@ -1111,7 +1112,7 @@
 1485549514 c:\users\user\desktop\bomberman\include\abstractobject.h
 	<Object.h>
 
-1486250414 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
+1486330559 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
 	"GameInstance.h"
 	<SDL.h>
 	<stdio.h>
@@ -1168,10 +1169,12 @@
 1485013384 source:c:\users\user\desktop\bomberman\src\objectinstancecontainer.cpp
 	"ObjectInstanceContainer.h"
 
-1486230939 c:\users\user\desktop\bomberman\include\structures.h
+1486331468 c:\users\user\desktop\bomberman\include\structures.h
 	<cmath>
+	<SDL.h>
+	<memory>
 
-1486230939 c:\users\user\desktop\bomberman\include\enumerations.h
+1486331659 c:\users\user\desktop\bomberman\include\enumerations.h
 
 1486230939 c:\users\user\desktop\bomberman\include\constants.h
 	<SDL.h>
@@ -1296,7 +1299,7 @@
 	"EventManager.h"
 	"GameInstance.h"
 
-1486252291 c:\users\user\desktop\bomberman\include\eventmanager.h
+1486331498 c:\users\user\desktop\bomberman\include\eventmanager.h
 	"InputManager.h"
 	<unordered_map>
 	<vector>

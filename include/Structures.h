@@ -1,6 +1,10 @@
 #ifndef STRUCTURES_H_INCLUDED
 #define STRUCTURES_H_INCLUDED
 #include <cmath>
+#include <SDL.h>
+#include <memory>
+using namespace std;
+class Entity;
 /// na przyszlosc
 /*
 enum VarType
@@ -85,6 +89,14 @@ struct Circle
 {
     Circle(double x, double y, double r) : x(x), y(y), r(r) {}
     double x, y, r;
+};
+
+struct EntityEvent
+{
+    Uint32 type;
+    Uint32 timestamp;
+    shared_ptr<Entity> publisher;
+    shared_ptr<Entity> subscriber;
 };
 
 #endif // STRUCTURES_H_INCLUDED

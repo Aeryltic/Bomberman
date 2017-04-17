@@ -2,9 +2,11 @@ KWESTIE SILNIKA
 
 	1. G£ÓWNE CELE:
 	
+		# funkcja dla ka¿dego Entity buduj¹ca jego funkcjê update(unsigned ms_passed) z jego komponentów (generuje automatycznie powi¹zania miêdzy komponentami, by oby³o siê bez sprawdzania za ka¿dym razem czy entity ma jakiœ komponent) - rebuild()
+	
 		# SERIALIZACJA I SKRYPTY (Cereal i Lua)
 
-		# USPRAWNIÆ KOMUNIKACJÊ MIÊDZY SYSTEMAMI (mniej przekazywania systemów - niech siê znaj¹, ale te¿ ¿eby by³y w miarê niezale¿ne od siebie i najlepiej czym mniej znajomoœci tym lepiej)
+		# USPRAWNIÆ KOMUNIKACJÊ MIÊDZY SYSTEMAMI (mniej przekazywania systemów - niech siê znaj¹, ale te¿ ¿eby by³y w miarê niezale¿ne od siebie, bo czym mniej znajomoœci tym lepiej, nie?)
 		
 		# nie ma gwarancji, ¿e hashe s¹ unikalne - trzeba u¿yæ czegoœ innego (typeid() powinno byæ lepsze)
 		

@@ -1,9 +1,11 @@
 #include "EventManager.h"
 
 #include "GameInstance.h"
+#include "Entity.h"
 //#include "Component.h"
 EventManager::EventManager(InputManager *inputManager) : _inputManager(inputManager)
 {
+    /// SDL_EventState(type, SDL_IGNORE); to disable event
     if((eventFirstNum = SDL_RegisterEvents(NUMEVENTS)) != (Uint32)-1)
     {
         _active = true;
@@ -105,4 +107,55 @@ void EventManager::registerStandardCallbacks() /// to powinno byæ w plikach mo¿e
 //              if(event.user.data1)delete event.user.data1; /// to by trzeba jakos lepiej rozwiazac
 //              if(event.user.data2)delete event.user.data2;
     });
+    /* // for future use
+    registerEventCallback(getUserEventType(EVENT_LOST),
+        [this](SDL_Event const& event)
+        {
+            printf("PRZEGRALES\n");
+            GameInstance::getInstance().quit();
+        }
+    );
+    registerEventCallback(getUserEventType(EVENT_WON),
+        [this](SDL_Event const& event)
+        {
+            printf("WYGRALES\n");
+            GameInstance::getInstance().quit();
+        }
+    );
+    registerEventCallback(getUserEventType(EVENT_KILLED),
+        [this](SDL_Event const& event)
+        {
+            printf("ZGINALES\n");
+            const EntityEvent *e = reinterpret_cast<const EntityEvent*>(&event);
+            if(e->subscriber->hasComponent<Player>())
+            {
+                SDL_Event event;
+                event.type = getUserEventType(EVENT_LOST);
+                SDL_PushEvent(&event);
+            }
+        }
+    );
+    */
+}
+void EventManager::pushEntityEvent(Uint32 eventcode, shared_ptr<Entity> publisher, shared_ptr<Entity> subscriber)
+{
+    SDL_Event event;
+    EntityEvent *e = reinterpret_cast<EntityEvent*>(&event);
+    SDL_memset(&event, 0, sizeof(event));
+    e->type = getUserEventType(eventcode);
+    e->timestamp = SDL_GetTicks();
+    e->publisher = publisher;
+    e->subscriber = subscriber;
+
+    /*
+    event.user.code = eventcode;
+    event.user.data1 = data1;
+    event.user.data2 = data2;
+    */
+    SDL_PushEvent(&event);
+}
+
+Uint32 EventManager::getUserEventType(Uint32 eventcode)
+{
+    return eventFirstNum + eventcode;
 }

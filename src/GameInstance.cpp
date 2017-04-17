@@ -34,6 +34,7 @@ int GameInstance::run()
     {
         return -1;
     }
+    //printf("%llu\n",sizeof(SDL_Event));
     shared_ptr<DisplayManager>  _displayManager = make_shared<DisplayManager>();
     shared_ptr<InputManager>    _inputManager = make_shared<InputManager>();
     shared_ptr<EntityManager>   _entityManager = make_shared<EntityManager>(_displayManager->getGraphicsManager(), _inputManager.get());

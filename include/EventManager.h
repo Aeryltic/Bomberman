@@ -25,6 +25,8 @@ class EventManager
         virtual ~EventManager();
 
         static void pushUserEvent(int eventcode, void *data1, void *data2); /// nic nie wrzucac do data1 ani data2 poki co
+        static void pushEntityEvent(Uint32 eventcode, shared_ptr<Entity> publisher, shared_ptr<Entity> subscriber);
+        static Uint32 getUserEventType(Uint32 eventcode);
 
     //template <class T>
       // void EventManager::pushEvent(int eventNum, int eventCode, shared_ptr<Entity> publisher, shared_ptr<Entity> subscriber);
