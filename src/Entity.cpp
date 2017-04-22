@@ -1,5 +1,6 @@
 #include "Entity.h"
 
+
 Entity::Entity() /// zmienic obsluge zeby moglobyc false
 {
     _active = true;
@@ -14,7 +15,7 @@ Entity::~Entity()
     //printf("DELETING ENTITY #%d\n",_id);
 }
 
-inline bool Entity::hasComponent(int key) const
+inline bool Entity::hasComponent(type_index key) const
 {
     return _component.find(key) != _component.end();
 }
@@ -22,7 +23,8 @@ inline bool Entity::hasComponent(int key) const
 bool Entity::addComponent(Component *component)
 {
     //int key = typeid(*component).hash_code();
-    int key = typeid(*component).hash_code();
+    //int key = typeid(*component).hash_code();
+    type_index key = tindex(*component);
     if(!hasComponent(key))
     {
         _component.insert(make_pair(key,component));

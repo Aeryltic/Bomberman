@@ -1,0 +1,14 @@
+
+                   /*
+template <class C, class R>
+R run(Entity *entity, C, function fun...)
+{
+    C *component = entity->getComponent<C>()
+    if(component)
+        component->fun(##__VA_ARGS__);
+}
+*/
+#define run(entity, Comp, fun, ...)    ({                                                           \
+                                                    Comp * __comp = (entity)->getComponent<Comp>(); \
+                                                        __comp->fun(##__VA_ARGS__);                 \
+                                            })

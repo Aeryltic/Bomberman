@@ -98,6 +98,7 @@ int_vector2d World::getNearestCellCoorFromGivenPosInGivenDirection(int_vector2d 
         if(valid(dx,dy))
         {
             if((_square[dy][dx].lock()->getComponent<SquareCell>()->getType() == CELL_FLOOR) && (_square[dy][dx].lock()->getComponent<SquareCell>()->available()))
+            //if(((run(_square[dy][dx].lock(), SquareCell, getType)) == CELL_FLOOR) && (run(_square[dy][dx].lock(), SquareCell, available())))
             {
                 return int_vector2d(dx,dy);//realFromGrid(dx,dy);
             }

@@ -1,5 +1,7 @@
 KWESTIE SILNIKA
 
+	USUN¥Æ GRÊ SILNIK ZACZ¥Æ OD NOWA
+
 	1. G£ÓWNE CELE:
 	
 		# funkcja dla ka¿dego Entity buduj¹ca jego funkcjê update(unsigned ms_passed) z jego komponentów (generuje automatycznie powi¹zania miêdzy komponentami, by oby³o siê bez sprawdzania za ka¿dym razem czy entity ma jakiœ komponent) - rebuild()
@@ -8,7 +10,24 @@ KWESTIE SILNIKA
 
 		# USPRAWNIÆ KOMUNIKACJÊ MIÊDZY SYSTEMAMI (mniej przekazywania systemów - niech siê znaj¹, ale te¿ ¿eby by³y w miarê niezale¿ne od siebie, bo czym mniej znajomoœci tym lepiej, nie?)
 		
-		# nie ma gwarancji, ¿e hashe s¹ unikalne - trzeba u¿yæ czegoœ innego (typeid() powinno byæ lepsze)
+		# BEZ SPRAWDZANIA CZY KOMPONENT JEST W ENTITY WYWO£YWAÆ FUNKCJÊ TYCH KOMPONENTÓW
+			A MO¯E TRZEBA ZMIENIÆ METODYKÊ, ¯EBY TAKICH SYTUACJI W OGÓLE NIE BY£O
+		
+		funkcja typu: entity.run(SomeComponent, someFunction, arg1, arg2, ...)
+				  albo:	run(entity, SomeComponent, someFunction, arg1, arg2, ...)	
+
+		sprawdza czy entity ma dany komponent i jeœli tak to wykonuje na nim funkcjê
+		zamiast 
+		
+		if(entity->hasComponent<someComponent>())
+			entity->getComponent<someComponent>->someFunction(arg1, arg2, ...)
+		
+		to nie jest takie proste, bo te funkcje te¿ zwracaj¹ wartoœci
+		
+		funkcje a procedury
+			
+		albo po prostu zrobiæ obs³ugê wyj¹tków - gdy nie ma komponentu rzuca wyj¹tek i po sprawie, tylko ¿e ca³y kod trzeba by przebudowaæ, to i tak trzeba jakoœ inaczej
+		mo¿e funkcja z lambd¹ jako argumentem a w niej operacje, które maj¹ siê wykonaæ 
 		
 		# rozbudowaæ obs³ugê zdarzeñ (ale do tego potrzeba przekontruowaæ czêœæ silnika - uproœciæ komunikacjê miêdzy systemami, itp)
 
@@ -18,7 +37,7 @@ KWESTIE SILNIKA
 			
 		# dodaæ system obiektów bazowych i ich instancji
 	
-		# funkcja getComponent powinna wyrzucaæ wyj¹tek przy próbie uzyskania komponentu którego nie ma zamiast zwracaæ nullptr
+		# funkcja getComponent powinna wyrzucaæ wyj¹tek przy próbie uzyskania komponentu którego nie ma zamiast zwracaæ nullptr - tylko ¿e z tym jest problem, bo trzeba wszêdzie pamiêtaæ, ¿e to pluje wyj¹tkami które trzeba obs³u¿yæ, a wywo³añ getComponent jest ca³a masa
 	
 		# rozszerzyæ/przebudowaæ komponent TextureComponent, tak by mo¿na by³o u¿ywaæ animacji
 

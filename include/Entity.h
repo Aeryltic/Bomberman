@@ -5,8 +5,13 @@
 #include <unordered_map>
 #include <typeinfo>
 
+#include <typeindex>
+
+/// BOSKIE MAKRO
+#define tindex(a) type_index(typeid(a))
+
 using namespace std;
-typedef unordered_map<int, Component*> comp_map;
+typedef unordered_map<type_index, Component*> comp_map;
 class Entity : public std::enable_shared_from_this<Entity>
 {
     public:
@@ -15,7 +20,7 @@ class Entity : public std::enable_shared_from_this<Entity>
 
         template<class C>
         bool hasComponent() const;
-        inline bool hasComponent(int key) const;
+        inline bool hasComponent(type_index key) const;
 
         template<class C>
         C* getComponent();
@@ -40,7 +45,7 @@ class Entity : public std::enable_shared_from_this<Entity>
 
     private:
         int _id;
-        comp_map _component; /* typeid(T).hash_code() */
+        comp_map _component;
         bool _active;
         /** zamiast prostej mapy moze lepiej byloby zaimplementowac inteligentny kontener, ktory moglby uproscic odwolania do elementow
         * zeby nie musiec pisac calej tej dlugiej formulki z hasComponent i getComponent
@@ -53,7 +58,7 @@ class Entity : public std::enable_shared_from_this<Entity>
 template<class C>
 C* Entity::getComponent()
 {
-    int key = typeid(C).hash_code();
+    type_index key = tindex(C);
     comp_map::iterator found = _component.find(key);
     if(found != _component.end())
     {
@@ -65,14 +70,14 @@ C* Entity::getComponent()
 template<class C>
 bool Entity::hasComponent() const
 {
-    int key = typeid(C).hash_code();
+    type_index key = tindex(C);
     return _component.find(key) != _component.end();
 }
 
 template<class C>
 bool Entity::removeComponent()
 {
-    int key = typeid(C).hash_code();
+    type_index key = tindex(C);
     if(_component.find(key) != _component.end())
     {
         _component.erase(key);

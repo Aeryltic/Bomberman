@@ -641,7 +641,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl.h
 	"SDL_main.h"
 	"SDL_stdinc.h"
 	"SDL_assert.h"
@@ -672,12 +672,12 @@
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_main.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_main.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_stdinc.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_stdinc.h
 	"SDL_config.h"
 	<sys/types.h>
 	<stdio.h>
@@ -705,34 +705,34 @@
 	<stdlib.h>
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_config.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_config.h
 	"SDL_platform.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_platform.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_platform.h
 	"AvailabilityMacros.h"
 	"TargetConditionals.h"
 	<winapifamily.h>
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\begin_code.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\begin_code.h
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\close_code.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\close_code.h
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_assert.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_assert.h
 	"SDL_config.h"
 	"begin_code.h"
 	<signal.h>
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_atomic.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_atomic.h
 	"SDL_stdinc.h"
 	"SDL_platform.h"
 	"begin_code.h"
 	<mbarrier.h>
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_audio.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_audio.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_endian.h"
@@ -742,24 +742,24 @@
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_error.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_error.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_endian.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_endian.h
 	"SDL_stdinc.h"
 	<endian.h>
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_mutex.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_mutex.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_thread.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_thread.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_atomic.h"
@@ -768,18 +768,18 @@
 	<process.h>
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_rwops.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_rwops.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_clipboard.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_clipboard.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_cpuinfo.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_cpuinfo.h
 	"SDL_stdinc.h"
 	<intrin.h>
 	<intrin.h>
@@ -791,7 +791,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_events.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_events.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_video.h"
@@ -805,7 +805,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_video.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_video.h
 	"SDL_stdinc.h"
 	"SDL_pixels.h"
 	"SDL_rect.h"
@@ -813,13 +813,13 @@
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_pixels.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_pixels.h
 	"SDL_stdinc.h"
 	"SDL_endian.h"
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_rect.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_rect.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_pixels.h"
@@ -827,7 +827,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_surface.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_surface.h
 	"SDL_stdinc.h"
 	"SDL_pixels.h"
 	"SDL_rect.h"
@@ -836,11 +836,11 @@
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_blendmode.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_blendmode.h
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_keyboard.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_keyboard.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_keycode.h"
@@ -848,27 +848,27 @@
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_keycode.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_keycode.h
 	"SDL_stdinc.h"
 	"SDL_scancode.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_scancode.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_scancode.h
 	"SDL_stdinc.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_mouse.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_mouse.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_video.h"
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_joystick.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_joystick.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_gamecontroller.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_gamecontroller.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_rwops.h"
@@ -876,11 +876,11 @@
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_quit.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_quit.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_gesture.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_gesture.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_video.h"
@@ -888,60 +888,60 @@
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_touch.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_touch.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_video.h"
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_filesystem.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_filesystem.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_haptic.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_haptic.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_joystick.h"
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_hints.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_hints.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_loadso.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_loadso.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_log.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_log.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_messagebox.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_messagebox.h
 	"SDL_stdinc.h"
 	"SDL_video.h"
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_power.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_power.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_render.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_render.h
 	"SDL_stdinc.h"
 	"SDL_rect.h"
 	"SDL_video.h"
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_system.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_system.h
 	"SDL_stdinc.h"
 	"SDL_keyboard.h"
 	"SDL_render.h"
@@ -949,13 +949,13 @@
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_timer.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_timer.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1476935975 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_version.h
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_version.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
@@ -1041,12 +1041,12 @@
 1484993295 source:c:\users\user\desktop\bomberman\bomberman\src\logicmanager.cpp
 	"LogicManager.h"
 
-1486230939 source:c:\users\user\desktop\bomberman\main.cpp
+1486234539 source:c:\users\user\desktop\bomberman\main.cpp
 	"GameInstance.h"
 
-1486230939 c:\users\user\desktop\bomberman\include\gameinstance.h
+1486234539 c:\users\user\desktop\bomberman\include\gameinstance.h
 
-1486252907 c:\users\user\desktop\bomberman\include\graphicsmanager.h
+1486256507 c:\users\user\desktop\bomberman\include\graphicsmanager.h
 	<unordered_map>
 	"AppWindow.h"
 	"Constants.h"
@@ -1056,35 +1056,35 @@
 	<SDL_image.h>
 	<string>
 
-1486230939 c:\users\user\desktop\bomberman\include\appwindow.h
+1486234539 c:\users\user\desktop\bomberman\include\appwindow.h
 	"SDL.h"
 
-1486230939 c:\users\user\desktop\bomberman\include\inputmanager.h
+1486234539 c:\users\user\desktop\bomberman\include\inputmanager.h
 	<SDL.h>
 	"Structures.h"
 	"Enumerations.h"
 	"Constants.h"
 	<unordered_map>
 
-1486230939 c:\users\user\desktop\bomberman\include\logicmanager.h
+1486234539 c:\users\user\desktop\bomberman\include\logicmanager.h
 	"EntityManager.h"
 	"ControllingSystem.h"
 	"ObjectFactory.h"
 
-1486230940 source:c:\users\user\desktop\bomberman\src\appwindow.cpp
+1486234540 source:c:\users\user\desktop\bomberman\src\appwindow.cpp
 	"AppWindow.h"
 	<stdio.h>
 
-1486252958 source:c:\users\user\desktop\bomberman\src\graphicsmanager.cpp
+1486256558 source:c:\users\user\desktop\bomberman\src\graphicsmanager.cpp
 	"GraphicsManager.h"
 	<fstream>
 	<SDL_image.h>
 
-1486230940 source:c:\users\user\desktop\bomberman\src\inputmanager.cpp
+1486234540 source:c:\users\user\desktop\bomberman\src\inputmanager.cpp
 	"InputManager.h"
 	<cstdio>
 
-1486230940 source:c:\users\user\desktop\bomberman\src\logicmanager.cpp
+1486234540 source:c:\users\user\desktop\bomberman\src\logicmanager.cpp
 	"LogicManager.h"
 
 1485553898 source:c:\users\user\desktop\bomberman\src\object.cpp
@@ -1112,7 +1112,7 @@
 1485549514 c:\users\user\desktop\bomberman\include\abstractobject.h
 	<Object.h>
 
-1486330559 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
+1486334159 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
 	"GameInstance.h"
 	<SDL.h>
 	<stdio.h>
@@ -1135,13 +1135,13 @@
 1485562293 c:\users\user\desktop\bomberman\include\realobject.h
 	<Object.h>
 
-1486230939 c:\users\user\desktop\bomberman\include\displaymanager.h
+1486234539 c:\users\user\desktop\bomberman\include\displaymanager.h
 	"AppWindow.h"
 	"GraphicsManager.h"
 	<memory>
 	<SDL.h>
 
-1486230940 source:c:\users\user\desktop\bomberman\src\displaymanager.cpp
+1486234540 source:c:\users\user\desktop\bomberman\src\displaymanager.cpp
 	"DisplayManager.h"
 	<SDL.h>
 	<SDL_image.h>
@@ -1160,7 +1160,7 @@
 	"ObjectContainer.h"
 	<unordered_map>
 
-1451800386 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_image.h
+1451803986 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_image.h
 	"SDL.h"
 	"SDL_version.h"
 	"begin_code.h"
@@ -1169,14 +1169,14 @@
 1485013384 source:c:\users\user\desktop\bomberman\src\objectinstancecontainer.cpp
 	"ObjectInstanceContainer.h"
 
-1486331468 c:\users\user\desktop\bomberman\include\structures.h
+1486335068 c:\users\user\desktop\bomberman\include\structures.h
 	<cmath>
 	<SDL.h>
 	<memory>
 
-1486331659 c:\users\user\desktop\bomberman\include\enumerations.h
+1486335259 c:\users\user\desktop\bomberman\include\enumerations.h
 
-1486230939 c:\users\user\desktop\bomberman\include\constants.h
+1486234539 c:\users\user\desktop\bomberman\include\constants.h
 	<SDL.h>
 	<memory>
 	<deque>
@@ -1236,7 +1236,7 @@
 	"Field.h"
 	<vector>
 
-1486230940 source:c:\users\user\desktop\bomberman\src\component.cpp
+1486234540 source:c:\users\user\desktop\bomberman\src\component.cpp
 	"Component.h"
 	"InputManager.h"
 	"Entity.h"
@@ -1246,7 +1246,7 @@
 	"EventManager.h"
 	"MiscFunctions.h"
 
-1486230939 c:\users\user\desktop\bomberman\include\component.h
+1486234539 c:\users\user\desktop\bomberman\include\component.h
 	<vector>
 	"Structures.h"
 	<SDL.h>
@@ -1256,61 +1256,63 @@
 	"Enumerations.h"
 	"Typedefs.h"
 
-1486230940 source:c:\users\user\desktop\bomberman\src\entity.cpp
+1492895429 source:c:\users\user\desktop\bomberman\src\entity.cpp
 	"Entity.h"
 
-1486230939 c:\users\user\desktop\bomberman\include\entity.h
+1492900948 c:\users\user\desktop\bomberman\include\entity.h
 	"Component.h"
 	<unordered_map>
 	<typeinfo>
+	<typeindex>
 
-1486230939 c:\users\user\desktop\bomberman\include\miscfunctions.h
+1492895114 c:\users\user\desktop\bomberman\include\miscfunctions.h
 	<typeinfo>
 	<cmath>
 	<SDL.h>
 	<Structures.h>
 
-1486230940 source:c:\users\user\desktop\bomberman\src\entitymanager.cpp
+1486234540 source:c:\users\user\desktop\bomberman\src\entitymanager.cpp
 	"EntityManager.h"
 	"Entity.h"
 	"GraphicsManager.h"
 
-1486230939 c:\users\user\desktop\bomberman\include\entitymanager.h
+1486234539 c:\users\user\desktop\bomberman\include\entitymanager.h
 	<vector>
 	"Constants.h"
 	"ObjectFactory.h"
 	"Entity.h"
 	<queue>
 
-1486230939 c:\users\user\desktop\bomberman\include\objectfactory.h
+1486234539 c:\users\user\desktop\bomberman\include\objectfactory.h
 	"Constants.h"
 	"GraphicsManager.h"
 	"InputManager.h"
 	"Typedefs.h"
 
-1486230940 source:c:\users\user\desktop\bomberman\src\objectfactory.cpp
+1486234540 source:c:\users\user\desktop\bomberman\src\objectfactory.cpp
 	"ObjectFactory.h"
 	<fstream>
 	"Constants.h"
 	"Entity.h"
 	"EntityManager.h"
 
-1486252166 source:c:\users\user\desktop\bomberman\src\eventmanager.cpp
+1486336724 source:c:\users\user\desktop\bomberman\src\eventmanager.cpp
 	"EventManager.h"
 	"GameInstance.h"
+	"Entity.h"
 
-1486331498 c:\users\user\desktop\bomberman\include\eventmanager.h
+1486335098 c:\users\user\desktop\bomberman\include\eventmanager.h
 	"InputManager.h"
 	<unordered_map>
 	<vector>
 	<functional>
 	<SDL.h>
 
-1486230939 c:\users\user\desktop\bomberman\include\controllingsystem.h
+1486234539 c:\users\user\desktop\bomberman\include\controllingsystem.h
 	"EntityManager.h"
 	"ObjectFactory.h"
 
-1486230940 source:c:\users\user\desktop\bomberman\src\controllingsystem.cpp
+1486234540 source:c:\users\user\desktop\bomberman\src\controllingsystem.cpp
 	"ControllingSystem.h"
 	"InputManager.h"
 	"MiscFunctions.h"
@@ -1323,10 +1325,10 @@
 1485967410 c:\users\user\desktop\bomberman\src\miscfunctions.h
 	"MiscFunctions.h"
 
-1486230940 source:c:\users\user\desktop\bomberman\src\miscfunctions.cpp
+1486234540 source:c:\users\user\desktop\bomberman\src\miscfunctions.cpp
 	"MiscFunctions.h"
 	"Constants.h"
 
-1486230939 c:\users\user\desktop\bomberman\include\typedefs.h
+1486234539 c:\users\user\desktop\bomberman\include\typedefs.h
 	"Structures.h"
 
