@@ -1066,10 +1066,11 @@
 	"Constants.h"
 	<unordered_map>
 
-1486234539 c:\users\user\desktop\bomberman\include\logicmanager.h
+1493752641 c:\users\user\desktop\bomberman\include\logicmanager.h
 	"EntityManager.h"
 	"ControllingSystem.h"
 	"ObjectFactory.h"
+	"ScriptSystem.h"
 
 1486234540 source:c:\users\user\desktop\bomberman\src\appwindow.cpp
 	"AppWindow.h"
@@ -1080,11 +1081,11 @@
 	<fstream>
 	<SDL_image.h>
 
-1486234540 source:c:\users\user\desktop\bomberman\src\inputmanager.cpp
+1492951472 source:c:\users\user\desktop\bomberman\src\inputmanager.cpp
 	"InputManager.h"
 	<cstdio>
 
-1486234540 source:c:\users\user\desktop\bomberman\src\logicmanager.cpp
+1493752632 source:c:\users\user\desktop\bomberman\src\logicmanager.cpp
 	"LogicManager.h"
 
 1485553898 source:c:\users\user\desktop\bomberman\src\object.cpp
@@ -1112,7 +1113,7 @@
 1485549514 c:\users\user\desktop\bomberman\include\abstractobject.h
 	<Object.h>
 
-1486334159 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
+1493755862 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
 	"GameInstance.h"
 	<SDL.h>
 	<stdio.h>
@@ -1122,6 +1123,7 @@
 	"EntityManager.h"
 	"ObjectFactory.h"
 	"EventManager.h"
+	"ScriptSystem.h"
 	"Structures.h"
 	<ctime>
 	<cstdlib>
@@ -1135,13 +1137,14 @@
 1485562293 c:\users\user\desktop\bomberman\include\realobject.h
 	<Object.h>
 
-1486234539 c:\users\user\desktop\bomberman\include\displaymanager.h
+1493757303 c:\users\user\desktop\bomberman\include\displaymanager.h
 	"AppWindow.h"
 	"GraphicsManager.h"
 	<memory>
 	<SDL.h>
+	"SDL_ttf.h"
 
-1486234540 source:c:\users\user\desktop\bomberman\src\displaymanager.cpp
+1493754604 source:c:\users\user\desktop\bomberman\src\displaymanager.cpp
 	"DisplayManager.h"
 	<SDL.h>
 	<SDL_image.h>
@@ -1169,7 +1172,7 @@
 1485013384 source:c:\users\user\desktop\bomberman\src\objectinstancecontainer.cpp
 	"ObjectInstanceContainer.h"
 
-1486335068 c:\users\user\desktop\bomberman\include\structures.h
+1492951472 c:\users\user\desktop\bomberman\include\structures.h
 	<cmath>
 	<SDL.h>
 	<memory>
@@ -1236,7 +1239,7 @@
 	"Field.h"
 	<vector>
 
-1486234540 source:c:\users\user\desktop\bomberman\src\component.cpp
+1492951311 source:c:\users\user\desktop\bomberman\src\component.cpp
 	"Component.h"
 	"InputManager.h"
 	"Entity.h"
@@ -1246,7 +1249,7 @@
 	"EventManager.h"
 	"MiscFunctions.h"
 
-1486234539 c:\users\user\desktop\bomberman\include\component.h
+1492951233 c:\users\user\desktop\bomberman\include\component.h
 	<vector>
 	"Structures.h"
 	<SDL.h>
@@ -1256,63 +1259,64 @@
 	"Enumerations.h"
 	"Typedefs.h"
 
-1492895429 source:c:\users\user\desktop\bomberman\src\entity.cpp
+1493739057 source:c:\users\user\desktop\bomberman\src\entity.cpp
 	"Entity.h"
 
-1492900948 c:\users\user\desktop\bomberman\include\entity.h
-	"Component.h"
+1493739057 c:\users\user\desktop\bomberman\include\entity.h
 	<unordered_map>
 	<typeinfo>
 	<typeindex>
+	"MiscFunctions.h"
+	"Component.h"
 
-1492895114 c:\users\user\desktop\bomberman\include\miscfunctions.h
+1492952437 c:\users\user\desktop\bomberman\include\miscfunctions.h
 	<typeinfo>
 	<cmath>
 	<SDL.h>
 	<Structures.h>
 
-1486234540 source:c:\users\user\desktop\bomberman\src\entitymanager.cpp
+1492902475 source:c:\users\user\desktop\bomberman\src\entitymanager.cpp
 	"EntityManager.h"
 	"Entity.h"
 	"GraphicsManager.h"
 
-1486234539 c:\users\user\desktop\bomberman\include\entitymanager.h
+1493739057 c:\users\user\desktop\bomberman\include\entitymanager.h
 	<vector>
 	"Constants.h"
 	"ObjectFactory.h"
 	"Entity.h"
 	<queue>
 
-1486234539 c:\users\user\desktop\bomberman\include\objectfactory.h
+1493739057 c:\users\user\desktop\bomberman\include\objectfactory.h
 	"Constants.h"
 	"GraphicsManager.h"
 	"InputManager.h"
 	"Typedefs.h"
 
-1486234540 source:c:\users\user\desktop\bomberman\src\objectfactory.cpp
+1493739360 source:c:\users\user\desktop\bomberman\src\objectfactory.cpp
 	"ObjectFactory.h"
 	<fstream>
 	"Constants.h"
 	"Entity.h"
 	"EntityManager.h"
 
-1486336724 source:c:\users\user\desktop\bomberman\src\eventmanager.cpp
+1493669753 source:c:\users\user\desktop\bomberman\src\eventmanager.cpp
 	"EventManager.h"
 	"GameInstance.h"
 	"Entity.h"
 
-1486335098 c:\users\user\desktop\bomberman\include\eventmanager.h
+1493751778 c:\users\user\desktop\bomberman\include\eventmanager.h
 	"InputManager.h"
 	<unordered_map>
 	<vector>
 	<functional>
 	<SDL.h>
 
-1486234539 c:\users\user\desktop\bomberman\include\controllingsystem.h
+1493750125 c:\users\user\desktop\bomberman\include\controllingsystem.h
 	"EntityManager.h"
 	"ObjectFactory.h"
 
-1486234540 source:c:\users\user\desktop\bomberman\src\controllingsystem.cpp
+1493752593 source:c:\users\user\desktop\bomberman\src\controllingsystem.cpp
 	"ControllingSystem.h"
 	"InputManager.h"
 	"MiscFunctions.h"
@@ -1331,4 +1335,95 @@
 
 1486234539 c:\users\user\desktop\bomberman\include\typedefs.h
 	"Structures.h"
+
+1493669754 source:c:\users\user\desktop\bomberman\src\components.cpp
+
+1492980632 source:c:\users\user\desktop\bomberman\src\gameinitializer.cpp
+	"GameInitializer.h"
+
+1492980632 c:\users\user\desktop\bomberman\include\gameinitializer.h
+
+1493753710 c:\users\user\desktop\bomberman\include\scriptsystem.h
+	<LuaBridge.h>
+	<iostream>
+	"lua.h"
+	"lauxlib.h"
+	"lualib.h"
+	<DisplayManager.h>
+
+1493666744 c:\dev_libs\lua-5.3.3\include\lua.h
+	<stdarg.h>
+	<stddef.h>
+	"luaconf.h"
+
+1493666744 c:\dev_libs\lua-5.3.3\include\luaconf.h
+	<limits.h>
+	<stddef.h>
+	<stdint.h>
+	<assert.h>
+
+1493666744 c:\dev_libs\lua-5.3.3\include\lauxlib.h
+	<stddef.h>
+	<stdio.h>
+	"lua.h"
+
+1493666744 c:\dev_libs\lua-5.3.3\include\lualib.h
+	"lua.h"
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\luabridge.h
+	<cassert>
+	<sstream>
+	<stdexcept>
+	<string>
+	<typeinfo>
+	"detail/LuaHelpers.h"
+	"detail/TypeTraits.h"
+	"detail/TypeList.h"
+	"detail/FuncTraits.h"
+	"detail/Constructor.h"
+	"detail/Stack.h"
+	"detail/ClassInfo.h"
+	"detail/LuaException.h"
+	"detail/LuaRef.h"
+	"detail/Iterator.h"
+	"detail/Userdata.h"
+	"detail/CFunctions.h"
+	"detail/Namespace.h"
+
+1493667372 c:\dev_libs\luabridge\source\luabridge\detail\luahelpers.h
+	"lua.h"
+	"lauxlib.h"
+	"lualib.h"
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\typetraits.h
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\typelist.h
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\functraits.h
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\constructor.h
+
+1493667438 c:\dev_libs\luabridge\source\luabridge\detail\stack.h
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\classinfo.h
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\luaexception.h
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\luaref.h
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\iterator.h
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\userdata.h
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\cfunctions.h
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\namespace.h
+
+1493754626 source:c:\users\user\desktop\bomberman\src\scriptsystem.cpp
+	"ScriptSystem.h"
+
+1454366547 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_ttf.h
+	"SDL.h"
+	"begin_code.h"
+	"close_code.h"
 

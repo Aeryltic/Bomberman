@@ -13,8 +13,9 @@ class ObjectFactory
         virtual ~ObjectFactory();
 
         entity_ptr createDefault();
+        inline bool addTo(shared_ptr<Component> component, shared_ptr<Entity> entity);
         //entity_ptr createPhysical(int x, int y,)
-
+/*
         entity_ptr createMan(int x, int y, string tex_path);
         entity_ptr createPlayer(int x, int y);
         entity_ptr createEnemy(int x, int y);
@@ -25,7 +26,7 @@ class ObjectFactory
 
         bool createWorld(string path); // laduje caly poziom uzywajac pliku pod sciezka: path
         entity_ptr createWorldCell(int x, int y, int t);
-
+*/
         bool isActive(){return _active;}
     protected:
 

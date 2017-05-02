@@ -5,7 +5,7 @@
 		<Option title="Bomberman" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="GraphicsModule\;GraphicsModule\include\;GraphicsModule\src\;Others\;InputModule\;InputModule\src\;InputModule\include\;GameObjects_v2\;GameObjects_v2\src\;GameObjects_v2\include\;LogicModule\;LogicModule\src\;LogicModule\include\;Other\;Other\src\;Other\include\;EventModule\;MainModule\;MainModule\src\;MainModule\include\;EventModule\include\;EventModule\src\;AudioModule\;AudioModule\include\;AudioModule\src\;" />
+		<Option virtualFolders="GraphicsModule\;GraphicsModule\include\;GraphicsModule\src\;Others\;InputModule\;InputModule\src\;InputModule\include\;GameObjects\;LogicModule\;LogicModule\src\;LogicModule\include\;Other\;Other\src\;Other\include\;EventModule\;MainModule\;MainModule\src\;MainModule\include\;EventModule\include\;EventModule\src\;AudioModule\;AudioModule\include\;AudioModule\src\;GameObjects\src\;GameObjects\include\;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/Bomberman" prefix_auto="1" extension_auto="1" />
@@ -16,8 +16,15 @@
 					<Add option="-Wall" />
 					<Add option="-std=c++14" />
 					<Add option="-g" />
+					<Add directory="C:/Dev_Libs/x86_64-w64-mingw32/include/SDL2" />
 					<Add directory="include" />
+					<Add directory="C:/Dev_Libs/lua-5.3.3/include" />
+					<Add directory="C:/Dev_Libs/LuaBridge" />
 				</Compiler>
+				<Linker>
+					<Add option="-lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf" />
+					<Add library="C:/Dev_Libs/lua-5.3.3/liblua53.a" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/Bomberman" prefix_auto="1" extension_auto="1" />
@@ -39,19 +46,21 @@
 			<Add option="-std=c++14" />
 			<Add directory="C:/Dev_Libs/x86_64-w64-mingw32/include/SDL2" />
 			<Add directory="include" />
-			<Add directory="C:/Dev_Libs/cereal-1.2.1/include" />
-			<Add directory="C:/Dev_Libs/lua-5.3.4/src" />
+			<Add directory="C:/Dev_Libs/lua-5.3.3/include" />
+			<Add directory="C:/Dev_Libs/LuaBridge/Source/LuaBridge" />
 		</Compiler>
 		<Linker>
 			<Add option="-lmingw32 -lSDL2main -lSDL2 -lSDL2_image" />
+			<Add library="C:/Dev_Libs/lua-5.3.3/liblua53.a" />
 			<Add directory="C:/Dev_Libs/x86_64-w64-mingw32/lib" />
 		</Linker>
 		<Unit filename="include/AppWindow.h">
 			<Option virtualFolder="GraphicsModule/include/" />
 		</Unit>
 		<Unit filename="include/Component.h">
-			<Option virtualFolder="GameObjects_v2/include/" />
+			<Option virtualFolder="GameObjects/include/" />
 		</Unit>
+		<Unit filename="include/Components.h" />
 		<Unit filename="include/Constants.h">
 			<Option virtualFolder="Other/include/" />
 		</Unit>
@@ -62,10 +71,10 @@
 			<Option virtualFolder="GraphicsModule/include/" />
 		</Unit>
 		<Unit filename="include/Entity.h">
-			<Option virtualFolder="GameObjects_v2/include/" />
+			<Option virtualFolder="GameObjects/include/" />
 		</Unit>
 		<Unit filename="include/EntityManager.h">
-			<Option virtualFolder="GameObjects_v2/include/" />
+			<Option virtualFolder="GameObjects/include/" />
 		</Unit>
 		<Unit filename="include/Enumerations.h">
 			<Option virtualFolder="Other/include/" />
@@ -73,6 +82,7 @@
 		<Unit filename="include/EventManager.h">
 			<Option virtualFolder="EventModule/include/" />
 		</Unit>
+		<Unit filename="include/GameInitializer.h" />
 		<Unit filename="include/GameInstance.h">
 			<Option virtualFolder="MainModule/include/" />
 		</Unit>
@@ -89,11 +99,13 @@
 			<Option virtualFolder="Other/include/" />
 		</Unit>
 		<Unit filename="include/ObjectFactory.h">
-			<Option virtualFolder="GameObjects_v2/include/" />
+			<Option virtualFolder="GameObjects/include/" />
 		</Unit>
+		<Unit filename="include/ScriptSystem.h" />
 		<Unit filename="include/Structures.h">
 			<Option virtualFolder="Other/include/" />
 		</Unit>
+		<Unit filename="include/Stuff.h" />
 		<Unit filename="include/Typedefs.h">
 			<Option virtualFolder="Other/include/" />
 		</Unit>
@@ -102,8 +114,9 @@
 			<Option virtualFolder="GraphicsModule/src/" />
 		</Unit>
 		<Unit filename="src/Component.cpp">
-			<Option virtualFolder="GameObjects_v2/src/" />
+			<Option virtualFolder="GameObjects/src/" />
 		</Unit>
+		<Unit filename="src/Components.cpp" />
 		<Unit filename="src/ControllingSystem.cpp">
 			<Option virtualFolder="LogicModule/src/" />
 		</Unit>
@@ -111,14 +124,15 @@
 			<Option virtualFolder="GraphicsModule/src/" />
 		</Unit>
 		<Unit filename="src/Entity.cpp">
-			<Option virtualFolder="GameObjects_v2/src/" />
+			<Option virtualFolder="GameObjects/src/" />
 		</Unit>
 		<Unit filename="src/EntityManager.cpp">
-			<Option virtualFolder="GameObjects_v2/src/" />
+			<Option virtualFolder="GameObjects/src/" />
 		</Unit>
 		<Unit filename="src/EventManager.cpp">
 			<Option virtualFolder="EventModule/src/" />
 		</Unit>
+		<Unit filename="src/GameInitializer.cpp" />
 		<Unit filename="src/GameInstance.cpp">
 			<Option virtualFolder="MainModule/src/" />
 		</Unit>
@@ -135,8 +149,9 @@
 			<Option virtualFolder="Other/src/" />
 		</Unit>
 		<Unit filename="src/ObjectFactory.cpp">
-			<Option virtualFolder="GameObjects_v2/src/" />
+			<Option virtualFolder="GameObjects/src/" />
 		</Unit>
+		<Unit filename="src/ScriptSystem.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

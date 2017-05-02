@@ -4,9 +4,11 @@ KWESTIE SILNIKA
 
 	1. G£ÓWNE CELE:
 	
-		# funkcja dla ka¿dego Entity buduj¹ca jego funkcjê update(unsigned ms_passed) z jego komponentów (generuje automatycznie powi¹zania miêdzy komponentami, by oby³o siê bez sprawdzania za ka¿dym razem czy entity ma jakiœ komponent) - rebuild()
+		# SERIALIZACJA I SKRYPTY (Cereal i Lua) (do serializacji Lua te¿ siê nada)
+		
+		# konsola
 	
-		# SERIALIZACJA I SKRYPTY (Cereal i Lua)
+		# funkcja dla ka¿dego Entity buduj¹ca jego funkcjê update(unsigned ms_passed) z jego komponentów (generuje automatycznie powi¹zania miêdzy komponentami, by oby³o siê bez sprawdzania za ka¿dym razem czy entity ma jakiœ komponent) - rebuild()
 
 		# USPRAWNIÆ KOMUNIKACJÊ MIÊDZY SYSTEMAMI (mniej przekazywania systemów - niech siê znaj¹, ale te¿ ¿eby by³y w miarê niezale¿ne od siebie, bo czym mniej znajomoœci tym lepiej, nie?)
 		
@@ -34,6 +36,10 @@ KWESTIE SILNIKA
 		# OBS£UGA WYJ¥TKÓW (mniej crashy, prostszy kod)
 		
 	2. WA¯NE:
+	
+		# zrobiæ porz¹dek z tymi vector2d
+	
+		# ObjectFactory tworz¹cy obiekty z serializacji ("poprzez serializacjê"?)
 			
 		# dodaæ system obiektów bazowych i ich instancji
 	

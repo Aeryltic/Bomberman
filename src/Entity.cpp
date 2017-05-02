@@ -1,38 +1,32 @@
 #include "Entity.h"
 
 
-Entity::Entity() /// zmienic obsluge zeby moglobyc false
+Entity::Entity()
 {
     _active = true;
 }
 
 Entity::~Entity()
 {
-    for(auto &component : _component)
-    {
-        delete component.second;
-    }
-    //printf("DELETING ENTITY #%d\n",_id);
+
 }
 
-inline bool Entity::hasComponent(type_index key) const
+inline bool Entity::has(type_index key) const
 {
     return _component.find(key) != _component.end();
 }
 
-bool Entity::addComponent(Component *component)
+bool Entity::add(shared_ptr<Component> component)
 {
-    //int key = typeid(*component).hash_code();
-    //int key = typeid(*component).hash_code();
-    type_index key = tindex(*component);
-    if(!hasComponent(key))
+    type_index key = tindex(component.get());
+    if(!has(key))
     {
         _component.insert(make_pair(key,component));
         component->setTarget(shared_from_this());
-        return 1;
+        return true;
     }
     printf("can't add component (already exists)\n"); /// lepsza ta wiadomosc mogla byc
-    return 0;
+    return false;
 }
 
 void Entity::update(int ms)
@@ -45,11 +39,9 @@ void Entity::update(int ms)
 
 void Entity::activate()
 {
-    //printf("Entity::activate()\n");
     for(auto &component : _component)
     {
- //       component.second->setTarget(shared_from_this());
         component.second->setActive();
     }
-
+    _active = true;
 }

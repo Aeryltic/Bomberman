@@ -10,8 +10,9 @@
 using namespace std;
 class EventManager
 {
+    /// --------------------------------------------------------------------------
     public:
-        /// --------------------------------------------------------------------------
+
         using EventCallback = function<void(SDL_Event const&)>;
 
         void registerEventCallback(unsigned type, EventCallback callback);

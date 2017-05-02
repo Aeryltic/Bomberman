@@ -1,0 +1,640 @@
+/*
+entity_ptr ObjectFactory::createMan(int x, int y, string tex_path)
+{
+    entity_ptr man = createDefault();
+    man->add(new Alive);
+    man->add(new PhysicalForm((x)*GRID_SIZE ,(y)*GRID_SIZE, 2, GRID_SIZE, GRID_SIZE, MAN_SPEED));
+    man->get<PhysicalForm>()->setMovable();
+    man->get<PhysicalForm>()->setDestructible(true);
+    man->get<PhysicalForm>()->setSolid(true);
+    man->get<PhysicalForm>()->setZ(2);
+    man->add(new MovementController);
+    man->add(new TextureComponent(_graphicsManager->getTexture(tex_path)));
+    man->add(new BombPlanter(INITIAL_BOMB_RANGE));
+    return man;
+}
+
+entity_ptr ObjectFactory::createPlayer(int x, int y)
+{
+    //printf("creating player at %d x %d\n", x, y);
+    entity_ptr player = createMan(x, y, "textures/player.png");
+    player->add(new KeyboardController(_inputManager));
+    player->add(new Player);
+
+    player->activate();
+    //printf("PLAYER READY (ID:%d)\n", player->getID());
+    return player;
+}
+
+entity_ptr ObjectFactory::createEnemy(int x, int y)
+{
+    //printf("creating enemy at %d x %d\n",x,y);
+    entity_ptr enemy = createMan(x,y,"textures/enemy.png");
+    enemy->add(new AIController());
+    enemy->add(new Enemy);
+    enemy->activate();
+    //printf("enemy ready\n");
+    return enemy;
+}
+
+entity_ptr ObjectFactory::createBomb(int x, int y, unsigned range)
+{
+    //printf("creating bomb at %d x %d\n",x,y);
+    entity_ptr bomb = createDefault();
+    bomb->add(new PhysicalForm((x)*GRID_SIZE ,(y)*GRID_SIZE, 1, GRID_SIZE, GRID_SIZE, MAN_SPEED));
+    bomb->add(new Timer(2000));
+    bomb->add(new TextureComponent(_graphicsManager->getTexture("textures/bomb.png")));
+    bomb->add(new Explosive(range));
+
+    bomb->get<PhysicalForm>()->setZ(1);
+    bomb->activate();
+    /// bomb components
+    return bomb;
+}
+
+entity_ptr ObjectFactory::createWorldCell(int x, int y, int t)
+{
+    entity_ptr grid = createDefault();
+    grid->add(new PhysicalForm(x * GRID_SIZE, y * GRID_SIZE, 0, GRID_SIZE, GRID_SIZE, 0));
+    grid->get<PhysicalForm>()->setStatic();
+
+    grid->add(new SquareCell);
+    grid->get<SquareCell>()->setType((WorldCellType)t);
+    switch (t)
+    {
+        case CELL_FLOOR: // FLOOR
+        {
+            grid->add(new TextureComponent(_graphicsManager->getTexture("textures/floor.png")));
+            //grid->add(new NavNode());
+            grid->get<SquareCell>()->unblock();
+            grid->get<SquareCell>()->setSafe();
+            grid->get<PhysicalForm>()->setDestructible(false);
+            break;
+        }
+        case CELL_WALL: // WALL
+        {
+            grid->add(new TextureComponent(_graphicsManager->getTexture("textures/wall.png")));
+            grid->get<SquareCell>()->block();
+            grid->get<PhysicalForm>()->setSolid(true);
+            grid->get<PhysicalForm>()->setDestructible(false);
+            break;
+        }
+        case CELL_DIRT: // DIRT
+        {
+            grid->add(new TextureComponent(_graphicsManager->getTexture("textures/dirt.png")));
+            grid->get<SquareCell>()->block();
+            grid->get<PhysicalForm>()->setSolid(true);
+            grid->get<PhysicalForm>()->setDestructible(true);
+            break;
+        }
+    }
+    grid->activate();
+    return grid;
+}
+
+entity_ptr ObjectFactory::createExplosion(int x, int y)
+{
+    entity_ptr expl = createDefault();
+    expl->add(new PhysicalForm(x*GRID_SIZE,y*GRID_SIZE,3,GRID_SIZE,GRID_SIZE,0,0));
+    expl->add(new TextureComponent(_graphicsManager->getTexture("textures/explosion.png")));
+    expl->add(new Timer(1000));
+    expl->add(new Destroyer);
+    return expl;
+}
+
+bool ObjectFactory::createWorld(string path) /// OBSLUGA BLEDOW, BLAGAM !!!
+{
+    printf("INFO: Loading world.\n");
+
+    ifstream file;
+    file.open(path);
+    if(file.good())
+    {
+        vector<entity_ptr> entity_buffer;
+        int w,h;
+        file>>w>>h;
+
+        entity_ptr world = make_shared<Entity>();
+        world->add(new World(w,h));
+        world->activate();
+        entity_buffer.push_back(world);
+
+        for(int i=0; i<h; i++)
+        {
+            for(int j=0; j<w; j++)
+            {
+                int t;
+                file>>t;
+                //entity_buffer.push_back();
+                world->get<World>()->addCell(createWorldCell(j,i,t));
+            }
+        }
+//        world->get<World>()->setup();
+        int xp, yp;
+        file>>xp>>yp;
+        entity_buffer.push_back(createPlayer(xp,yp));
+        //entity_buffer.back()->get<MovementController>()->setCurrent(world->get<World>()->getNavNode(xp,yp));
+        int e;
+        file>>e;
+        while(e--)
+        {
+            int xe,ye;
+            if(file>>xe>>ye)
+                entity_buffer.push_back(createEnemy(xe,ye));
+            else printf("WOOHOOO - need to fix that file!!!\n");
+        }
+        for(auto e: entity_buffer)
+        {
+            _entityManager->addRequest(e);
+        }
+        file.close();
+        printf("INFO: World loaded successfully.\n");
+        return 1;
+    }
+    printf("ERROR: Wrong world path.\n");
+    return 0;
+}
+*/
+
+/*
+void ControllingSystem::update(int ms)
+{
+    entity_ptr world = _entityManager->getWorld();
+    entity_ptr player = _entityManager->getPlayer();
+    //printf("player.getID() = %d\n",player->getID());
+    for(auto object_m : _entityManager->entity())
+    {
+        entity_ptr object = object_m.second;
+       // if(object->isActive())
+        {
+            if(object->has<PhysicalForm>())
+            {
+                if(object->has<BombPlanter>())
+                    object->get<BombPlanter>()->update(ms);
+
+                PhysicalForm *physicalForm = object->get<PhysicalForm>();
+                int_vector2d grid_coor = physicalForm->getGridPos();
+                physicalForm->update(ms);
+                if(object->has<MovementController>())
+                {
+                    MovementController *movementController = object->get<MovementController>();
+                    movementController->update(ms);
+
+
+                    /// KeyboardController BEGIN
+                    if(object->has<KeyboardController>())
+                    {
+                        KeyboardController *controller = object->get<KeyboardController>();
+                        InputManager *_iManager = controller->getInputManager();
+                        if(movementController->destReached())
+                        {
+
+                            Direction dir = DIR_NONE;
+                            if(_iManager->keyStatus(SDLK_w) & (KEY_PRESSED|KEY_DOWN))   // go up
+                            {
+                                dir = DIR_UP;
+                            }
+                            else if(_iManager->keyStatus(SDLK_s) & (KEY_PRESSED|KEY_DOWN))  // go down
+                            {
+                                dir = DIR_DOWN;
+                            }
+                            if(_iManager->keyStatus(SDLK_a) & (KEY_PRESSED|KEY_DOWN))  // go left
+                            {
+                                dir = DIR_LEFT;
+                            }
+                            else if(_iManager->keyStatus(SDLK_d) & (KEY_PRESSED|KEY_DOWN))  // go right
+                            {
+                                dir = DIR_RIGHT;
+                            }
+
+                            if(dir)
+                            {
+                                movementController->setDest(realFromGrid(world->get<World>()->getNearestCellCoorFromGivenPosInGivenDirection(grid_coor,dir)));
+                            }
+                        }
+
+                        //else _target->get<PhysicalForm>()->deccelerate(ms);//_target->get<PhysicalForm>()->setSpeed(0);
+                        // bomb dropping
+                        if(object->has<BombPlanter>())
+                        {
+                            if(_iManager->keyStatus(SDLK_SPACE) & (KEY_PRESSED|KEY_DOWN))    // drop bomb
+                            {
+                                BombPlanter *bombPlanter = object->get<BombPlanter>();
+                                if(bombPlanter->canPlantNext())
+                                {
+                                    plantBomb(grid_coor.x, grid_coor.y, bombPlanter);
+                                }
+                            }
+                        }
+
+                    }
+                    /// END
+
+                    /// AIController BEGIN
+//                     CEL:
+//                        - AI nie zastawia sobie przejscia - zanim postawi bombe sprawdza czy moze gdzies uciec przed nia -> ustawia droge ucieczki zanim ja pusci
+//                        - AI nie chodzi jakby miala padaczke
+//                        - nie sledzi bez przerwy gracza
+//                        - sprawdza czy nie ma lepszej drogi kiedy sytuacja na mapie sie zmienia
+
+                    if(object->has<AIController>())
+                    {
+                        /// need cleverer AI
+                        AIController *controller = object->get<AIController>();
+                        if(movementController->destReached())
+                        {
+                            //int_vector2d curr_pos
+                            int dir = controller->getDir();
+                            //printf("%d is at %dx%d (%d)\n",object->getID(),grid_coor.x,grid_coor.y,world->get<World>()->isSafe(grid_coor.x,grid_coor.y));
+                            /// trzeba to inaczej zrobic, bo czasem wyruszaja w jakims kierunku i zastawiaja sobie droge ucieczki
+                            if(!world->get<World>()->isSafe(grid_coor.x,grid_coor.y)) /// run away
+                            {
+                                //printf("%d at %dx%d is not safe, looking for escape plan!\n",object->getID(),grid_coor.x,grid_coor.y);
+                                if(!controller->hasPath()) /// nie wywoływac jak juz raz nie znalazl drogi ucieczki
+                                {
+                                    setRunawayPath(grid_coor.x, grid_coor.y, controller); /// powinno zwracac czy udalo sie wyznaczyc droge
+                                    //controller->print();
+                                }
+                                else /// to naprawia buga z wychodzeniem za mape
+                                {
+                                    vector2d new_dest = realFromGrid(controller->nextStop());//world->get<World>()->getNearestCellCoorFromGivenPosInGivenDirection(physicalForm->getPos(),dir);
+                                    controller->setDir(dir);
+                                    movementController->setDest(new_dest);
+                                }
+
+                            }
+                            else /// go anywhere safe - tego trzeba by sie pozbyc
+                            {
+                                controller->clearPath();
+                                //printf("free roam at %dx%d\n", grid_coor.x, grid_coor.y);
+                                vector2d curr_pos = physicalForm->getPos();
+                                vector<int>possible;
+                                //bool possible[DIR_MAX] = {false};
+                                for(int i=1; i<DIR_MAX; i++) // sprawdzanie gdzie mozna sie ruszyc
+                                {
+                                    if(curr_pos != realFromGrid(world->get<World>()->getNearestCellCoorFromGivenPosInGivenDirection(grid_coor,i)))possible.push_back(i);
+                                }
+                                if(possible.size() == 1)
+                                {
+                                    dir = possible[0];
+                                }
+                                else
+                                {
+                                    int opposite = DIR_NONE;
+                                    if(dir == DIR_DOWN)opposite = DIR_UP;
+                                    else if(dir == DIR_UP)opposite = DIR_DOWN;
+                                    else if(dir == DIR_LEFT)opposite = DIR_RIGHT;
+                                    else if(dir == DIR_RIGHT)opposite = DIR_LEFT;
+                                    for(unsigned i=0; i<possible.size(); i++) // nie wchodzimy gdzie niebezpiecznie
+                                    {
+                                        if(!world->get<World>()->isSafe(world->get<World>()->getNearestCellCoorFromGivenPosInGivenDirection(grid_coor,dir)))
+                                        {
+                                            possible.erase(possible.begin() + i);
+                                            i--;
+                                        }
+                                    }
+                                    if(possible.size()>1) // nie cofamy sie bez potrzeby
+                                    {
+                                        for(unsigned i=0; i<possible.size(); i++)
+                                        {
+                                            if(possible[i] == opposite)
+                                            {
+                                                possible.erase(possible.begin() + i);
+                                                i--;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if(possible.size())
+                                    {
+                                        dir = possible[rand()%possible.size()];
+                                    }
+                                    else dir = DIR_NONE;
+
+                                }
+                                if(dir != DIR_NONE)
+                                {
+                                    vector2d new_dest = realFromGrid(world->get<World>()->getNearestCellCoorFromGivenPosInGivenDirection(grid_coor,dir));
+                                    controller->setDir(dir);
+                                    if(world->get<World>()->isSafe(gridFromReal(new_dest)))movementController->setDest(new_dest);
+                                    if(object->has<BombPlanter>())
+                                    {
+                                        if(itIsAGoodSpotToDropABomb(grid_coor.x, grid_coor.y))
+                                        {
+                                            BombPlanter *bombPlanter = object->get<BombPlanter>();
+                                            if(bombPlanter->canPlantNext())
+                                            {
+                                                plantBomb(grid_coor.x, grid_coor.y, bombPlanter);
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                    /// END
+                }
+
+                if(object->has<Timer>())
+                {
+                    Timer *timer = object->get<Timer>();
+                    timer->update(ms);
+                    if(timer->timeIsUp())
+                    {
+                        if(object->has<Explosive>())
+                        {
+                            explosion(object);
+                        }
+                        object->deactivate();
+                        //entityManager->removeRequest(object->getID());
+                    }
+                }
+                if(object->has<Destroyer>() && !object->get<Destroyer>()->isDone())
+                {
+                    object->get<Destroyer>()->done();
+                    if(world->get<World>()->getCell(grid_coor.x, grid_coor.y)->get<SquareCell>()->getType() == CELL_DIRT)
+                    {
+                        world->get<World>()->destroyDirt(grid_coor.x, grid_coor.y, _entityManager); /// to nie powinno tak dzialac - powinno byc zrealizowane przez kontroler
+                    }
+                    else
+                    {
+                        //printf("looking for targets for %d\n", object->getID());
+                        for(auto obj_m : _entityManager->entity()) /// ZOPTYMALIZOWAC
+                        {
+                            entity_ptr obj = obj_m.second;
+                            if(obj->getID() == object->getID()) continue;
+                            if((obj->has<PhysicalForm>()) &&
+                               (obj->get<PhysicalForm>()->getGridPos() == grid_coor) &&
+                               (obj->get<PhysicalForm>()->isDestructible()))
+                            {
+                                        obj->deactivate();
+                                       // entityManager->removeRequest(obj->getID());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+void ControllingSystem::plantBomb(int x, int y, BombPlanter *bombPlanter)
+{
+    int range = bombPlanter->getRange();
+    int_vector2d pos = int_vector2d(x,y);
+    _objectFactory->createBomb(x, y, range);
+    World *world = _entityManager->getWorld()->get<World>(); /// wyjatki
+    bombPlanter->plant();
+    world->setUnsafe(x,y);
+    world->blockCell(x,y);
+    //printf("%dx%d set as unsafe (%d)\n",x,y,(int)world->isSafe(x,y));
+    bool av[4];
+    for(int i=0;i<4;i++)
+        av[i]=true;
+
+    for(int i=1;i<=range;i++)
+    {
+        for(int j=0;j<4;j++) // kierunki
+        {
+            int x,y;
+            if(j==0)x = pos.x, y = pos.y-i;
+            if(j==1)x = pos.x, y = pos.y+i;
+            if(j==2)x = pos.x-i, y = pos.y;
+            if(j==3)x = pos.x+i, y = pos.y;
+            entity_ptr cell = world->getCell(x,y);
+            if(av[j] && cell && (cell->get<SquareCell>()->getType() != CELL_WALL))
+            {
+                if(cell->get<SquareCell>()->getType() == CELL_DIRT)
+                    av[j] = false;
+                world->setUnsafe(x,y);
+            }
+            else av[j] = false;
+        }
+    }
+
+}
+void ControllingSystem::explosion(entity_ptr bomb)
+{
+    int_vector2d pos = bomb->get<PhysicalForm>()->getGridPos();
+    World *world = _entityManager->getWorld()->get<World>(); /// wyjatki
+    //printf("BOOM at %dx%d\n",pos.x,pos.y);
+
+    int range = bomb->get<Explosive>()->getRange();
+
+    bool av[4];
+    for(int i=0;i<4;i++)
+        av[i]=true;
+
+    _objectFactory->createExplosion(pos.x,pos.y);
+    world->setSafe(pos.x,pos.y);
+    world->unblockCell(pos.x,pos.y);
+
+    for(int i=1;i<=range;i++)
+    {
+        for(int j=0;j<4;j++) // kierunki
+        {
+            int x,y;
+            if(j==0)x = pos.x, y = pos.y-i;
+            if(j==1)x = pos.x, y = pos.y+i;
+            if(j==2)x = pos.x-i, y = pos.y;
+            if(j==3)x = pos.x+i, y = pos.y;
+            entity_ptr cell = world->getCell(x,y);
+            if(av[j] && cell && (cell->get<SquareCell>()->getType() != CELL_WALL))
+            {
+                if(cell->get<SquareCell>()->getType() == CELL_DIRT)
+                    av[j] = false;
+                _objectFactory->createExplosion(x,y);
+                world->setSafe(x,y);
+            }
+            else av[j] = false;
+        }
+    }
+
+
+}
+
+bool ControllingSystem::itIsAGoodSpotToDropABomb(int x, int y) // sprawdza tylko czy nie stoi przypadkiem obok dirta
+{
+    bool result = false;
+    World *world = _entityManager->getWorld()->get<World>(); /// wyjatki
+    int_vector2d ppos = _entityManager->getPlayer()->get<PhysicalForm>()->getGridPos();
+    int tx = x, ty = y;
+    for(int i=0;i<4;i++)
+    {
+        if(i==0)tx = x - 1;
+        if(i==1)tx = x + 1;
+        if(i==2)tx = x, ty = y - 1;
+        if(i==3)ty = y + 1;
+        if(world->valid(tx,ty) && world->getCell(tx,ty)->get<PhysicalForm>()->isDestructible()) result = true;
+    }
+    if((abs(ppos.x-x)<=1) && (abs(ppos.y-y)<=1)) result = true;
+    return result;
+}
+bool ControllingSystem::setRunawayPath(int x, int y, AIController *controller)
+{
+    Path path;
+    pathFromTo(int_vector2d(x, y), int_vector2d(x, y), path);
+    controller->setPath(path);
+    return controller->hasPath();
+}
+
+Path ControllingSystem::pathFromTo(int_vector2d from, int_vector2d to, Path &path)
+{
+    /// BFS
+    //printf("pathFromTo(%dx%d)\n",from.x,from.y);
+    bool lookingForClosestSafe = (from == to); // jesli to==from szuka najblizszego bezpiecznego punktu
+
+    World *world = _entityManager->getWorld()->get<World>(); /// wyjatki
+    queue<int_vector2d> to_check;
+
+    int w = world->width(),
+        h = world->height();
+	vector<vector<bool>> V;
+	V.resize(h);
+
+	vector<vector<int_vector2d>> previous;
+	previous.resize(h);
+	for(int i=0; i<h; i++)
+    {
+        previous[i].resize(w);
+        V[i].resize(w,0);
+        for(int j=0; j<w; j++)
+            V[i][j] = false;
+    }
+
+    previous[from.y][from.x] = from;
+	to_check.push(from);
+
+	while(!to_check.empty())
+	{
+		int_vector2d current = to_check.front();
+		to_check.pop();
+
+		V[current.y][current.x] = true;
+
+		//printf("BFS at %dx%d\n",current.x,current.y);
+		if(lookingForClosestSafe)
+        {
+            if(world->valid(current.x,current.y) && world->isSafe(current.x,current.y))
+            {
+                to = current;
+                //printf("found safe place at %dx%d\n",to.x,to.y);
+                break;
+            }
+        }
+        else if(current == to) break; /// nie testowane jeszcze wcale
+
+        for(int i=0; i<4; i++)
+        {
+            int_vector2d neighbour;
+            if(i==0) neighbour.x = current.x, neighbour.y = current.y-1;
+            if(i==1) neighbour.x = current.x, neighbour.y = current.y+1;
+            if(i==2) neighbour.x = current.x-1, neighbour.y = current.y;
+            if(i==3) neighbour.x = current.x+1, neighbour.y = current.y;
+            //printf("checking neighbour %dx%d\n",neighbour.x,neighbour.y);
+            if(world->valid(neighbour.x,neighbour.y))
+            {
+                if((V[neighbour.y][neighbour.x]==false) &&
+                    world->getCell(neighbour.x,neighbour.y)->get<SquareCell>()->available() &&
+                    (world->getCell(neighbour.x,neighbour.y)->get<SquareCell>()->getType() == CELL_FLOOR))
+                {
+                    to_check.push(neighbour);
+                    previous[neighbour.y][neighbour.x] = current;
+                }
+            }
+        }
+	}
+	//printf("checked all neighbours\n");
+	while(to!=from)
+    {
+        //printf("+%dx%d ",to.x,to.y);
+        path.push_front(to);
+        to = previous[to.y][to.x];
+    }
+    //printf("path found\n");
+    return path;
+}
+*/
+/*
+void DisplayManager::test()
+{
+    SDL_Texture *t1 = _graphicsManager.getTexture("textures/player.png");
+    SDL_Texture *t2 = _graphicsManager.getTexture("textures/floor.png");
+    SDL_Texture *t3 = nullptr;
+    SDL_Texture *t4 = nullptr;
+    SDL_Texture *t5 = _graphicsManager.getTexture("textures/not_existing.png");
+    SDL_Rect a = {.x = 0, .y=0, .w = 128, .h = 128};
+    if(t1 == nullptr)
+    {
+        printf("t1 error\n");
+    }
+    if(t2 == nullptr)
+    {
+        printf("t2 error\n");
+    }
+
+    SDL_Surface* loadedSurface = IMG_Load( "textures/brick.png" );
+    if( loadedSurface == nullptr )
+    {
+        printf( "Unable to load image %s! SDL_image Error: %s\n", "textures/brick.png", IMG_GetError() );
+//        return -1;
+    }
+    else
+    {
+        //Create texture from surface pixels
+        t3 = SDL_CreateTextureFromSurface( _window.getRenderer(), loadedSurface );
+        SDL_FreeSurface( loadedSurface );
+        if( t3 == NULL )
+        {
+            printf( "Unable to create texture from %s! SDL Error: %s\n", "textures/brick.png", SDL_GetError() );
+//            return -1;
+        }
+    }
+
+    SDL_Texture *tex = nullptr;
+    SDL_Surface *s;
+    s = SDL_CreateRGBSurface(0, 128, 128, 32, 0, 0, 0, 0);
+
+    SDL_FillRect(s, NULL, SDL_MapRGBA(s->format, 0, 255, 0, 255));
+        if(s == nullptr)
+        {
+            /// error
+        }
+        else
+        {
+            tex = SDL_CreateTextureFromSurface(_window.getRenderer(), s);
+        }
+        SDL_FreeSurface(s);
+    t4 = tex;
+    if(SDL_RenderCopy( _window.getRenderer(), t1, NULL, &a ))
+    {
+        printf( "Unable to print texture1! SDL_image Error: %s\n", IMG_GetError() );
+    }
+    a.x+=128;
+    if(SDL_RenderCopy( _window.getRenderer(), t2, NULL, &a ))
+    {
+        printf( "Unable to print BLANK1! SDL_image Error: %s\n", IMG_GetError() );
+    }
+    a.x+=128;
+    if(SDL_RenderCopy( _window.getRenderer(), t3, NULL, &a ))
+    {
+        printf( "Unable to print texture2! SDL_image Error: %s\n", IMG_GetError() );
+    }
+    a.x+=128;
+    if(SDL_RenderCopy( _window.getRenderer(), t4, NULL, &a ))
+    {
+        printf( "Unable to print BLANK2! SDL_image Error: %s\n", IMG_GetError() );
+    }
+    a.x+=128;
+    if(SDL_RenderCopy( _window.getRenderer(), t5, NULL, &a ))
+    {
+        printf( "Unable to print BLANK3! SDL_image Error: %s\n", IMG_GetError() );
+    }
+    a.x=0;
+    a.y=128;
+    SDL_DestroyTexture(t3);
+    SDL_DestroyTexture(t4);
+}
+*/

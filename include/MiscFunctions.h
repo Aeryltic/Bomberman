@@ -5,6 +5,11 @@
 #include <cmath>
 #include <SDL.h>
 #include <Structures.h>
+
+/// BOSKIE MAKRO
+#define tindex(a) type_index(typeid(a))
+
+
 /*
 template<class C>
 inline int getHash() {return typeid(C).hash_code();}

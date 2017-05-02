@@ -127,7 +127,7 @@ void EventManager::registerStandardCallbacks() /// to powinno byæ w plikach mo¿e
         {
             printf("ZGINALES\n");
             const EntityEvent *e = reinterpret_cast<const EntityEvent*>(&event);
-            if(e->subscriber->hasComponent<Player>())
+            if(e->subscriber->has<Player>())
             {
                 SDL_Event event;
                 event.type = getUserEventType(EVENT_LOST);

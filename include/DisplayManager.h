@@ -6,6 +6,8 @@
 
 #include <memory>
 #include <SDL.h>
+#include "SDL_ttf.h"
+
 
 const int WINDOW_WIDTH = 640;
 const int WINDOW_HEIGHT = 480;
@@ -43,6 +45,10 @@ class DisplayManager
 
         GraphicsManager *getGraphicsManager(){return &_graphicsManager;}
         bool isActive(){if(!_active)printf("DisplayManager is not active\n");return _active;}
+
+        void showDialog(const string &text);
+        void drawRectangle(const SDL_Rect &rect, const SDL_Color &color);
+        void drawText(const string &text, const SDL_Color &color);
     protected:
 
     private:
@@ -50,6 +56,12 @@ class DisplayManager
         AppWindow _window;
         GraphicsManager _graphicsManager;
         SDL_Rect _windowRect;
+
+        TTF_Font* consoleFont;
+        int consoleFontSize;
+        SDL_Color consoleFontColor;
+
+        SDL_Color clearColor;
 };
 
 #endif // DISPLAYMANAGER_H

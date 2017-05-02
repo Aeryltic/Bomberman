@@ -24,7 +24,7 @@ class EntityManager
 
         void addRequest(entity_ptr entity){_toAdd.push(entity);} ///nikt poza ObjectFactory nie powinien miec do tego dostepu
 
-        const unordered_map<int,entity_ptr> &entity() const{return _entity;}
+        const unordered_map<int,entity_ptr> &entity() const{return _entity;} /// a po co to komu?
 
         entity_ptr getWorld();
         entity_ptr getPlayer();
@@ -34,6 +34,12 @@ class EntityManager
         bool isActive(){if(!_active)printf("EntityManager is not active\n");return _active;}
 
         ObjectFactory *getFactory(){return &_objectFactory;}
+
+        template<class C>
+        void add(weak_ptr<C> component)
+        {
+            _component[tindex(C)].push_back(component);
+        }
     protected:
 
     private:
@@ -43,6 +49,7 @@ class EntityManager
 
         //vector<entity_ptr> _entity; /// przebudowac na unordered_map
         unordered_map<int,entity_ptr> _entity;
+        unordered_map<type_index, vector<weak_ptr<Component> > >  _component;
 
         weak_ptr<Entity> _world, _player;
 

@@ -29,7 +29,7 @@ struct Variable
 };
 */
 ///-------------------
-extern int _AliveCount;
+//extern int _AliveCount;
 struct Vector2D_double
 {
     Vector2D_double() : x(0), y(0) {}

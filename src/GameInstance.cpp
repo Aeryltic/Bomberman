@@ -9,6 +9,7 @@
 #include "EntityManager.h"
 #include "ObjectFactory.h"
 #include "EventManager.h"
+#include "ScriptSystem.h"
 
 #include "Structures.h"
 
@@ -40,12 +41,16 @@ int GameInstance::run()
     shared_ptr<EntityManager>   _entityManager = make_shared<EntityManager>(_displayManager->getGraphicsManager(), _inputManager.get());
     shared_ptr<LogicManager>    _logicManager = make_shared<LogicManager>(_entityManager.get());
     shared_ptr<EventManager>    _eventManager = make_shared<EventManager>(_inputManager.get());
+    shared_ptr<ScriptSystem>    _scriptSystem = make_shared<ScriptSystem>("scripts/script.lua", _displayManager.get());
 
-    if(!(_displayManager->isActive()    &&
+    if(!(
+         _displayManager->isActive()    &&
          _inputManager->isActive()      &&
          _entityManager->isActive()     &&
          _logicManager->isActive()      &&
-         _eventManager->isActive()))
+         _eventManager->isActive()      &&
+         _scriptSystem->isActive()
+        ))
     {
         printf("some system(s) is(are) not active\n");
         return -1;
@@ -59,7 +64,7 @@ int GameInstance::run()
     unsigned lag = 0.0;
 
    /// TEST
-    if(!_entityManager->getFactory()->createWorld("maps/lvl1")) return -1; /// przydaloby sie zeby lepiej sprawdzac czy gre faktycznie mozna zaczac
+//    if(!_entityManager->getFactory()->createWorld("maps/lvl1")) return -1; /// przydaloby sie zeby lepiej sprawdzac czy gre faktycznie mozna zaczac
    /// KONIEC TESTU
 
     while(_working)

@@ -9,7 +9,17 @@
 DisplayManager::DisplayManager() : _window(WINDOW_WIDTH, WINDOW_HEIGHT), _graphicsManager(GraphicsManager(_window.getRenderer()))
 {
     printf("new DisplayManager\n");
-    IMG_Init(IMG_INIT_PNG);
+
+    if(IMG_Init(IMG_INIT_PNG) == -1)
+    {
+        printf("IMG_Init: %s\n", IMG_GetError());
+        exit(-1);
+    }
+    if(TTF_Init() == -1)
+    {
+        printf("TTF_Init: %s\n", TTF_GetError());
+        exit(-1);
+    }
 
     if(_window.isReady() && _graphicsManager.isActive())
     {
@@ -20,12 +30,27 @@ DisplayManager::DisplayManager() : _window(WINDOW_WIDTH, WINDOW_HEIGHT), _graphi
         _active = true;
     }
     else _active = false;
+
+    consoleFontSize = 30;
+    if((consoleFont = TTF_OpenFont("FORCED_SQUARE.ttf", consoleFontSize)) == NULL)
+    {
+        printf("FONT ERROR\n");
+    }
+    consoleFontColor = {.r=0, .g=155, .b=0, .a=255};
+
+    clearColor = {.r=0, .g=0, .b=0, .a=255};
+    SDL_SetRenderDrawColor(_window.getRenderer(), clearColor.r, clearColor.g, clearColor.b, clearColor.a);
 }
 
 DisplayManager::~DisplayManager()
 {
     printf("delete DisplayManager\n");
+
     IMG_Quit();
+
+    TTF_CloseFont(consoleFont);
+    consoleFont=NULL;
+    TTF_Quit();
 }
 
 /*  tworzy priority_queue
@@ -37,21 +62,21 @@ DisplayManager::~DisplayManager()
     dla kazdego w kolejce:
         wrzuca do renderera
 */
-void DisplayManager::render(const EntityManager *entityManager, int ms) /// wlasciwie to jest prawie gotowa tylko testowac
+void DisplayManager::render(const EntityManager *entityManager, int ms)
 {
     SDL_RenderClear(_window.getRenderer());
     priority_queue<ToRender> trt;
     for(auto &entity_m : entityManager->entity())
     {
         entity_ptr entity = entity_m.second;
-        if(entity->hasComponent<PhysicalForm>() && entity->hasComponent<TextureComponent>())
+        if(entity->has<PhysicalForm>() && entity->has<TextureComponent>())
         {
-            SDL_Rect rect = entity->getComponent<PhysicalForm>()->rect(ms);
+            SDL_Rect rect = entity->get<PhysicalForm>()->rect(ms);
             if(isVisible(rect))
             {
-                SDL_Texture *texture = entity->getComponent<TextureComponent>()->texture();
-                int z = entity->getComponent<PhysicalForm>()->getZ();
-                double angle = entity->getComponent<PhysicalForm>()->getAngle();
+                SDL_Texture *texture = entity->get<TextureComponent>()->texture(); /// animacje!
+                int z = entity->get<PhysicalForm>()->getZ();
+                double angle = entity->get<PhysicalForm>()->getAngle();
                 trt.push(ToRender(texture, rect, z, angle));
             }
         }
@@ -65,10 +90,11 @@ void DisplayManager::render(const EntityManager *entityManager, int ms) /// wlas
         }
         trt.pop();
     }
+    showDialog("abcdefghijklmnoprstuvwxyz");
     SDL_RenderPresent(_window.getRenderer());
 }
 
-bool DisplayManager::isVisible(const SDL_Rect &rect) /// ta funckja powinna uwzgledniach obrot, bo tak obiekty na skraju moga sie niepojawic mimo ze powinny
+bool DisplayManager::isVisible(const SDL_Rect &rect) /// ta funckja powinna uwzgledniaæ obrot, bo tak obiekty na skraju moga sie nie pojawic mimo ze powinny
 {
     SDL_Point p;
     p.x = rect.x;
@@ -82,84 +108,42 @@ bool DisplayManager::isVisible(const SDL_Rect &rect) /// ta funckja powinna uwzg
     if(SDL_PointInRect(&p, &_windowRect)) return true;
     return false;
 }
-/*
-void DisplayManager::test()
+void DisplayManager::showDialog(const string &text)
 {
-    SDL_Texture *t1 = _graphicsManager.getTexture("textures/player.png");
-    SDL_Texture *t2 = _graphicsManager.getTexture("textures/floor.png");
-    SDL_Texture *t3 = nullptr;
-    SDL_Texture *t4 = nullptr;
-    SDL_Texture *t5 = _graphicsManager.getTexture("textures/not_existing.png");
-    SDL_Rect a = {.x = 0, .y=0, .w = 128, .h = 128};
-    if(t1 == nullptr)
-    {
-        printf("t1 error\n");
-    }
-    if(t2 == nullptr)
-    {
-        printf("t2 error\n");
-    }
+    int len = text.length();
 
-    SDL_Surface* loadedSurface = IMG_Load( "textures/brick.png" );
-    if( loadedSurface == nullptr )
-    {
-        printf( "Unable to load image %s! SDL_image Error: %s\n", "textures/brick.png", IMG_GetError() );
-//        return -1;
-    }
-    else
-    {
-        //Create texture from surface pixels
-        t3 = SDL_CreateTextureFromSurface( _window.getRenderer(), loadedSurface );
-        SDL_FreeSurface( loadedSurface );
-        if( t3 == NULL )
-        {
-            printf( "Unable to create texture from %s! SDL Error: %s\n", "textures/brick.png", SDL_GetError() );
-//            return -1;
-        }
-    }
+    SDL_Rect textRect;
+    textRect.w = consoleFontSize * len + 50;
+    textRect.h = consoleFontSize + 50;
+    textRect.x = (_windowRect.w - textRect.w) / 2;
+    textRect.y = (_windowRect.h - textRect.h) / 2;
+    SDL_Color boxColor = {.r=50, .g=50, .b=50, .a=255};
 
-    SDL_Texture *tex = nullptr;
-    SDL_Surface *s;
-    s = SDL_CreateRGBSurface(0, 128, 128, 32, 0, 0, 0, 0);
-
-    SDL_FillRect(s, NULL, SDL_MapRGBA(s->format, 0, 255, 0, 255));
-        if(s == nullptr)
-        {
-            /// error
-        }
-        else
-        {
-            tex = SDL_CreateTextureFromSurface(_window.getRenderer(), s);
-        }
-        SDL_FreeSurface(s);
-    t4 = tex;
-    if(SDL_RenderCopy( _window.getRenderer(), t1, NULL, &a ))
-    {
-        printf( "Unable to print texture1! SDL_image Error: %s\n", IMG_GetError() );
-    }
-    a.x+=128;
-    if(SDL_RenderCopy( _window.getRenderer(), t2, NULL, &a ))
-    {
-        printf( "Unable to print BLANK1! SDL_image Error: %s\n", IMG_GetError() );
-    }
-    a.x+=128;
-    if(SDL_RenderCopy( _window.getRenderer(), t3, NULL, &a ))
-    {
-        printf( "Unable to print texture2! SDL_image Error: %s\n", IMG_GetError() );
-    }
-    a.x+=128;
-    if(SDL_RenderCopy( _window.getRenderer(), t4, NULL, &a ))
-    {
-        printf( "Unable to print BLANK2! SDL_image Error: %s\n", IMG_GetError() );
-    }
-    a.x+=128;
-    if(SDL_RenderCopy( _window.getRenderer(), t5, NULL, &a ))
-    {
-        printf( "Unable to print BLANK3! SDL_image Error: %s\n", IMG_GetError() );
-    }
-    a.x=0;
-    a.y=128;
-    SDL_DestroyTexture(t3);
-    SDL_DestroyTexture(t4);
+    drawRectangle(textRect, boxColor);
+    drawText(text, consoleFontColor);
 }
-*/
+void DisplayManager::drawRectangle(const SDL_Rect &rect, const SDL_Color &color)
+{
+    SDL_SetRenderDrawColor(_window.getRenderer(), color.r, color.g, color.b, color.a);
+    SDL_RenderDrawRect(_window.getRenderer(), &rect);
+    SDL_SetRenderDrawColor(_window.getRenderer(), clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+}
+void DisplayManager::drawText(const string &text, const SDL_Color &color)
+{
+    int len = text.length();
+
+    SDL_SetRenderDrawColor(_window.getRenderer(), color.r, color.g, color.b, color.a);
+
+    SDL_Surface* messageSurface = TTF_RenderText_Solid(consoleFont, text.c_str(), consoleFontColor);
+    SDL_Texture* message = SDL_CreateTextureFromSurface(_window.getRenderer(), messageSurface);
+    SDL_FreeSurface(messageSurface);
+
+    SDL_Rect textRect;
+    TTF_SizeText(consoleFont, text.c_str(), &textRect.w, &textRect.h);
+    textRect.x = (_windowRect.w - textRect.w) / 2;
+    textRect.y = (_windowRect.h - textRect.h) / 2;
+
+    SDL_RenderCopy(_window.getRenderer(), message, NULL, &textRect);
+
+    SDL_SetRenderDrawColor(_window.getRenderer(), clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+}

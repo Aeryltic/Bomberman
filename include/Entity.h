@@ -1,81 +1,74 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "Component.h"
 #include <unordered_map>
 #include <typeinfo>
-
 #include <typeindex>
 
-/// BOSKIE MAKRO
-#define tindex(a) type_index(typeid(a))
+#include "MiscFunctions.h"
+#include "Component.h"
 
 using namespace std;
-typedef unordered_map<type_index, Component*> comp_map;
+
+typedef unordered_map<type_index, shared_ptr<Component> > compMap;
+
 class Entity : public std::enable_shared_from_this<Entity>
 {
     public:
         Entity();
         virtual ~Entity();
 
-        template<class C>
-        bool hasComponent() const;
-        inline bool hasComponent(type_index key) const;
+        template<class C> bool has() const;
+        template<class C> C* get();
+        template<class C> bool remove();
+        inline bool has(type_index key) const;
 
-        template<class C>
-        C* getComponent();
+        bool add(shared_ptr<Component> component);
 
-        bool addComponent(Component *component);
-        template<class C>
-        bool removeComponent();
+
 
         void update(int ms);
 
-        void activate();
-        void deactivate(){_active = false;}
+        compMap &components(){return _component;}
 
-        comp_map &components(){return _component;}
-
-        void setID(int id){/*printf("got ID: #%d\n",id);*/_id = id;}
+        void setID(int id){_id = id;}
         int getID(){return _id;}
 
+        void activate();
+        void deactivate(){_active = false;}
         bool isActive(){return _active;}
 
     protected:
 
     private:
         int _id;
-        comp_map _component;
+        compMap _component;
         bool _active;
-        /** zamiast prostej mapy moze lepiej byloby zaimplementowac inteligentny kontener, ktory moglby uproscic odwolania do elementow
-        * zeby nie musiec pisac calej tej dlugiej formulki z hasComponent i getComponent
-        *
-        */
 };
 
 // TEMPLATES
 
 template<class C>
-C* Entity::getComponent()
+C* Entity::get()
 {
     type_index key = tindex(C);
-    comp_map::iterator found = _component.find(key);
+    compMap::iterator found = _component.find(key);
     if(found != _component.end())
     {
-        return static_cast<C*>(found->second);
+        return static_cast<C*>(found->second.get());
     }
     return nullptr;
 }
 
 template<class C>
-bool Entity::hasComponent() const
+bool Entity::has() const
 {
     type_index key = tindex(C);
     return _component.find(key) != _component.end();
 }
 
 template<class C>
-bool Entity::removeComponent()
+bool Entity::remove()
 {
     type_index key = tindex(C);
     if(_component.find(key) != _component.end())
