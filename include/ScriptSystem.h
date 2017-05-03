@@ -19,16 +19,17 @@ class ScriptSystem
         ScriptSystem(const string &filename, DisplayManager *displayManager);
         virtual ~ScriptSystem();
         void update(int ms);
-        bool isActive(){return _luaState;}
+        bool isActive(){return _L;}
         void registerEverything();
+        lua_State* getLuaState(){return _L;}
+        string execute(const string &command);
     protected:
 
     private:
         bool _active;
-        lua_State* _luaState;
+        lua_State* _L;
         DisplayManager *_displayManager;
-        void showDialog(string text);
-//        LuaRef updateTime;
+        void initialize();
 };
 
 #endif // SCRIPTSYSTEM_H

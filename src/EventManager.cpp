@@ -3,8 +3,13 @@
 #include "GameInstance.h"
 #include "Entity.h"
 //#include "Component.h"
-EventManager::EventManager(InputManager *inputManager) : _inputManager(inputManager)
+
+Uint32 EventManager::eventFirstNum = 0;
+
+EventManager::EventManager(InputManager *inputManager, Console *console)
 {
+    _inputManager = inputManager;
+    _console = console;
     /// SDL_EventState(type, SDL_IGNORE); to disable event
     if((eventFirstNum = SDL_RegisterEvents(NUMEVENTS)) != (Uint32)-1)
     {
@@ -14,14 +19,17 @@ EventManager::EventManager(InputManager *inputManager) : _inputManager(inputMana
     }
     else _active = false;
 }
+
 EventManager::~EventManager()
 {
     //dtor
 }
+
 void EventManager::registerEventCallback(unsigned type, EventCallback callback)
 {
     _registeredCallbacks[type].push_back(callback);
 }
+
 void EventManager::handleEvents()
 {
     SDL_Event event;
@@ -34,7 +42,6 @@ void EventManager::handleEvents()
     }
 }
 
-Uint32 EventManager::eventFirstNum=0;
 void EventManager::pushUserEvent(int eventcode, void *data1, void *data2)
 {
     SDL_Event event;
@@ -45,13 +52,16 @@ void EventManager::pushUserEvent(int eventcode, void *data1, void *data2)
     event.user.data2 = data2;
     SDL_PushEvent(&event);
 }
-void EventManager::registerStandardCallbacks() /// to powinno by� w plikach mo�e poza standardowymi SLD_KEYDOWN, SDL_KEYUP i mo�e kilkoma ktorych jeszcze nie ma tu
+
+void EventManager::registerStandardCallbacks() /// to powinno być w plikach może poza standardowymi SLD_KEYDOWN, SDL_KEYUP i może kilkoma ktorych jeszcze nie ma tu
 {
-    registerEventCallback(SDL_KEYDOWN, [this](SDL_Event const& event)
-    {
-        SDL_Keycode keycode = event.key.keysym.sym;
-        _inputManager->setKeyStatus(keycode,KEY_PRESSED);
-    });
+    /// to mija się z celem
+//    registerEventCallback(SDL_KEYDOWN, [this](SDL_Event const& event)
+//    {
+//        SDL_Keycode keycode = event.key.keysym.sym;
+//        _inputManager->setKeyStatus(keycode,KEY_PRESSED);
+//    });
+    /// to wszystko w ogóle to w skryptach powinno wylądować
     registerEventCallback(SDL_KEYUP, [this](SDL_Event const& event)
     {
         SDL_Keycode keycode = event.key.keysym.sym;
@@ -60,15 +70,19 @@ void EventManager::registerStandardCallbacks() /// to powinno by� w plikach mo�e
     registerEventCallback(SDL_KEYDOWN, [this](SDL_Event const& event)
     {
         SDL_Keycode keycode = event.key.keysym.sym;
-        if(keycode == SDLK_ESCAPE)
+        switch (keycode)
         {
+        case SDLK_ESCAPE:
             SDL_Event pushed;
             pushed.type = SDL_QUIT;
             SDL_PushEvent(&pushed);
-        }
-        if(keycode == SDLK_p)
-        {
+            break;
+        case SDLK_p:
             pushUserEvent(EVENT_PAUSE,NULL,NULL);
+            break;
+        case SDLK_BACKQUOTE: /// co z eventami, które były w kolejce po wywołującym consolę? to jest źle - powinna być uruchomiona po przejrzeniu wszystkiego
+            _console->run();
+            break;
         }
     });
     registerEventCallback(SDL_QUIT, [this](SDL_Event const& event)
@@ -94,7 +108,7 @@ void EventManager::registerStandardCallbacks() /// to powinno by� w plikach mo�e
                 break;
             case EVENT_PAUSE:
                 GameInstance::getInstance().pause();
-
+                break;
            // case EVENT_DELETE:
            //     _entityManager->removeRequest(static_cast<Entity *>(data1)->getID());
            //     break;

@@ -40,8 +40,9 @@ int GameInstance::run()
     shared_ptr<InputManager>    _inputManager = make_shared<InputManager>();
     shared_ptr<EntityManager>   _entityManager = make_shared<EntityManager>(_displayManager->getGraphicsManager(), _inputManager.get());
     shared_ptr<LogicManager>    _logicManager = make_shared<LogicManager>(_entityManager.get());
-    shared_ptr<EventManager>    _eventManager = make_shared<EventManager>(_inputManager.get());
     shared_ptr<ScriptSystem>    _scriptSystem = make_shared<ScriptSystem>("scripts/script.lua", _displayManager.get());
+    shared_ptr<Console>         _console = make_shared<Console>(_displayManager.get(), _scriptSystem.get());
+    shared_ptr<EventManager>    _eventManager = make_shared<EventManager>(_inputManager.get(), _console.get());
 
     if(!(
          _displayManager->isActive()    &&
@@ -75,12 +76,14 @@ int GameInstance::run()
 
         _inputManager->update();
         _eventManager->handleEvents();
+
         if(!_paused)
         {
             lag += elapsed;
             while (lag >= TIMESTEP)
             {
                 _logicManager->update(TIMESTEP);
+                _scriptSystem->update(TIMESTEP);
                 lag -= TIMESTEP;
             }
         }
@@ -95,14 +98,13 @@ int GameInstance::run()
             last_check = SDL_GetTicks();
         }
 
-        SDL_Delay(1); /// tylko do testow - we wlasciwym silniku bylaby to strzala w kolano
+        SDL_Delay(1); /// tylko do testow
     }
 	return 0;
 }
 
 int GameInstance::init()
 {
-
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 	{
 		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());

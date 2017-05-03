@@ -31,8 +31,8 @@ DisplayManager::DisplayManager() : _window(WINDOW_WIDTH, WINDOW_HEIGHT), _graphi
     }
     else _active = false;
 
-    consoleFontSize = 30;
-    if((consoleFont = TTF_OpenFont("FORCED_SQUARE.ttf", consoleFontSize)) == NULL)
+    consoleFontSize = 20;
+    if((consoleFont = TTF_OpenFont("fonts/FORCED_SQUARE.ttf", consoleFontSize)) == NULL)
     {
         printf("FONT ERROR\n");
     }
@@ -40,11 +40,15 @@ DisplayManager::DisplayManager() : _window(WINDOW_WIDTH, WINDOW_HEIGHT), _graphi
 
     clearColor = {.r=0, .g=0, .b=0, .a=255};
     SDL_SetRenderDrawColor(_window.getRenderer(), clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+
+    _gameWorldView = SDL_CreateTexture(_window.getRenderer(), SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, _windowRect.w, _windowRect.h);
 }
 
 DisplayManager::~DisplayManager()
 {
     printf("delete DisplayManager\n");
+
+    SDL_DestroyTexture(_gameWorldView);
 
     IMG_Quit();
 
@@ -53,18 +57,20 @@ DisplayManager::~DisplayManager()
     TTF_Quit();
 }
 
-/*  tworzy priority_queue
-    dla kazdej instancji:
-        jesli na ekranie
-            oblicza pozycje
-            tworzy strukture { SDL_Rect rect, int h}
-            wrzuca do kolejki (priorytet po h)
-    dla kazdego w kolejce:
-        wrzuca do renderera
+/*  render():
+        tworzy priority_queue
+        dla kazdej instancji:
+            jesli na ekranie
+                oblicza pozycje
+                tworzy strukture {SDL_Rect rect, int h}
+                wrzuca do kolejki (priorytet po h)
+        dla kazdego w kolejce:
+            renderuje
 */
+
 void DisplayManager::render(const EntityManager *entityManager, int ms)
 {
-    SDL_RenderClear(_window.getRenderer());
+    /// obliczenia kto i gdzie
     priority_queue<ToRender> trt;
     for(auto &entity_m : entityManager->entity())
     {
@@ -81,6 +87,11 @@ void DisplayManager::render(const EntityManager *entityManager, int ms)
             }
         }
     }
+
+    /// renderowanie
+    SDL_SetRenderTarget(_window.getRenderer(), _gameWorldView);
+    SDL_RenderClear(_window.getRenderer());
+
     while(!trt.empty())
     {
         auto &sth = trt.top();
@@ -90,11 +101,38 @@ void DisplayManager::render(const EntityManager *entityManager, int ms)
         }
         trt.pop();
     }
-    showDialog("abcdefghijklmnoprstuvwxyz");
+
+    showDialog(text);
+
+    SDL_SetRenderTarget(_window.getRenderer(), nullptr); /// przywracam właściwy renderer
+    SDL_RenderClear(_window.getRenderer());
+    SDL_RenderCopy(_window.getRenderer(), _gameWorldView, nullptr, nullptr);
     SDL_RenderPresent(_window.getRenderer());
 }
 
-bool DisplayManager::isVisible(const SDL_Rect &rect) /// ta funckja powinna uwzglednia� obrot, bo tak obiekty na skraju moga sie nie pojawic mimo ze powinny
+void DisplayManager::drawConsole(const string &buffer, const deque<string> &commandHistory)
+{
+    SDL_RenderClear(_window.getRenderer());
+
+    SDL_RenderCopy(_window.getRenderer(), _gameWorldView, nullptr, nullptr);
+
+    SDL_Color consoleColor = {.r=50, .g=50, .b=50, .a=255};
+    SDL_Rect consoleRect = {.x=0, .y=_windowRect.h - 7*(consoleFontSize+2), .w=_windowRect.w, .h=7*(consoleFontSize+2)};
+    drawRectangle(consoleRect, consoleColor);
+
+    string formatted_buffer = ">> " + buffer;
+    int x0 = 20;
+    int y0 = _windowRect.h - consoleFontSize*2;
+    drawText(formatted_buffer, x0, y0, consoleFontColor);
+    for(int i=0; (i<5) && (i<commandHistory.size()); i++)
+    {
+        drawText(commandHistory[i], x0, y0 - (i+1)*consoleFontSize, consoleFontColor);
+    }
+
+    SDL_RenderPresent(_window.getRenderer());
+}
+
+bool DisplayManager::isVisible(const SDL_Rect &rect) /// ta funkcja powinna uwzgledniać obrot, bo tak obiekty na skraju moga sie nie pojawic mimo ze powinny
 {
     SDL_Point p;
     p.x = rect.x;
@@ -108,30 +146,33 @@ bool DisplayManager::isVisible(const SDL_Rect &rect) /// ta funckja powinna uwzg
     if(SDL_PointInRect(&p, &_windowRect)) return true;
     return false;
 }
+
 void DisplayManager::showDialog(const string &text)
 {
-    int len = text.length();
+    //printf("dialog with: \"%s\"\n", text.c_str());
+    int textW, textH;
+    TTF_SizeText(consoleFont, text.c_str(), &textW, &textH);
 
     SDL_Rect textRect;
-    textRect.w = consoleFontSize * len + 50;
-    textRect.h = consoleFontSize + 50;
+    textRect.w = textW + 50;
+    textRect.h = textH + 50;
     textRect.x = (_windowRect.w - textRect.w) / 2;
     textRect.y = (_windowRect.h - textRect.h) / 2;
     SDL_Color boxColor = {.r=50, .g=50, .b=50, .a=255};
 
     drawRectangle(textRect, boxColor);
-    drawText(text, consoleFontColor);
+    drawText(text, textRect.x + 25, textRect.y + 25, consoleFontColor);
 }
+
 void DisplayManager::drawRectangle(const SDL_Rect &rect, const SDL_Color &color)
 {
     SDL_SetRenderDrawColor(_window.getRenderer(), color.r, color.g, color.b, color.a);
-    SDL_RenderDrawRect(_window.getRenderer(), &rect);
+    SDL_RenderFillRect(_window.getRenderer(), &rect);
     SDL_SetRenderDrawColor(_window.getRenderer(), clearColor.r, clearColor.g, clearColor.b, clearColor.a);
 }
-void DisplayManager::drawText(const string &text, const SDL_Color &color)
-{
-    int len = text.length();
 
+void DisplayManager::drawText(const string &text, int x, int y, const SDL_Color &color)
+{
     SDL_SetRenderDrawColor(_window.getRenderer(), color.r, color.g, color.b, color.a);
 
     SDL_Surface* messageSurface = TTF_RenderText_Solid(consoleFont, text.c_str(), consoleFontColor);
@@ -140,10 +181,11 @@ void DisplayManager::drawText(const string &text, const SDL_Color &color)
 
     SDL_Rect textRect;
     TTF_SizeText(consoleFont, text.c_str(), &textRect.w, &textRect.h);
-    textRect.x = (_windowRect.w - textRect.w) / 2;
-    textRect.y = (_windowRect.h - textRect.h) / 2;
+    textRect.x = x;
+    textRect.y = y;
 
     SDL_RenderCopy(_window.getRenderer(), message, NULL, &textRect);
+    SDL_DestroyTexture(message);
 
     SDL_SetRenderDrawColor(_window.getRenderer(), clearColor.r, clearColor.g, clearColor.b, clearColor.a);
 }

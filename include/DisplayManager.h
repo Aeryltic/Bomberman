@@ -8,6 +8,7 @@
 #include <SDL.h>
 #include "SDL_ttf.h"
 
+#include <deque>
 
 const int WINDOW_WIDTH = 640;
 const int WINDOW_HEIGHT = 480;
@@ -39,6 +40,7 @@ class DisplayManager
         DisplayManager();
         virtual ~DisplayManager();
 
+        void drawConsole(const string &buffer, const deque<string> &commandHistory);
         void render(const EntityManager *entityManager, int ms);
 
         bool isVisible(const SDL_Rect &rect);
@@ -48,7 +50,13 @@ class DisplayManager
 
         void showDialog(const string &text);
         void drawRectangle(const SDL_Rect &rect, const SDL_Color &color);
-        void drawText(const string &text, const SDL_Color &color);
+        void drawText(const string &text, int x, int y, const SDL_Color &color);
+
+    /// TESTY
+        string text;
+        void setText(const std::string& test){text = test;}
+        string getText() const {return text;}
+    /// -----------
     protected:
 
     private:
@@ -57,11 +65,18 @@ class DisplayManager
         GraphicsManager _graphicsManager;
         SDL_Rect _windowRect;
 
+        SDL_Texture *_gameWorldView;
+        SDL_Texture *_UI; /// chocia¿ mo¿e bez tego siê obêdzie
+
         TTF_Font* consoleFont;
         int consoleFontSize;
         SDL_Color consoleFontColor;
 
         SDL_Color clearColor;
+        SDL_Texture *gameViewBuffer;
+
+
+
 };
 
 #endif // DISPLAYMANAGER_H

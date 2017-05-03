@@ -15,8 +15,12 @@ AppWindow::AppWindow(int w, int h) /* to nie powinno byc tak - raczej po prostu 
 AppWindow::~AppWindow()
 {
     printf("delete AppWindow\n");
+    printf("SDL_DestroyRenderer\n");
     SDL_DestroyRenderer(_renderer);
+    printf("destroyed\n");
+    printf("SDL_DestroyWindow\n");
     SDL_DestroyWindow(_window);
+    printf("destroyed\n");
 }
 
 bool AppWindow::isReady()

@@ -61,6 +61,7 @@
 			<Option virtualFolder="GameObjects/include/" />
 		</Unit>
 		<Unit filename="include/Components.h" />
+		<Unit filename="include/Console.h" />
 		<Unit filename="include/Constants.h">
 			<Option virtualFolder="Other/include/" />
 		</Unit>
@@ -117,6 +118,7 @@
 			<Option virtualFolder="GameObjects/src/" />
 		</Unit>
 		<Unit filename="src/Components.cpp" />
+		<Unit filename="src/Console.cpp" />
 		<Unit filename="src/ControllingSystem.cpp">
 			<Option virtualFolder="LogicModule/src/" />
 		</Unit>

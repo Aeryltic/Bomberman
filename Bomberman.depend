@@ -1072,7 +1072,7 @@
 	"ObjectFactory.h"
 	"ScriptSystem.h"
 
-1486234540 source:c:\users\user\desktop\bomberman\src\appwindow.cpp
+1493772226 source:c:\users\user\desktop\bomberman\src\appwindow.cpp
 	"AppWindow.h"
 	<stdio.h>
 
@@ -1113,7 +1113,7 @@
 1485549514 c:\users\user\desktop\bomberman\include\abstractobject.h
 	<Object.h>
 
-1493755862 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
+1493829436 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
 	"GameInstance.h"
 	<SDL.h>
 	<stdio.h>
@@ -1137,14 +1137,15 @@
 1485562293 c:\users\user\desktop\bomberman\include\realobject.h
 	<Object.h>
 
-1493757303 c:\users\user\desktop\bomberman\include\displaymanager.h
+1493838258 c:\users\user\desktop\bomberman\include\displaymanager.h
 	"AppWindow.h"
 	"GraphicsManager.h"
 	<memory>
 	<SDL.h>
 	"SDL_ttf.h"
+	<deque>
 
-1493754604 source:c:\users\user\desktop\bomberman\src\displaymanager.cpp
+1493839431 source:c:\users\user\desktop\bomberman\src\displaymanager.cpp
 	"DisplayManager.h"
 	<SDL.h>
 	<SDL_image.h>
@@ -1300,17 +1301,18 @@
 	"Entity.h"
 	"EntityManager.h"
 
-1493669753 source:c:\users\user\desktop\bomberman\src\eventmanager.cpp
+1493810166 source:c:\users\user\desktop\bomberman\src\eventmanager.cpp
 	"EventManager.h"
 	"GameInstance.h"
 	"Entity.h"
 
-1493751778 c:\users\user\desktop\bomberman\include\eventmanager.h
+1493810221 c:\users\user\desktop\bomberman\include\eventmanager.h
 	"InputManager.h"
 	<unordered_map>
 	<vector>
 	<functional>
 	<SDL.h>
+	"Console.h"
 
 1493750125 c:\users\user\desktop\bomberman\include\controllingsystem.h
 	"EntityManager.h"
@@ -1343,7 +1345,7 @@
 
 1492980632 c:\users\user\desktop\bomberman\include\gameinitializer.h
 
-1493753710 c:\users\user\desktop\bomberman\include\scriptsystem.h
+1493824664 c:\users\user\desktop\bomberman\include\scriptsystem.h
 	<LuaBridge.h>
 	<iostream>
 	"lua.h"
@@ -1419,11 +1421,20 @@
 
 1493666366 c:\dev_libs\luabridge\source\luabridge\detail\namespace.h
 
-1493754626 source:c:\users\user\desktop\bomberman\src\scriptsystem.cpp
+1493839485 source:c:\users\user\desktop\bomberman\src\scriptsystem.cpp
 	"ScriptSystem.h"
 
 1454366547 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_ttf.h
 	"SDL.h"
 	"begin_code.h"
 	"close_code.h"
+
+1493839656 source:c:\users\user\desktop\bomberman\src\console.cpp
+	"Console.h"
+
+1493835864 c:\users\user\desktop\bomberman\include\console.h
+	<deque>
+	<SDL.h>
+	"DisplayManager.h"
+	"ScriptSystem.h"
 

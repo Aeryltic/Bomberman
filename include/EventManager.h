@@ -6,23 +6,25 @@
 #include <vector>
 #include <functional>
 #include <SDL.h>
+#include "Console.h"
 
 using namespace std;
 class EventManager
 {
     /// --------------------------------------------------------------------------
     public:
-
         using EventCallback = function<void(SDL_Event const&)>;
 
         void registerEventCallback(unsigned type, EventCallback callback);
+        /// unregisterEventCallback?
         void handleEvents();
 
     private:
         unordered_map<unsigned, vector<EventCallback>> _registeredCallbacks;
                                         /// by Kolja from gamedev.stackexchange.com just formatted by me
+    /// --------------------------------------------------------------------------
     public:
-        EventManager(InputManager *inputManager);
+        EventManager(InputManager *inputManager, Console *console);
         virtual ~EventManager();
 
         static void pushUserEvent(int eventcode, void *data1, void *data2); /// nic nie wrzucac do data1 ani data2 poki co
@@ -40,5 +42,6 @@ class EventManager
         bool _active;
         InputManager *_inputManager;
         static Uint32 eventFirstNum;
+        Console *_console;
 };
 #endif // EVENTMANAGER_H

@@ -4,11 +4,18 @@ KWESTIE SILNIKA
 
 	1. G£ÓWNE CELE:
 	
-		# SERIALIZACJA I SKRYPTY (Cereal i Lua) (do serializacji Lua te¿ siê nada)
+		# SERIALIZACJA I SKRYPTY - Lua
+		
+		# konsola nie powinna ingerowaæ w g³ówn¹ pêtlê gry (albo usprawniæ t¹ drug¹, ¿eby sobie z tym radzi³a)
+		
+		# eventy zmieniaj¹ STAN obiektów(komponentów), co jest obs³ugiwane w g³ównej pêtli update'ów
 		
 		# konsola
+		
+		# wywaliæ InputManagera
 	
 		# funkcja dla ka¿dego Entity buduj¹ca jego funkcjê update(unsigned ms_passed) z jego komponentów (generuje automatycznie powi¹zania miêdzy komponentami, by oby³o siê bez sprawdzania za ka¿dym razem czy entity ma jakiœ komponent) - rebuild()
+			to ju¿ na poziomie skryptów
 
 		# USPRAWNIÆ KOMUNIKACJÊ MIÊDZY SYSTEMAMI (mniej przekazywania systemów - niech siê znaj¹, ale te¿ ¿eby by³y w miarê niezale¿ne od siebie, bo czym mniej znajomoœci tym lepiej, nie?)
 		
@@ -55,13 +62,13 @@ KWESTIE SILNIKA
 		
 	3. ŒREDNIO WA¯NE:
 	
+		# DWIÊK
+	
 		# obs³uga tekstu
 	
-		# dodaæ kamerê - jako klasa powinna byæ jednakowa w ka¿dym projekcie, ale jej obs³uga to ju¿ kwestia ka¿dego przypadku z osobna
+		# dodaæ kamerê - jako klasa powinna byæ jednakowa w ka¿dym projekcie, ale jej obs³uga to ju¿ kwestia ka¿dego przypadku z osobna (skrypty)
 	
 		# zacz¹æ wprowadzaæ jakiœ standard (komponenty, których nie powinno siê zastêpowaæ - zupe³nie podstawowe jak PhysicalForm, TextureComponent i pewnie coœ jeszcze)
-
-		# optymalizacja dzia³ania systemów
 		
 	4. MA£O WA¯NE:
 	
@@ -69,9 +76,6 @@ KWESTIE SILNIKA
 
 		# multimapy do przechowywania komponentów? - "optymalizacja" przy korzystaniu z systemow
 
-		# DWIÊK
-		
-		# crashe przy spamowaniu bombami - nie zaobserwowane od dawna
 		
 KWESTIE GRY
 
