@@ -3,10 +3,11 @@
 #include <SDL_image.h>
 
 #include <queue>
+#include "GameInstance.h"
 #include "EntityManager.h"
-#include "MiscFunctions.h"
 
-DisplayManager::DisplayManager() : _window(WINDOW_WIDTH, WINDOW_HEIGHT), _graphicsManager(GraphicsManager(_window.getRenderer()))
+
+DisplayManager::DisplayManager(GameInstance *gameInstance) : _window(WINDOW_WIDTH, WINDOW_HEIGHT), _graphicsManager(GraphicsManager(_window.getRenderer()))
 {
     printf("new DisplayManager\n");
 
@@ -68,46 +69,50 @@ DisplayManager::~DisplayManager()
             renderuje
 */
 
-void DisplayManager::render(const EntityManager *entityManager, int ms)
+void DisplayManager::render(EntityManager *entityManager, int ms)
 {
-    /// obliczenia kto i gdzie
-    priority_queue<ToRender> trt;
-    for(auto &entity_m : entityManager->entity())
+    // kto i gdzie
+    if(!GameInstance::isPaused())
     {
-        entity_ptr entity = entity_m.second;
-        if(entity->has<PhysicalForm>() && entity->has<TextureComponent>())
+        priority_queue<ToRender> trt;
+        for(auto &entity_m : entityManager->getEntities())
         {
-            SDL_Rect rect = entity->get<PhysicalForm>()->rect(ms);
-            if(isVisible(rect))
+            entity_ptr entity = entity_m.second;
+            if(entity->has<PhysicalForm>() && entity->has<TextureComponent>())
             {
-                SDL_Texture *texture = entity->get<TextureComponent>()->texture(); /// animacje!
-                int z = entity->get<PhysicalForm>()->getZ();
-                double angle = entity->get<PhysicalForm>()->getAngle();
-                trt.push(ToRender(texture, rect, z, angle));
+                SDL_Rect rect = entity->get<PhysicalForm>()->rect(ms);
+                if(isVisible(rect))
+                {
+                    SDL_Texture *texture = entity->get<TextureComponent>()->texture(); /// animacje!
+                    int z = entity->get<PhysicalForm>()->getZ();
+                    double angle = entity->get<PhysicalForm>()->getAngle();
+                    trt.push(ToRender(texture, rect, z, angle));
+                }
             }
         }
-    }
 
-    /// renderowanie
-    SDL_SetRenderTarget(_window.getRenderer(), _gameWorldView);
-    SDL_RenderClear(_window.getRenderer());
+        // renderowanie
+        SDL_SetRenderTarget(_window.getRenderer(), _gameWorldView);
+        SDL_RenderClear(_window.getRenderer());
 
-    while(!trt.empty())
-    {
-        auto &sth = trt.top();
-        if(SDL_RenderCopyEx(_window.getRenderer(), sth.texture, NULL, &sth.rect, degrees(sth.angle), NULL, SDL_FLIP_NONE) < 0)
+        while(!trt.empty())
         {
-            printf("SDL_RenderCopy - Error\n");
+            auto &sth = trt.top();
+            if(SDL_RenderCopyEx(_window.getRenderer(), sth.texture, NULL, &sth.rect, degrees(sth.angle), NULL, SDL_FLIP_NONE) < 0)
+            {
+                printf("SDL_RenderCopy - Error\n");
+            }
+            trt.pop();
         }
-        trt.pop();
+
+        showDialog(text); /// TEST
+
+        SDL_SetRenderTarget(_window.getRenderer(), nullptr); // przywracam właściwy renderer
+
+        SDL_RenderClear(_window.getRenderer());
+        SDL_RenderCopy(_window.getRenderer(), _gameWorldView, nullptr, nullptr);
+        SDL_RenderPresent(_window.getRenderer());
     }
-
-    showDialog(text);
-
-    SDL_SetRenderTarget(_window.getRenderer(), nullptr); /// przywracam właściwy renderer
-    SDL_RenderClear(_window.getRenderer());
-    SDL_RenderCopy(_window.getRenderer(), _gameWorldView, nullptr, nullptr);
-    SDL_RenderPresent(_window.getRenderer());
 }
 
 void DisplayManager::drawConsole(const string &buffer, const deque<string> &commandHistory)

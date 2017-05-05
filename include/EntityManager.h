@@ -13,58 +13,49 @@ using namespace std;
 
 class GraphicsManager;
 class InputManager;
+class GameInstance;
 
 class EntityManager
 {
     public:
-        EntityManager(GraphicsManager *graphicsManager, InputManager *inputManager);
+        EntityManager(GameInstance *gameInstance);
         virtual ~EntityManager();
 
         void update(int ms);
 
-        void addRequest(entity_ptr entity){_toAdd.push(entity);} ///nikt poza ObjectFactory nie powinien miec do tego dostepu
+        void addRequest(entity_ptr entity) {toAdd.push(entity);}
+        void removeRequest(int id);
 
-        const unordered_map<int,entity_ptr> &entity() const{return _entity;} /// a po co to komu?
+        unordered_map<int,entity_ptr> &getEntities() {return entities;}
 
         entity_ptr getWorld();
         entity_ptr getPlayer();
 
-        bool exists(int id){return _entity.find(id) != _entity.end();}
+        bool exists(int id){return entities.find(id) != entities.end();}
 
-        bool isActive(){if(!_active)printf("EntityManager is not active\n");return _active;}
+        bool isActive(){if(!active)printf("EntityManager is not active\n");return active;}
 
-        ObjectFactory *getFactory(){return &_objectFactory;}
+        ObjectFactory *getFactory(){return &objectFactory;}
 
         template<class C>
         void add(weak_ptr<C> component)
         {
-            _component[tindex(C)].push_back(component);
+            components[tindex(C)].push_back(component);
         }
+
     protected:
 
     private:
-        bool _active;
-        //queue<int> _toRemove;
-        queue<entity_ptr> _toAdd;
+        unordered_map<int, entity_ptr> entities; // na vector?
+        unordered_map<type_index, vector<weak_ptr<Component> > >  components;
 
-        //vector<entity_ptr> _entity; /// przebudowac na unordered_map
-        unordered_map<int,entity_ptr> _entity;
-        unordered_map<type_index, vector<weak_ptr<Component> > >  _component;
+        bool active;
 
-        weak_ptr<Entity> _world, _player;
+        queue<entity_ptr> toAdd;
+        queue<int> toRemove;
 
-        ObjectFactory _objectFactory;
-       // entity_ptr    _world, _player;
-        int _nextID;
-
-  //      void removeEntity(int id);
-  //      void removeEntity(entity_ptr entity);
-
-        void addEntity(entity_ptr entity) {entity->setID(_nextID);/*_entity.push_back(entity);*/ _entity.insert({_nextID++, entity});}
-
-//        void removeRequest(int id){printf("to remove %d\n",id);_toRemove.push(id); if(exists(id))_entity[id]->deactivate();}
-//        void removeRequest(entity_ptr entity){_toRemove.push(entity->getID());entity->deactivate();}
-
+        ObjectFactory objectFactory;
+        int nextID;
 };
 
 #endif // ENTITYMANAGER_H

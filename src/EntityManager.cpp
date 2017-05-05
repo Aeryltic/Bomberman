@@ -2,15 +2,17 @@
 
 #include "Entity.h"
 #include "GraphicsManager.h"
+#include "GameInstance.h"
+#include "DisplayManager.h"
 
-EntityManager::EntityManager(GraphicsManager *graphicsManager, InputManager *inputManager)
-                            : _objectFactory(this, graphicsManager, inputManager)
+EntityManager::EntityManager(GameInstance *gameInstance)
+                            : objectFactory(this, gameInstance->getDisplayManager()->getGraphicsManager())
 {
     printf("new EntityManager\n");
-    if(_objectFactory.isActive()) _active = true;
-    else _active = false;
+    if(objectFactory.isActive()) active = true;
+    else active = false;
 
-    _nextID = 0;
+    nextID = 0;
 }
 
 EntityManager::~EntityManager()
@@ -20,55 +22,37 @@ EntityManager::~EntityManager()
 
 void EntityManager::update(int ms)
 {
- //   printf("updating: %llu\n", _entity.size());
- /*
-    for(auto &entity : _entity)
+    for (auto it = entities.begin(); it != entities.end(); )
     {
-        entity->update(ms);
-    }
-    */
-
-    for (auto it = _entity.begin(); it != _entity.end(); )
-    {
-        if (!it->second->isActive()) _entity.erase(it++);
+        if (!it->second->isActive()) entities.erase(it++);
         else ++it;
     }
 
-    /*
-    for(auto entity_m : _entity)
+    while(!toRemove.empty())
     {
-        entity_ptr entity = entity_m.second;
-        if(!entity->isActive())
-        {
-            printf("%d is inactive -> to remove\n",entity->getID());
-            removeRequest(entity->getID());
-        }
+        int id = toRemove.front();
+        toRemove.pop();
+
+        auto it = entities.find(id);
+        if(it != entities.end()) entities.erase(it);
     }
-    */
-    /*
-    while(!_toRemove.empty())
+    while(!toAdd.empty())
     {
-        removeEntity(_toRemove.front());
-        _toRemove.pop();
-    }
-*/
-    while(!_toAdd.empty())
-    {
-        addEntity(_toAdd.front());
-        _toAdd.pop();
+        auto entity = toAdd.front();
+        toAdd.pop();
+
+        entity->setID(nextID);
+        entities.insert({nextID++, entity});
     }
 
 }
-/// dlaczego to usuwanie nie dziala?
-/*
-void EntityManager::removeEntity(int id)
-{
-    auto it = _entity.find(id);
-    if(it != _entity.end()) _entity.erase(it);
-}
 
-void EntityManager::removeEntity(entity_ptr entity)
+void EntityManager::removeRequest(int id)
 {
-    removeEntity(entity->getID());
+    if(exists(id))
+    {
+        printf("to remove %d\n",id);
+        toRemove.push(id);
+        entities[id]->deactivate();
+    }
 }
-*/

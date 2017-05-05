@@ -45,11 +45,10 @@ enum EventType
     EVENT_REMOVE,
     EVENT_ADD,
     EVENT_PAUSE,
-    EVENT_KILLED,
-    EVENT_BOMB_DROPPED,
-    EVENT_BOOM,
+    EVENT_CONSOLE_TOGGLE,
 
-    NUMEVENTS
+
+    NUMEVENTS               /// to ma tu być
 };
 
 #endif // ENUMERATIONS_H_INCLUDED

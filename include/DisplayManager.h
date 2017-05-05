@@ -18,6 +18,8 @@ class ObjectContainer;
 
 using namespace std;
 
+class GameInstance;
+
 class DisplayManager
 {
     /// -----------------------------------
@@ -37,11 +39,11 @@ class DisplayManager
     };
     /// -----------------------------------
     public:
-        DisplayManager();
+        DisplayManager(GameInstance *gameInstance); /// to tylko fake
         virtual ~DisplayManager();
 
         void drawConsole(const string &buffer, const deque<string> &commandHistory);
-        void render(const EntityManager *entityManager, int ms);
+        void render(EntityManager *entityManager, int ms);
 
         bool isVisible(const SDL_Rect &rect);
 
@@ -66,7 +68,6 @@ class DisplayManager
         SDL_Rect _windowRect;
 
         SDL_Texture *_gameWorldView;
-        SDL_Texture *_UI; /// chocia¿ mo¿e bez tego siê obêdzie
 
         TTF_Font* consoleFont;
         int consoleFontSize;
@@ -74,9 +75,6 @@ class DisplayManager
 
         SDL_Color clearColor;
         SDL_Texture *gameViewBuffer;
-
-
-
 };
 
 #endif // DISPLAYMANAGER_H

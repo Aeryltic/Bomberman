@@ -10,17 +10,19 @@
 class LogicManager
 {
     public:
-        LogicManager(EntityManager *entityManager);
+        LogicManager(GameInstance *gameInstance);
         virtual ~LogicManager();
         void update(int ms_passed);
 
-        bool isActive(){if(!_active)printf("LogicManager is not active\n");return _active;}
+        bool isActive(){if(!active)printf("LogicManager is not active\n");return active;}
     protected:
 
     private:
-        bool _active;
-        ControllingSystem *_controlSystem;
-        EntityManager *_entityManager;
+        bool active;
+        ControllingSystem *controlSystem;
+        EntityManager *entityManager;
+
+        GameInstance *gameInstance;
 };
 
 #endif // LOGICMANAGER_H

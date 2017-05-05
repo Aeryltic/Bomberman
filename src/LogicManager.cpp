@@ -1,21 +1,25 @@
 #include "LogicManager.h"
 
-LogicManager::LogicManager(EntityManager *entityManager)
+#include "GameInstance.h"
+
+LogicManager::LogicManager(GameInstance *gameInstance)
 {
     printf("new LogicManager\n");
-    _entityManager = entityManager;
-    _controlSystem = new ControllingSystem(_entityManager);
-    _active = _controlSystem->isActive();
+
+    entityManager = gameInstance->getEntityManager();
+
+    controlSystem = new ControllingSystem(entityManager);
+    active = controlSystem->isActive();
 }
 
 LogicManager::~LogicManager()
 {
     printf("delete LogicManager\n");
-    delete _controlSystem;
+    delete controlSystem;
 }
 
 void LogicManager::update(int ms_passed)
 {
-    _entityManager->update(ms_passed);
-    _controlSystem->update(ms_passed);
+    entityManager->update(ms_passed);
+    controlSystem->update(ms_passed);
 }

@@ -1,6 +1,5 @@
 #include "ControllingSystem.h"
 
-#include "InputManager.h"
 #include "MiscFunctions.h"
 
 ControllingSystem::ControllingSystem(EntityManager *entityManager)

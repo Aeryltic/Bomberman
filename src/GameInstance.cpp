@@ -3,29 +3,42 @@
 #include <SDL.h>
 #include <stdio.h>
 
-#include "DisplayManager.h"
-#include "InputManager.h"
-#include "LogicManager.h"
-#include "EntityManager.h"
-#include "ObjectFactory.h"
-#include "EventManager.h"
-#include "ScriptSystem.h"
-
 #include "Structures.h"
 
 #include <ctime>
 #include <cstdlib>
 
+#include "DisplayManager.h"
+#include "LogicManager.h"
+#include "EntityManager.h"
+#include "ObjectFactory.h"
+#include "EventManager.h"
+#include "ScriptSystem.h"
+#include "Console.h"
+
+bool GameInstance::paused = false;
+
 GameInstance::GameInstance()
 {
-    printf("new GameInstance\n");
-    _working = true;
-    _paused = false;
+    printf("creating GameInstance...");
+    working = true;
+
+    printf("done\n");
 }
 
 GameInstance::~GameInstance()
 {
     printf("delete GameInstance\n");
+
+    SDL_RemoveTimer(timerID);
+
+    delete eventManager;
+    delete displayManager;
+    delete logicManager;
+    delete entityManager;
+    delete scriptSystem;
+    delete console;
+
     SDL_Quit();
 }
 
@@ -33,27 +46,6 @@ int GameInstance::run()
 {
     if(init() < 0)
     {
-        return -1;
-    }
-    //printf("%llu\n",sizeof(SDL_Event));
-    shared_ptr<DisplayManager>  _displayManager = make_shared<DisplayManager>();
-    shared_ptr<InputManager>    _inputManager = make_shared<InputManager>();
-    shared_ptr<EntityManager>   _entityManager = make_shared<EntityManager>(_displayManager->getGraphicsManager(), _inputManager.get());
-    shared_ptr<LogicManager>    _logicManager = make_shared<LogicManager>(_entityManager.get());
-    shared_ptr<ScriptSystem>    _scriptSystem = make_shared<ScriptSystem>("scripts/script.lua", _displayManager.get());
-    shared_ptr<Console>         _console = make_shared<Console>(_displayManager.get(), _scriptSystem.get());
-    shared_ptr<EventManager>    _eventManager = make_shared<EventManager>(_inputManager.get(), _console.get());
-
-    if(!(
-         _displayManager->isActive()    &&
-         _inputManager->isActive()      &&
-         _entityManager->isActive()     &&
-         _logicManager->isActive()      &&
-         _eventManager->isActive()      &&
-         _scriptSystem->isActive()
-        ))
-    {
-        printf("some system(s) is(are) not active\n");
         return -1;
     }
 
@@ -64,31 +56,27 @@ int GameInstance::run()
     unsigned previous = SDL_GetTicks();
     unsigned lag = 0.0;
 
-   /// TEST
-//    if(!_entityManager->getFactory()->createWorld("maps/lvl1")) return -1; /// przydaloby sie zeby lepiej sprawdzac czy gre faktycznie mozna zaczac
-   /// KONIEC TESTU
-
-    while(_working)
+    while(working)
     {
         unsigned current = SDL_GetTicks();
         unsigned elapsed = current - previous;
         previous = current;
 
-        _inputManager->update();
-        _eventManager->handleEvents();
+        eventManager->handleEvents();
+        console->run();
 
-        if(!_paused)
+        if(!paused)
         {
             lag += elapsed;
             while (lag >= TIMESTEP)
             {
-                _logicManager->update(TIMESTEP);
-                _scriptSystem->update(TIMESTEP);
+                logicManager->update(TIMESTEP);
+                scriptSystem->update(TIMESTEP);
                 lag -= TIMESTEP;
             }
         }
 
-        _displayManager->render(_entityManager.get(), lag);
+        displayManager->render(entityManager, lag);
         frames++;
 
         if(SDL_GetTicks() - last_check >= 1000)
@@ -105,17 +93,91 @@ int GameInstance::run()
 
 int GameInstance::init()
 {
-    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0)
 	{
 		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 		return -1;
 	}
+    /// rozdzielić konstrukcję i inicjalizację systemów, bo crashe przy innej kolejności konstrukcji
+
+    //Uint32 delay = (33 / 10) * 10;  /* To round it down to the nearest 10 ms */
+    //SDL_TimerID my_timer_id = SDL_AddTimer(delay, my_callbackfunc, my_callback_param);
+    //timerID = SDL_AddTimer()
+
+	displayManager = new DisplayManager(this);
+    entityManager = new EntityManager(this);
+    eventManager = new EventManager(this);
+    logicManager = new LogicManager(this);
+    scriptSystem = new ScriptSystem(this);
+    console = new Console(this);
+
+    console->init();
+
+    if(!(
+         displayManager->isActive()    &&
+         entityManager->isActive()     &&
+         logicManager->isActive()      &&
+         eventManager->isActive()      &&
+         scriptSystem->isActive()
+        ))
+    {
+        printf("some systems are not active\n");
+        return -1;
+    }
+
+    EventManager::registerEventCallback(SDL_QUIT, [this](SDL_Event const& event)
+    {
+        quit();
+    });
+
+    EventManager::registerEventCallback(SDL_USEREVENT, [this](SDL_Event const& event)
+    {
+        SDL_Event pushed;
+        switch (event.user.code)
+        {
+            case EVENT_LOST:
+                printf("EVENT_LOST\n");
+                SDL_memset(&pushed, 0, sizeof(pushed));
+                pushed.type = SDL_QUIT;
+                SDL_PushEvent(&pushed);
+                break;
+            case EVENT_WON:
+                printf("EVENT_WON\n");
+                SDL_memset(&pushed, 0, sizeof(pushed));
+                pushed.type = SDL_QUIT;
+                SDL_PushEvent(&pushed);
+                break;
+            case EVENT_PAUSE:
+                tooglePause();
+                break;
+        }
+    });
+
+    EventManager::registerEventCallback(SDL_KEYDOWN, [this](SDL_Event const& event)
+    {
+        SDL_Keycode keycode = event.key.keysym.sym;
+        switch (keycode)
+        {
+        case SDLK_ESCAPE:
+            SDL_Event pushed;
+            pushed.type = SDL_QUIT;
+            SDL_PushEvent(&pushed);
+            break;
+        case SDLK_p:
+            EventManager::pushUserEvent(EVENT_PAUSE,NULL,NULL);
+            break;
+        case SDLK_BACKQUOTE:
+            EventManager::pushUserEvent(EVENT_CONSOLE_TOGGLE,NULL,NULL);
+            break;
+        }
+    });
+
     return 0;
 }
 
 void GameInstance::quit()
 {
-    _working = false;
+    working = false;
 }
 
 GameInstance &GameInstance::getInstance()
@@ -123,3 +185,10 @@ GameInstance &GameInstance::getInstance()
     static GameInstance instance;
     return instance;
 }
+
+DisplayManager  *GameInstance::getDisplayManager(){return displayManager;}
+EntityManager   *GameInstance::getEntityManager(){return entityManager;}
+LogicManager    *GameInstance::getLogicManager(){return logicManager;}
+ScriptSystem    *GameInstance::getScriptSystem(){return scriptSystem;}
+Console         *GameInstance::getConsole(){return console;}
+EventManager    *GameInstance::getEventManager(){return eventManager;}

@@ -45,3 +45,8 @@ void Entity::activate()
     }
     _active = true;
 }
+
+void Entity::receiveMessage(/*wiadomość*/) /// odbiera wiadomo i przesyła do komponentu, który zarejestrował się jako odbiorca tego typu wiadomości
+{
+
+}

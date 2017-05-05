@@ -2,28 +2,36 @@
 #define CONSOLE_H
 
 #include <deque>
-
-#include <SDL.h>
-
-#include "DisplayManager.h"
-#include "ScriptSystem.h"
+#include <string>
+class GameInstance;
+class DisplayManager;
+class ScriptSystem;
 
 using namespace std;
+
 class Console
 {
     public:
-        Console(DisplayManager *displayManager, ScriptSystem *scriptSystem);
+        Console(GameInstance *gameInstance);
         virtual ~Console();
         void execute(const string &command);
         void run();
+
+        void init();
+        void toggle();
     protected:
 
     private:
         string buffer;
         deque<string> commandHistory;
-        bool _active;
-        DisplayManager *_displayManager;
-        ScriptSystem *_scriptSystem;
+        deque<string> history;
+        bool active;
+        DisplayManager *displayManager;
+        ScriptSystem *scriptSystem;
+
+        int commandHistoryIndex;
+        char *text;
+        bool visible;
 };
 
 #endif // CONSOLE_H

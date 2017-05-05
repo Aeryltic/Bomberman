@@ -68,29 +68,6 @@ class PhysicalForm : public Component // oddzieliæ kwestie zwi¹zane z ruchem o
         double getW(){return _w;}
         double getH(){return _h;}
 
-/*
-        void setSolid(bool s){_solid = s;}
-
-        void needsUpdate(){_updated = false;}
-
-        void accelerate(int ms) {_v += _a * ms / 1000.0; if(_v > _maxV) _v = _maxV;}
-        void deccelerate(int ms) {_v -= 2 * _a * ms / 1000.0; if(_v < 0.0) _v = 0.0;}
-
-        void moveTo(double x, double y){_x = x; _y = y;}
-        void moveBy(double dx, double dy){_x += dx; _y += dy;}
-
-        void printPos() const {printf("%.2lf x %.2lf\n",_x,_y);}
-
-        void setMovable() {_static = false;}
-        void setStatic() {_static = true;}
-
-
-        void setMaxSpeed(double maxV) {_maxV = maxV;}
-
-        void setSpeed(double v) {_v = v;}
-        void setAngle(double a) {_angle = a;}
-        void setSpeedToMax() {_v = _maxV;}
-*/
     protected:
         void work(int ms);
 
@@ -100,18 +77,8 @@ class PhysicalForm : public Component // oddzieliæ kwestie zwi¹zane z ruchem o
         double _z; // wysokosc uzywana narazie tylko w renderowaniu
         double _w, _h;
         double _angle; // chociaż też chyba nie powinien być tu
-
-        //vector2d _position;
-        /*
-        bool _solid;
-        bool _static;
-
-        bool _updated;
-*/
-        //double _maxV, _v, _angle;
-        //double _a; // acceleration pixels/(s^2)
 };
-/// dodaæ AnimationComponent
+/// dodać AnimationComponent
 class TextureComponent : public Component /// uses PhysicalForm
 {
     public:

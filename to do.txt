@@ -1,6 +1,43 @@
 KWESTIE SILNIKA
 
-	USUN¥Æ GRÊ SILNIK ZACZ¥Æ OD NOWA
+	0. WARTE UWAGI MYŒLI
+	
+	GAME STATE'y - KONIECZNIE
+	
+	komponenty przechowywane w systemach jak np. TextureComponent(chocia¿ to powinno byæ bardziej ogólne: GraphiscComponent?) w DisplayManager
+	
+	nie wywo³ywaæ funkcji innych obiektów, ale wysy³aæ eventy kiedy tylko siê da
+	
+	atrybuty bytów do zapisywania stanu gry, tworzone przez komponenty (jakaœ mapa?)
+	komponenty mog³oby ³atwo dzieliæ siê tymi atrybutami, bez przepytywania swojego Entity o posiadanie jakiegoœ komponentu i w ogóle
+	
+	id<0 dla archetypów i id>0 dla rzeczywistych obiektów
+	
+	uchwyty (handle) - dla obiektów w tablicach, ¿eby po indeksach dzia³aæ i optymalizowaæ cache
+	
+	komponenty maj¹ id swojej "rodziny" oraz swój w³asny id (jeœli mamy jak¹œ hierarchiê wœród komponentów)
+	
+	czy komponenty maj¹ coœ faktycznie robiæ czy byæ tylko kontenerami?
+	
+	sendMessage and receiveMessage for both Entities and Components
+		
+	NotificationSystem - obiekty rejestruj¹ siê do nich, ¿e s³uchaj¹ danych typów wiadomoœci
+	albo systemy kontroluj¹ce komponenty rozsy³aj¹ce wiadomoœci do komponentów bez rejestracji
+	
+	nadawcy i odbiorcy wiadomoœci w pewnych przypadkach
+	
+	"""
+	Also, I did not mention Links yet. Those are a different concept. The engine uses them to link objects together. Basic link type is an inheritance link, which inherits property (component) values from object to other object. There are numerous link types, for example ControlDevice link will route any incomming messages of a certain kind to the object(s) that the link targets, etc. 
+	(Imagine a switch linked with a light with ControlDevice link, using the switch will cause a SwitchOn/SwitchOff message to appear, and this message will be routed to the light, which reacts to this signal)
+	"""
+	
+	renderNodes czy coœ w tym stylu
+	
+	same komponenty sk³adaj¹ siê z czeœci? np. PhysicalForm z³o¿ony z Position, Rotation, "Mesh", Movement - do zmniejszenia rozdrobnienia (nie ka¿dy obiekt potrzebuje kompletnego physical form, niektóre bêd¹ statyczne, inne niewidzialne, albo w ogóle bez kszta³tu i to wszystko w jednym komponencie, ale do tego potrzeba jakiejœ "kompilacji", ¿eby nie traciæ czasu na badanie za ka¿dmy razem z czego sk³ada siê komponent)
+	
+	Entity::clone()
+	
+	
 
 	1. G£ÓWNE CELE:
 	
@@ -8,11 +45,9 @@ KWESTIE SILNIKA
 		
 		# konsola nie powinna ingerowaæ w g³ówn¹ pêtlê gry (albo usprawniæ t¹ drug¹, ¿eby sobie z tym radzi³a)
 		
+		# tak czy siak trzeba usprawniæ g³ówn¹ pêtlê
+		
 		# eventy zmieniaj¹ STAN obiektów(komponentów), co jest obs³ugiwane w g³ównej pêtli update'ów
-		
-		# konsola
-		
-		# wywaliæ InputManagera
 	
 		# funkcja dla ka¿dego Entity buduj¹ca jego funkcjê update(unsigned ms_passed) z jego komponentów (generuje automatycznie powi¹zania miêdzy komponentami, by oby³o siê bez sprawdzania za ka¿dym razem czy entity ma jakiœ komponent) - rebuild()
 			to ju¿ na poziomie skryptów

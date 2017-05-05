@@ -3,10 +3,10 @@
 #include "Constants.h"
 #include "Entity.h"
 #include "EntityManager.h"
-ObjectFactory::ObjectFactory(EntityManager *entityManager, GraphicsManager *graphicsManager, InputManager *inputManager) :
-                _entityManager(entityManager), _graphicsManager(graphicsManager), _inputManager(inputManager)
+ObjectFactory::ObjectFactory(EntityManager *entityManager, GraphicsManager *graphicsManager) :
+                _entityManager(entityManager), _graphicsManager(graphicsManager)
 {
-    if(_graphicsManager->isActive() && _inputManager->isActive()) _active = true;
+    if(_graphicsManager->isActive()) _active = true;
     else _active = false;
 }
 ObjectFactory::~ObjectFactory()

@@ -25,8 +25,6 @@ class Entity : public std::enable_shared_from_this<Entity>
 
         bool add(shared_ptr<Component> component);
 
-
-
         void update(int ms);
 
         compMap &components(){return _component;}
@@ -37,6 +35,8 @@ class Entity : public std::enable_shared_from_this<Entity>
         void activate();
         void deactivate(){_active = false;}
         bool isActive(){return _active;}
+
+        void receiveMessage(/*wiadomoœæ*/); // do otrzymywania wiadomoœci, podobnie jak przy eventach, ale raczej takich gdzie chcemy natychmiastowej reakcji (jak miêdzy komponentami jednego bytu)
 
     protected:
 

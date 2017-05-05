@@ -1,100 +1,145 @@
 #include "Console.h"
+#include <SDL.h>
 
-Console::Console(DisplayManager *displayManager, ScriptSystem *scriptSystem)
+#include "GameInstance.h"
+#include "DisplayManager.h"
+#include "ScriptSystem.h"
+#include "EventManager.h"
+#include "Enumerations.h"
+
+Console::Console(GameInstance *gameInstance)
 {
-    _displayManager = displayManager;
-    _scriptSystem = scriptSystem;
+    this->displayManager = gameInstance->getDisplayManager();
+    this->scriptSystem = gameInstance->getScriptSystem();
+
+    commandHistoryIndex = -1;
+    text = new char[1024];
+    text[0] = 0;
+
+    visible = false;
+
+    active = true;
 }
 
 Console::~Console()
 {
-    //dtor
+    delete [] text;
 }
+
 void Console::run()
 {
-    SDL_StartTextInput();
-
-    char *text = new char[1024];
-    text[0] = 0;
-    int commandHistoryIndex = -1;
-    bool done = false;
-    while (!done)
+    if (visible)
     {
-        SDL_Event event;
-        if (SDL_PollEvent(&event))
-        {
-            switch (event.type)
-            {
-                case SDL_TEXTEDITING:
-                    /*
-                    Update the composition text.
-                    Update the cursor position.
-                    Update the selection length (if any).
-                    */
-                    //printf("EDITING: %s\n", event.edit.text);
-//                    buffer = string(event.edit.text);
-//                    composition = event.edit.text;
-//                    cursor = event.edit.start;
-//                    selection_len = event.edit.length;
-                    break;
-                case SDL_TEXTINPUT:
-                    /* Add new text onto the end of our text */
-                    strcat(text, event.text.text);
-                    buffer = string(text);
-                    //printf("INPUT: %s\n", text);
-                    //execute(string(event.text.text));
-                    break;
-                case SDL_KEYDOWN:
-                    SDL_Keycode keycode = event.key.keysym.sym;
-                    int len = strlen(text);
-                    switch (keycode)
-                    {
-                        case SDLK_ESCAPE:
-                            done = true;
-                            break;
-
-                        case SDLK_RETURN:
-                            if(len)
-                            {
-                                execute(buffer);
-                                text[0] = 0;
-                                commandHistoryIndex = -1;
-                            }
-                            break;
-
-                        case SDLK_BACKSPACE:
-                            if(len)
-                            {
-                                text[len - 1] = 0;
-                            }
-                            break;
-
-                        case SDLK_UP:
-                            if(commandHistoryIndex < int(commandHistory.size()) - 1)
-                            {
-                                commandHistoryIndex++;
-                                strcpy(text, commandHistory[commandHistoryIndex].c_str());
-                            }
-                            break;
-
-                        case SDLK_DOWN:
-                            if(commandHistoryIndex > 0)
-                            {
-                                commandHistoryIndex--;
-                                strcpy(text, commandHistory[commandHistoryIndex].c_str());
-                            }
-                    }
-                    buffer = string(text);
-                    break;
-            }
-        }
-        _displayManager->drawConsole(buffer, commandHistory);
+        displayManager->drawConsole(buffer, history); // to te¿ nie powinno byæ tak
     }
-    SDL_StopTextInput();
 }
 void Console::execute(const string &command)
 {
-    _scriptSystem->execute(command);
+    string output = scriptSystem->execute(command);
     commandHistory.push_front(command);
+    history.push_front(command);
+    if(output.length())history.push_front(output);
     printf("executed: %s\n", command.c_str());
+}
+
+void Console::init()
+{
+    EventManager::registerEventCallback(SDL_USEREVENT, [this](SDL_Event const& event)
+    {
+        switch (event.user.code)
+        {
+            case EVENT_CONSOLE_TOGGLE:
+                toggle();
+                EventManager::pushUserEvent(EVENT_PAUSE, nullptr, nullptr);
+                break;
+        }
+    });
+    EventManager::registerEventCallback(SDL_TEXTEDITING, [this](SDL_Event const& event)
+    {
+        if(visible)
+        {
+            /*
+            Update the composition text.
+            Update the cursor position.
+            Update the selection length (if any).
+            */
+            printf("EDITING: %s\n", event.edit.text);
+            //buffer = string(event.edit.text);
+            //composition = event.edit.text;
+            //cursor = event.edit.start;
+            //selection_len = event.edit.length;
+            buffer = string(text);
+        }
+
+    });
+    EventManager::registerEventCallback(SDL_TEXTINPUT, [this](SDL_Event const& event)
+    {
+        if(visible)
+        {
+            /* Add new text onto the end of our text */
+            strcat(text, event.text.text);
+            buffer = string(text);
+            //printf("INPUT: %s\n", text);
+            //execute(string(event.text.text));
+        }
+
+    });
+    EventManager::registerEventCallback(SDL_KEYDOWN, [this](SDL_Event const& event)
+    {
+        if(visible)
+        {
+            SDL_Keycode keycode = event.key.keysym.sym;
+            int len = strlen(text);
+            switch (keycode)
+            {
+                case SDLK_RETURN:
+                    if(len)
+                    {
+                        execute(buffer);
+                        text[0] = 0;
+                        commandHistoryIndex = -1;
+                    }
+                    break;
+
+                case SDLK_BACKSPACE:
+                    if(len)
+                    {
+                        text[len - 1] = 0;
+                    }
+                    break;
+
+                case SDLK_UP:
+                    if(commandHistoryIndex < int(commandHistory.size()) - 1)
+                    {
+                        commandHistoryIndex++;
+                        strcpy(text, commandHistory[commandHistoryIndex].c_str());
+                    }
+                    break;
+
+                case SDLK_DOWN:
+                    if(commandHistoryIndex > 0)
+                    {
+                        commandHistoryIndex--;
+                        strcpy(text, commandHistory[commandHistoryIndex].c_str());
+                    }
+            }
+            buffer = string(text);
+        }
+    });
+}
+
+void Console::toggle()
+{
+    visible = !visible;
+    if(visible)
+    {
+        SDL_StartTextInput();
+        text[0] = 0;
+        commandHistoryIndex = -1;
+    }
+    else
+    {
+        SDL_StopTextInput();
+    }
+    printf("console toggled %s\n", ((visible) ? "ON" : "OFF"));
 }

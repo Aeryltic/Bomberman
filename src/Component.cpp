@@ -1,5 +1,4 @@
 #include "Component.h"
-#include "InputManager.h"
 #include "Entity.h"
 #include <cmath>
 #include "EntityManager.h"
