@@ -2,7 +2,7 @@
 #define DISPLAYMANAGER_H
 
 #include "AppWindow.h"
-#include "GraphicsManager.h"
+//#include "GraphicsManager.h"
 
 #include <memory>
 #include <SDL.h>
@@ -10,11 +10,13 @@
 
 #include <deque>
 
-const int WINDOW_WIDTH = 640;
-const int WINDOW_HEIGHT = 480;
+#include "Enumerations.h"
+
+const int WINDOW_WIDTH = 1280;
+const int WINDOW_HEIGHT = 720;
 
 class EntityManager;
-class ObjectContainer;
+//class ObjectContainer;
 
 using namespace std;
 
@@ -47,10 +49,10 @@ class DisplayManager
 
         bool isVisible(const SDL_Rect &rect);
 
-        GraphicsManager *getGraphicsManager(){return &_graphicsManager;}
+//        GraphicsManager *getGraphicsManager(){return &_graphicsManager;}
         bool isActive(){if(!_active)printf("DisplayManager is not active\n");return _active;}
 
-        void showDialog(const string &text);
+        void showDialog(const string &text, BoxPosition position = POS_CENTER);
         void drawRectangle(const SDL_Rect &rect, const SDL_Color &color);
         void drawText(const string &text, int x, int y, const SDL_Color &color);
 
@@ -58,13 +60,15 @@ class DisplayManager
         string text;
         void setText(const std::string& test){text = test;}
         string getText() const {return text;}
+
+        void init();
     /// -----------
     protected:
 
     private:
         bool _active;
         AppWindow _window;
-        GraphicsManager _graphicsManager;
+//        GraphicsManager _graphicsManager;
         SDL_Rect _windowRect;
 
         SDL_Texture *_gameWorldView;

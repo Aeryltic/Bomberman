@@ -10,7 +10,7 @@
 
 using namespace std;
 
-typedef unordered_map<type_index, shared_ptr<Component> > compMap;
+typedef unordered_map<type_index, shared_ptr<Component> > component_map;
 
 class Entity : public std::enable_shared_from_this<Entity>
 {
@@ -21,29 +21,29 @@ class Entity : public std::enable_shared_from_this<Entity>
         template<class C> bool has() const;
         template<class C> C* get();
         template<class C> bool remove();
-        inline bool has(type_index key) const;
 
         bool add(shared_ptr<Component> component);
 
+        component_map &getComponents(){return components;}
+
+        void setID(int id){this->id = id;}
+        int getID(){return id;}
+/*
         void update(int ms);
-
-        compMap &components(){return _component;}
-
-        void setID(int id){_id = id;}
-        int getID(){return _id;}
-
         void activate();
         void deactivate(){_active = false;}
         bool isActive(){return _active;}
-
-        void receiveMessage(/*wiadomoœæ*/); // do otrzymywania wiadomoœci, podobnie jak przy eventach, ale raczej takich gdzie chcemy natychmiastowej reakcji (jak miêdzy komponentami jednego bytu)
+*/
+        //void receiveMessage(/*wiadomoœæ*/); // do otrzymywania wiadomoœci, podobnie jak przy eventach, ale raczej takich gdzie chcemy natychmiastowej reakcji (jak miêdzy komponentami jednego bytu)
 
     protected:
 
     private:
-        int _id;
-        compMap _component;
-        bool _active;
+        inline bool has(type_index key) const;
+
+        int id;
+        component_map components;
+//        bool _active;
 };
 
 // TEMPLATES
@@ -52,8 +52,8 @@ template<class C>
 C* Entity::get()
 {
     type_index key = tindex(C);
-    compMap::iterator found = _component.find(key);
-    if(found != _component.end())
+    component_map::iterator found = components.find(key);
+    if(found != components.end())
     {
         return static_cast<C*>(found->second.get());
     }
@@ -64,16 +64,16 @@ template<class C>
 bool Entity::has() const
 {
     type_index key = tindex(C);
-    return _component.find(key) != _component.end();
+    return components.find(key) != components.end();
 }
 
 template<class C>
 bool Entity::remove()
 {
     type_index key = tindex(C);
-    if(_component.find(key) != _component.end())
+    if(components.find(key) != components.end())
     {
-        _component.erase(key);
+        components.erase(key);
         return true;
     }
     return false;

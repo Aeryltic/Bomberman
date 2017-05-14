@@ -4,7 +4,7 @@
 /* przechowuje i zarzadza teksturami */
 
 #include <unordered_map>
-#include "AppWindow.h"
+//#include "AppWindow.h"
 #include "Constants.h"
 
 using namespace std;
@@ -20,7 +20,7 @@ class GraphicsManager
             SDL_Texture *_texture;
     };
     public:
-        GraphicsManager(SDL_Renderer *renderer);
+        GraphicsManager(/*SDL_Renderer *renderer*/);
         virtual ~GraphicsManager();
         SDL_Texture *getTexture(const string &path);
         SDL_Texture *getTexture(const char *path);
@@ -30,6 +30,8 @@ class GraphicsManager
         int copyTexToRenderer(const char *tex, SDL_Rect *rect);
 
         bool isActive(){return _active;}
+
+        void init(SDL_Renderer *renderer);
     protected:
 
     private:

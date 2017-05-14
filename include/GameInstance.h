@@ -2,12 +2,16 @@
 #define GAMEINSTANCE_H
 
 #include <stdio.h>
+#include <GameState.h>
+#include <vector>
+
 class DisplayManager;
 class EntityManager;
-class LogicManager;
+//class LogicManager;
 class ScriptSystem;
 class Console;
 class EventManager;
+class ComponentSystem;
 
 class GameInstance
 {
@@ -19,8 +23,7 @@ class GameInstance
 
          DisplayManager  *getDisplayManager();
          EntityManager   *getEntityManager();
-         LogicManager    *getLogicManager();
-         ScriptSystem    *getScriptSystem();
+//         LogicManager    *getLogicManager();
          Console         *getConsole();
          EventManager    *getEventManager();
 
@@ -28,12 +31,15 @@ class GameInstance
     protected:
 
     private:
+        /// to w ogóle nie powinny być pointery
         DisplayManager  *displayManager;
         EntityManager   *entityManager;
-        LogicManager    *logicManager;
-        ScriptSystem    *scriptSystem;
+        ComponentSystem *componentSystem;
+//        LogicManager    *logicManager;
         Console         *console;
         EventManager    *eventManager;
+
+//        std::vector<GameState*> gameStates;
 
         int timerID; // SDL_timer_ID
 

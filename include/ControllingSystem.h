@@ -1,9 +1,10 @@
 #ifndef CONTROLLINGSYSTEM_H
 #define CONTROLLINGSYSTEM_H
-
+/*
 #include "EntityManager.h"
 #include "ObjectFactory.h"
 /// te wszystkie funkcje powinny albo brac ca³e obiekty albo same komponenty, a nie raz to a raz to
+
 class ControllingSystem
 {
     public:
@@ -19,12 +20,12 @@ class ControllingSystem
         bool _active;
 
         EntityManager *_entityManager;
-        ObjectFactory *_objectFactory;
+//        ObjectFactory *_objectFactory;
 
-        /*
-        template<class T>
-        unordered_multimap<T,shared_ptr<T>> _component;
-        */
+
+//        template<class T>
+//        unordered_multimap<T,shared_ptr<T>> _component;
+
 };
-
+*/
 #endif // CONTROLLINGSYSTEM_H

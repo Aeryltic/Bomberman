@@ -5,22 +5,23 @@
 using namespace luabridge;
 using namespace std;
 
-ScriptSystem::ScriptSystem(GameInstance *gameInstance)
-{
-    this->displayManager = gameInstance->getDisplayManager();
+ScriptSystem ScriptSystem::instance;
 
+ScriptSystem::ScriptSystem()
+{
     L = luaL_newstate();
     luaL_openlibs(L);
 
-    registerEverything();
-
-    string filename("scripts/script.lua");
+    string filename("scripts/init.lua");
 
     if (luaL_dofile(L, filename.c_str()))
     {
         printf("Error: script not loaded/executed (%s)\n", filename.c_str());
+        printf("Error: %s\n",lua_tostring(L, -1));
         L = nullptr;
+        active = false;
     }
+    else active = true;
 
     initialize();
 }
@@ -33,14 +34,13 @@ void ScriptSystem::initialize()
 {
     //LuaRef passDisplay = getGlobal(L, "passDisplay");
     //passDisplay(*_displayManager);
-    active = true;
 }
 void ScriptSystem::update(int ms)
 {
     LuaRef updateTime = getGlobal(L, "updateTime");
-    updateTime(ms);
+    updateTime();
 }
-
+/*
 void ScriptSystem::registerEverything()
 {
     printf("registering\n");
@@ -55,14 +55,14 @@ void ScriptSystem::registerEverything()
 /// -------
     printf("done\n");
 }
-
+*/
 string ScriptSystem::execute(const string &command)
 {
     /// to by trzeba dopracować, żeby syfu nie robić
     printf("executing: %s\n",command.c_str());
     try
     {
-        if(luaL_loadstring(L, command.c_str()) || lua_pcall(L,0,0,0))
+        if(luaL_dostring(L, command.c_str()))
         {
             return lua_tostring(L, -1);
         }

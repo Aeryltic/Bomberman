@@ -1,33 +1,58 @@
 #include "ObjectFactory.h"
-#include <fstream>
-#include "Constants.h"
+
 #include "Entity.h"
 #include "EntityManager.h"
-ObjectFactory::ObjectFactory(EntityManager *entityManager, GraphicsManager *graphicsManager) :
-                _entityManager(entityManager), _graphicsManager(graphicsManager)
+#include "Components.h"
+
+ObjectFactory::ObjectFactory()
 {
-    if(_graphicsManager->isActive()) _active = true;
-    else _active = false;
+    constructors["ant"] = ([](EntityManager *entityManager, double x, double y) -> shared_ptr<Entity>
+    {
+        shared_ptr<Entity> e = entityManager->make_entity();
+        e->add(entityManager->make_component<CPhysicalForm>(e,x,y,0,15,15));
+        e->add(entityManager->make_component<CAspect>(e,SDL_Color{.r=255,.g=0,.b=0,.a=255}));
+
+        e->add(entityManager->make_component<CMovement>(e,100));
+
+        e->add(entityManager->make_component<CSmell>(e));
+        return e;
+    });
+
+    constructors["tree"] = ([](EntityManager *entityManager, double x, double y) -> shared_ptr<Entity>
+    {
+        shared_ptr<Entity> e = entityManager->make_entity();
+        e->add(entityManager->make_component<CPhysicalForm>(e,x,y,0,30,30));
+        e->add(entityManager->make_component<CAspect>(e,SDL_Color{.r=50,.g=155,.b=0,.a=155}));
+        //e->add(entityManager->make_component<CMovement>(e,100));
+        e->add(entityManager->make_component<CEnergyStore>(e, 100));
+        e->add(entityManager->make_component<CBreeder>(e, "grain", 500, 1, 5));
+        //e->add(entityManager->make_component<CSmell>(e));
+        return e;
+    });
+
+    constructors["grain"] = ([](EntityManager *entityManager, double x, double y) -> shared_ptr<Entity>
+    {
+        shared_ptr<Entity> e = entityManager->make_entity();
+        e->add(entityManager->make_component<CPhysicalForm>(e,x,y,0,10,10));
+        e->add(entityManager->make_component<CAspect>(e,SDL_Color{.r=0,.g=155,.b=0,.a=255}));
+        //e->add(entityManager->make_component<CMovement>(e,100));
+        //e->add(entityManager->make_component<CEnergyStore>(e, 0));
+        e->add(entityManager->make_component<CSmell>(e));
+        return e;
+    });
 }
+
 ObjectFactory::~ObjectFactory()
 {
-    printf("delete ObjectFactory\n");
+    //dtor
 }
 
-entity_ptr ObjectFactory::createDefault()
+shared_ptr<Entity> ObjectFactory::newObject(string type, double x, double y, EntityManager *entityManager)
 {
-    entity_ptr def = make_shared<Entity>();
-    _entityManager->addRequest(def);
-    return def;
-}
-
-inline bool ObjectFactory::addTo(shared_ptr<Component> component, shared_ptr<Entity> entity)
-{
-    if(entity->add(component))
+    shared_ptr<Entity> e = nullptr;
+    if(constructors.find(type) != constructors.end())
     {
-        _entityManager->add(weak_ptr<Component>(component));
-        return true;
+        e = constructors[type](entityManager, x, y);
     }
-    return false;
+    return e;
 }
-

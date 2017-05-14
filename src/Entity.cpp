@@ -3,7 +3,7 @@
 
 Entity::Entity()
 {
-    _active = true;
+//    _active = true;
 }
 
 Entity::~Entity()
@@ -13,40 +13,18 @@ Entity::~Entity()
 
 inline bool Entity::has(type_index key) const
 {
-    return _component.find(key) != _component.end();
+    return components.find(key) != components.end();
 }
 
 bool Entity::add(shared_ptr<Component> component)
 {
-    type_index key = tindex(component.get());
+    type_index key = tindex(*component.get());
     if(!has(key))
     {
-        _component.insert(make_pair(key,component));
-        component->setTarget(shared_from_this());
+        components.insert(make_pair(key,component));
+        component->owner = shared_from_this();
         return true;
     }
     printf("can't add component (already exists)\n"); /// lepsza ta wiadomosc mogla byc
     return false;
-}
-
-void Entity::update(int ms)
-{
-    for(auto &component : _component)
-    {
-        component.second->update(ms);
-    }
-}
-
-void Entity::activate()
-{
-    for(auto &component : _component)
-    {
-        component.second->setActive();
-    }
-    _active = true;
-}
-
-void Entity::receiveMessage(/*wiadomość*/) /// odbiera wiadomo i przesyła do komponentu, który zarejestrował się jako odbiorca tego typu wiadomości
-{
-
 }

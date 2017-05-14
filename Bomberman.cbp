@@ -22,7 +22,7 @@
 					<Add directory="C:/Dev_Libs/LuaBridge" />
 				</Compiler>
 				<Linker>
-					<Add option="-lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf" />
+					<Add option="-lmingw32 -lSDL2_gfx -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf" />
 					<Add library="C:/Dev_Libs/lua-5.3.3/liblua53.a" />
 				</Linker>
 			</Target>
@@ -63,15 +63,17 @@
 		<Unit filename="include/Component.h">
 			<Option virtualFolder="GameObjects/include/" />
 		</Unit>
-		<Unit filename="include/Components.h" />
+		<Unit filename="include/ComponentSystem.h">
+			<Option virtualFolder="GameObjects/include/" />
+		</Unit>
+		<Unit filename="include/Components.h">
+			<Option virtualFolder="GameObjects/include/" />
+		</Unit>
 		<Unit filename="include/Console.h">
 			<Option virtualFolder="ScriptModule/include/" />
 		</Unit>
 		<Unit filename="include/Constants.h">
 			<Option virtualFolder="Other/include/" />
-		</Unit>
-		<Unit filename="include/ControllingSystem.h">
-			<Option virtualFolder="LogicModule/include/" />
 		</Unit>
 		<Unit filename="include/DisplayManager.h">
 			<Option virtualFolder="GraphicsModule/include/" />
@@ -92,27 +94,29 @@
 		<Unit filename="include/GameInstance.h">
 			<Option virtualFolder="MainModule/include/" />
 		</Unit>
+		<Unit filename="include/GameState.h">
+			<Option virtualFolder="MainModule/include/" />
+		</Unit>
 		<Unit filename="include/GraphicsManager.h">
 			<Option virtualFolder="GraphicsModule/include/" />
 		</Unit>
-		<Unit filename="include/LogicManager.h">
-			<Option virtualFolder="LogicModule/include/" />
-		</Unit>
+		<Unit filename="include/MainMenuGS.h" />
 		<Unit filename="include/MiscFunctions.h">
 			<Option virtualFolder="Other/include/" />
 		</Unit>
-		<Unit filename="include/ObjectFactory.h">
-			<Option virtualFolder="GameObjects/include/" />
-		</Unit>
+		<Unit filename="include/ObjectFactory.h" />
+		<Unit filename="include/ResourceManager.h" />
 		<Unit filename="include/ScriptSystem.h">
 			<Option virtualFolder="ScriptModule/include/" />
 		</Unit>
 		<Unit filename="include/Structures.h">
 			<Option virtualFolder="Other/include/" />
 		</Unit>
-		<Unit filename="include/Stuff.h" />
 		<Unit filename="include/Typedefs.h">
 			<Option virtualFolder="Other/include/" />
+		</Unit>
+		<Unit filename="include/Views.h">
+			<Option virtualFolder="GameObjects/include/" />
 		</Unit>
 		<Unit filename="main.cpp" />
 		<Unit filename="src/AppWindow.cpp">
@@ -121,15 +125,11 @@
 		<Unit filename="src/AudioManager.cpp">
 			<Option virtualFolder="AudioModule/src/" />
 		</Unit>
-		<Unit filename="src/Component.cpp">
+		<Unit filename="src/ComponentSystem.cpp">
 			<Option virtualFolder="GameObjects/src/" />
 		</Unit>
-		<Unit filename="src/Components.cpp" />
 		<Unit filename="src/Console.cpp">
 			<Option virtualFolder="ScriptModule/src/" />
-		</Unit>
-		<Unit filename="src/ControllingSystem.cpp">
-			<Option virtualFolder="LogicModule/src/" />
 		</Unit>
 		<Unit filename="src/DisplayManager.cpp">
 			<Option virtualFolder="GraphicsModule/src/" />
@@ -150,15 +150,12 @@
 		<Unit filename="src/GraphicsManager.cpp">
 			<Option virtualFolder="GraphicsModule/src/" />
 		</Unit>
-		<Unit filename="src/LogicManager.cpp">
-			<Option virtualFolder="LogicModule/src/" />
-		</Unit>
+		<Unit filename="src/MainMenuGS.cpp" />
 		<Unit filename="src/MiscFunctions.cpp">
 			<Option virtualFolder="Other/src/" />
 		</Unit>
-		<Unit filename="src/ObjectFactory.cpp">
-			<Option virtualFolder="GameObjects/src/" />
-		</Unit>
+		<Unit filename="src/ObjectFactory.cpp" />
+		<Unit filename="src/ResourceManager.cpp" />
 		<Unit filename="src/ScriptSystem.cpp">
 			<Option virtualFolder="ScriptModule/src/" />
 		</Unit>

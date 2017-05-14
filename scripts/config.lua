@@ -1,12 +1,12 @@
-coreSettings = {
-	tickPerSecond = 20,
-	timestep = 1000/tickPerSecond
-}
+coreSettings = {}
+coreSettings.ticksPerSecond = 20
+coreSettings.timestep = 1000/coreSettings.ticksPerSecond
+
 
 appWindow = {
 	title = "EngineTest",
 	size = {
-		w = 1024,
+		w = 1280,
 		h = 720
 	}
 }

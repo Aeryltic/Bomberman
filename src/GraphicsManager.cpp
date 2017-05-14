@@ -1,31 +1,27 @@
 #include "GraphicsManager.h"
 #include <fstream>
 #include <SDL_image.h>
-GraphicsManager::GraphicsManager(SDL_Renderer *renderer)
-{
+GraphicsManager::GraphicsManager(){
     printf("new GraphicsManager\n");
-    _renderer = renderer;
-    if(_renderer)
-    {
-        _active = true;
-        createBlankTexture();
-    }
-    else _active = false;
+    _renderer = nullptr;
+    _active = false;
 }
-
-GraphicsManager::~GraphicsManager()
-{
+void GraphicsManager::init(SDL_Renderer *renderer){
+    _renderer = renderer;
+    if(_renderer){
+        _active = true;
+    }
+}
+GraphicsManager::~GraphicsManager(){
     printf("delete GraphicsManager\n");
 }
-SDL_Texture *GraphicsManager::getTexture(const string &path)
-{
+SDL_Texture *GraphicsManager::getTexture(const string &path){
     // uzywana przy ladowaniu obiektow. sprawdza czy juz jest, jesli nie ma probuje zaladowac, jesli nie moze - BLANK
     SDL_Texture *texture;
     texture = 0;
 
     unordered_map<string, shared_ptr<Texture>>::iterator found = _textures.find(path);
-    if(found == _textures.end())
-    {
+    if(found == _textures.end()){
         printf("Texture: %s not found. Loading texture.\n", path.c_str());
         loadTexture(path);
     }
@@ -35,38 +31,30 @@ SDL_Texture *GraphicsManager::getTexture(const string &path)
     return texture;
 }
 
-SDL_Texture *GraphicsManager::getTexture(const char *path)
-{
+SDL_Texture *GraphicsManager::getTexture(const char *path){
     string tmp(path);
     return getTexture(tmp);
 }
 
-bool GraphicsManager::loadTexture(string texture_path) /// uproscic to bo okropnie wyglada
-{
-    if(_textures.find(texture_path) == _textures.end())
-    {
+bool GraphicsManager::loadTexture(string texture_path){
+    if(_textures.find(texture_path) == _textures.end()){
         printf("Loading texture: %s\n", texture_path.c_str());
         SDL_Texture* newTexture = nullptr;
 
         SDL_Surface* loadedSurface = IMG_Load(texture_path.c_str());
-        if(loadedSurface == nullptr)
-        {
+        if(loadedSurface == nullptr){
             printf("Unable to load image %s! SDL_image Error: %s\n", texture_path.c_str(), IMG_GetError());
-        }
-        else
-        {
+        }else{
             newTexture = SDL_CreateTextureFromSurface(_renderer, loadedSurface);
             SDL_FreeSurface(loadedSurface);
 
-            if(newTexture == nullptr)
-            {
+            if(newTexture == nullptr){
                 printf("Unable to create texture from %s! SDL Error: %s\n", texture_path.c_str(), SDL_GetError());
             }
 
         }
         _textures.insert(make_pair(texture_path, make_shared<Texture>(newTexture)));
-        if(newTexture)
-        {
+        if(newTexture){
             printf("Texture loaded.\n");
             return 1;
         }
@@ -79,8 +67,7 @@ bool GraphicsManager::loadTexture(string texture_path) /// uproscic to bo okropn
 
 void GraphicsManager::createBlankTexture()
 {
-    if(_textures.find(BLANK_TEX) == _textures.end())
-    {
+    if(_textures.find(BLANK_TEX) == _textures.end()){
         printf("Creating BLANK texture.\n");
 
         SDL_Texture *tex = nullptr;
@@ -89,19 +76,14 @@ void GraphicsManager::createBlankTexture()
         s = SDL_CreateRGBSurface(0, 128, 128, 32, 0, 0, 0, 0);
         SDL_FillRect(s, NULL, SDL_MapRGBA(s->format, 255, 100, 255, 255));
 
-        if(s == nullptr)
-        {
+        if(s == nullptr){
             printf("Error creating BLANK texture. Our last hope failed - nothing is gonna help us now!\n");
             /// error
-        }
-        else
-        {
-            if((tex = SDL_CreateTextureFromSurface(_renderer, s)) == nullptr)
-            {
+        }else{
+            if((tex = SDL_CreateTextureFromSurface(_renderer, s)) == nullptr){
                 printf("We DON'T have BLANK!!!!!\n");
             }
             else printf("We have BLANK!!!!!\n");
-
         }
         SDL_FreeSurface(s);
 

@@ -46,9 +46,33 @@ enum EventType
     EVENT_ADD,
     EVENT_PAUSE,
     EVENT_CONSOLE_TOGGLE,
+    EVENT_TIME_UPDATE,
 
 
     NUMEVENTS               /// to ma tu być
 };
 
+enum BoxPosition
+{
+    POS_CENTER,
+    POS_LEFT,
+    POS_RIGHT,
+    POS_TOP,
+    POS_BOTTOM,
+    POS_LEFT_TOP,
+    POS_RIGHT_TOP,
+    POS_LEFT_BOTTOM,
+    POS_RIGHT_BOTTOM
+};
+
+enum ConsumableType
+{
+    CONSUMABLE_FOOD,
+    CONSUMABLE_WATER
+};
+
+enum ScentType
+{
+
+};
 #endif // ENUMERATIONS_H_INCLUDED

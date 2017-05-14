@@ -4,21 +4,20 @@
 #include <vector>
 
 #include "Constants.h"
-#include "ObjectFactory.h"
+#include "Typedefs.h"
 
+
+#include "ObjectFactory.h"
+#include "ResourceManager.h"
 #include "Entity.h"
 #include <queue>
 
 using namespace std;
 
-class GraphicsManager;
-class InputManager;
-class GameInstance;
-
 class EntityManager
 {
     public:
-        EntityManager(GameInstance *gameInstance);
+        EntityManager(/*GameInstance *gameInstance*/);
         virtual ~EntityManager();
 
         void update(int ms);
@@ -28,34 +27,51 @@ class EntityManager
 
         unordered_map<int,entity_ptr> &getEntities() {return entities;}
 
-        entity_ptr getWorld();
-        entity_ptr getPlayer();
-
         bool exists(int id){return entities.find(id) != entities.end();}
 
         bool isActive(){if(!active)printf("EntityManager is not active\n");return active;}
 
-        ObjectFactory *getFactory(){return &objectFactory;}
+        //ObjectFactory *getFactory(){return &objectFactory;}
 
-        template<class C>
-        void add(weak_ptr<C> component)
-        {
-            components[tindex(C)].push_back(component);
-        }
+        void loadEntitiesFromFile(string filepath);
+
+        template<class C, class ... Args>
+        shared_ptr<C> make_component(Args && ... args);
+
+        unordered_map<type_index, vector<weak_ptr<Component>>> &getComponents() {return components;}
+
+        shared_ptr<Entity> make_entity();
+
+        shared_ptr<Entity> make_object(string type, double x, double y);
 
     protected:
 
     private:
+        static int getNextID();
+
         unordered_map<int, entity_ptr> entities; // na vector?
-        unordered_map<type_index, vector<weak_ptr<Component> > >  components;
+        unordered_map<type_index, vector<weak_ptr<Component>>>  components;
 
         bool active;
 
         queue<entity_ptr> toAdd;
         queue<int> toRemove;
 
-        ObjectFactory objectFactory;
+        ResourceManager resourceManager;
         int nextID;
+
+        ObjectFactory factory;
 };
+
+
+template<class C, class ... Args>
+shared_ptr<C> EntityManager::make_component(Args && ... args)
+{
+    shared_ptr<C> component = make_shared<C>(args...);
+    components[tindex(C)].push_back(component);
+
+    return component;
+}
+
 
 #endif // ENTITYMANAGER_H

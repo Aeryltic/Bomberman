@@ -1,17 +1,11 @@
 #include "EntityManager.h"
 
 #include "Entity.h"
-#include "GraphicsManager.h"
-#include "GameInstance.h"
-#include "DisplayManager.h"
 
-EntityManager::EntityManager(GameInstance *gameInstance)
-                            : objectFactory(this, gameInstance->getDisplayManager()->getGraphicsManager())
+EntityManager::EntityManager()
 {
     printf("new EntityManager\n");
-    if(objectFactory.isActive()) active = true;
-    else active = false;
-
+    active = true;
     nextID = 0;
 }
 
@@ -22,12 +16,6 @@ EntityManager::~EntityManager()
 
 void EntityManager::update(int ms)
 {
-    for (auto it = entities.begin(); it != entities.end(); )
-    {
-        if (!it->second->isActive()) entities.erase(it++);
-        else ++it;
-    }
-
     while(!toRemove.empty())
     {
         int id = toRemove.front();
@@ -44,7 +32,6 @@ void EntityManager::update(int ms)
         entity->setID(nextID);
         entities.insert({nextID++, entity});
     }
-
 }
 
 void EntityManager::removeRequest(int id)
@@ -53,6 +40,18 @@ void EntityManager::removeRequest(int id)
     {
         printf("to remove %d\n",id);
         toRemove.push(id);
-        entities[id]->deactivate();
+//        entities[id]->deactivate();
     }
+}
+
+shared_ptr<Entity> EntityManager::make_entity()
+{
+    shared_ptr<Entity> e = make_shared<Entity>();
+    entities[nextID++] = e;
+    return e;
+}
+
+shared_ptr<Entity> EntityManager::make_object(string type, double x, double y)
+{
+    return factory.newObject(type, x, y, this);
 }

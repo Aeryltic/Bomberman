@@ -8,29 +8,30 @@ extern "C" {
 # include "lualib.h"
 }
 
-class Console;
-class GameInstance;
-class DisplayManager;
-
 using namespace luabridge;
 using namespace std;
+
 class ScriptSystem
 {
     public:
-        ScriptSystem(GameInstance *gameInstance);
+        static ScriptSystem *getInstance(){return &instance;}
         virtual ~ScriptSystem();
+
         void update(int ms);
         bool isActive(){return active;}
-        void registerEverything();
+        //void registerEverything();
         lua_State* getLuaState(){return L;}
         string execute(const string &command);
     protected:
 
     private:
+        ScriptSystem();
+
         bool active;
         lua_State* L;
-        DisplayManager *displayManager;
         void initialize();
+
+        static ScriptSystem instance;
 };
 
 #endif // SCRIPTSYSTEM_H

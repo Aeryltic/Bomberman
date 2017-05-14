@@ -19,8 +19,8 @@ union VarUnion
 {
     int int32;
     long long int64;
-    double double64;
-    char character;
+    double float64;
+    char chr;
 };
 struct Variable
 {
@@ -65,6 +65,33 @@ struct Vector2D_int
     const bool operator!=(const Vector2D_int &b) const
     {
         return !((*this)==b);
+    }
+};
+
+struct vec3d
+{
+    double x, y, z;
+    vec3d(double x, double y, double z) : x(x), y(y), z(z) {}
+    vec3d(): x(0), y(0), z(0) {}
+
+    double dist(const vec3d &other)
+    {
+        return sqrt((x-other.x)*(x-other.x)+(y-other.y)*(y-other.y)+(z-other.z)*(z-other.z));
+    }
+
+    vec3d operator+(const vec3d &other)
+    {
+        return vec3d(x + other.x, y + other.y, z + other.z);
+    }
+
+    void operator+=(const vec3d &other)
+    {
+        (x += other.x, y += other.y, z += other.z);
+    }
+
+    vec3d operator*(const double &v)
+    {
+        return vec3d(x*v, y*v, z*v);
     }
 };
 

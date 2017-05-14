@@ -1,26 +1,25 @@
 #ifndef OBJECTFACTORY_H
 #define OBJECTFACTORY_H
 
-#include "Constants.h"
-#include "GraphicsManager.h"
-#include "Typedefs.h"
+#include <functional>
+#include <memory>
+#include <unordered_map>
+using namespace std;
+
+class Entity;
 class EntityManager;
+using entity_creator = function<shared_ptr<Entity>(EntityManager*, double, double)>;
+
 class ObjectFactory
 {
     public:
-        ObjectFactory(EntityManager *entityManager, GraphicsManager *graphicsManager);
+        ObjectFactory();
         virtual ~ObjectFactory();
-
-        entity_ptr createDefault();
-        inline bool addTo(shared_ptr<Component> component, shared_ptr<Entity> entity);
-
-        bool isActive(){return _active;}
+        shared_ptr<Entity> newObject(string type, double x, double y, EntityManager *entityManager);
     protected:
 
     private:
-        EntityManager *_entityManager;
-        GraphicsManager *_graphicsManager;
-        bool _active;
+        unordered_map<string, entity_creator> constructors;
 };
 
 #endif // OBJECTFACTORY_H

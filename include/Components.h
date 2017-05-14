@@ -1,14 +1,145 @@
 #ifndef COMPONENTS_H
 #define COMPONENTS_H
 
-//class SolidComponent : public Component /// uses PhysicalForm, sets collisions
+#include "Component.h"
+#include "Structures.h"
+#include "Enumerations.h"
+
+struct CPhysicalForm : public Component
+{
+    CPhysicalForm(std::weak_ptr<Entity> owner, double x, double y, double z, double w, double h, double d = 0)
+        : Component(owner), pos(x, y, z), vol(w, h, d), rot(0,0,0) {}
+    virtual ~CPhysicalForm() {}
+
+    vec3d pos;
+    vec3d vol;
+    vec3d rot;
+};
+
+//struct CPosition : public Component
+//{
+//    CPosition(std::weak_ptr<Entity> owner, double x, double y, double z) : Component(owner), x(x), y(y), z(z) {}
+//
+//    double x, y, z;
+//    double ax, ay, az;
+//};
+
+//struct CShape : public Component
+//{
+//     CShape(std::weak_ptr<Entity> owner) : Component(owner){}
+//};
+
+/// dodać AnimationComponent
+struct CAspect : public Component /// uses CPhysicalForm
+{
+    //CAspect(std::weak_ptr<Entity> owner, SDL_Texture *texture, SDL_Rect *source) :  Component(owner), texture(texture), source(source) {}
+    CAspect(std::weak_ptr<Entity> owner, SDL_Color color) :  Component(owner), color(color) {}
+    virtual ~CAspect() {}
+
+    SDL_Color color;
+//    SDL_Texture *texture; /// tu chyba shared_ptr powinien być, a w GraphicsManagerze weak_ptr, albo jeszcze jakoś inaczej
+//    SDL_Rect *source;
+
+};
+
+struct CMovement : public Component
+{
+    CMovement(std::weak_ptr<Entity> owner, float max_speed) : Component(owner) {
+        this->max_speed = max_speed;
+    }
+    virtual ~CMovement() {};
+
+    bool has_dest = false;
+    vec3d dest;
+    vec3d speed;            // to raczej w punktach na sekundę
+    float max_speed;
+    /// to potem gdzie indziej pójdzie
+    unsigned wait_end;
+};
+
+struct AIBlackboard : public Component /// huhuhu
+{
+
+};
+
+struct CSensor : public Component
+{
+    CSensor(std::weak_ptr<Entity> owner): Component(owner) {}
+    virtual ~CSensor(){};
+};
+
+/*
+struct CNeeds : public Component
+{
+    CNeeds(std::weak_ptr<Entity> owner): Component(owner) {}
+    virtual ~CNeeds(){};
+
+    float   hunger, thirst, weariness,
+            hungerV, thirstV, wearinessV;
+};
+*/
+
+struct CEnergyStore : public Component
+{
+    CEnergyStore(std::weak_ptr<Entity> owner, float pace): Component(owner), pace(pace) {amount = 100.0;}
+    virtual ~CEnergyStore(){};
+
+    float amount;
+    float pace; /// to nie powinno tu być
+};
+
+struct CScentSource : public Component
+{
+    CScentSource(std::weak_ptr<Entity> owner): Component(owner) {}
+    virtual ~CScentSource(){};
+
+    ScentType type;
+    float intensity;
+};
+
+struct CConsumable : public Component
+{
+    CConsumable(std::weak_ptr<Entity> owner): Component(owner) {}
+    virtual ~CConsumable(){};
+
+    float value;
+};
+
+struct CBreeder : public Component
+{
+    CBreeder(std::weak_ptr<Entity> owner, string child_type, float required_energy, int min_amount, int max_amount) :
+        Component(owner),
+        child_type(child_type),
+        required_energy(required_energy),
+        min_amount(min_amount),
+        max_amount(max_amount) {}
+    virtual ~CBreeder(){};
+
+    string child_type;
+    float required_energy;
+    int min_amount, max_amount;
+
+    bool ready()
+    {
+        CEnergyStore *es = owner.lock()->get<CEnergyStore>();
+        if(es)
+        {
+            return (es->amount >= required_energy);
+        }
+        return false;
+    }
+};
+
+
+
+//struct SolidComponent : public Component /// uses CPhysicalForm, sets collisions
 //{
 //    public:
 //        SolidComponent() {}
 //        virtual ~SolidComponent() {}
 //    /// SYSTEM NEEDED
 //};
-//class KeyboardController : public Component
+//struct KeyboardController : public Component
 //{
 //    public:
 //        KeyboardController(InputManager *iManager) : Component() {_iManager = iManager;}
@@ -23,7 +154,7 @@
 //        InputManager *_iManager;
 //
 //};
-//class Alive : public Component /// to indicate that if dies should be removed or something - should be handled externally (using events or some system)
+//struct Alive : public Component /// to indicate that if dies should be removed or something - should be handled externally (using events or some system)
 //{
 //    public:
 //        Alive() {_alive = true;_AliveCount++;}
@@ -38,7 +169,7 @@
 //};
 //
 ///*
-//class MovementComponent : public Component /// uses PhysicalForm
+//struct MovementComponent : public Component /// uses CPhysicalForm
 //{
 //    public:
 //        MovementComponent() {_maxV = 50.0; _v = 0.0; _angle = 0.0; setActive();}
@@ -51,12 +182,12 @@
 //
 //};
 //*/
-//class Dangerous : public Component /// enemies will flee away from tiles with this component
+//struct Dangerous : public Component /// enemies will flee away from tiles with this component
 //{
 //
 //};
 //
-//class Timer : public Component
+//struct Timer : public Component
 //{
 //    public:
 //        Timer(int timer) : Component(), _msLeft(timer) {}
@@ -68,7 +199,7 @@
 //        int _msLeft;
 //};
 ///* // for later use
-//class NavNode : public Component    /// uses PhysicalForm
+//struct NavNode : public Component    /// uses CPhysicalForm
 //{
 //    public:
 //        NavNode() : Component() {}
@@ -80,7 +211,7 @@
 //    unordered_map<int, NavNode*> _linked; // int = Direction (do nawigacji)
 //};
 //*/
-//class SquareCell : public Component /// powinny byc przetwarzane jako instancje - za duza redundancja
+//struct SquareCell : public Component /// powinny byc przetwarzane jako instancje - za duza redundancja
 //{
 //    public:
 //        SquareCell(WorldCellType type = CELL_NONE) : Component() {_type = type; _safe = true; _available = true;}
@@ -104,7 +235,7 @@
 //        bool _safe;
 //};
 //
-//class World : public Component
+//struct World : public Component
 //{
 //    public:
 //        World(int w, int h) : Component(), _w(w), _h(h) {_square.resize(_h); for(int i=0;i<_h;i++)_square[i].resize(_w);}
@@ -138,7 +269,7 @@
 //        vector<vector<weak_ptr<Entity>>> _square;
 //};
 ///*
-//class PlayerControllerComponent : public Component /// uses PhysicalForm
+//struct PlayerControllerComponent : public Component /// uses CPhysicalForm
 //{
 //    public:
 //        PlayerControllerComponent(InputManager *iManager) : Component() {_iManager = iManager;}
@@ -154,7 +285,7 @@
 //};
 //*/
 //
-//class AIController : public Component
+//struct AIController : public Component
 //{
 //    public:
 //        AIController() : Component() {}
@@ -171,7 +302,7 @@
 //        Path _path;
 //};
 //
-//class MovementController : public Component
+//struct MovementController : public Component
 //{
 //    public:
 //        MovementController() : Component() {_physicalForm = nullptr;}
@@ -198,7 +329,7 @@
 //        //NavNode *_dest; /// wrong
 //        //NavNode *_current; /// wrong
 //        vector2d _dest; /// ok
-//        PhysicalForm *_physicalForm;
+//        CPhysicalForm *_physicalForm;
 //
 //        bool _readyToStop;
 //        bool _reached;
@@ -206,7 +337,7 @@
 // //       bool _moving;
 //};
 ///*
-//class NPCControllerComponent : public Component /// uses PhysicalForm
+//struct NPCControllerComponent : public Component /// uses CPhysicalForm
 //{
 //    public:
 //        NPCControllerComponent() : Component() {_hasDestination = false;}
@@ -219,7 +350,7 @@
 //*/
 //
 //
-//class BombPlanter : public Component
+//struct BombPlanter : public Component
 //{
 //    public:
 //        BombPlanter(unsigned range) : Component() { _range = range; _toNextPlant=0;_active = true;}
@@ -235,7 +366,7 @@
 //        unsigned _range;
 //};
 //
-//class Explosive : public Component
+//struct Explosive : public Component
 //{
 //    public:
 //        Explosive(int range) : Component(), _range(range) {}
@@ -246,7 +377,7 @@
 //        int _range;
 //};
 //
-//class Destroyer : public Component
+//struct Destroyer : public Component
 //{
 //    public:
 //        Destroyer() : Component() {_done = false;}
@@ -257,7 +388,7 @@
 //        bool _done;
 //};
 //
-//class Player : public Component
+//struct Player : public Component
 //{
 //    public:
 //        Player() : Component() {}
@@ -265,7 +396,7 @@
 //    private:
 //};
 //
-//class Enemy : public Component
+//struct Enemy : public Component
 //{
 //    public:
 //        Enemy() : Component() {_count++;}

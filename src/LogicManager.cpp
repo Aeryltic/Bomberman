@@ -2,6 +2,7 @@
 
 #include "GameInstance.h"
 
+/*
 LogicManager::LogicManager(GameInstance *gameInstance)
 {
     printf("new LogicManager\n");
@@ -23,3 +24,4 @@ void LogicManager::update(int ms_passed)
     entityManager->update(ms_passed);
     controlSystem->update(ms_passed);
 }
+*/

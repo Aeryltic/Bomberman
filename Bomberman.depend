@@ -1044,12 +1044,13 @@
 1486234539 source:c:\users\user\desktop\bomberman\main.cpp
 	"GameInstance.h"
 
-1494015651 c:\users\user\desktop\bomberman\include\gameinstance.h
+1494682443 c:\users\user\desktop\bomberman\include\gameinstance.h
 	<stdio.h>
+	<GameState.h>
+	<vector>
 
-1486256507 c:\users\user\desktop\bomberman\include\graphicsmanager.h
+1494193314 c:\users\user\desktop\bomberman\include\graphicsmanager.h
 	<unordered_map>
-	"AppWindow.h"
 	"Constants.h"
 
 1486230939 c:\users\user\desktop\bomberman\include\texture.h
@@ -1067,7 +1068,7 @@
 	"Constants.h"
 	<unordered_map>
 
-1493926464 c:\users\user\desktop\bomberman\include\logicmanager.h
+1494192681 c:\users\user\desktop\bomberman\include\logicmanager.h
 	"EntityManager.h"
 	"ControllingSystem.h"
 	"ObjectFactory.h"
@@ -1077,7 +1078,7 @@
 	"AppWindow.h"
 	<stdio.h>
 
-1486256558 source:c:\users\user\desktop\bomberman\src\graphicsmanager.cpp
+1494193449 source:c:\users\user\desktop\bomberman\src\graphicsmanager.cpp
 	"GraphicsManager.h"
 	<fstream>
 	<SDL_image.h>
@@ -1086,7 +1087,7 @@
 	"InputManager.h"
 	<cstdio>
 
-1493927508 source:c:\users\user\desktop\bomberman\src\logicmanager.cpp
+1494192700 source:c:\users\user\desktop\bomberman\src\logicmanager.cpp
 	"LogicManager.h"
 	"GameInstance.h"
 
@@ -1115,7 +1116,7 @@
 1485549514 c:\users\user\desktop\bomberman\include\abstractobject.h
 	<Object.h>
 
-1494016040 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
+1494769941 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
 	"GameInstance.h"
 	<SDL.h>
 	<stdio.h>
@@ -1123,12 +1124,13 @@
 	<ctime>
 	<cstdlib>
 	"DisplayManager.h"
-	"LogicManager.h"
 	"EntityManager.h"
-	"ObjectFactory.h"
 	"EventManager.h"
 	"ScriptSystem.h"
 	"Console.h"
+	"ComponentSystem.h"
+	"Enumerations.h"
+	"GameInitializer.h"
 
 1485549077 source:c:\users\user\desktop\bomberman\src\objectcontainer.cpp
 	"ObjectContainer.h"
@@ -1139,21 +1141,24 @@
 1485562293 c:\users\user\desktop\bomberman\include\realobject.h
 	<Object.h>
 
-1493926438 c:\users\user\desktop\bomberman\include\displaymanager.h
+1494717515 c:\users\user\desktop\bomberman\include\displaymanager.h
 	"AppWindow.h"
-	"GraphicsManager.h"
 	<memory>
 	<SDL.h>
 	"SDL_ttf.h"
 	<deque>
+	"Enumerations.h"
 
-1494015881 source:c:\users\user\desktop\bomberman\src\displaymanager.cpp
+1494773561 source:c:\users\user\desktop\bomberman\src\displaymanager.cpp
 	"DisplayManager.h"
 	<SDL.h>
 	<SDL_image.h>
 	<queue>
 	"GameInstance.h"
 	"EntityManager.h"
+	"ScriptSystem.h"
+	"Components.h"
+	"SDL2_gfxPrimitives.h"
 
 1485512203 source:c:\users\user\desktop\bomberman\src\objectinstance.cpp
 	"ObjectInstance.h"
@@ -1175,12 +1180,12 @@
 1485013384 source:c:\users\user\desktop\bomberman\src\objectinstancecontainer.cpp
 	"ObjectInstanceContainer.h"
 
-1492951472 c:\users\user\desktop\bomberman\include\structures.h
+1494687584 c:\users\user\desktop\bomberman\include\structures.h
 	<cmath>
 	<SDL.h>
 	<memory>
 
-1494016040 c:\users\user\desktop\bomberman\include\enumerations.h
+1494772562 c:\users\user\desktop\bomberman\include\enumerations.h
 
 1486234539 c:\users\user\desktop\bomberman\include\constants.h
 	<SDL.h>
@@ -1242,7 +1247,7 @@
 	"Field.h"
 	<vector>
 
-1494008743 source:c:\users\user\desktop\bomberman\src\component.cpp
+1494608067 source:c:\users\user\desktop\bomberman\src\component.cpp
 	"Component.h"
 	"Entity.h"
 	<cmath>
@@ -1251,62 +1256,54 @@
 	"EventManager.h"
 	"MiscFunctions.h"
 
-1493919328 c:\users\user\desktop\bomberman\include\component.h
-	<vector>
-	"Structures.h"
-	<SDL.h>
+1494674569 c:\users\user\desktop\bomberman\include\component.h
 	<memory>
-	"Constants.h"
-	<unordered_map>
-	"Enumerations.h"
-	"Typedefs.h"
 
-1493739057 source:c:\users\user\desktop\bomberman\src\entity.cpp
+1494687509 source:c:\users\user\desktop\bomberman\src\entity.cpp
 	"Entity.h"
 
-1494021793 c:\users\user\desktop\bomberman\include\entity.h
+1494676704 c:\users\user\desktop\bomberman\include\entity.h
 	<unordered_map>
 	<typeinfo>
 	<typeindex>
 	"MiscFunctions.h"
 	"Component.h"
 
-1492952437 c:\users\user\desktop\bomberman\include\miscfunctions.h
+1494774708 c:\users\user\desktop\bomberman\include\miscfunctions.h
 	<typeinfo>
 	<cmath>
 	<SDL.h>
 	<Structures.h>
 
-1494003289 source:c:\users\user\desktop\bomberman\src\entitymanager.cpp
+1494777146 source:c:\users\user\desktop\bomberman\src\entitymanager.cpp
 	"EntityManager.h"
 	"Entity.h"
-	"GraphicsManager.h"
-	"GameInstance.h"
-	"DisplayManager.h"
 
-1493926836 c:\users\user\desktop\bomberman\include\entitymanager.h
+1494777152 c:\users\user\desktop\bomberman\include\entitymanager.h
 	<vector>
 	"Constants.h"
+	"Typedefs.h"
 	"ObjectFactory.h"
+	"ResourceManager.h"
 	"Entity.h"
 	<queue>
 
-1493926972 c:\users\user\desktop\bomberman\include\objectfactory.h
-	"Constants.h"
-	"GraphicsManager.h"
-	"Typedefs.h"
+1494776841 c:\users\user\desktop\bomberman\include\objectfactory.h
+	<functional>
+	<memory>
+	<unordered_map>
 
-1493926935 source:c:\users\user\desktop\bomberman\src\objectfactory.cpp
+1494778186 source:c:\users\user\desktop\bomberman\src\objectfactory.cpp
 	"ObjectFactory.h"
-	<fstream>
-	"Constants.h"
 	"Entity.h"
 	"EntityManager.h"
+	"Components.h"
 
-1494012806 source:c:\users\user\desktop\bomberman\src\eventmanager.cpp
+1494674062 source:c:\users\user\desktop\bomberman\src\eventmanager.cpp
 	"EventManager.h"
 	"GameInstance.h"
 	"Entity.h"
+	"Enumerations.h"
 
 1494013539 c:\users\user\desktop\bomberman\include\eventmanager.h
 	<unordered_map>
@@ -1315,11 +1312,11 @@
 	<memory>
 	<SDL.h>
 
-1493750125 c:\users\user\desktop\bomberman\include\controllingsystem.h
+1494192855 c:\users\user\desktop\bomberman\include\controllingsystem.h
 	"EntityManager.h"
 	"ObjectFactory.h"
 
-1494008751 source:c:\users\user\desktop\bomberman\src\controllingsystem.cpp
+1494192865 source:c:\users\user\desktop\bomberman\src\controllingsystem.cpp
 	"ControllingSystem.h"
 	"MiscFunctions.h"
 
@@ -1331,21 +1328,26 @@
 1485967410 c:\users\user\desktop\bomberman\src\miscfunctions.h
 	"MiscFunctions.h"
 
-1486234540 source:c:\users\user\desktop\bomberman\src\miscfunctions.cpp
+1494776801 source:c:\users\user\desktop\bomberman\src\miscfunctions.cpp
 	"MiscFunctions.h"
 	"Constants.h"
 
-1486234539 c:\users\user\desktop\bomberman\include\typedefs.h
-	"Structures.h"
+1494673812 c:\users\user\desktop\bomberman\include\typedefs.h
 
-1493669754 source:c:\users\user\desktop\bomberman\src\components.cpp
+1494609333 source:c:\users\user\desktop\bomberman\src\components.cpp
+	"Components.h"
 
-1492980632 source:c:\users\user\desktop\bomberman\src\gameinitializer.cpp
+1494778035 source:c:\users\user\desktop\bomberman\src\gameinitializer.cpp
 	"GameInitializer.h"
+	"EntityManager.h"
+	"Components.h"
 
-1492980632 c:\users\user\desktop\bomberman\include\gameinitializer.h
+1494777647 c:\users\user\desktop\bomberman\include\gameinitializer.h
+	<functional>
+	<memory>
+	<unordered_map>
 
-1494008394 c:\users\user\desktop\bomberman\include\scriptsystem.h
+1494120134 c:\users\user\desktop\bomberman\include\scriptsystem.h
 	<LuaBridge.h>
 	"lua.h"
 	"lauxlib.h"
@@ -1419,7 +1421,7 @@
 
 1493666366 c:\dev_libs\luabridge\source\luabridge\detail\namespace.h
 
-1494008400 source:c:\users\user\desktop\bomberman\src\scriptsystem.cpp
+1494767298 source:c:\users\user\desktop\bomberman\src\scriptsystem.cpp
 	"ScriptSystem.h"
 	"GameInstance.h"
 	"DisplayManager.h"
@@ -1429,7 +1431,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1494016038 source:c:\users\user\desktop\bomberman\src\console.cpp
+1494120037 source:c:\users\user\desktop\bomberman\src\console.cpp
 	"Console.h"
 	<SDL.h>
 	"GameInstance.h"
@@ -1446,4 +1448,49 @@
 	"AudioManager.h"
 
 1493921567 c:\users\user\desktop\bomberman\include\audiomanager.h
+
+1494777738 source:c:\users\user\desktop\bomberman\src\componentsystem.cpp
+	"ComponentSystem.h"
+	"EntityManager.h"
+	"Views.h"
+
+1494701812 c:\users\user\desktop\bomberman\include\componentsystem.h
+	<functional>
+	<vector>
+	<stdio.h>
+
+1494676297 source:c:\users\user\desktop\bomberman\src\componentsystemcontroller.cpp
+	"ComponentSystemController.h"
+
+1494676289 c:\users\user\desktop\bomberman\include\componentsystemcontroller.h
+	<unordered_map>
+	<functional>
+
+1494192496 c:\users\user\desktop\bomberman\include\resourcemanager.h
+	<GraphicsManager.h>
+	<AudioManager.h>
+
+1494190981 source:c:\users\user\desktop\bomberman\src\resourcemanager.cpp
+	"ResourceManager.h"
+
+1494610127 c:\users\user\desktop\bomberman\include\gamestate.h
+
+1494777973 c:\users\user\desktop\bomberman\include\components.h
+	"Component.h"
+	"Structures.h"
+	"Enumerations.h"
+
+1494674296 source:c:\users\user\desktop\bomberman\src\mainmenugs.cpp
+	"MainMenuGS.h"
+
+1494674098 c:\users\user\desktop\bomberman\include\mainmenugs.h
+	"GameState.h"
+
+1494777809 c:\users\user\desktop\bomberman\include\views.h
+	"Components.h"
+	"Entity.h"
+
+1487657770 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl2_gfxprimitives.h
+	<math.h>
+	"SDL.h"
 

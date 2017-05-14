@@ -1,11 +1,21 @@
-//#include "Components.h"
-//int _AliveCount=0;
+#include "Components.h"
+/// CPhysicalForm ---------------------------------------------------------------------------
+/*
+SDL_Rect CPhysicalForm::rect(int ms)
+{
+    SDL_Rect rect = {.x = (int)pos.x, .y = (int)pos.y, .w = (int)vol.x, .h = (int)vol.y};
+//    rect.x += cos(_angle) * _v * ms / 1000.0;
+//    rect.y += sin(_angle) * _v * ms / 1000.0;
+    return rect;
+}
+*/
+
+
 //
-///*
 ///// PlayerControllerComponent ---------------------------------------------------------------------------
 //void PlayerControllerComponent::setActive()
 //{
-//    if(target()->has<PhysicalForm>() && (_iManager != nullptr))
+//    if(target()->has<CPhysicalForm>() && (_iManager != nullptr))
 //        _active = true;
 //}
 //void PlayerControllerComponent::work(int ms)
@@ -31,11 +41,11 @@
 //
 //    if(up_down || left_right)
 //    {
-//        target()->get<PhysicalForm>()->setAngle(atan2(up_down,left_right));
-//        //_target->get<PhysicalForm>()->setSpeedToMax();
-//        target()->get<PhysicalForm>()->accelerate(ms);
+//        target()->get<CPhysicalForm>()->setAngle(atan2(up_down,left_right));
+//        //_target->get<CPhysicalForm>()->setSpeedToMax();
+//        target()->get<CPhysicalForm>()->accelerate(ms);
 //    }
-//    else target()->get<PhysicalForm>()->deccelerate(ms);//_target->get<PhysicalForm>()->setSpeed(0);
+//    else target()->get<CPhysicalForm>()->deccelerate(ms);//_target->get<CPhysicalForm>()->setSpeed(0);
 //    // bomb dropping
 //    if(_iManager->keyStatus(SDLK_SPACE) & (KEY_PRESSED))    // drop bomb
 //    {
@@ -98,9 +108,9 @@
 //
 //bool World::addCell(entity_ptr cell)//, int x, int y)
 //{
-//    if(cell->has<SquareCell>() && cell->get<PhysicalForm>())
+//    if(cell->has<SquareCell>() && cell->get<CPhysicalForm>())
 //    {
-//        int_vector2d pos = cell->get<PhysicalForm>()->getGridPos();
+//        int_vector2d pos = cell->get<CPhysicalForm>()->getGridPos();
 //        if(valid(pos.x,pos.y))
 //        {
 //            _square[pos.y][pos.x] = cell;
@@ -112,7 +122,7 @@
 ///// class KeyboardController
 //void KeyboardController::setActive()
 //{
-//    if(target()->has<PhysicalForm>() && (_iManager != nullptr))
+//    if(target()->has<CPhysicalForm>() && (_iManager != nullptr))
 //        _active = true;
 //}
 //
@@ -127,16 +137,16 @@
 //        _reached = true;
 //        return 1;
 //    }
-//    //if(_target->get<PhysicalForm>()->getPos() - _dest->coor() < 1.0) return 1;
+//    //if(_target->get<CPhysicalForm>()->getPos() - _dest->coor() < 1.0) return 1;
 //    return 0;
 //}
 //
 //void MovementController::setActive()
 //{
 // //   printf("MovementController::setActive()\n");
-//    if(target()->has<PhysicalForm>())
+//    if(target()->has<CPhysicalForm>())
 //    {
-//        _physicalForm = target()->get<PhysicalForm>();
+//        _physicalForm = target()->get<CPhysicalForm>();
 //        _dest = _physicalForm->getPos();
 //        _active = true;
 //      //  printf("----Movement Controller Active\n");
@@ -145,7 +155,7 @@
 //
 //void MovementController::work(int ms) // kierowanie ruchu postaci
 //{
-//    //PhysicalForm *physicalForm = _target->get<PhysicalForm>();
+//    //CPhysicalForm *physicalForm = _target->get<CPhysicalForm>();
 //    if(_moving)
 //    {
 //        if(!destReached())
@@ -192,7 +202,7 @@
 //vector2d MovementController::current()
 //{
 //    /*printf("MovementController::current()\n");*/
-//    return target()->get<PhysicalForm>()->getPos();
+//    return target()->get<CPhysicalForm>()->getPos();
 //}
 //
 ///// class Player
@@ -234,7 +244,7 @@
 ///*
 //vector2d NavNode::coor()
 //{
-//    vector2d v = target()->get<PhysicalForm>()->getPos();
+//    vector2d v = target()->get<CPhysicalForm>()->getPos();
 //    return v;
 //}
 //*/

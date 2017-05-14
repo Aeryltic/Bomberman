@@ -3,10 +3,12 @@
 
 //#include "ObjectContainer.h"
 //#include "Structures.h"
+/*
 #include "EntityManager.h"
 #include "ControllingSystem.h"
 #include "ObjectFactory.h"
 #include "ScriptSystem.h"
+
 class LogicManager
 {
     public:
@@ -24,5 +26,5 @@ class LogicManager
 
         GameInstance *gameInstance;
 };
-
+*/
 #endif // LOGICMANAGER_H

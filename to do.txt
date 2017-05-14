@@ -2,43 +2,127 @@ KWESTIE SILNIKA
 
 	0. WARTE UWAGI MYŒLI
 	
-	GAME STATE'y - KONIECZNIE
-	
-	komponenty przechowywane w systemach jak np. TextureComponent(chocia¿ to powinno byæ bardziej ogólne: GraphiscComponent?) w DisplayManager
-	
-	nie wywo³ywaæ funkcji innych obiektów, ale wysy³aæ eventy kiedy tylko siê da
-	
-	atrybuty bytów do zapisywania stanu gry, tworzone przez komponenty (jakaœ mapa?)
-	komponenty mog³oby ³atwo dzieliæ siê tymi atrybutami, bez przepytywania swojego Entity o posiadanie jakiegoœ komponentu i w ogóle
-	
-	id<0 dla archetypów i id>0 dla rzeczywistych obiektów
-	
-	uchwyty (handle) - dla obiektów w tablicach, ¿eby po indeksach dzia³aæ i optymalizowaæ cache
-	
-	komponenty maj¹ id swojej "rodziny" oraz swój w³asny id (jeœli mamy jak¹œ hierarchiê wœród komponentów)
-	
-	czy komponenty maj¹ coœ faktycznie robiæ czy byæ tylko kontenerami?
-	
-	sendMessage and receiveMessage for both Entities and Components
+		GAME STATE'y - KONIECZNIE
 		
-	NotificationSystem - obiekty rejestruj¹ siê do nich, ¿e s³uchaj¹ danych typów wiadomoœci
-	albo systemy kontroluj¹ce komponenty rozsy³aj¹ce wiadomoœci do komponentów bez rejestracji
-	
-	nadawcy i odbiorcy wiadomoœci w pewnych przypadkach
-	
-	"""
-	Also, I did not mention Links yet. Those are a different concept. The engine uses them to link objects together. Basic link type is an inheritance link, which inherits property (component) values from object to other object. There are numerous link types, for example ControlDevice link will route any incomming messages of a certain kind to the object(s) that the link targets, etc. 
-	(Imagine a switch linked with a light with ControlDevice link, using the switch will cause a SwitchOn/SwitchOff message to appear, and this message will be routed to the light, which reacts to this signal)
-	"""
-	
-	renderNodes czy coœ w tym stylu
-	
-	same komponenty sk³adaj¹ siê z czeœci? np. PhysicalForm z³o¿ony z Position, Rotation, "Mesh", Movement - do zmniejszenia rozdrobnienia (nie ka¿dy obiekt potrzebuje kompletnego physical form, niektóre bêd¹ statyczne, inne niewidzialne, albo w ogóle bez kszta³tu i to wszystko w jednym komponencie, ale do tego potrzeba jakiejœ "kompilacji", ¿eby nie traciæ czasu na badanie za ka¿dmy razem z czego sk³ada siê komponent)
-	
-	Entity::clone()
-	
-	
+		hierarchiczne game staty do wspó³dzielenia danych itp?
+		
+		nie wszystkie systemy musz¹ chyba updatowaæ siê tak samo czêsto
+		
+		rozdzieliæ kszta³t i pozycjê
+		
+		timery dla ka¿dego typu komponentu, który wskazywa³by, ¿e nale¿y je odœwie¿yæ?
+		
+		------------------------------
+		Game:
+			- Engine:
+				- zawsze w jakimœ State
+				- przechowuje Entity oraz Systemy (ale przecie¿ nie wszystkie GameState'y to interesuje, wiêc mo¿e coœ nad Engine - klasa który mo¿e byæ w GameState'ach, np. Game)
+			
+			- InitialState:
+				- od niego zaczynamy
+			
+			- MainMenuState:
+				- po InitialState, albo gdy wychodzimy z gry
+			
+			- GameplayState:
+				Entity sk³ada siê z Componentów.
+				SystemNode sk³ada siê z pointerów do Componentów jednego Entity.
+				Systemy operuja na SystemNode'ach.
+				Engine sk³ada sie z Systemów i wykonuje regularnie ich update (ale przecie¿ render nie jest regularny)
+			
+			- PauseState:
+				- zakrywa GameplayState (zawsze w pamiêci, ale nie na stosie GameState'ów)
+			
+			- EditState:
+				- operuje na tym samym co GameplayState, czyli dane nie nale¿¹ do State'ów, State'y s¹ tylko funkcjami
+			
+			- ConsoleState(?):
+		EntityManager:
+			- zawiera fabrykê, graphicsManagera, itd (wszystkie zasoby na które sk³adaj¹ siê byty)
+		------------------------------
+		
+		
+		
+		w ogóle state'y do wszystkiego (The State Pattern)
+		Behaviours bêd¹ potrzebowaæ state'ów - niezupe³nie, bêd¹ potrzebowaæ celów (Planowanie, Akcje, Pre- i Post- conditiony)
+		State'y w formie np. ChceJeœæ -> cel: NieChceJeœæ
+		
+		komponenty przechowywane w systemach jak np. TextureComponent(chocia¿ to powinno byæ bardziej ogólne: GraphiscComponent?) w DisplayManager
+		
+		nie wywo³ywaæ funkcji innych obiektów, ale wysy³aæ eventy kiedy tylko siê da
+		
+		atrybuty bytów do zapisywania stanu gry, tworzone przez komponenty (jakaœ mapa?)
+		komponenty mog³oby ³atwo dzieliæ siê tymi atrybutami, bez przepytywania swojego Entity o posiadanie jakiegoœ komponentu i w ogóle
+		
+		id<0 dla archetypów i id>0 dla rzeczywistych obiektów
+		# to nie pozwoli przechowywaæ ich wydajnie w tablicy
+		
+		uchwyty (handle) - dla obiektów w tablicach, ¿eby po indeksach dzia³aæ i optymalizowaæ cache
+		
+		komponenty maj¹ id swojej "rodziny" oraz swój w³asny id (jeœli mamy jak¹œ hierarchiê wœród komponentów)
+		
+		czy komponenty maj¹ coœ faktycznie robiæ czy byæ tylko kontenerami?
+		
+		sendMessage and receiveMessage for both Entities and Components
+			
+		NotificationSystem - obiekty rejestruj¹ siê do nich, ¿e s³uchaj¹ danych typów wiadomoœci
+		albo systemy kontroluj¹ce komponenty rozsy³aj¹ce wiadomoœci do komponentów bez rejestracji
+		
+		nadawcy i odbiorcy wiadomoœci w pewnych przypadkach
+		
+		"""
+		Also, I did not mention Links yet. Those are a different concept. The engine uses them to link objects together. Basic link type is an inheritance link, which inherits property (component) values from object to other object. There are numerous link types, for example ControlDevice link will route any incomming messages of a certain kind to the object(s) that the link targets, etc. 
+		(Imagine a switch linked with a light with ControlDevice link, using the switch will cause a SwitchOn/SwitchOff message to appear, and this message will be routed to the light, which reacts to this signal)
+		"""
+		
+		renderNodes czy coœ w tym stylu
+		
+		same komponenty sk³adaj¹ siê z czeœci? np. PhysicalForm z³o¿ony z Position, Rotation, "Mesh", Movement - do zmniejszenia rozdrobnienia (nie ka¿dy obiekt potrzebuje kompletnego physical form, niektóre bêd¹ statyczne, inne niewidzialne, albo w ogóle bez kszta³tu i to wszystko w jednym komponencie, ale do tego potrzeba jakiejœ "kompilacji", ¿eby nie traciæ czasu na badanie za ka¿dmy razem z czego sk³ada siê komponent)
+		
+		Entity::clone()
+		
+		PhysicalForm mo¿e mieæ stany: Static i Dynamic, które definiuj¹ update (chocia¿ mo¿e nie jest to dobre w tym przyk³adzie)
+		
+		PhysicalForm = Position [+ Shape] [+ Velocity] [+ Appearance]
+		
+		dzielone zmienne
+		
+		
+		to jest ciekawe:
+		//-----------------------------------------------
+		class MoveNode
+		{
+		  public var position:PositionComponent;
+		  public var velocity:VelocityComponent;
+		}
+		class RenderNode
+		{
+		  public var display:DisplayComponent;
+		  public var position:PositionComponent;
+		}
+		//-----------------------------------------------
+		
+		--------------- Jeff Orkin ------------------
+		
+		animation keyframes with embedded messages to for example: play sound
 
+		cele i akcje, które je zaspokajaj¹ - pewnie jakieœ drzewa gdzie korzeniem jest nasz cel, a ga³êziami drogi do jego zaspokojenia
+		nie tam nie bêdzie drzewa, ani w ogóle ¿adnego grafu - tylko warunki wstêpne i skutki, one pozwol¹ na dynamiczne tworzenie scenariuszy, bez ¿adnych zale¿noœci
+
+		A*
+
+		akcje - klasy przechowuj¹ce preconditionale w postaci tablicy ze stanami œwiata oraz funkcjami sprawdzaj¹cymi czy warunki s¹ spe³nione na zawo³anie
+
+		hierarchical task network planning
+
+		hierarchia potrzeb: potrzeby gatunkowe, spo³eczne, lokalne i osobiste
+		
+		//------------------------------------------------------------------------------------------------------------------------------------//
+		
+		ScriptSystem jako singleton?
+		# teraz ju¿ jest, i jest wewnêtrznie zupe³nie niezale¿ny od ca³ej reszty programu
+
+##############################################################################################################################
 	1. G£ÓWNE CELE:
 	
 		# SERIALIZACJA I SKRYPTY - Lua
