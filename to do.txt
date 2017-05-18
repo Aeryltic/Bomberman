@@ -12,6 +12,10 @@ KWESTIE SILNIKA
 		
 		timery dla ka¿dego typu komponentu, który wskazywa³by, ¿e nale¿y je odœwie¿yæ?
 		
+		dodaæ funkcjê: unsigned string_id(string str), która bêdzie zwraca³a identyfikator dla ka¿dego stringa, tak ¿eby zaoszczêdziæ miejsce czy coœ, no i pewnie optymalizacja
+		
+		AI: czego nie zna boi siê
+		
 		------------------------------
 		Game:
 			- Engine:

@@ -2,48 +2,57 @@
 #define ENTITY_H
 
 #include <unordered_map>
+#include <vector>
 #include <typeinfo>
 #include <typeindex>
 
 #include "MiscFunctions.h"
-#include "Component.h"
+#include "Enumerations.h"
 
 using namespace std;
 
+class Component;
+
 typedef unordered_map<type_index, shared_ptr<Component> > component_map;
+using message_callback = function<void(Message &)>;
 
 class Entity : public std::enable_shared_from_this<Entity>
 {
-    public:
-        Entity();
-        virtual ~Entity();
+public:
+    Entity();
+    virtual ~Entity();
 
-        template<class C> bool has() const;
-        template<class C> C* get();
-        template<class C> bool remove();
+    template<class C> bool has() const;
+    template<class C> C* get();
+    template<class C> bool remove();
 
-        bool add(shared_ptr<Component> component);
+    bool add(shared_ptr<Component> component);
 
-        component_map &getComponents(){return components;}
+    component_map &getComponents()
+    {
+        return components;
+    }
 
-        void setID(int id){this->id = id;}
-        int getID(){return id;}
-/*
-        void update(int ms);
-        void activate();
-        void deactivate(){_active = false;}
-        bool isActive(){return _active;}
-*/
-        //void receiveMessage(/*wiadomoœæ*/); // do otrzymywania wiadomoœci, podobnie jak przy eventach, ale raczej takich gdzie chcemy natychmiastowej reakcji (jak miêdzy komponentami jednego bytu)
+    void setID(int id)
+    {
+        this->id = id;
+    }
+    int getID()
+    {
+        return id;
+    }
 
-    protected:
+    void receive_message(Message message);
+    void register_listener(unsigned message_type, message_callback callback); /// potrzeba te¿ "unregister", bo jak usuniemy komponent w trakcie pracy to bêdzie crash
 
-    private:
-        inline bool has(type_index key) const;
+protected:
 
-        int id;
-        component_map components;
-//        bool _active;
+private:
+    inline bool has(type_index key) const;
+
+    int id;
+    component_map components;
+    unordered_map<unsigned, vector<message_callback>> callbacks;
 };
 
 // TEMPLATES

@@ -30,6 +30,16 @@ struct Variable
 */
 ///-------------------
 //extern int _AliveCount;
+struct Message /// potrzebna tu jakaś hierarchia... chyba?
+{
+    Message(unsigned type, weak_ptr<Entity> publisher) :
+        type(type), publisher(publisher) {}
+    virtual ~Message() {};
+
+    unsigned type;
+    weak_ptr<Entity> publisher;
+};
+
 struct Vector2D_double
 {
     Vector2D_double() : x(0), y(0) {}
@@ -99,7 +109,7 @@ typedef Vector2D_double vector2d;
 typedef Vector2D_int int_vector2d;
 struct PositionAndSpeed // obsolete
 {
-    PositionAndSpeed(){}
+    PositionAndSpeed() {}
     vector2d pos,v;
     void updatePosition(int ms_passed)
     {

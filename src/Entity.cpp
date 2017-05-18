@@ -1,5 +1,6 @@
 #include "Entity.h"
 
+#include "Component.h"
 
 Entity::Entity()
 {
@@ -27,4 +28,17 @@ bool Entity::add(shared_ptr<Component> component)
     }
     printf("can't add component (already exists)\n"); /// lepsza ta wiadomosc mogla byc
     return false;
+}
+
+void Entity::receive_message(Message message)
+{
+    for(auto &callback : callbacks[message.type])
+    {
+        callback(message);
+    }
+}
+
+void Entity::register_listener(unsigned message_type, message_callback callback)
+{
+    callbacks[message_type].push_back(callback);
 }

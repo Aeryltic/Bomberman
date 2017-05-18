@@ -1,0 +1,13 @@
+16.05.2017
+	1. mrówki chodz¹ do ziaren, zbieraj¹ je, ale póki co jest sieczka
+	2. nie chce mi siê naprawiaæ, ale kilku mo¿e nosiæ ten sam obiekt, a nawet jak ktoœ nosi, to ca³y czas wywo³uje to kolizje - no masakra
+	3. zrobiæ ¿eby chodzili za tym co w followed_scent
+17.05.2017
+	1. dziwne zamieszanie - czêœæ mrówek z póŸniejszego okresu zatrzymuje siê w po³owie drogi i kr¹¿¹ w miejscu
+	2. MYŒLEÆ NAD IMPLEMENTACJ¥ AKCJI
+	3. akcje kumulacyjne - jeœli nie mo¿na zrobiæ czegoœ za jednym zamachem, robimy to co najbardziej nas przybli¿y do celu
+	4. warto przeanalizowaæ to dok³adnie: https://gamedevelopment.tutsplus.com/tutorials/goal-oriented-action-planning-for-a-smarter-ai--cms-20793
+	5. olaæ "wêch" - uproœciæ, ¿eby szybko wprowadziæ pierwszy, prosty GOAP
+	6. Idle, GoTo, PerformAction
+18.05.2017
+	1. doda³em obiekty, ale bez implementacji metod, ani wszystkim metod w ogóle... ale wszystkie obiekty potrzebne chyba s¹

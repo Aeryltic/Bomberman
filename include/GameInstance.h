@@ -15,43 +15,49 @@ class ComponentSystem;
 
 class GameInstance
 {
-    public:
+public:
 
-        virtual ~GameInstance();
-        static GameInstance &getInstance();
-        int run();
+    virtual ~GameInstance();
+    static GameInstance &getInstance();
+    int run();
 
-         DisplayManager  *getDisplayManager();
-         EntityManager   *getEntityManager();
+    DisplayManager  *getDisplayManager();
+    EntityManager   *getEntityManager();
 //         LogicManager    *getLogicManager();
-         Console         *getConsole();
-         EventManager    *getEventManager();
+    Console         *getConsole();
+    EventManager    *getEventManager();
 
-         static bool isPaused(){return paused;}
-    protected:
+    static bool isPaused()
+    {
+        return paused;
+    }
+protected:
 
-    private:
-        /// to w ogóle nie powinny być pointery
-        DisplayManager  *displayManager;
-        EntityManager   *entityManager;
-        ComponentSystem *componentSystem;
+private:
+    /// to w ogóle nie powinny być pointery
+    DisplayManager  *displayManager;
+    EntityManager   *entityManager;
+    ComponentSystem *componentSystem;
 //        LogicManager    *logicManager;
-        Console         *console;
-        EventManager    *eventManager;
+    Console         *console;
+    EventManager    *eventManager;
 
 //        std::vector<GameState*> gameStates;
 
-        int timerID; // SDL_timer_ID
+    int timerID; // SDL_timer_ID
 
-        GameInstance();
-        bool working;
-        static bool paused;
+    GameInstance();
+    bool working;
+    static bool paused;
 
-        int init();
-        int startGame();
+    int init();
+    int startGame();
 
-        void quit();
-        void tooglePause(){paused = !paused;}
+    void quit();
+    void tooglePause()
+    {
+        paused = !paused;
+    }
 };
 
 #endif // GAMEINSTANCE_H

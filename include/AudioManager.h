@@ -4,13 +4,13 @@
 
 class AudioManager
 {
-    public:
-        AudioManager();
-        virtual ~AudioManager();
+public:
+    AudioManager();
+    virtual ~AudioManager();
 
-    protected:
+protected:
 
-    private:
+private:
 };
 
 #endif // AUDIOMANAGER_H

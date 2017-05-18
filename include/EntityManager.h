@@ -16,51 +16,67 @@ using namespace std;
 
 class EntityManager
 {
-    public:
-        EntityManager(/*GameInstance *gameInstance*/);
-        virtual ~EntityManager();
+public:
+    EntityManager(/*GameInstance *gameInstance*/);
+    virtual ~EntityManager();
 
-        void update(int ms);
+    void update(int ms);
 
-        void addRequest(entity_ptr entity) {toAdd.push(entity);}
-        void removeRequest(int id);
+    void addRequest(entity_ptr entity)
+    {
+        toAdd.push(entity);
+    }
+    void removeRequest(int id);
 
-        unordered_map<int,entity_ptr> &getEntities() {return entities;}
+    unordered_map<int,entity_ptr> &getEntities()
+    {
+        return entities;
+    }
 
-        bool exists(int id){return entities.find(id) != entities.end();}
+    bool exists(int id)
+    {
+        return entities.find(id) != entities.end();
+    }
 
-        bool isActive(){if(!active)printf("EntityManager is not active\n");return active;}
+    bool isActive()
+    {
+        if(!active)printf("EntityManager is not active\n");
+        return active;
+    }
 
-        //ObjectFactory *getFactory(){return &objectFactory;}
+    //ObjectFactory *getFactory(){return &objectFactory;}
 
-        void loadEntitiesFromFile(string filepath);
+    void loadEntitiesFromFile(string filepath);
 
-        template<class C, class ... Args>
-        shared_ptr<C> make_component(Args && ... args);
+    template<class C, class ... Args>
+    shared_ptr<C> make_component(Args && ... args);
 
-        unordered_map<type_index, vector<weak_ptr<Component>>> &getComponents() {return components;}
+    unordered_map<type_index, vector<weak_ptr<Component>>> &getComponents()
+    {
+        return components;
+    }
 
-        shared_ptr<Entity> make_entity();
+    shared_ptr<Entity> make_entity();
 
-        shared_ptr<Entity> make_object(string type, double x, double y);
+    shared_ptr<Entity> make_object(string type, double x, double y);
 
-    protected:
+protected:
 
-    private:
-        static int getNextID();
+private:
+    static int getNextID();
 
-        unordered_map<int, entity_ptr> entities; // na vector?
-        unordered_map<type_index, vector<weak_ptr<Component>>>  components;
+    unordered_map<int, entity_ptr> entities; // na vector?
+    unordered_map<type_index, vector<weak_ptr<Component>>>  components;
 
-        bool active;
+    bool active;
 
-        queue<entity_ptr> toAdd;
-        queue<int> toRemove;
+    queue<entity_ptr> toAdd;
+    queue<int> toRemove;
 
-        ResourceManager resourceManager;
-        int nextID;
+    ResourceManager resourceManager;
+    int nextID;
 
-        ObjectFactory factory;
+    ObjectFactory factory;
 };
 
 

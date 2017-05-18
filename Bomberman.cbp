@@ -5,7 +5,7 @@
 		<Option title="Bomberman" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="GraphicsModule\;GraphicsModule\include\;GraphicsModule\src\;Others\;GameObjects\;LogicModule\;LogicModule\src\;LogicModule\include\;Other\;Other\src\;Other\include\;EventModule\;MainModule\;MainModule\src\;MainModule\include\;EventModule\include\;EventModule\src\;AudioModule\;AudioModule\include\;AudioModule\src\;GameObjects\src\;GameObjects\include\;ScriptModule\;ScriptModule\src\;ScriptModule\include\;" />
+		<Option virtualFolders="GraphicsModule\;GraphicsModule\include\;GraphicsModule\src\;Others\;GameObjects\;LogicModule\;LogicModule\src\;LogicModule\include\;Other\;Other\src\;Other\include\;EventModule\;MainModule\;MainModule\src\;MainModule\include\;EventModule\include\;EventModule\src\;AudioModule\;AudioModule\include\;AudioModule\src\;GameObjects\src\;GameObjects\include\;ScriptModule\;ScriptModule\src\;ScriptModule\include\;AI\;AI\src\;AI\include\;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/Bomberman" prefix_auto="1" extension_auto="1" />
@@ -54,6 +54,9 @@
 			<Add library="C:/Dev_Libs/lua-5.3.3/liblua53.a" />
 			<Add directory="C:/Dev_Libs/x86_64-w64-mingw32/lib" />
 		</Linker>
+		<Unit filename="include/Action.h">
+			<Option virtualFolder="AI/include/" />
+		</Unit>
 		<Unit filename="include/AppWindow.h">
 			<Option virtualFolder="GraphicsModule/include/" />
 		</Unit>
@@ -90,12 +93,24 @@
 		<Unit filename="include/EventManager.h">
 			<Option virtualFolder="EventModule/include/" />
 		</Unit>
+		<Unit filename="include/FSM.h">
+			<Option virtualFolder="AI/include/" />
+		</Unit>
+		<Unit filename="include/FSMState.h">
+			<Option virtualFolder="AI/include/" />
+		</Unit>
 		<Unit filename="include/GameInitializer.h" />
 		<Unit filename="include/GameInstance.h">
 			<Option virtualFolder="MainModule/include/" />
 		</Unit>
 		<Unit filename="include/GameState.h">
 			<Option virtualFolder="MainModule/include/" />
+		</Unit>
+		<Unit filename="include/GoapAgent.h">
+			<Option virtualFolder="AI/include/" />
+		</Unit>
+		<Unit filename="include/GoapPlanner.h">
+			<Option virtualFolder="AI/include/" />
 		</Unit>
 		<Unit filename="include/GraphicsManager.h">
 			<Option virtualFolder="GraphicsModule/include/" />
@@ -104,7 +119,9 @@
 		<Unit filename="include/MiscFunctions.h">
 			<Option virtualFolder="Other/include/" />
 		</Unit>
-		<Unit filename="include/ObjectFactory.h" />
+		<Unit filename="include/ObjectFactory.h">
+			<Option virtualFolder="GameObjects/include/" />
+		</Unit>
 		<Unit filename="include/ResourceManager.h" />
 		<Unit filename="include/ScriptSystem.h">
 			<Option virtualFolder="ScriptModule/include/" />
@@ -119,6 +136,9 @@
 			<Option virtualFolder="GameObjects/include/" />
 		</Unit>
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Action.cpp">
+			<Option virtualFolder="AI/src/" />
+		</Unit>
 		<Unit filename="src/AppWindow.cpp">
 			<Option virtualFolder="GraphicsModule/src/" />
 		</Unit>
@@ -143,9 +163,21 @@
 		<Unit filename="src/EventManager.cpp">
 			<Option virtualFolder="EventModule/src/" />
 		</Unit>
+		<Unit filename="src/FSM.cpp">
+			<Option virtualFolder="AI/src/" />
+		</Unit>
+		<Unit filename="src/FSMState.cpp">
+			<Option virtualFolder="AI/src/" />
+		</Unit>
 		<Unit filename="src/GameInitializer.cpp" />
 		<Unit filename="src/GameInstance.cpp">
 			<Option virtualFolder="MainModule/src/" />
+		</Unit>
+		<Unit filename="src/GoapAgent.cpp">
+			<Option virtualFolder="AI/src/" />
+		</Unit>
+		<Unit filename="src/GoapPlanner.cpp">
+			<Option virtualFolder="AI/src/" />
 		</Unit>
 		<Unit filename="src/GraphicsManager.cpp">
 			<Option virtualFolder="GraphicsModule/src/" />
@@ -154,7 +186,9 @@
 		<Unit filename="src/MiscFunctions.cpp">
 			<Option virtualFolder="Other/src/" />
 		</Unit>
-		<Unit filename="src/ObjectFactory.cpp" />
+		<Unit filename="src/ObjectFactory.cpp">
+			<Option virtualFolder="GameObjects/src/" />
+		</Unit>
 		<Unit filename="src/ResourceManager.cpp" />
 		<Unit filename="src/ScriptSystem.cpp">
 			<Option virtualFolder="ScriptModule/src/" />

@@ -5,24 +5,24 @@
 
 class MainMenuGS : public GameState
 {
-    public:
-        MainMenuGS();
-        virtual ~MainMenuGS();
+public:
+    MainMenuGS();
+    virtual ~MainMenuGS();
 
-        void init();
-        void cleanup();
-/*
-        void pause();
-        void resume();
-*/
-/*
-        void handleEvents(GameEngine* game);
-        void update(GameEngine* game);
-        void draw(GameEngine* game);
-        */
-    protected:
+    void init();
+    void cleanup();
+    /*
+            void pause();
+            void resume();
+    */
+    /*
+            void handleEvents(GameEngine* game);
+            void update(GameEngine* game);
+            void draw(GameEngine* game);
+            */
+protected:
 
-    private:
+private:
 };
 
 #endif // MAINMENUGS_H

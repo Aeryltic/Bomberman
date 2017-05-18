@@ -24,4 +24,5 @@ void GameInitializer::initializeGame(EntityManager *entityManager)
         }
     }
     entityManager->make_object("tree", 500, 500);
+    entityManager->make_object("nest", 300, 300);
 }

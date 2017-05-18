@@ -4,13 +4,13 @@
 
 class EntitySystem
 {
-    public:
-        EntitySystem();
-        virtual ~EntitySystem();
+public:
+    EntitySystem();
+    virtual ~EntitySystem();
 
-    protected:
+protected:
 
-    private:
+private:
 };
 
 #endif // ENTITYSYSTEM_H

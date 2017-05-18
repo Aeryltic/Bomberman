@@ -6,14 +6,14 @@
 
 class ResourceManager
 {
-    public:
-        ResourceManager();
-        virtual ~ResourceManager();
-    protected:
+public:
+    ResourceManager();
+    virtual ~ResourceManager();
+protected:
 
-    private:
-        GraphicsManager graphicsManager;
-        AudioManager audioManager;
+private:
+    GraphicsManager graphicsManager;
+    AudioManager audioManager;
 };
 
 #endif // RESOURCEMANAGER_H

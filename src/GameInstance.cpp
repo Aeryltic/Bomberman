@@ -99,7 +99,7 @@ int GameInstance::run()
 
         SDL_Delay(1); /// tylko do testow
     }
-	return 0;
+    return 0;
 }
 
 /*
@@ -112,17 +112,17 @@ void GameInstance::run()
 int GameInstance::init()
 {
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0)
-	{
-		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
-		return -1;
-	}
+    {
+        printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+        return -1;
+    }
     /// rozdzielić konstrukcję i inicjalizację systemów, bo crashe przy innej kolejności konstrukcji
 
     //Uint32 delay = (33 / 10) * 10;  /* To round it down to the nearest 10 ms */
     //SDL_TimerID my_timer_id = SDL_AddTimer(delay, my_callbackfunc, my_callback_param);
     //timerID = SDL_AddTimer()
 
-	displayManager = new DisplayManager(this);
+    displayManager = new DisplayManager(this);
     entityManager = new EntityManager();
     eventManager = new EventManager(this);
 //    logicManager = new LogicManager(this);
@@ -134,46 +134,46 @@ int GameInstance::init()
     componentSystem->init();
 
     if(!(
-         displayManager->isActive()    &&
-         entityManager->isActive()     &&
+                displayManager->isActive()    &&
+                entityManager->isActive()     &&
 //         logicManager->isActive()      &&
-         eventManager->isActive()      &&
-         ScriptSystem::getInstance()->isActive()
-        ))
+                eventManager->isActive()      &&
+                ScriptSystem::getInstance()->isActive()
+            ))
     {
         printf("some systems are not active\n");
         return -1;
     }
 
-    EventManager::registerEventCallback(SDL_QUIT, [this](SDL_Event const& event)
+    EventManager::registerEventCallback(SDL_QUIT, [=](SDL_Event const& event)
     {
         quit();
     });
 
-    EventManager::registerEventCallback(SDL_USEREVENT, [this](SDL_Event const& event)
+    EventManager::registerEventCallback(SDL_USEREVENT, [=](SDL_Event const& event)
     {
         SDL_Event pushed;
         switch (event.user.code)
         {
-            case EVENT_LOST:
-                printf("EVENT_LOST\n");
-                SDL_memset(&pushed, 0, sizeof(pushed));
-                pushed.type = SDL_QUIT;
-                SDL_PushEvent(&pushed);
-                break;
-            case EVENT_WON:
-                printf("EVENT_WON\n");
-                SDL_memset(&pushed, 0, sizeof(pushed));
-                pushed.type = SDL_QUIT;
-                SDL_PushEvent(&pushed);
-                break;
-            case EVENT_PAUSE:
-                tooglePause();
-                break;
+        case EVENT_LOST:
+            printf("EVENT_LOST\n");
+            SDL_memset(&pushed, 0, sizeof(pushed));
+            pushed.type = SDL_QUIT;
+            SDL_PushEvent(&pushed);
+            break;
+        case EVENT_WON:
+            printf("EVENT_WON\n");
+            SDL_memset(&pushed, 0, sizeof(pushed));
+            pushed.type = SDL_QUIT;
+            SDL_PushEvent(&pushed);
+            break;
+        case EVENT_PAUSE:
+            tooglePause();
+            break;
         }
     });
 
-    EventManager::registerEventCallback(SDL_KEYDOWN, [this](SDL_Event const& event)
+    EventManager::registerEventCallback(SDL_KEYDOWN, [=](SDL_Event const& event)
     {
         SDL_Keycode keycode = event.key.keysym.sym;
         switch (keycode)
@@ -198,7 +198,7 @@ int GameInstance::init()
     /*
     Uint32 delay = 1000;
     SDL_TimerID my_timer_id = SDL_AddTimer(delay,
-        [this](Uint32 interval, void *param) -> int
+        [=](Uint32 interval, void *param) -> int
         {
             EventManager::pushUserEvent(EVENT_CONSOLE_TOGGLE,NULL,NULL);
 
@@ -213,8 +213,20 @@ void GameInstance::quit()
     working = false;
 }
 
-DisplayManager  *GameInstance::getDisplayManager(){return displayManager;}
-EntityManager   *GameInstance::getEntityManager(){return entityManager;}
+DisplayManager  *GameInstance::getDisplayManager()
+{
+    return displayManager;
+}
+EntityManager   *GameInstance::getEntityManager()
+{
+    return entityManager;
+}
 //LogicManager    *GameInstance::getLogicManager(){return logicManager;}
-Console         *GameInstance::getConsole(){return console;}
-EventManager    *GameInstance::getEventManager(){return eventManager;}
+Console         *GameInstance::getConsole()
+{
+    return console;
+}
+EventManager    *GameInstance::getEventManager()
+{
+    return eventManager;
+}

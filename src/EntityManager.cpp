@@ -2,7 +2,7 @@
 
 #include "Entity.h"
 
-EntityManager::EntityManager()
+EntityManager::EntityManager() : factory(this)
 {
     printf("new EntityManager\n");
     active = true;
@@ -53,5 +53,5 @@ shared_ptr<Entity> EntityManager::make_entity()
 
 shared_ptr<Entity> EntityManager::make_object(string type, double x, double y)
 {
-    return factory.newObject(type, x, y, this);
+    return factory.make_object(type, x, y);
 }

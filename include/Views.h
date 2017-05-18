@@ -4,9 +4,11 @@
 #include "Components.h"
 #include "Entity.h"
 
+#include "GoapAgent.h"
+
 class ViewCreator
 {
-    public:
+public:
     template<class C>
     static vector<C> createViews(EntityManager *entityManager) /// na dłuższą metę i tak będzie trzeba robić osobny creator dla każdego widoku, bo to jest niewydajne
     {
@@ -14,7 +16,8 @@ class ViewCreator
         for(auto &e : entityManager->getEntities())
         {
             C view(e.second.get());
-            if(view.complete){
+            if(view.complete)
+            {
                 views.push_back(view);
             }
         }
@@ -22,11 +25,13 @@ class ViewCreator
     }
 };
 
-struct View {
+struct View
+{
     bool complete = false;
 };
 
-struct MovementView : View {
+struct MovementView : View
+{
     MovementView(Entity *e)
     {
         pf = e->get<CPhysicalForm>();
@@ -37,7 +42,8 @@ struct MovementView : View {
     CMovement *m;
 };
 
-struct BreederView : View {
+struct BreederView : View
+{
     BreederView(Entity *e)
     {
         breeder = e->get<CBreeder>();
@@ -51,7 +57,8 @@ struct BreederView : View {
     CPhysicalForm *pf;
 };
 
-struct EnergyView : View {
+struct EnergyView : View
+{
     EnergyView(Entity *e)
     {
         energy = e->get<CEnergyStore>();
@@ -59,6 +66,47 @@ struct EnergyView : View {
         complete = (energy);
     }
     CEnergyStore *energy;
+};
+
+struct ScentView : View
+{
+    ScentView(Entity *e)
+    {
+        scent = e->get<CScentSource>();
+        pf = e->get<CPhysicalForm>();
+
+        complete = (scent && pf);
+    }
+    CScentSource *scent;
+    CPhysicalForm *pf;
+};
+
+struct SmellSensorView : View
+{
+    SmellSensorView(Entity *e)
+    {
+        smell = e->get<CSmellSensor>();
+        pf = e->get<CPhysicalForm>();
+
+        complete = (smell && pf);
+    }
+    CSmellSensor *smell;
+    CPhysicalForm *pf;
+};
+
+struct AIView : View
+{
+    AIView(Entity *e)
+    {
+        ai = e->get<GoapAgent>();
+        pf = e->get<CPhysicalForm>();
+        m  = e->get<CMovement>();
+
+        complete = (ai && pf && m);     /// to wszystko tylko teraz tak wygląda
+    }
+    GoapAgent *ai;
+    CPhysicalForm *pf;
+    CMovement *m;
 };
 
 #endif // VIEWS_H_INCLUDED

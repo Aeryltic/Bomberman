@@ -43,17 +43,17 @@ void Console::execute(const string &command)
 
 void Console::init()
 {
-    EventManager::registerEventCallback(SDL_USEREVENT, [this](SDL_Event const& event)
+    EventManager::registerEventCallback(SDL_USEREVENT, [=](SDL_Event const& event)
     {
         switch (event.user.code)
         {
-            case EVENT_CONSOLE_TOGGLE:
-                toggle();
-                EventManager::pushUserEvent(EVENT_PAUSE, nullptr, nullptr);
-                break;
+        case EVENT_CONSOLE_TOGGLE:
+            toggle();
+            EventManager::pushUserEvent(EVENT_PAUSE, nullptr, nullptr);
+            break;
         }
     });
-    EventManager::registerEventCallback(SDL_TEXTEDITING, [this](SDL_Event const& event)
+    EventManager::registerEventCallback(SDL_TEXTEDITING, [=](SDL_Event const& event)
     {
         if(visible)
         {
@@ -67,11 +67,11 @@ void Console::init()
             //composition = event.edit.text;
             //cursor = event.edit.start;
             //selection_len = event.edit.length;
-            buffer = string(text);
+            //buffer = string(text);
         }
 
     });
-    EventManager::registerEventCallback(SDL_TEXTINPUT, [this](SDL_Event const& event)
+    EventManager::registerEventCallback(SDL_TEXTINPUT, [=](SDL_Event const& event)
     {
         if(visible)
         {
@@ -83,7 +83,7 @@ void Console::init()
         }
 
     });
-    EventManager::registerEventCallback(SDL_KEYDOWN, [this](SDL_Event const& event)
+    EventManager::registerEventCallback(SDL_KEYDOWN, [=](SDL_Event const& event)
     {
         if(visible)
         {
@@ -91,36 +91,36 @@ void Console::init()
             int len = strlen(text);
             switch (keycode)
             {
-                case SDLK_RETURN:
-                    if(len)
-                    {
-                        execute(buffer);
-                        text[0] = 0;
-                        commandHistoryIndex = -1;
-                    }
-                    break;
+            case SDLK_RETURN:
+                if(len)
+                {
+                    execute(buffer);
+                    text[0] = 0;
+                    commandHistoryIndex = -1;
+                }
+                break;
 
-                case SDLK_BACKSPACE:
-                    if(len)
-                    {
-                        text[len - 1] = 0;
-                    }
-                    break;
+            case SDLK_BACKSPACE:
+                if(len)
+                {
+                    text[len - 1] = 0;
+                }
+                break;
 
-                case SDLK_UP:
-                    if(commandHistoryIndex < int(commandHistory.size()) - 1)
-                    {
-                        commandHistoryIndex++;
-                        strcpy(text, commandHistory[commandHistoryIndex].c_str());
-                    }
-                    break;
+            case SDLK_UP:
+                if(commandHistoryIndex < int(commandHistory.size()) - 1)
+                {
+                    commandHistoryIndex++;
+                    strcpy(text, commandHistory[commandHistoryIndex].c_str());
+                }
+                break;
 
-                case SDLK_DOWN:
-                    if(commandHistoryIndex > 0)
-                    {
-                        commandHistoryIndex--;
-                        strcpy(text, commandHistory[commandHistoryIndex].c_str());
-                    }
+            case SDLK_DOWN:
+                if(commandHistoryIndex > 0)
+                {
+                    commandHistoryIndex--;
+                    strcpy(text, commandHistory[commandHistoryIndex].c_str());
+                }
             }
             buffer = string(text);
         }

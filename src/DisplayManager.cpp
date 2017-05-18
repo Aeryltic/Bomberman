@@ -90,9 +90,8 @@ void DisplayManager::render(EntityManager *entityManager, int ms)
         {
             CAspect *asp = static_cast<CAspect*>(component.lock().get());
             CPhysicalForm *pf = static_cast<CPhysicalForm*>(component.lock()->owner.lock()->get<CPhysicalForm>());
-            float   //x = pf->pos.x,
-                    //y = pf->pos.y,
-                    r = pf->vol.x / 2;
+            float r = pf->vol.x / 2;
+
             SDL_Rect rect{.x = (int)pf->pos.x, .y = (int)pf->pos.y, .w = (int)pf->vol.x, .h = (int)pf->vol.y};
 
             CMovement *m = static_cast<CMovement*>(component.lock()->owner.lock()->get<CMovement>()); /// "piękne"
@@ -106,17 +105,17 @@ void DisplayManager::render(EntityManager *entityManager, int ms)
         }
 
 
-/*
-        while(!trt.empty())
-        {
-            auto &sth = trt.top();
-            if(SDL_RenderCopyEx(_window.getRenderer(), sth.texture, NULL, &sth.rect, degrees(sth.angle), NULL, SDL_FLIP_NONE) < 0)
-            {
-                printf("SDL_RenderCopy - Error\n");
-            }
-            trt.pop();
-        }
-*/
+        /*
+                while(!trt.empty())
+                {
+                    auto &sth = trt.top();
+                    if(SDL_RenderCopyEx(_window.getRenderer(), sth.texture, NULL, &sth.rect, degrees(sth.angle), NULL, SDL_FLIP_NONE) < 0)
+                    {
+                        printf("SDL_RenderCopy - Error\n");
+                    }
+                    trt.pop();
+                }
+        */
         showDialog(text, POS_RIGHT_TOP); /// TEST
 
         SDL_SetRenderTarget(_window.getRenderer(), nullptr); // przywracam właściwy renderer
@@ -174,7 +173,8 @@ void DisplayManager::showDialog(const string &text, BoxPosition position)
     textRect.w = textW + 50;
     textRect.h = textH + 50;
 
-    switch (position){
+    switch (position)
+    {
     case POS_CENTER:
         textRect.x = (_windowRect.w - textRect.w) / 2;
         textRect.y = (_windowRect.h - textRect.h) / 2;
@@ -256,9 +256,9 @@ void DisplayManager::init()
     lua_State *L = ScriptSystem::getInstance()->getLuaState();
 
     getGlobalNamespace (L)
-        .beginClass <DisplayManager> ("DisplayManager")
-            .addProperty ("text", &DisplayManager::getText, &DisplayManager::setText)
-        .endClass();
+    .beginClass <DisplayManager> ("DisplayManager")
+    .addProperty ("text", &DisplayManager::getText, &DisplayManager::setText)
+    .endClass();
 
     push (L, this);
     lua_setglobal (L, "display");

@@ -10,18 +10,18 @@ class Entity;
 
 using namespace std;
 
-using entity_creator = function<shared_ptr<Entity>(EntityManager*, double, double)>;
+using entity_creator = function<shared_ptr<Entity>(double, double)>;
 class EntityManager;
 class GameInitializer
 {
-    public:
-        GameInitializer();
-        virtual ~GameInitializer();
-        void initializeGame(EntityManager *entityManager);
-    protected:
+public:
+    GameInitializer();
+    virtual ~GameInitializer();
+    void initializeGame(EntityManager *entityManager);
+protected:
 
-    private:
-        //unordered_map<string, entity_creator> creators;
+private:
+    //unordered_map<string, entity_creator> creators;
 };
 
 #endif // GAMEINITIALIZER_H

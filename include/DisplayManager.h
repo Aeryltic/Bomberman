@@ -40,45 +40,55 @@ class DisplayManager
         }
     };
     /// -----------------------------------
-    public:
-        DisplayManager(GameInstance *gameInstance); /// to tylko fake
-        virtual ~DisplayManager();
+public:
+    DisplayManager(GameInstance *gameInstance); /// to tylko fake
+    virtual ~DisplayManager();
 
-        void drawConsole(const string &buffer, const deque<string> &commandHistory);
-        void render(EntityManager *entityManager, int ms);
+    void drawConsole(const string &buffer, const deque<string> &commandHistory);
+    void render(EntityManager *entityManager, int ms);
 
-        bool isVisible(const SDL_Rect &rect);
+    bool isVisible(const SDL_Rect &rect);
 
 //        GraphicsManager *getGraphicsManager(){return &_graphicsManager;}
-        bool isActive(){if(!_active)printf("DisplayManager is not active\n");return _active;}
+    bool isActive()
+    {
+        if(!_active)printf("DisplayManager is not active\n");
+        return _active;
+    }
 
-        void showDialog(const string &text, BoxPosition position = POS_CENTER);
-        void drawRectangle(const SDL_Rect &rect, const SDL_Color &color);
-        void drawText(const string &text, int x, int y, const SDL_Color &color);
+    void showDialog(const string &text, BoxPosition position = POS_CENTER);
+    void drawRectangle(const SDL_Rect &rect, const SDL_Color &color);
+    void drawText(const string &text, int x, int y, const SDL_Color &color);
 
     /// TESTY
-        string text;
-        void setText(const std::string& test){text = test;}
-        string getText() const {return text;}
+    string text;
+    void setText(const std::string& test)
+    {
+        text = test;
+    }
+    string getText() const
+    {
+        return text;
+    }
 
-        void init();
+    void init();
     /// -----------
-    protected:
+protected:
 
-    private:
-        bool _active;
-        AppWindow _window;
+private:
+    bool _active;
+    AppWindow _window;
 //        GraphicsManager _graphicsManager;
-        SDL_Rect _windowRect;
+    SDL_Rect _windowRect;
 
-        SDL_Texture *_gameWorldView;
+    SDL_Texture *_gameWorldView;
 
-        TTF_Font* consoleFont;
-        int consoleFontSize;
-        SDL_Color consoleFontColor;
+    TTF_Font* consoleFont;
+    int consoleFontSize;
+    SDL_Color consoleFontColor;
 
-        SDL_Color clearColor;
-        SDL_Texture *gameViewBuffer;
+    SDL_Color clearColor;
+    SDL_Texture *gameViewBuffer;
 };
 
 #endif // DISPLAYMANAGER_H

@@ -7,7 +7,10 @@ class Entity;
 
 struct Component
 {
-    Component(std::weak_ptr<Entity> owner){this->owner = owner;}
+    Component(std::weak_ptr<Entity> owner)
+    {
+        this->owner = owner;
+    }
     virtual ~Component() {}
 
     std::weak_ptr<Entity> owner;
