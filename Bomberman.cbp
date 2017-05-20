@@ -54,6 +54,9 @@
 			<Add library="C:/Dev_Libs/lua-5.3.3/liblua53.a" />
 			<Add directory="C:/Dev_Libs/x86_64-w64-mingw32/lib" />
 		</Linker>
+		<Unit filename="include/ANode.h">
+			<Option virtualFolder="AI/include/" />
+		</Unit>
 		<Unit filename="include/Action.h">
 			<Option virtualFolder="AI/include/" />
 		</Unit>
@@ -135,7 +138,13 @@
 		<Unit filename="include/Views.h">
 			<Option virtualFolder="GameObjects/include/" />
 		</Unit>
+		<Unit filename="include/WorldState.h">
+			<Option virtualFolder="AI/include/" />
+		</Unit>
 		<Unit filename="main.cpp" />
+		<Unit filename="src/ANode.cpp">
+			<Option virtualFolder="AI/src/" />
+		</Unit>
 		<Unit filename="src/Action.cpp">
 			<Option virtualFolder="AI/src/" />
 		</Unit>
@@ -192,6 +201,9 @@
 		<Unit filename="src/ResourceManager.cpp" />
 		<Unit filename="src/ScriptSystem.cpp">
 			<Option virtualFolder="ScriptModule/src/" />
+		</Unit>
+		<Unit filename="src/WorldState.cpp">
+			<Option virtualFolder="AI/src/" />
 		</Unit>
 		<Extensions>
 			<code_completion />

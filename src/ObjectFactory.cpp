@@ -7,6 +7,7 @@
 
 ObjectFactory::ObjectFactory(EntityManager* entityManager) : entityManager(entityManager)
 {
+    Action::init_actions();
 
     constructors["nest"] = ([=](double x, double y) -> shared_ptr<Entity>
     {
@@ -30,11 +31,19 @@ ObjectFactory::ObjectFactory(EntityManager* entityManager) : entityManager(entit
 
         e->add(entityManager->make_component<CMovement>(e,100));
 
-        e->add(entityManager->make_component<GoapAgent>(e));
         e->add(entityManager->make_component<CSmellSensor>(e));
 
-
         e->add(entityManager->make_component<CBackpack>(e));
+
+        auto agent = entityManager->make_component<GoapAgent>(e);
+        agent->set_state("have_grain", false);
+        agent->set_state("grain_delivered", false);
+
+        agent->add_action(Action::get_action("deliver_grain"));
+        agent->add_action(Action::get_action("pickup_grain"));
+
+        e->add(agent);
+
         return e;
     });
 

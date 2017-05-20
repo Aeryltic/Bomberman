@@ -10,4 +10,21 @@
 	5. olaæ "wêch" - uproœciæ, ¿eby szybko wprowadziæ pierwszy, prosty GOAP
 	6. Idle, GoTo, PerformAction
 18.05.2017
-	1. doda³em obiekty, ale bez implementacji metod, ani wszystkim metod w ogóle... ale wszystkie obiekty potrzebne chyba s¹
+	1. doda³em obiekty, ale bez implementacji metod, ani w ogóle wszystkich metod... ale wszystkie obiekty potrzebne chyba s¹
+19.05.2017
+	1. jakieœ funkcje, które testuj¹ "WorldSpace" i ustawiaj¹ odpowiadaj¹ce wartoœci w WorldState
+	3. dla lepszej heurystyki ustaliæ jakiœ tam koszt zmiany ka¿dego stanu?
+	4. i jednak od koñca
+20.05.2017
+	1. zrobiæ, ¿eby czujniki ustawia³y wartoœci w WorldState'ach - chyba po jednym na ka¿d¹ zmienn¹
+	2. pierwszy GOAPPlanner zaimplementowany - ciekawe tylko czy dzia³a
+	3. planner chyba dzia³a, przynajmniej na tym jednym przyk³adzie
+	4. teraz zrobiæ ActionHandler'y lub coœ, które maj¹:
+		- ustalaæ cel akcji
+		- sprawdzaæ preconditionale
+		- ewentualnie ustalaæ koszt (wspomagaæ plannera)
+		- sterowaæ wykonaniem akcji
+	5. jak zrobiæ ustalanie celów?
+	6. kiedyœ tam pewnie przyda siê uogólnienie tego A*... chocia¿ pewnie proœciej bêdzie przepisaæ go dla nowego u¿ytku... chocia¿ kiedyœ mo¿e...
+	7. stworzyæ PACZKI z dostêpnymi akcjami dla AI
+	8. oraz definicje akcji... mo¿e Lua w koñcu siê przyda?

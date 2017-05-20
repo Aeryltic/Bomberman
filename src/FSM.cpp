@@ -12,12 +12,12 @@ FSM::~FSM()
     //dtor
 }
 
-void FSM::update()
+void FSM::update(int ms)
 {
-    if(!states.empty())
-    {
-        states.top()->update();
-    }
+    if(states.empty())
+        push_state(make_unique<IdleState>(this));
+
+    states.top()->update(ms);
 }
 
 void FSM::push_state(std::unique_ptr<FSMState> state)

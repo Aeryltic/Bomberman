@@ -4,10 +4,10 @@ coreSettings.timestep = 1000/coreSettings.ticksPerSecond
 
 
 appWindow = {
-	title = "EngineTest",
-	size = {
-		w = 1280,
-		h = 720
-	}
+  title = "EngineTest",
+  size = {
+    w = 1280,
+    h = 720
+  }
 }
 

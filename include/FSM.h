@@ -13,9 +13,11 @@ public:
     FSM(GoapAgent *agent);
     virtual ~FSM();
 
-    void update();
+    void update(int ms);
     void push_state(std::unique_ptr<FSMState> state);
     void pop_state();
+
+    GoapAgent *get_agent(){return agent;}
 
 protected:
 
