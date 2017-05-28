@@ -17,8 +17,9 @@ ObjectFactory::ObjectFactory(EntityManager* entityManager) : entityManager(entit
         //e->add(entityManager->make_component<CMovement>(e,100));
         e->add(entityManager->make_component<CEnergyStore>(e, 100));
         e->add(entityManager->make_component<CBreeder>(e, "ant", 500, 1, 2));
+        e->add(entityManager->make_component<CActionTarget>(e, "TARGET_NEST"));
 
-        e->add(entityManager->make_component<CScentSource>(e, 100, SCENT_NEST));
+//        e->add(entityManager->make_component<CScentSource>(e, 100, SCENT_NEST));
         //e->add(entityManager->make_component<CSmell>(e));
         return e;
     });
@@ -28,20 +29,18 @@ ObjectFactory::ObjectFactory(EntityManager* entityManager) : entityManager(entit
         shared_ptr<Entity> e = entityManager->make_entity();
         e->add(entityManager->make_component<CPhysicalForm>(e,x,y,0,10,10));
         e->add(entityManager->make_component<CAspect>(e,SDL_Color{.r=255,.g=0,.b=0,.a=255}));
-
         e->add(entityManager->make_component<CMovement>(e,100));
-
-        e->add(entityManager->make_component<CSmellSensor>(e));
 
         e->add(entityManager->make_component<CBackpack>(e));
 
         auto agent = entityManager->make_component<GoapAgent>(e);
-        agent->set_state("have_grain", false);
-        agent->set_state("grain_delivered", false);
+        agent->set_state("have_grain", false);// to tu być nie winno
+        //agent->set_state("grain_delivered", false);//ani to
 
         agent->add_action(Action::get_action("deliver_grain"));
         agent->add_action(Action::get_action("pickup_grain"));
 
+        agent->add_goal("grain_delivered", true, 1);
         e->add(agent);
 
         return e;
@@ -62,12 +61,13 @@ ObjectFactory::ObjectFactory(EntityManager* entityManager) : entityManager(entit
     constructors["grain"] = ([=](double x, double y) -> shared_ptr<Entity>
     {
         shared_ptr<Entity> e = entityManager->make_entity();
-        e->add(entityManager->make_component<CPhysicalForm>(e,x,y,0,10,10));
-        e->add(entityManager->make_component<CAspect>(e,SDL_Color{.r=0,.g=155,.b=0,.a=255}));
+        e->add(entityManager->make_component<CPhysicalForm>(e, x, y, 0, 10, 10));
+        e->add(entityManager->make_component<CAspect>(e, SDL_Color{.r=0,.g=155,.b=0,.a=255}));
         //e->add(entityManager->make_component<CEnergyStore>(e, 0));
-        e->add(entityManager->make_component<CScentSource>(e, 100, SCENT_FOOD));
-        e->add(entityManager->make_component<CConsumable>(e, CONSUMABLE_FOOD, 100));
+        //e->add(entityManager->make_component<CScentSource>(e, 100, SCENT_FOOD));
+        e->add(entityManager->make_component<CActionTarget>(e, "TARGET_GRAIN"));
 
+        e->add(entityManager->make_component<CConsumable>(e, CONSUMABLE_FOOD, 100));
         e->add(entityManager->make_component<CCarryable>(e));
         return e;
     });

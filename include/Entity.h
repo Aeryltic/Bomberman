@@ -7,7 +7,9 @@
 #include <typeindex>
 
 #include "MiscFunctions.h"
-#include "Enumerations.h"
+//#include "Enumerations.h"
+
+#include "Message.h"
 
 using namespace std;
 

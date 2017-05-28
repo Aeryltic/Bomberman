@@ -119,6 +119,7 @@
 			<Option virtualFolder="GraphicsModule/include/" />
 		</Unit>
 		<Unit filename="include/MainMenuGS.h" />
+		<Unit filename="include/Message.h" />
 		<Unit filename="include/MiscFunctions.h">
 			<Option virtualFolder="Other/include/" />
 		</Unit>
@@ -157,6 +158,9 @@
 		<Unit filename="src/ComponentSystem.cpp">
 			<Option virtualFolder="GameObjects/src/" />
 		</Unit>
+		<Unit filename="src/Components.cpp">
+			<Option virtualFolder="GameObjects/src/" />
+		</Unit>
 		<Unit filename="src/Console.cpp">
 			<Option virtualFolder="ScriptModule/src/" />
 		</Unit>
@@ -192,6 +196,7 @@
 			<Option virtualFolder="GraphicsModule/src/" />
 		</Unit>
 		<Unit filename="src/MainMenuGS.cpp" />
+		<Unit filename="src/Message.cpp" />
 		<Unit filename="src/MiscFunctions.cpp">
 			<Option virtualFolder="Other/src/" />
 		</Unit>

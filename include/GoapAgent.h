@@ -32,11 +32,14 @@ public:
 
     FSM* getFSM(){return &fsm;}
 
+    void add_goal(std::string goal_name, bool goal_state, unsigned priority);
+
 protected:
     FSM fsm;
     //std::unordered_map<std::string, bool> world_state;
     WorldState ws;
     std::unordered_map<std::string, Action> available_actions;
+    std::list<std::pair<unsigned, std::pair<std::string, bool>>> goals; // <priority, <goal_name, goal_state>>
 
     friend class PerformActionState;
     std::list<Action*> current_actions;

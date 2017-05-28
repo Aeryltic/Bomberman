@@ -21,6 +21,7 @@ void ComponentSystem::addUpdateFunction(int priority, update_function ufunction)
 bool ComponentSystem::init() /// póki co nie ma w ogóle sortowania tych funkcji
 {
     /// jakiś tam ruch
+    /*
     addUpdateFunction(10, [](int ms, EntityManager* entityManager) /// tylko test
     {
         vector<MovementView> views = ViewCreator::createViews<MovementView>(entityManager);
@@ -35,6 +36,7 @@ bool ComponentSystem::init() /// póki co nie ma w ogóle sortowania tych funkcj
             }
         }
     });
+    */
 
     /// breedery - to też AI, chociaż może nie nadużywajmy AI, to jest zwykły automat... ale jakieś metaautomaty też można by zrobić
     addUpdateFunction(20, [](int ms, EntityManager* entityManager)

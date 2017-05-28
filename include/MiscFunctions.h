@@ -29,13 +29,13 @@ inline bool collide(SDL_Rect *a, SDL_Rect *b)
 {
     return SDL_HasIntersection(a,b);
 }
-
+/*
 int_vector2d gridFromReal(vector2d real);
 vector2d realFromGrid(int_vector2d grid);
 
 int_vector2d gridFromReal(double rx, double ry);
 vector2d realFromGrid(int gx, int gy);
-
+*/
 vec3d random_point_in_range(double x, double y, double r_min, double r_max);
 
 #endif // MISCFUNCTIONS_H_INCLUDED

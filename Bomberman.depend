@@ -1149,7 +1149,7 @@
 	<deque>
 	"Enumerations.h"
 
-1495146516 source:c:\users\user\desktop\bomberman\src\displaymanager.cpp
+1495997782 source:c:\users\user\desktop\bomberman\src\displaymanager.cpp
 	"DisplayManager.h"
 	<SDL.h>
 	<SDL_image.h>
@@ -1180,12 +1180,11 @@
 1485013384 source:c:\users\user\desktop\bomberman\src\objectinstancecontainer.cpp
 	"ObjectInstanceContainer.h"
 
-1495146517 c:\users\user\desktop\bomberman\include\structures.h
+1495997745 c:\users\user\desktop\bomberman\include\structures.h
 	<cmath>
-	<SDL.h>
 	<memory>
 
-1495122292 c:\users\user\desktop\bomberman\include\enumerations.h
+1495396244 c:\users\user\desktop\bomberman\include\enumerations.h
 
 1486234539 c:\users\user\desktop\bomberman\include\constants.h
 	<SDL.h>
@@ -1263,15 +1262,15 @@
 	"Entity.h"
 	"Component.h"
 
-1495146517 c:\users\user\desktop\bomberman\include\entity.h
+1495812397 c:\users\user\desktop\bomberman\include\entity.h
 	<unordered_map>
 	<vector>
 	<typeinfo>
 	<typeindex>
 	"MiscFunctions.h"
-	"Enumerations.h"
+	"Message.h"
 
-1495147267 c:\users\user\desktop\bomberman\include\miscfunctions.h
+1495410411 c:\users\user\desktop\bomberman\include\miscfunctions.h
 	<typeindex>
 	<typeinfo>
 	<cmath>
@@ -1296,14 +1295,14 @@
 	<memory>
 	<unordered_map>
 
-1495286309 source:c:\users\user\desktop\bomberman\src\objectfactory.cpp
+1495992302 source:c:\users\user\desktop\bomberman\src\objectfactory.cpp
 	"ObjectFactory.h"
 	"Entity.h"
 	"EntityManager.h"
 	"Components.h"
 	"GoapAgent.h"
 
-1494674062 source:c:\users\user\desktop\bomberman\src\eventmanager.cpp
+1495812422 source:c:\users\user\desktop\bomberman\src\eventmanager.cpp
 	"EventManager.h"
 	"GameInstance.h"
 	"Entity.h"
@@ -1332,13 +1331,12 @@
 1485967410 c:\users\user\desktop\bomberman\src\miscfunctions.h
 	"MiscFunctions.h"
 
-1495146517 source:c:\users\user\desktop\bomberman\src\miscfunctions.cpp
+1495812582 source:c:\users\user\desktop\bomberman\src\miscfunctions.cpp
 	"MiscFunctions.h"
-	"Constants.h"
 
 1494673812 c:\users\user\desktop\bomberman\include\typedefs.h
 
-1494609333 source:c:\users\user\desktop\bomberman\src\components.cpp
+1495396538 source:c:\users\user\desktop\bomberman\src\components.cpp
 	"Components.h"
 
 1495291750 source:c:\users\user\desktop\bomberman\src\gameinitializer.cpp
@@ -1453,7 +1451,7 @@
 
 1495146517 c:\users\user\desktop\bomberman\include\audiomanager.h
 
-1495290499 source:c:\users\user\desktop\bomberman\src\componentsystem.cpp
+1495995878 source:c:\users\user\desktop\bomberman\src\componentsystem.cpp
 	"ComponentSystem.h"
 	"EntityManager.h"
 	"Views.h"
@@ -1481,7 +1479,7 @@
 
 1495146517 c:\users\user\desktop\bomberman\include\gamestate.h
 
-1495146517 c:\users\user\desktop\bomberman\include\components.h
+1495995803 c:\users\user\desktop\bomberman\include\components.h
 	"Entity.h"
 	"Component.h"
 	"Structures.h"
@@ -1495,7 +1493,7 @@
 1495146517 c:\users\user\desktop\bomberman\include\mainmenugs.h
 	"GameState.h"
 
-1495146517 c:\users\user\desktop\bomberman\include\views.h
+1495396554 c:\users\user\desktop\bomberman\include\views.h
 	"Components.h"
 	"Entity.h"
 	"GoapAgent.h"
@@ -1504,13 +1502,21 @@
 	<math.h>
 	"SDL.h"
 
-1495289073 source:c:\users\user\desktop\bomberman\src\action.cpp
+1496018842 source:c:\users\user\desktop\bomberman\src\action.cpp
 	"Action.h"
 	<functional>
+	<Entity.h>
+	<Components.h>
+	"json.hpp"
+	<string>
+	<fstream>
+	<streambuf>
 
-1495285756 c:\users\user\desktop\bomberman\include\action.h
+1496014175 c:\users\user\desktop\bomberman\include\action.h
 	<unordered_map>
 	<string>
+	<memory>
+	<vector>
 	"WorldState.h"
 
 1495141512 c:\users\user\desktop\bomberman\include\ai.h
@@ -1519,7 +1525,7 @@
 	<memory>
 	<stack>
 
-1495295801 c:\users\user\desktop\bomberman\include\goapagent.h
+1495928344 c:\users\user\desktop\bomberman\include\goapagent.h
 	<unordered_map>
 	<memory>
 	<list>
@@ -1532,20 +1538,20 @@
 	"FSM.h"
 	"FSMState.h"
 
-1495291898 c:\users\user\desktop\bomberman\include\fsmstate.h
+1495997793 c:\users\user\desktop\bomberman\include\fsmstate.h
 	"Structures.h"
 
-1495292072 source:c:\users\user\desktop\bomberman\src\fsmstate.cpp
+1495995605 source:c:\users\user\desktop\bomberman\src\fsmstate.cpp
 	"FSMState.h"
 	"FSM.h"
 	"GoapPlanner.h"
 	"WorldState.h"
 	"GoapAgent.h"
 
-1495295837 source:c:\users\user\desktop\bomberman\src\goapagent.cpp
+1495990188 source:c:\users\user\desktop\bomberman\src\goapagent.cpp
 	"GoapAgent.h"
 
-1495295805 source:c:\users\user\desktop\bomberman\src\goapplanner.cpp
+1495992117 source:c:\users\user\desktop\bomberman\src\goapplanner.cpp
 	"GoapPlanner.h"
 	<unordered_map>
 	<algorithm>
@@ -1554,7 +1560,7 @@
 	"GoapAgent.h"
 	"WorldState.h"
 
-1495291275 c:\users\user\desktop\bomberman\include\goapplanner.h
+1495392143 c:\users\user\desktop\bomberman\include\goapplanner.h
 	<deque>
 	<list>
 
@@ -1569,4 +1575,39 @@
 
 1495283067 source:c:\users\user\desktop\bomberman\src\worldstate.cpp
 	"WorldState.h"
+
+1495812482 c:\users\user\desktop\bomberman\include\message.h
+	<memory>
+
+1495812479 source:c:\users\user\desktop\bomberman\src\message.cpp
+	"Message.h"
+
+1496015718 c:\users\user\desktop\bomberman\include\json.hpp
+	<algorithm>
+	<array>
+	<cassert>
+	<cctype>
+	<ciso646>
+	<cmath>
+	<cstddef>
+	<cstdint>
+	<cstdlib>
+	<cstring>
+	<forward_list>
+	<functional>
+	<initializer_list>
+	<iomanip>
+	<iostream>
+	<iterator>
+	<limits>
+	<locale>
+	<map>
+	<memory>
+	<numeric>
+	<sstream>
+	<stdexcept>
+	<string>
+	<type_traits>
+	<utility>
+	<vector>
 

@@ -24,11 +24,11 @@ private:
     std::deque<ANode*> closed;
     std::list<ANode*> open;
 
-    void addToOpenList(ANode *node);
-    ANode* popAndClose();
+    void add_to_open(ANode *node);
+    ANode* pop_and_close();
 
-    bool memberOfClosed(const WorldState& ws);
-    std::list<ANode*>::iterator memberOfOpen(const WorldState& ws);
+    bool is_closed(const WorldState& ws);
+    std::list<ANode*>::iterator is_open(const WorldState& ws);
 };
 
 #endif // GOAPPLANNER_H

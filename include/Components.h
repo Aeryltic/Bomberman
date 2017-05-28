@@ -43,50 +43,122 @@ struct CMovement : public Component
         : Component(owner)
     {
         this->max_speed = max_speed;
-        this->movement_angle = rand()%360;
+        //this->movement_angle = rand()%360;
     }
     virtual ~CMovement() {};
 
-    bool has_dest = false;
+    //bool has_dest = false;
     //vec3d dest;
-    float movement_angle;
-    vec3d speed;            // to raczej w punktach na sekundę
+    //float movement_angle;
+    //vec3d speed;            // to raczej w punktach na sekundę
     float max_speed;
     /// to potem gdzie indziej pójdzie
-    unsigned wait_end;
+    //unsigned wait_end;
+};
+
+struct CActionTarget : public Component /// to nie jest chyba dobry pomysł
+{
+    CActionTarget(weak_ptr<Entity> owner, string target_type) : Component(owner), target_type(target_type)
+    {
+        targets[target_type].push_back(owner); /// może jakieś problemy przy wielowątkowości?
+    }
+    virtual ~CActionTarget(){}
+
+    string target_type;
+
+    static unordered_map<string, vector<weak_ptr<Entity>>> targets;
 };
 
 ///-------------------------------------------------------------------------------------------
-/// sensory reagują na dane typy stimulusów
-struct CSensor : public Component /// na dobrą sprawę - zmysł
+struct CSensor : public Component
 {
     CSensor(weak_ptr<Entity> owner)
-        : Component(owner) {}
+        : Component(owner)
+    {
+        owner.lock()->register_listener(MSG_SCANNING, [=](Message& msg)
+        {
+            scan();
+        });
+    }
     virtual ~CSensor() {};
+
+    virtual void scan()
+    {
+        printf("default scan\n");
+    }
 
     float effectiveness;
 };
+/// to sie chyba jeszcze wykorzysta
+/*
+struct CClosestTargetSensor : public CSensor
+{
+    CClosestTargetSensor(weak_ptr<Entity> owner) : CSensor(owner) {}
+    virtual ~CClosestTargetSensor() {};
 
+    //string target_type;
+
+    void scan(string target_type)
+    {
+        printf("looking for: %s\n", target_type.c_str());
+        weak_ptr<Entity> closest;
+        float dist = 0;
+        auto opf = owner.lock()->get<CPhysicalForm>();
+        if(opf)
+        {
+            for(auto target: CActionTarget::targets[target_type])
+            {
+                auto pf = target.lock()->get<CPhysicalForm>();
+                if(pf)
+                {
+                    if(closest.expired())
+                    {
+                        closest = target;
+                        dist = opf->pos.dist(pf->pos);
+                    }
+                    else
+                    {
+                        float temp = opf->pos.dist(pf->pos);
+                        if(temp < dist)
+                        {
+                            closest = target;
+                            dist = temp;
+                        }
+                    }
+                }
+            }
+        }
+        owner.lock()->receive_message(Message(MSG_TARGET, closest));
+    }
+};
+*/
+/*
 struct CSmellSensor : public CSensor
 {
     CSmellSensor(weak_ptr<Entity> owner)
         : CSensor(owner) {}
     virtual ~CSmellSensor() {};
 
-    unordered_map<unsigned, double> last; /// tego tu być nie winno, jeśli już to w CAIBlackboard
-    unordered_map<unsigned, stack<double>> stimuli;
+    void scan()
+    {
+        printf("smell scan\n");
+        //Entity *close
+    }
+
+    //unordered_map<unsigned, double> last; /// tego tu być nie winno, jeśli już to w CAIBlackboard
+    //unordered_map<unsigned, stack<double>> stimuli;
 };
 
 struct CSightSensor : public CSensor
 {
 
 };
-/* // chyba jednak niepoczebne
-struct CLifeSignSendor : public CSensor
+ // chyba jednak niepoczebne
+struct CLifeSignsSensor : public CSensor
 {
 
 };
-*/
+
 struct CStimulusSource : public Component /// czy to ma sens? dźwięki, zapachy... co jeszcze?
 {
     CStimulusSource(weak_ptr<Entity> owner, float intensity)
@@ -105,6 +177,7 @@ struct CScentSource : public CStimulusSource
 
     ScentType type;
 };
+*/
 ///-------------------------------------------------------------------------------------------
 struct CCarryable : public Component
 {

@@ -3,6 +3,7 @@
 
 #include "Structures.h"
 
+class Entity;
 class FSM;
 
 class FSMState
@@ -27,7 +28,7 @@ public:
     unsigned wait_end;
 };
 
-class GotoState : public FSMState
+class GotoState : public FSMState /// będzie korzystał z A* w przyszłości
 {
 public:
     GotoState(FSM *fsm, vec3d dest, float min_range);
@@ -35,7 +36,7 @@ public:
 
     void update(int ms);
 
-    vec3d dest; /// robi się zamieszanie, bo już jeden dest jest w CMovement
+    vec3d dest;
     float min_range;
 
     bool is_in_range();
@@ -48,6 +49,7 @@ public:
     virtual ~PerformActionState();
 
     void update(int ms);
+    void set_target(weak_ptr<Entity> target);
 };
 
 #endif // FSMSTATE_H

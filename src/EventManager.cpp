@@ -51,7 +51,7 @@ void EventManager::pushUserEvent(int eventcode, void *data1, void *data2)
     event.user.data2 = data2;
     SDL_PushEvent(&event);
 }
-
+/*
 void EventManager::pushEntityEvent(Uint32 eventcode, shared_ptr<Entity> publisher, shared_ptr<Entity> subscriber)
 {
     SDL_Event event;
@@ -62,14 +62,14 @@ void EventManager::pushEntityEvent(Uint32 eventcode, shared_ptr<Entity> publishe
     e->publisher = publisher;
     e->subscriber = subscriber;
 
-    /*
-    event.user.code = eventcode;
-    event.user.data1 = data1;
-    event.user.data2 = data2;
-    */
+
+//    event.user.code = eventcode;
+//    event.user.data1 = data1;
+//    event.user.data2 = data2;
+
     SDL_PushEvent(&event);
 }
-
+*/
 Uint32 EventManager::getUserEventType(Uint32 eventcode)
 {
     return eventFirstNum + eventcode;

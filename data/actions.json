@@ -1,0 +1,27 @@
+[
+	{
+	"name": "deliver_grain",
+		"cost": 10,
+		"duration": 500,
+		"target": "TARGET_NEST",
+		"preconditions": [
+			["have_grain", true]
+		],
+		"effects": [
+			["have_grain", false],
+			["grain_delivered", true]
+		]
+	},
+	{
+	"name": "pickup_grain",
+		"cost": 1,
+		"duration": 500,
+		"target": "TARGET_GRAIN",
+		"preconditions": [
+			["have_grain", false]
+		],
+		"effects": [
+			["have_grain", true]
+		]
+	}
+]

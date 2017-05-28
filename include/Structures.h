@@ -1,45 +1,62 @@
 #ifndef STRUCTURES_H_INCLUDED
 #define STRUCTURES_H_INCLUDED
 #include <cmath>
-#include <SDL.h>
+//#include <SDL.h>
 #include <memory>
 using namespace std;
-class Entity;
-/// na przyszlosc
+
+struct vec3d
+{
+    double x, y, z;
+
+    vec3d(double x, double y, double z) : x(x), y(y), z(z) {}
+    vec3d(): x(0), y(0), z(0) {}
+
+    double dist(const vec3d &other) const {
+        return sqrt((x-other.x)*(x-other.x)+(y-other.y)*(y-other.y)+(z-other.z)*(z-other.z));
+    }
+
+    vec3d operator+(const vec3d &other) const {
+        return vec3d(x + other.x, y + other.y, z + other.z);
+    }
+
+    vec3d operator-(const vec3d &other) const {
+        return vec3d(x - other.x, y - other.y, z - other.z);
+    }
+
+    void operator+=(const vec3d &other) {
+        (x += other.x, y += other.y, z += other.z);
+    }
+
+    vec3d operator*(const double &v) const {
+        return vec3d(x*v, y*v, z*v);
+    }
+
+    vec3d operator/(const double &v) const {
+        return vec3d(x/v, y/v, z/v);
+    }
+
+    vec3d moved_towards(const vec3d &other, double step) const {
+        double distance = dist(other);
+        return step >= distance ? other : (*this) + (other - *this) * step / distance;
+    }
+
+    vec3d normalized() const {
+        return *this / dist(vec3d(0,0,0));
+    }
+
+};
 /*
-enum VarType
+struct EntityEvent
 {
-    INT32,
-    INT64,
-    DOUBLE64,
-    CHAR,
-    STRING
-};
-union VarUnion
-{
-    int int32;
-    long long int64;
-    double float64;
-    char chr;
-};
-struct Variable
-{
-    VarType _type;
-    VarUnion _val;
+    unsigned type;
+    unsigned timestamp;
+    shared_ptr<Entity> publisher;
+    shared_ptr<Entity> subscriber;
 };
 */
-///-------------------
-//extern int _AliveCount;
-struct Message /// potrzebna tu jakaś hierarchia... chyba?
-{
-    Message(unsigned type, weak_ptr<Entity> publisher) :
-        type(type), publisher(publisher) {}
-    virtual ~Message() {};
 
-    unsigned type;
-    weak_ptr<Entity> publisher;
-};
-
+/*
 struct Vector2D_double
 {
     Vector2D_double() : x(0), y(0) {}
@@ -77,34 +94,9 @@ struct Vector2D_int
         return !((*this)==b);
     }
 };
+*/
 
-struct vec3d
-{
-    double x, y, z;
-    vec3d(double x, double y, double z) : x(x), y(y), z(z) {}
-    vec3d(): x(0), y(0), z(0) {}
-
-    double dist(const vec3d &other)
-    {
-        return sqrt((x-other.x)*(x-other.x)+(y-other.y)*(y-other.y)+(z-other.z)*(z-other.z));
-    }
-
-    vec3d operator+(const vec3d &other)
-    {
-        return vec3d(x + other.x, y + other.y, z + other.z);
-    }
-
-    void operator+=(const vec3d &other)
-    {
-        (x += other.x, y += other.y, z += other.z);
-    }
-
-    vec3d operator*(const double &v)
-    {
-        return vec3d(x*v, y*v, z*v);
-    }
-};
-
+/*
 typedef Vector2D_double vector2d;
 typedef Vector2D_int int_vector2d;
 struct PositionAndSpeed // obsolete
@@ -127,13 +119,30 @@ struct Circle
     Circle(double x, double y, double r) : x(x), y(y), r(r) {}
     double x, y, r;
 };
-
-struct EntityEvent
+*/
+/// na przyszlosc... raczej nie
+/*
+enum VarType
 {
-    Uint32 type;
-    Uint32 timestamp;
-    shared_ptr<Entity> publisher;
-    shared_ptr<Entity> subscriber;
+    INT32,
+    INT64,
+    DOUBLE64,
+    CHAR,
+    STRING
 };
-
+union VarUnion
+{
+    int int32;
+    long long int64;
+    double float64;
+    char chr;
+};
+struct Variable
+{
+    VarType _type;
+    VarUnion _val;
+};
+*/
+///-------------------
+//extern int _AliveCount;
 #endif // STRUCTURES_H_INCLUDED

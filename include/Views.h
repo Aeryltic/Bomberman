@@ -67,7 +67,7 @@ struct EnergyView : View
     }
     CEnergyStore *energy;
 };
-
+/*
 struct ScentView : View
 {
     ScentView(Entity *e)
@@ -93,7 +93,7 @@ struct SmellSensorView : View
     CSmellSensor *smell;
     CPhysicalForm *pf;
 };
-
+*/
 struct AIView : View
 {
     AIView(Entity *e)

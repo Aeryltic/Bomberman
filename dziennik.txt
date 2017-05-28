@@ -28,3 +28,19 @@
 	6. kiedyœ tam pewnie przyda siê uogólnienie tego A*... chocia¿ pewnie proœciej bêdzie przepisaæ go dla nowego u¿ytku... chocia¿ kiedyœ mo¿e...
 	7. stworzyæ PACZKI z dostêpnymi akcjami dla AI
 	8. oraz definicje akcji... mo¿e Lua w koñcu siê przyda?
+21.05.2017
+	1. stany porz¹dane okreœlaj¹ce cele: "jestem zdrowy", "jestem bezpieczny" itp...
+	2. dodaæ funkcjê move_towards()
+	3. zredukowaæ to rozdrobnienie komponentów, bo to chore i utrudnia tylko
+	4. przemianowaæ CPhysicalForm na Transform
+26.05.2017
+	1. zrobiæ ¿eby akcje jako takie by³y w tylko jednym miejscu, a byty posiada³y jedynie jakieœ ³¹czniki wskazuj¹ce, ¿e potrafi¹ je wykonywaæ, ewentualnie jakieœ dane w tych ³¹cznikach jeœli potrzeba (o celu itp) ActionHandle/ActionLink
+28.05.2017
+	1. stworzyæ jakaœ pamiêæ "krótkotrwa³¹" która zapamiêtywa³aby, które akcje siê nie powiod³y tak by planista nie próbowa³ robiæ ci¹gle tego samego przy niepowodzeniu
+	2. OPRACOWAÆ MECHANIZMY POZWALAJ¥CE NA CZYSZCZENIE - USUWANIE OBIEKTÓW, ICH KOMPONENTÓW ITP.
+	3. no mi³o - mrówki chodz¹ w tê i z powrotem, ale nic z tego nie wynika, zrobiæ ¿eby nosi³y ziarna i odk³ada³y je
+	4. dodaæ jakieœ ActionNode'y - pole na które siê wchodzi i mo¿na wykonywaæ tam akcjê na targecie
+	5. co jeœli któraœ mrówka zabierze siê za podnoszenie ziarna, które chcia³a podnieœæ inna?
+29.05.2017
+	1. DANE w jakimœ JSONie lub czymœ nawet l¿ejszym
+	2. podstawowy json dodany - akcje z pliku

@@ -1,4 +1,7 @@
 #include "Components.h"
+
+unordered_map<string, vector<weak_ptr<Entity>>> CActionTarget::targets;
+
 /// CPhysicalForm ---------------------------------------------------------------------------
 /*
 SDL_Rect CPhysicalForm::rect(int ms)

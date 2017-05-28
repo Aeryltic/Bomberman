@@ -94,12 +94,12 @@ void DisplayManager::render(EntityManager *entityManager, int ms)
 
             SDL_Rect rect{.x = (int)pf->pos.x, .y = (int)pf->pos.y, .w = (int)pf->vol.x, .h = (int)pf->vol.y};
 
-            CMovement *m = static_cast<CMovement*>(component.lock()->owner.lock()->get<CMovement>()); /// "piękne"
-            if(m != nullptr) // to chyba nie działa jak należy
-            {
-                rect.x += m->speed.x * ms / 1000.0;
-                rect.y += m->speed.y * ms / 1000.0;
-            }
+//            CMovement *m = component.lock()->owner.lock()->get<CMovement>(); /// "piękne"
+//            if(m != nullptr)
+//            {
+//                rect.x += m->speed.x * ms / 1000.0;
+//                rect.y += m->speed.y * ms / 1000.0;
+//            }
             //drawRectangle(rect, SDL_Color{.r=255,.g=0,.b=0,.a=255});
             filledCircleRGBA (_window.getRenderer(), rect.x, rect.y, r, asp->color.r, asp->color.g, asp->color.b, asp->color.a);
         }

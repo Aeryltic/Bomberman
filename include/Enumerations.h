@@ -45,6 +45,9 @@ enum MessageType
 {
     MSG_COLLISION,
     MSG_ACTIVATION,
+
+    MSG_SCANNING,
+    MSG_TARGET,
     //-----------------
     MSG_GOOD_DIRECTION,
     MSG_BAD_DIRECTION,
