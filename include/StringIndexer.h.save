@@ -1,0 +1,18 @@
+#ifndef STRINGINDEXER_H
+#define STRINGINDEXER_H
+
+
+class StringIndexer {
+public:
+    virtual ~StringIndexer();
+    
+
+protected:
+
+private:
+    StringIndexer();
+
+    unordered_map<string, unsigned> indexes;
+};
+
+#endif // STRINGINDEXER_H

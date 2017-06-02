@@ -1,0 +1,39 @@
+[
+	{
+		"name": "nest",
+		"components": [
+			["CPhysicalForm", 0, 50 ,50],
+			["CAspect", [100,50,50,255]],
+			["CEnergyStore", 100],
+			["CBreeder", "ant", 500, 1, 2],
+			["CActionTarget", "TARGET_NEST"]
+		]
+	},
+	{
+		"name": "ant",
+		"components": [
+			["CPhysicalForm", 0, 10, 10],
+			["CAspect", [255,0,0,255]],
+			["CMovement", 100],
+			["GoapAgent"]
+		]
+	},
+	{
+		"name": "tree",
+		"components": [
+			["CPhysicalForm", 0, 30, 30],
+			["CAspect", [50,155,0,255]],
+			["CEnergyStore", 400],
+			["CBreeder", "grain", 500, 1, 5]
+		]
+	},
+	{
+		"name": "grain",
+		"components": [
+			["CPhysicalForm", 0, 10, 10],
+			["CAspect", [0,155,0,255]],
+			["CActionTarget", "TARGET_GRAIN"]
+		]
+	},
+
+]

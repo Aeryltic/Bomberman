@@ -2,6 +2,19 @@
 
 unordered_map<string, vector<weak_ptr<Entity>>> CActionTarget::targets;
 
+void register_components(lua_State *L) { /// to potem
+    getGlobalNamespace (L)
+        .beginNamespace ("components")
+            .beginClass <CPhysicalForm> ("CPhysicalForm")
+                .addConstructor <void (*) (double x, double y, double z, double w, double h, double d)> ()
+            .endClass ()
+            .beginClass <CAspect> ("CAspect")
+                .addConstructor <void (*) (Uint8 r, Uint8 g, Uint8 b, Uint8 a)> ()
+            .endClass ()
+    .endNamespace ();
+}
+
+
 /// CPhysicalForm ---------------------------------------------------------------------------
 /*
 SDL_Rect CPhysicalForm::rect(int ms)

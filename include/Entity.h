@@ -14,12 +14,14 @@
 using namespace std;
 
 class Component;
+class EntityManager;
 
-typedef unordered_map<type_index, shared_ptr<Component> > component_map;
-using message_callback = function<void(Message &)>;
+using message_callback = function<void(Message&)>;
 
-class Entity : public std::enable_shared_from_this<Entity>
+class Entity : public std::enable_shared_from_this<Entity> /// no ja nie wiem czy to jest dobre
 {
+    //typedef unordered_map<type_index, shared_ptr<Component> > component_map;
+    using component_map = unordered_map<type_index, shared_ptr<Component> >;
 public:
     Entity();
     virtual ~Entity();
@@ -30,31 +32,32 @@ public:
 
     bool add(shared_ptr<Component> component);
 
-    component_map &getComponents()
-    {
+    component_map& get_components() {
         return components;
     }
 
-    void setID(int id)
-    {
+    void set_id(int id) {
         this->id = id;
     }
-    int getID()
-    {
+    int get_id() {
         return id;
     }
 
     void receive_message(Message message);
     void register_listener(unsigned message_type, message_callback callback); /// potrzeba te¿ "unregister", bo jak usuniemy komponent w trakcie pracy to bêdzie crash
 
-protected:
+    void destroy_me();
+
+    static void set_manager(EntityManager *manager);
 
 private:
-    inline bool has(type_index key) const;
-
     int id;
     component_map components;
     unordered_map<unsigned, vector<message_callback>> callbacks;
+
+    inline bool has(type_index key) const;
+// static
+    static EntityManager* entityManager;
 };
 
 // TEMPLATES

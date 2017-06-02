@@ -13,10 +13,11 @@ class GameInstance;
 class Entity;
 
 using namespace std;
-using EventCallback = function<void(SDL_Event const&)>;
+
 
 class EventManager
 {
+    using EventCallback = function<void(SDL_Event const&)>;
     /// --------------------------------------------------------------------------
 public:
     static void registerEventCallback(unsigned type, EventCallback callback);

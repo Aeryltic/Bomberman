@@ -7,13 +7,12 @@
 
 #include "Components.h"
 #include "FSM.h"
-#include "Action.h"
 #include "WorldState.h"
+#include "Action.h"
 
-class GoapAgent : public Component /// stworzyć system, który to obsłuży przynajmniej w jednym aspekcie
-{
+class GoapAgent : public Component {
 public:
-    GoapAgent(std::weak_ptr<Entity> owner);
+    GoapAgent();
     virtual ~GoapAgent();
 
     void add_action(Action a);
@@ -30,9 +29,11 @@ public:
 
     void scan_world();
 
-    FSM* getFSM(){return &fsm;}
-
     void add_goal(std::string goal_name, bool goal_state, unsigned priority);
+
+    void update(int ms) {
+        fsm.update(ms);
+    }
 
 protected:
     FSM fsm;

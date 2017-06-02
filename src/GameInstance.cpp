@@ -80,6 +80,7 @@ int GameInstance::run()
             lag += elapsed;
             while (lag >= TIMESTEP)
             {
+                entityManager->update();
                 componentSystem->update(TIMESTEP, entityManager);
                 ScriptSystem::getInstance()->update(TIMESTEP);
                 lag -= TIMESTEP;
@@ -192,7 +193,7 @@ int GameInstance::init()
         }
     });
 
-    GameInitializer().initializeGame(entityManager);
+    GameInitializer().init_entities(entityManager);
 
     /// TEST TIMERA
     /*

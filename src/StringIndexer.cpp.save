@@ -1,0 +1,19 @@
+#include "StringIndexer.h"
+
+StringIndexer::StringIndexer()
+{
+    //ctor
+}
+
+StringIndexer::~StringIndexer()
+{
+    //dtor
+}
+
+static StringIndexer::get_id(string& str)
+{
+    static unsigned next_id = 0;
+    static unordered_map<string, unsigned> indexes;
+    
+    auto it 
+}

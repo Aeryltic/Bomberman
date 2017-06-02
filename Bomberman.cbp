@@ -5,7 +5,7 @@
 		<Option title="Bomberman" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="GraphicsModule\;GraphicsModule\include\;GraphicsModule\src\;Others\;GameObjects\;LogicModule\;LogicModule\src\;LogicModule\include\;Other\;Other\src\;Other\include\;EventModule\;MainModule\;MainModule\src\;MainModule\include\;EventModule\include\;EventModule\src\;AudioModule\;AudioModule\include\;AudioModule\src\;GameObjects\src\;GameObjects\include\;ScriptModule\;ScriptModule\src\;ScriptModule\include\;AI\;AI\src\;AI\include\;" />
+		<Option virtualFolders="GraphicsModule\;GraphicsModule\include\;GraphicsModule\src\;Others\;GameObjects\;LogicModule\;LogicModule\src\;LogicModule\include\;Other\;Other\src\;Other\include\;EventModule\;MainModule\;MainModule\src\;MainModule\include\;EventModule\include\;EventModule\src\;AudioModule\;AudioModule\include\;AudioModule\src\;GameObjects\src\;GameObjects\include\;ScriptModule\;ScriptModule\src\;ScriptModule\include\;AI\;AI\src\;AI\include\;Components\;Components\src\;Components\include\;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/Bomberman" prefix_auto="1" extension_auto="1" />
@@ -48,6 +48,7 @@
 			<Add directory="include" />
 			<Add directory="C:/Dev_Libs/lua-5.3.3/include" />
 			<Add directory="C:/Dev_Libs/LuaBridge/Source/LuaBridge" />
+			<Add directory="C:/Dev_Libs/other" />
 		</Compiler>
 		<Linker>
 			<Add option="-lmingw32 -lSDL2main -lSDL2 -lSDL2_image" />
@@ -67,13 +68,13 @@
 			<Option virtualFolder="AudioModule/include/" />
 		</Unit>
 		<Unit filename="include/Component.h">
-			<Option virtualFolder="GameObjects/include/" />
+			<Option virtualFolder="Components/include/" />
 		</Unit>
 		<Unit filename="include/ComponentSystem.h">
-			<Option virtualFolder="GameObjects/include/" />
+			<Option virtualFolder="Components/include/" />
 		</Unit>
 		<Unit filename="include/Components.h">
-			<Option virtualFolder="GameObjects/include/" />
+			<Option virtualFolder="Components/include/" />
 		</Unit>
 		<Unit filename="include/Console.h">
 			<Option virtualFolder="ScriptModule/include/" />
@@ -130,6 +131,9 @@
 		<Unit filename="include/ScriptSystem.h">
 			<Option virtualFolder="ScriptModule/include/" />
 		</Unit>
+		<Unit filename="include/StringIndexer.h">
+			<Option virtualFolder="Other/include/" />
+		</Unit>
 		<Unit filename="include/Structures.h">
 			<Option virtualFolder="Other/include/" />
 		</Unit>
@@ -155,11 +159,14 @@
 		<Unit filename="src/AudioManager.cpp">
 			<Option virtualFolder="AudioModule/src/" />
 		</Unit>
+		<Unit filename="src/Component.cpp">
+			<Option virtualFolder="Components/src/" />
+		</Unit>
 		<Unit filename="src/ComponentSystem.cpp">
-			<Option virtualFolder="GameObjects/src/" />
+			<Option virtualFolder="Components/src/" />
 		</Unit>
 		<Unit filename="src/Components.cpp">
-			<Option virtualFolder="GameObjects/src/" />
+			<Option virtualFolder="Components/src/" />
 		</Unit>
 		<Unit filename="src/Console.cpp">
 			<Option virtualFolder="ScriptModule/src/" />
@@ -206,6 +213,9 @@
 		<Unit filename="src/ResourceManager.cpp" />
 		<Unit filename="src/ScriptSystem.cpp">
 			<Option virtualFolder="ScriptModule/src/" />
+		</Unit>
+		<Unit filename="src/StringIndexer.cpp">
+			<Option virtualFolder="Other/src/" />
 		</Unit>
 		<Unit filename="src/WorldState.cpp">
 			<Option virtualFolder="AI/src/" />

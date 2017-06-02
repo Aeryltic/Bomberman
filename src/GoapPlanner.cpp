@@ -70,8 +70,6 @@ std::list<Action*> GoapPlanner::plan(GoapAgent *agent, WorldState goal)
     while(!open.empty())
     {
         ANode* current = pop_and_close();
-        //printf("CURRENT_WORLD_STATE: %s\n", current->ws.repr().c_str());
-        //std::min_element(open.begin(), open.end(), compNodes); /// biorę ten z najmniejszym f()
 
         if(current->ws.fulfills(goal)) /// jeśli dotarł do końca
         {
@@ -83,13 +81,13 @@ std::list<Action*> GoapPlanner::plan(GoapAgent *agent, WorldState goal)
                 current = current->parent;
             }
             prepared_plan.reverse();
-            printf("plan found\n");
+//            printf("plan found\n");
 //            if(prepared_plan.empty())
 //                printf("PLAN is EMPTY\n");
 //            else printf("PLAN FOUND\n");
             return prepared_plan;
         }
-        //printf("CHECKING AVAILABLE ACTIONS\n");
+
         for(auto& p : agent->get_actions())
         {
             Action& potential_action = p.second;

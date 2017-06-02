@@ -2,7 +2,6 @@
 #define WORLDSTATE_H
 
 #include <unordered_map>
-class Action;
 class WorldState
 {
     friend class Action;

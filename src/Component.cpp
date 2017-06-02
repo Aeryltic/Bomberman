@@ -1,9 +1,18 @@
 #include "Component.h"
-#include "Entity.h"
-#include <cmath>
+
 #include "EntityManager.h"
-#include "ObjectFactory.h"
-#include "EventManager.h"
-#include "MiscFunctions.h"
 
+EntityManager* Component::entity_manager = nullptr;
 
+Component::~Component() {
+    //printf("del comp...");
+    if(entity_manager) {
+            //printf(" ok...");
+        entity_manager->request_component_removal(tindex(*this), id);
+    }
+    //printf("\n");
+}
+
+void Component::set_manager(EntityManager* entity_manager) {
+    Component::entity_manager = entity_manager;
+}

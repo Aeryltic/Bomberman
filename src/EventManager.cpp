@@ -5,7 +5,7 @@
 #include "Enumerations.h"
 
 Uint32 EventManager::eventFirstNum = 0;
-unordered_map<unsigned, vector<EventCallback>> EventManager::_registeredCallbacks;
+unordered_map<unsigned, vector<EventManager::EventCallback>> EventManager::_registeredCallbacks;
 
 EventManager::EventManager(GameInstance *gameInstance)
 {

@@ -44,3 +44,42 @@
 29.05.2017
 	1. DANE w jakimœ JSONie lub czymœ nawet l¿ejszym
 	2. podstawowy json dodany - akcje z pliku
+	3. mo¿na by jeszcze zmniejszyæ jsona
+	4. jakieœ wygodne narzêdzie do generowania jsonów
+	5. przebudowaæ wszystkie komponenty na mapy przechowuj¹ce dowolne dane?
+	6. definiowanie obiektów jednak poprzez skrypty
+	7. przerzuciæ make_entity i make_component do ObjectFactory zamiast EntityManagera
+	8. ¿eby ka¿da akcja sk³ada³a siê z (niepodzilnych, atomowych) czynnoœci, które sprawiaj¹ zmiany w worldstate?
+	9. ciekawe:
+		template <typename T, typename... Ts>
+		void Push(const T value, const Ts... values) {
+			Push(value);
+			Push(values...);
+		}
+31.05.2017
+	1. pozbyæ siê GotoState i zast¹piæ go zwyk³¹ akcj¹?
+	2. klasa Systems/States czy coœ w tym stylu przechowuj¹ca systemy i ich stany, zwraca instancje aktualnego systemu
+	3. MUS NAPRAWIÆ USUWANIE OBIEKTÓW
+	4. stworzyæ coœ specjalnego dla komponentów? by usuwaæ je automatycznie zewsz¹d kiedy ginie entity - np. klasa dziedzicz¹ca z shared_ptr, która przy counterze==0 usuwa wpis z tablicy komponentów
+		albo po prostu usuwaæ martwe pointery przy wykryciu...
+	5. trzeba usuwaæ te martwe komponenty bo crashe
+	6. remember: BULLET-PROOF CODE
+	7. ciekawe, ¿e jak dochodz¹ do celu a okazuje siê ¿e celu nie ma to szukaj¹ na nowo :D
+	8. entity umieraj¹c powinien zadbaæ ¿e jego komponenty znikn¹
+	9. crashe s¹ jak wiêcej ni¿ jeden czeka na zakoñczenie akcji na tym samym targecie - tak to jest du¿y problem
+		edit: po poprawce albo goœæ siê zapêtla, albo crash
+	10. wróciæ do obmyœlania entitów na nowo, ¿eby to usuwanie dzia³a³o.
+02.06.2017
+	1. komponenty siê teoretycznie usuwaj¹
+	2. nie wiem co powoduje te crashe, ale to ma zwi¹zek z usuwaniem obiektów
+	3. nadal dwaj mog¹ usun¹æ ten sam obiekt w "skypcie" akcji - wina tego, ¿e nie usuwam obiektu od razu... to by trzeba jakoœ naprawiæ
+	4. LOGI W osobnym w¹tku, by nie spowalniaæ aplikacji
+	5. przywróciæ deaktywacjê entity'ów?
+	6. ten mechanizm, który dla ka¿dego stringa zwraca jego id by siê przyda³ - do wszystkiego praktycznie
+	7. jakieœ "wy³¹czanie" i komponentów i entity'ów zrobiæ zanim je usuwamy z pamiêci, tylko... jak zrobiæ to wydajnie? najlepiej tak ¿eby nie by³o ich po prostu widaæ
+		mo¿e listy z identyfikatorami aktywnych, a same komponenty w ci¹g³ej pamiêci...
+		nie to chyba nie jest dobry pomys³
+	8. prawdopodobnie bêdzie trzeba myœleæ jeszcze raz o pozyskiwaniu komponentów z entity'ów:
+		"I've seen a library (Ashley, java-based) use bits for component types implementation. 
+		It seems clever since it allows to make complex component type tests in a pretty optimized way (e.g. does this entity have type A, B & C = one bitwise & operation, as long as you have <64 component types).
+	9. ale t¹ deaktywacjê, a dopiero potem garbage collector trzeba zrobiæ...

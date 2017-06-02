@@ -13,7 +13,7 @@ public:
     static vector<C> createViews(EntityManager *entityManager) /// na dłuższą metę i tak będzie trzeba robić osobny creator dla każdego widoku, bo to jest niewydajne
     {
         vector<C> views;
-        for(auto &e : entityManager->getEntities())
+        for(auto &e : entityManager->get_entities())
         {
             C view(e.second.get());
             if(view.complete)

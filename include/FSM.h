@@ -7,8 +7,7 @@
 class GoapAgent;
 class FSMState;
 
-class FSM
-{
+class FSM {
 public:
     FSM(GoapAgent *agent);
     virtual ~FSM();
@@ -17,9 +16,9 @@ public:
     void push_state(std::unique_ptr<FSMState> state);
     void pop_state();
 
-    GoapAgent *get_agent(){return agent;}
-
-protected:
+    GoapAgent *get_agent() {
+        return agent;
+    }
 
 private:
     GoapAgent *agent;

@@ -13,6 +13,7 @@ public:
     virtual ~FSMState();
 
     virtual void update(int ms) = 0;
+    Entity* get_owner();
 
 protected:
     FSM *fsm;

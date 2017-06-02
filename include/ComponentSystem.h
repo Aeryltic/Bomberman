@@ -7,10 +7,10 @@
 using namespace std;
 
 class EntityManager;
-using update_function = function<void(int, EntityManager*)>;
 
 class ComponentSystem
 {
+    using update_function = function<void(int, EntityManager*)>;
 public:
     ComponentSystem() {}
     virtual ~ComponentSystem() {}

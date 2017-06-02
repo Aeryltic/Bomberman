@@ -5,6 +5,8 @@
 #include "GoapAgent.h"
 #include "GoapPlanner.h"
 
+#include <algorithm>
+
 void ComponentSystem::update(int timestep, EntityManager *entityManager)
 {
     for(auto &p : ufunctions)
@@ -15,11 +17,60 @@ void ComponentSystem::update(int timestep, EntityManager *entityManager)
 
 void ComponentSystem::addUpdateFunction(int priority, update_function ufunction)
 {
-    ufunctions.push_back(make_pair(priority, ufunction));
+    auto p = make_pair(priority, ufunction);
+    auto it = std::lower_bound(ufunctions.begin(), ufunctions.end(), p, [](pair<int, update_function> a, pair<int, update_function> b) -> bool{return a.first < b.first;});
+    ufunctions.emplace(it, p);
 }
 
 bool ComponentSystem::init() /// póki co nie ma w ogóle sortowania tych funkcji
 {
+    /// breedery - to też AI, chociaż może nie nadużywajmy AI, to jest zwykły automat... ale jakieś metaautomaty też można by zrobić
+    addUpdateFunction(20, [](int ms, EntityManager* entityManager)
+    {
+        //printf("breedery... ");
+        vector<BreederView> views = ViewCreator::createViews<BreederView>(entityManager);
+        for(auto &view: views)
+        {
+            if(view.breeder->ready())
+            {
+                view.energy->amount -= view.breeder->required_energy;
+                int amount = rand()%(view.breeder->max_amount - view.breeder->min_amount) + view.breeder->min_amount;
+                while(amount--)
+                {
+                    vec3d p = random_point_in_range(view.pf->pos.x, view.pf->pos.y, view.pf->vol.x/2, view.pf->vol.x*2);
+                    entityManager->make_object(view.breeder->child_type, p.x, p.y);
+                }
+            }
+        }
+        //printf("done\n");
+    });
+
+    /// odnawianie energii
+    addUpdateFunction(30, [](int ms, EntityManager* entityManager)
+    {
+        //printf("energy... ");
+        vector<EnergyView> views = ViewCreator::createViews<EnergyView>(entityManager);
+        for(auto &view: views)
+        {
+            view.energy->amount += view.energy->pace * ms / 1000.0;
+        }
+        //printf("done\n");
+    });
+
+    /// AI
+    addUpdateFunction(30, [](int ms, EntityManager* entityManager)
+    {
+        //printf("AI... ");
+        for(auto &wagent: entityManager->get_components()[tindex(GoapAgent)])
+        {
+            //printf("(");
+            GoapAgent* agent = static_cast<GoapAgent*>(wagent.second.lock().get());
+            agent->update(ms);
+            //printf(")");
+        }
+        //printf("done\n");
+    });
+
     /// jakiś tam ruch
     /*
     addUpdateFunction(10, [](int ms, EntityManager* entityManager) /// tylko test
@@ -38,47 +89,8 @@ bool ComponentSystem::init() /// póki co nie ma w ogóle sortowania tych funkcj
     });
     */
 
-    /// breedery - to też AI, chociaż może nie nadużywajmy AI, to jest zwykły automat... ale jakieś metaautomaty też można by zrobić
-    addUpdateFunction(20, [](int ms, EntityManager* entityManager)
-    {
-        vector<BreederView> views = ViewCreator::createViews<BreederView>(entityManager);
-        for(auto &view: views)
-        {
-            if(view.breeder->ready())
-            {
-                view.energy->amount -= view.breeder->required_energy;
-                int amount = rand()%(view.breeder->max_amount - view.breeder->min_amount) + view.breeder->min_amount;
-                while(amount--)
-                {
-                    vec3d p = random_point_in_range(view.pf->pos.x, view.pf->pos.y, view.pf->vol.x/2, view.pf->vol.x*2);
-                    entityManager->make_object(view.breeder->child_type, p.x, p.y);
-                }
-            }
-        }
-    });
-
-    /// odnawianie energii
-    addUpdateFunction(30, [](int ms, EntityManager* entityManager)
-    {
-        vector<EnergyView> views = ViewCreator::createViews<EnergyView>(entityManager);
-        for(auto &view: views)
-        {
-            view.energy->amount += view.energy->pace * ms / 1000.0;
-        }
-    });
-
-    /// AI
-    addUpdateFunction(30, [](int ms, EntityManager* entityManager)
-    {
-        for(auto &wagent: entityManager->getComponents()[tindex(GoapAgent)])
-        {
-            GoapAgent* agent = static_cast<GoapAgent*>(wagent.lock().get());
-
-            agent->getFSM()->update(ms);
-        }
-    });
-
     /// kolizje
+    /*
     addUpdateFunction(50, [](int ms, EntityManager* entityManager)
     {
         for(auto &wpf: entityManager->getComponents()[tindex(CPhysicalForm)])   /// trzeba było zostawić na indeksach
@@ -97,8 +109,10 @@ bool ComponentSystem::init() /// póki co nie ma w ogóle sortowania tych funkcj
             }
         }
     });
+    */
 
     /// przesuwanie carryablów na parentów - to w ogóle też jest do dupy
+    /*
     addUpdateFunction(50, [](int ms, EntityManager* entityManager)
     {
         for(auto &component: entityManager->getComponents()[tindex(CCarryable)])
@@ -114,7 +128,7 @@ bool ComponentSystem::init() /// póki co nie ma w ogóle sortowania tych funkcj
                 }
             }
         }
-    });
+    });*/
 
     /*
     /// oddziaływanie zapachów na węch
@@ -184,24 +198,6 @@ bool ComponentSystem::init() /// póki co nie ma w ogóle sortowania tych funkcj
             }
             //printf("nose: %d, ", int(sensor->stimuli.empty()));
 
-        }
-    });
-
-    /// AI
-    addUpdateFunction(60, [](int ms, EntityManager* entityManager)
-    {
-        vector<AIView> ai_views = ViewCreator::createViews<AIView>(entityManager);
-        for(auto &view : ai_views) {
-
-    //            if(view.ai->goes_in_wrong_direction) {                 /// to nie powinno być poolowane - kolejka z akcjami, które potrzeba wykonać
-    //                view.ai->goes_in_wrong_direction = false;          /// by się przydała jakaś pamięć, jaki poprzednio kierunek był dobry itp, żeby mrówa mogła szukać następnego dobrego kierunku
-    //                auto p = random_point_in_range(view.pf->pos.x, view.pf->pos.y, 10, 70);
-    //                p.z = view.pf->pos.z;
-    //                view.m->movement_angle = atan2(p.y - view.pf->pos.y, p.x - view.pf->pos.x);
-    //
-    //                view.m->has_dest = true;
-    //            }
-    //
         }
     });
     */

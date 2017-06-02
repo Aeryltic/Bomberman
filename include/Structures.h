@@ -3,6 +3,7 @@
 #include <cmath>
 //#include <SDL.h>
 #include <memory>
+#include <sstream>
 using namespace std;
 
 struct vec3d
@@ -45,6 +46,12 @@ struct vec3d
         return *this / dist(vec3d(0,0,0));
     }
 
+    string repr()
+    {
+        std::stringstream fmt;
+        fmt << x << " " << y << " " << z;
+        return fmt.str();
+    }
 };
 /*
 struct EntityEvent

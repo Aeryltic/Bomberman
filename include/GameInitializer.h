@@ -1,23 +1,22 @@
 #ifndef GAMEINITIALIZER_H
 #define GAMEINITIALIZER_H
 
-#include <functional>
+//#include <functional>
 #include <memory>
 #include <unordered_map>
 
 class EntityManager;
 class Entity;
+class EntityManager;
 
 using namespace std;
 
-using entity_creator = function<shared_ptr<Entity>(double, double)>;
-class EntityManager;
-class GameInitializer
-{
+class GameInitializer {
+    using entity_creator = function<shared_ptr<Entity>(double, double)>;
 public:
     GameInitializer();
     virtual ~GameInitializer();
-    void initializeGame(EntityManager *entityManager);
+    void init_entities(EntityManager *entityManager);
 protected:
 
 private:
