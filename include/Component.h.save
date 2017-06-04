@@ -4,22 +4,26 @@
 #include <memory>
 
 class Entity;
-c
+class EntityManager;
 
 struct Component {
-    std::weak_ptr<Entity> owner;
-
     Component() {}
-    virtual ~Component() {}
+    virtual ~Component();
+
 
     virtual void set_owner(std::weak_ptr<Entity> owner) {
+        /// to musi być setter
         this->owner = owner;
     }
-    void set_id(int id) {this->id = id;}
+    //void set_id(int id) { this->id = id; }
+    //int get_id() { return id; }
+
+    int id;
+    std::weak_ptr<Entity> owner;
 
     static void set_manager(EntityManager* entity_manager);
+
 private:
-    int id;
     static EntityManager* entity_manager;
 };
 

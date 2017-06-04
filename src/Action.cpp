@@ -15,7 +15,7 @@
 using json = nlohmann::json;
 std::unordered_map<std::string, Action> Action::actions;
 
-const ActionExecutor::exec_fun ActionExecutor::fun0 = [](Entity* doer, Entity* target) {return true;};
+const ActionExecutor::exec_fun ActionExecutor::fun0(ScriptSystem::getInstance()->getLuaState(), "do_nothing");// = [](Entity* doer, Entity* target) {return true;};
 
 void Action::init_actions() {
     std::ifstream t("data/actions.json");
@@ -39,6 +39,8 @@ void Action::init_actions() {
 
     for(auto a : j) { /// obsługa wyjątków!
         try {
+            //std::string name = a["name"];
+            //printf("adding action: %s...", name.c_str());
             Action action(a["name"], a["cost"], a["duration"], a["target"]);
             for(auto p: a["preconditions"]) {
                 action.add_precondition(p[0],p[1]);
@@ -46,25 +48,34 @@ void Action::init_actions() {
             for(auto e: a["effects"]) {
                 action.add_effect(e[0],e[1]);
             }
+            lua_State* L  = ScriptSystem::getInstance()->getLuaState();
+            std::string scr_name = a["script"];
+            LuaRef script = getGlobal(L, scr_name.c_str());
+            action.set_exec(script);
             actions.insert({action.name, action});
+            //printf(" done.\n");
         } catch(invalid_argument& e) {
             printf("error while loading from data/actions.json: %s\n", e.what());
         }
 
     }
-
+/// to tak samo powinno nie być tu - ale w skryptach
+/*
     actions["pickup_grain"].set_exec([](Entity* doer, Entity* target) {
-        //Engine::get_instance()->get_entity_manager()->to_remove(target->get_id());
         target->destroy_me();
         return true;
     });
     actions["deliver_grain"].set_exec([](Entity* doer, Entity* target) {
-        //Engine::get_instance()->get_entity_manager()->to_remove(target->get_id());
-        //target->destroy_me();
         auto e = target->get<CEnergyStore>();
         if(e) e->amount += 100;
         return true;
     });
+    actions["kill_enemy"].set_exec([](Entity* doer, Entity* target) {
+        printf("killing: %d\n", target->get_id());
+        target->destroy_me();
+        return true;
+    });
+    */
 }
 
 Action Action::get_action(std::string name) {
@@ -189,3 +200,6 @@ bool Action::is_in_range() {
     return needs_target ? (has_target() ? (get_owner()->get<CPhysicalForm>()->pos.dist(target.lock()->get<CPhysicalForm>()->pos) <= 10) : false) : true; // piękne
 }
 
+bool Action::has_target() {
+    return !target.expired() && target.lock()->is_active();
+}

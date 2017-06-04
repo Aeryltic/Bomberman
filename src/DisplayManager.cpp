@@ -238,9 +238,9 @@ void DisplayManager::init() {
     lua_State *L = ScriptSystem::getInstance()->getLuaState();
 
     getGlobalNamespace (L)
-    .beginClass <DisplayManager> ("DisplayManager")
-    .addProperty ("text", &DisplayManager::getText, &DisplayManager::setText)
-    .endClass();
+        .beginClass <DisplayManager> ("DisplayManager")
+            .addProperty ("text", &DisplayManager::getText, &DisplayManager::setText)
+        .endClass();
 
     push (L, this);
     lua_setglobal (L, "display");

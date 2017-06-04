@@ -1,0 +1,16 @@
+#ifndef TYPEINDEXER_H
+#define TYPEINDEXER_H
+
+
+class TypeIndexer
+{
+    public:
+        virtual ~TypeIndexer();
+        template<class C>
+        unsigned id()
+    private:
+        TypeIndexer();
+        
+};
+
+#endif // TYPEINDEXER_H

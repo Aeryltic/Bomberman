@@ -83,3 +83,15 @@
 		"I've seen a library (Ashley, java-based) use bits for component types implementation. 
 		It seems clever since it allows to make complex component type tests in a pretty optimized way (e.g. does this entity have type A, B & C = one bitwise & operation, as long as you have <64 component types).
 	9. ale t¹ deaktywacjê, a dopiero potem garbage collector trzeba zrobiæ...
+03.06.2017
+	1. jakiœ rodzaj SmartPointera? trzymanie syrowych identyfikatorów te¿ jest niefajne, bo weŸmy sytuacjê: entity jest celem jakieœ akcji, jego id jest trzymany przez drugie entity, któr¹ t¹ akcjê na nim wykonuje, entity #1 znika, jego id jest wrzucone do worka i zaraz po tym inny obiekt stworzyny dostaje jego id i akcja zostaje wykonana na innym obiekcie
+	2. pozbyæ siê type_index (edit. chyba siê nie da)
+	3. chyba pozby³em siê crashy w trakcie, ale za to pojawi³y siê crashe na koniec: doda³em do ka¿dego entity bool'a aktywnoœci
+	4. przenios³em czêœæ wykonania akcji na skrypty, teraz tylko to usprawniæ i doprowadziæ do porz¹danego stanu
+	5. nastêpny krok - przenieœæ definicje bytów do skryptów, by mo¿na stworzyæ edytor
+04.06.2017
+	1. utworzyæ paczki zachowañ (np. utrzymywanie przy ¿yciu, praca jako ktoœ, walka itd), które bêd¹ przekazywane konstruktorowi GoapAgenta i to bêdzie ³adne, tylko ¿e ka¿da klasa bytów musi mieæ w³asn¹ implementacjê zachowañ (np. pozyskiwanie po¿ywienia przez roœlino¿erców i miêso¿erców, mimo ¿e z zewn¹trz to bêdzie po prostu "pozyskiwanie po¿ywienia")
+	2. funkcje zwracaj¹ce funkcje przy wykonywaniu akcji przez skrypty
+	3. myœleæ nad wielow¹tkowoœci¹?
+	4. funkcje update'uj¹ce wykonanie akcji musz¹ przyjmowaæ wykonawce, cel oraz czas, który up³yn¹³
+	5. std::remove_if - dla garbage collectora

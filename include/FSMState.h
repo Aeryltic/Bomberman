@@ -32,12 +32,12 @@ public:
 class GotoState : public FSMState /// będzie korzystał z A* w przyszłości
 {
 public:
-    GotoState(FSM *fsm, vec3d dest, float min_range);
+    GotoState(FSM *fsm, weak_ptr<Entity> dest, float min_range);
     virtual ~GotoState();
 
     void update(int ms);
 
-    vec3d dest;
+    weak_ptr<Entity> dest;
     float min_range;
 
     bool is_in_range();

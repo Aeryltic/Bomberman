@@ -38,15 +38,17 @@ void IdleState::update(int ms) {
     }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------
-GotoState::GotoState(FSM *fsm, vec3d dest, float min_range): FSMState(fsm), dest(dest), min_range(min_range) {} /// dest to raczej powinien być ten ActionArea czy cuś
+GotoState::GotoState(FSM *fsm, weak_ptr<Entity> dest, float min_range): FSMState(fsm), dest(dest), min_range(min_range) {} /// dest to raczej powinien być ten ActionArea czy cuś
 GotoState::~GotoState() {}
 
 bool GotoState::is_in_range() {
     CPhysicalForm *pf = get_owner()->get<CPhysicalForm>();
     if(pf) {
-        auto d = pf->pos.dist(dest);
-        //printf("pos: %s, dest: %s, distance: %.2f\n", pf->pos.repr().c_str(), dest.repr().c_str(), d);
-        return d <= min_range;
+        if(!dest.expired() && dest.lock()->is_active()) {
+            auto d = pf->pos.dist(dest.lock()->get<CPhysicalForm>()->pos);
+            //printf("pos: %s, dest: %s, distance: %.2f\n", pf->pos.repr().c_str(), dest.repr().c_str(), d);
+            return d <= min_range;
+        }
     }
     return false;
     //return pf && (pf->pos.dist(dest) <= min_range);
@@ -56,8 +58,11 @@ void GotoState::update(int ms) {
     //printf("GotoState::update\n");
     CPhysicalForm *pf = get_owner()->get<CPhysicalForm>();
     CMovement *mv = get_owner()->get<CMovement>();
-    if(pf && mv)
-        pf->pos = pf->pos.moved_towards(dest, mv->max_speed * ms / 1000.0);
+    if(pf && mv) {
+        if(!dest.expired() && dest.lock()->is_active())
+            pf->pos = pf->pos.moved_towards(dest.lock()->get<CPhysicalForm>()->pos, mv->max_speed * ms / 1000.0);
+        else fsm->pop_state();
+    }
 
     if(is_in_range()) {
         fsm->pop_state();
@@ -82,8 +87,8 @@ void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy... to źle
             if(!action->is_in_range()) {
                 CPhysicalForm *tpf = action->get_target().lock()->get<CPhysicalForm>();
                 if(tpf) {
-                    vec3d dest = tpf->pos;
-                    fsm->push_state(make_unique<GotoState>(fsm, dest, 10));
+                    //vec3d dest = tpf->pos;
+                    fsm->push_state(make_unique<GotoState>(fsm, action->get_target(), 10));
                     return;
                 } else {
                     printf("invalid target!\n");
@@ -93,7 +98,7 @@ void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy... to źle
             }
         } else {
             if(action->does_need_target() && !action->has_target()) {
-                printf("target lost or sth!\n");
+                //printf("target lost or sth!\n");
                 fsm->pop_state(); /// to nie działa jak należy
                 action->reset();
                 return;

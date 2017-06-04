@@ -1,27 +1,8 @@
 #include "GoapAgent.h"
 
-GoapAgent::GoapAgent() : fsm(this) {
-    /*
-    owner.lock()->register_listener(MSG_TARGET, [=](Message& msg)
-    {
-        if(!msg.publisher.expired())
-        {
-            printf("target_FOUND\n");
-            //current_actions.front()->set_target(msg.publisher);
-            ws["target_available"] = true;
-        }
-        else
-        {
-            printf("target_NOT_FOUND\n");
-            ws["target_available"] = false;
-        }
-    });
-    */
-}
+GoapAgent::GoapAgent() : fsm(this) { }
 
-GoapAgent::~GoapAgent() {
-    //dtor
-}
+GoapAgent::~GoapAgent() { }
 
 void GoapAgent::add_action(Action a) {
     a.set_agent(this);
@@ -73,6 +54,8 @@ WorldState GoapAgent::find_goal() {
 }
 
 void GoapAgent::scan_world() {
-    owner.lock()->receive_message(Message(MSG_SCANNING, owner));
-    set_state("grain_delivered", false);
+    //owner.lock()->receive_message(Message(MSG_SCANNING, owner));
+    set_state("grain_delivered", false);    /// to tu nie może być
+    set_state("enemy_killed", false);       /// tak samo to
+                                            /// trzeba rozwinąć jednak sensory
 }

@@ -10,7 +10,8 @@
 		"effects": [
 			["have_grain", false],
 			["grain_delivered", true]
-		]
+		],
+		"script": "deliver_grain"
 	},
 	{
 	"name": "pickup_grain",
@@ -22,6 +23,20 @@
 		],
 		"effects": [
 			["have_grain", true]
-		]
+		],
+		"script": "pickup_grain"
+	},
+	{
+	"name": "kill_enemy",
+		"cost": 1,
+		"duration": 10,
+		"target": "TARGET_ANT",
+		"preconditions": [
+			["enemy_killed", false]
+		],
+		"effects": [
+			["enemy_killed", true]
+		],
+		"script": "kill_enemy"
 	}
 ]

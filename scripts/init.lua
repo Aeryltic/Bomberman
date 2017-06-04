@@ -4,6 +4,7 @@ print("current path is " .. current_path)
 dofile("scripts/config.lua")
 dofile("scripts/script.lua")
 dofile("scripts/entities.lua")
+dofile("scripts/action_handlers.lua")
 
 function initSettings()
 

@@ -3,6 +3,9 @@
 #include "Entity.h"
 #include "Component.h"
 
+
+#include "GoapAgent.h"
+
 EntityManager::EntityManager() : factory(this) {
     printf("new EntityManager\n");
     Entity::set_manager(this);
@@ -20,11 +23,11 @@ void EntityManager::update() {
     while(!entities_to_remove.empty()) {
         int id = entities_to_remove.front();
         entities_to_remove.pop();
-        printf("deleting %d\n", id);
+        //printf("deleting %d\n", id);
         auto it = entities.find(id);
         if(it != entities.end())
             entities.erase(it);
-        else printf("%d juz zostal usuniety!\n", id);
+        //else printf("%d juz zostal usuniety!\n", id);
     }
     while(!components_to_remove.empty()) {
         type_index t_index = components_to_remove.front().first;
@@ -48,7 +51,9 @@ void EntityManager::request_entity_removal(int id) {
 //    printf("ok\n");
 }
 
-void EntityManager::request_component_removal(type_index t_index, int id) {
+void EntityManager::request_component_removal(type_index t_index, int id) { /// ta funkcja nie działa wywoływana ze środka ~Component destruktora
+    //if(t_index == tindex(Component))printf("type index error while requesting component removal!\n");
+    //if(t_index == tindex(GoapAgent))printf("GoapAgent removal!\n");
     components_to_remove.push(make_pair(t_index, id));
 }
 
@@ -60,7 +65,7 @@ shared_ptr<Entity> EntityManager::make_entity() {
     return e;
 }
 
-shared_ptr<Entity> EntityManager::make_object(string type, double x, double y) {
+shared_ptr<Entity> EntityManager::make_object(unsigned type, double x, double y) {
     return factory.make_object(type, x, y);
 }
 

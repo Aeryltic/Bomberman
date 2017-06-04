@@ -1,18 +1,16 @@
 #ifndef STRINGINDEXER_H
 #define STRINGINDEXER_H
 
+#include <string>
 
 class StringIndexer {
 public:
     virtual ~StringIndexer();
-    
-
-protected:
+    static unsigned get_id(const std::string& str);
+    static st
 
 private:
     StringIndexer();
-
-    unordered_map<string, unsigned> indexes;
 };
 
 #endif // STRINGINDEXER_H

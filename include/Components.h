@@ -9,17 +9,20 @@
 
 #include <stack>
 #include <deque>
+#include <algorithm>
 
-#include "ScriptSystem.h"
+//#include "ScriptSystem.h"
 
 //using message_callback = function<void(Message &)>;
+namespace comp_setup{
+void register_components();
+}
 
-void register_components(lua_State *L);
 
 struct CPhysicalForm : public Component {
     explicit CPhysicalForm(double x, double y, double z, double w, double h, double d = 0)
         : pos(x, y, z), vol(w, h, d), rot(0,0,0) { }
-    virtual ~CPhysicalForm() {}
+    virtual ~CPhysicalForm() {/*printf("pf_destr\n");*/}
 
     vec3d pos;
     vec3d vol;
@@ -56,7 +59,9 @@ struct CActionTarget : public Component { /// to nie jest chyba dobry pomysł
     CActionTarget(string target_type) {
         this->target_type = target_type;
     }
-    virtual ~CActionTarget() {}
+    virtual ~CActionTarget() {
+        remove_target(target_type, owner);
+    }
 
     // Override
     void set_owner(std::weak_ptr<Entity> owner) {
@@ -65,6 +70,15 @@ struct CActionTarget : public Component { /// to nie jest chyba dobry pomysł
     }
 
     string target_type;
+    /// to niżej nie działa, dlatego lepsze byłby po prostu identyfikatory obiektów zamiast wskaźników
+
+    static void remove_target(string s, weak_ptr<Entity> target) {
+        auto it  = find_if(targets[s].begin(), targets[s].end(), [&target](const weak_ptr<Entity>& p) {return target.lock().get() == p.lock().get();});
+        if(it != targets[s].end()) {
+            targets[s].erase(it);
+        }
+    }
+
     static unordered_map<string, vector<weak_ptr<Entity>>> targets;
 };
 
@@ -75,6 +89,9 @@ struct CEnergyStore : public Component {
         amount = 100.0;
     }
     virtual ~CEnergyStore() {};
+
+    void set_amount(float amount){this->amount = amount;}
+    float get_amount() const { return amount; }
 
     float amount;
     float pace; /// to nie powinno tu być

@@ -17,25 +17,24 @@
 #include "ComponentSystem.h"
 #include "Enumerations.h"
 #include "GameInitializer.h"
+
+#include "Components.h"
 ///
 bool GameInstance::paused = false;
 
-GameInstance &GameInstance::getInstance()
-{
+GameInstance &GameInstance::getInstance() {
     static GameInstance instance;
     return instance;
 }
 
-GameInstance::GameInstance()
-{
+GameInstance::GameInstance() {
     printf("creating GameInstance...");
     working = true;
 
     printf("done\n");
 }
 
-GameInstance::~GameInstance()
-{
+GameInstance::~GameInstance() {
     printf("delete GameInstance\n");
 
     SDL_RemoveTimer(timerID);
@@ -50,10 +49,8 @@ GameInstance::~GameInstance()
     SDL_Quit();
 }
 
-int GameInstance::run()
-{
-    if(init() < 0)
-    {
+int GameInstance::run() {
+    if(init() < 0) {
         return -1;
     }
 
@@ -65,8 +62,7 @@ int GameInstance::run()
     unsigned last_update = SDL_GetTicks();
     unsigned lag = 0.0;
 
-    while(working)
-    {
+    while(working) {
         unsigned current = SDL_GetTicks();
         unsigned elapsed = current - previous;
 
@@ -75,11 +71,9 @@ int GameInstance::run()
         eventManager->handleEvents();
         console->run(); /// tu trzeba statów
 
-        if(!paused)
-        {
+        if(!paused) {
             lag += elapsed;
-            while (lag >= TIMESTEP)
-            {
+            while (lag >= TIMESTEP) {
                 entityManager->update();
                 componentSystem->update(TIMESTEP, entityManager);
                 ScriptSystem::getInstance()->update(TIMESTEP);
@@ -91,8 +85,7 @@ int GameInstance::run()
         displayManager->render(entityManager, SDL_GetTicks() - last_update);
         frames++;
 
-        if(SDL_GetTicks() - last_check >= 1000)
-        {
+        if(SDL_GetTicks() - last_check >= 1000) {
             printf("FPS: %d\n",frames);
             frames = 0;
             last_check = SDL_GetTicks();
@@ -110,10 +103,8 @@ void GameInstance::run()
 
 }
 */
-int GameInstance::init()
-{
-    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0)
-    {
+int GameInstance::init() {
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0) {
         printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
         return -1;
     }
@@ -140,22 +131,18 @@ int GameInstance::init()
 //         logicManager->isActive()      &&
                 eventManager->isActive()      &&
                 ScriptSystem::getInstance()->isActive()
-            ))
-    {
+            )) {
         printf("some systems are not active\n");
         return -1;
     }
 
-    EventManager::registerEventCallback(SDL_QUIT, [=](SDL_Event const& event)
-    {
+    EventManager::registerEventCallback(SDL_QUIT, [=](SDL_Event const& event) {
         quit();
     });
 
-    EventManager::registerEventCallback(SDL_USEREVENT, [=](SDL_Event const& event)
-    {
+    EventManager::registerEventCallback(SDL_USEREVENT, [=](SDL_Event const& event) {
         SDL_Event pushed;
-        switch (event.user.code)
-        {
+        switch (event.user.code) {
         case EVENT_LOST:
             printf("EVENT_LOST\n");
             SDL_memset(&pushed, 0, sizeof(pushed));
@@ -174,11 +161,9 @@ int GameInstance::init()
         }
     });
 
-    EventManager::registerEventCallback(SDL_KEYDOWN, [=](SDL_Event const& event)
-    {
+    EventManager::registerEventCallback(SDL_KEYDOWN, [=](SDL_Event const& event) {
         SDL_Keycode keycode = event.key.keysym.sym;
-        switch (keycode)
-        {
+        switch (keycode) {
         case SDLK_ESCAPE:
             SDL_Event pushed;
             pushed.type = SDL_QUIT;
@@ -192,6 +177,9 @@ int GameInstance::init()
             break;
         }
     });
+
+    comp_setup::register_components();
+    Entity::setup();
 
     GameInitializer().init_entities(entityManager);
 
@@ -209,25 +197,20 @@ int GameInstance::init()
     return 0;
 }
 
-void GameInstance::quit()
-{
+void GameInstance::quit() {
     working = false;
 }
 
-DisplayManager  *GameInstance::getDisplayManager()
-{
+DisplayManager  *GameInstance::getDisplayManager() {
     return displayManager;
 }
-EntityManager   *GameInstance::getEntityManager()
-{
+EntityManager   *GameInstance::getEntityManager() {
     return entityManager;
 }
 //LogicManager    *GameInstance::getLogicManager(){return logicManager;}
-Console         *GameInstance::getConsole()
-{
+Console         *GameInstance::getConsole() {
     return console;
 }
-EventManager    *GameInstance::getEventManager()
-{
+EventManager    *GameInstance::getEventManager() {
     return eventManager;
 }

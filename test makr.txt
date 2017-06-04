@@ -10,5 +10,7 @@ R run(Entity *entity, C, function fun...)
 */
 #define run(entity, Comp, fun, ...)    ({                                                           \
                                                     Comp * __comp = (entity)->getComponent<Comp>(); \
+													if(__comp)										\
                                                         __comp->fun(##__VA_ARGS__);                 \
                                             })
+											// to i tak jest zbyt kosztowne

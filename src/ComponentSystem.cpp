@@ -5,40 +5,34 @@
 #include "GoapAgent.h"
 #include "GoapPlanner.h"
 
+#include "StringIndexer.h"
+
 #include <algorithm>
 
-void ComponentSystem::update(int timestep, EntityManager *entityManager)
-{
-    for(auto &p : ufunctions)
-    {
+void ComponentSystem::update(int timestep, EntityManager *entityManager) {
+    for(auto &p : ufunctions) {
         p.second(timestep, entityManager);
     }
 }
 
-void ComponentSystem::addUpdateFunction(int priority, update_function ufunction)
-{
+void ComponentSystem::addUpdateFunction(int priority, update_function ufunction) {
     auto p = make_pair(priority, ufunction);
     auto it = std::lower_bound(ufunctions.begin(), ufunctions.end(), p, [](pair<int, update_function> a, pair<int, update_function> b) -> bool{return a.first < b.first;});
     ufunctions.emplace(it, p);
 }
 
-bool ComponentSystem::init() /// póki co nie ma w ogóle sortowania tych funkcji
-{
+bool ComponentSystem::init() { /// póki co nie ma w ogóle sortowania tych funkcji
     /// breedery - to też AI, chociaż może nie nadużywajmy AI, to jest zwykły automat... ale jakieś metaautomaty też można by zrobić
-    addUpdateFunction(20, [](int ms, EntityManager* entityManager)
-    {
+    addUpdateFunction(20, [](int ms, EntityManager* entityManager) {
         //printf("breedery... ");
         vector<BreederView> views = ViewCreator::createViews<BreederView>(entityManager);
-        for(auto &view: views)
-        {
-            if(view.breeder->ready())
-            {
+        for(auto &view: views) {
+            if(view.breeder->ready()) {
                 view.energy->amount -= view.breeder->required_energy;
                 int amount = rand()%(view.breeder->max_amount - view.breeder->min_amount) + view.breeder->min_amount;
-                while(amount--)
-                {
+                while(amount--) {
                     vec3d p = random_point_in_range(view.pf->pos.x, view.pf->pos.y, view.pf->vol.x/2, view.pf->vol.x*2);
-                    entityManager->make_object(view.breeder->child_type, p.x, p.y);
+                    entityManager->make_object(StringIndexer::get_id(view.breeder->child_type), p.x, p.y);
                 }
             }
         }
@@ -46,26 +40,25 @@ bool ComponentSystem::init() /// póki co nie ma w ogóle sortowania tych funkcj
     });
 
     /// odnawianie energii
-    addUpdateFunction(30, [](int ms, EntityManager* entityManager)
-    {
+    addUpdateFunction(30, [](int ms, EntityManager* entityManager) {
         //printf("energy... ");
         vector<EnergyView> views = ViewCreator::createViews<EnergyView>(entityManager);
-        for(auto &view: views)
-        {
+        for(auto &view: views) {
             view.energy->amount += view.energy->pace * ms / 1000.0;
         }
         //printf("done\n");
     });
 
     /// AI
-    addUpdateFunction(30, [](int ms, EntityManager* entityManager)
-    {
+    addUpdateFunction(30, [](int ms, EntityManager* entityManager) {
         //printf("AI... ");
-        for(auto &wagent: entityManager->get_components()[tindex(GoapAgent)])
-        {
+        for(auto &wagent: entityManager->get_components()[tindex(GoapAgent)]) {
             //printf("(");
-            GoapAgent* agent = static_cast<GoapAgent*>(wagent.second.lock().get());
-            agent->update(ms);
+            if(!wagent.second.expired()) {
+                GoapAgent* agent = static_cast<GoapAgent*>(wagent.second.lock().get());
+                agent->update(ms);
+            }
+            //else printf("goap_agent expired!\n");
             //printf(")");
         }
         //printf("done\n");

@@ -10,7 +10,7 @@ StringIndexer::~StringIndexer() {
     //dtor
 }
 
-unsigned StringIndexer::get_id(std::string& str) {
+unsigned StringIndexer::get_id(const std::string& str) {
     static unsigned next_id = 0;
     static std::unordered_map<std::string, unsigned> indexes;
 

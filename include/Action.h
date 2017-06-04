@@ -7,11 +7,12 @@
 #include <vector>
 
 #include "WorldState.h"
+#include "ScriptSystem.h"
 class GoapAgent;
 class Entity;
 
 struct ActionExecutor { /// wrapper dla procedury egzekucji akcji - potem tu będą skrypty pewnie
-    using exec_fun = std::function<bool(Entity*, Entity*)>;
+    using exec_fun = LuaRef;//std::function<bool(Entity*, Entity*)>;
 
     ActionExecutor() : fun(fun0) {}
     ActionExecutor(exec_fun fun) : fun(fun) {}
@@ -54,9 +55,7 @@ public:
     bool does_need_target() {
         return needs_target;
     }
-    bool has_target() {
-        return !target.expired();
-    }
+    bool has_target();
 
     void set_agent(GoapAgent* agent);
     Entity* get_owner();

@@ -103,7 +103,9 @@
 		<Unit filename="include/FSMState.h">
 			<Option virtualFolder="AI/include/" />
 		</Unit>
-		<Unit filename="include/GameInitializer.h" />
+		<Unit filename="include/GameInitializer.h">
+			<Option virtualFolder="GameObjects/include/" />
+		</Unit>
 		<Unit filename="include/GameInstance.h">
 			<Option virtualFolder="MainModule/include/" />
 		</Unit>
@@ -135,6 +137,9 @@
 			<Option virtualFolder="Other/include/" />
 		</Unit>
 		<Unit filename="include/Structures.h">
+			<Option virtualFolder="Other/include/" />
+		</Unit>
+		<Unit filename="include/TypeIndexer.h">
 			<Option virtualFolder="Other/include/" />
 		</Unit>
 		<Unit filename="include/Typedefs.h">
@@ -189,7 +194,9 @@
 		<Unit filename="src/FSMState.cpp">
 			<Option virtualFolder="AI/src/" />
 		</Unit>
-		<Unit filename="src/GameInitializer.cpp" />
+		<Unit filename="src/GameInitializer.cpp">
+			<Option virtualFolder="GameObjects/src/" />
+		</Unit>
 		<Unit filename="src/GameInstance.cpp">
 			<Option virtualFolder="MainModule/src/" />
 		</Unit>
@@ -215,6 +222,9 @@
 			<Option virtualFolder="ScriptModule/src/" />
 		</Unit>
 		<Unit filename="src/StringIndexer.cpp">
+			<Option virtualFolder="Other/src/" />
+		</Unit>
+		<Unit filename="src/TypeIndexer.cpp">
 			<Option virtualFolder="Other/src/" />
 		</Unit>
 		<Unit filename="src/WorldState.cpp">

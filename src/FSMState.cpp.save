@@ -38,16 +38,17 @@ void IdleState::update(int ms) {
     }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------
-GotoState::GotoState(FSM *fsm, vec3d dest, float min_range): FSMState(fsm), dest(dest), min_range(min_range) {} /// dest to raczej powinien być ten ActionArea czy cuś
+GotoState::GotoState(FSM *fsm, weak_ptr<Entity> dest, float min_range): FSMState(fsm), dest(dest), min_range(min_range) {} /// dest to raczej powinien być ten ActionArea czy cuś
 GotoState::~GotoState() {}
 
 bool GotoState::is_in_range() {
     CPhysicalForm *pf = get_owner()->get<CPhysicalForm>();
-    if(pf)
-    {
-        auto d = pf->pos.dist(dest);
-        //printf("pos: %s, dest: %s, distance: %.2f\n", pf->pos.repr().c_str(), dest.repr().c_str(), d);
-        return d <= min_range;
+    if(pf) {
+        if(!dest.expired() && !dest.lock()->is_active()) {
+            auto d = pf->pos.dist(dest.lock()->get<CPhysicalForm>()->);
+            //printf("pos: %s, dest: %s, distance: %.2f\n", pf->pos.repr().c_str(), dest.repr().c_str(), d);
+            return d <= min_range;
+        }
     }
     return false;
     //return pf && (pf->pos.dist(dest) <= min_range);
@@ -68,18 +69,17 @@ void GotoState::update(int ms) {
 PerformActionState::PerformActionState(FSM *fsm): FSMState(fsm) {}
 PerformActionState::~PerformActionState() {}
 
-void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy
+void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy... to źle wygląda
     //printf("PerformActionState::update\n");
     GoapAgent* agent = fsm->get_agent();
     if(agent->has_plan()) {
         Action* action = agent->current_actions.front();
-        if(!is_being_performed())
-        {
+        if(!action->is_being_performed()) {
             if(action->does_need_target() && !action->has_target()) {
-            if(!action->find_target(CActionTarget::targets)) { // nie można kontynuować, olać to
-                fsm->pop_state();
-                return;
-            }
+                if(!action->find_target(CActionTarget::targets)) { // nie można kontynuować, olać to
+                    fsm->pop_state();
+                    return;
+                }
             }
             if(!action->is_in_range()) {
                 CPhysicalForm *tpf = action->get_target().lock()->get<CPhysicalForm>();
@@ -93,13 +93,17 @@ void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy
                     return;
                 }
             }
+        } else {
+            if(action->does_need_target() && !action->has_target()) {
+                //printf("target lost or sth!\n");
+                fsm->pop_state(); /// to nie działa jak należy
+                action->reset();
+                return;
+            }
         }
-        else{
-                    if(action->perform()) {
+        if(action->perform()) {
             agent->ws = action->act_on(agent->ws); /// trzeba dodać sprawdzenie, czy worldstate nadal spełnia warunki
             agent->current_actions.pop_front();
-        }
-            
         }
 
     } else {
@@ -108,8 +112,3 @@ void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy
         return;
     }
 }
-/*
-void PerformActionState::set_target(weak_ptr<Entity> target) {
-
-}
-*/

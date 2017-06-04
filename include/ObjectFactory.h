@@ -16,10 +16,10 @@ class ObjectFactory
 public:
     ObjectFactory(EntityManager* entityManager);
     virtual ~ObjectFactory();
-    shared_ptr<Entity> make_object(string type, double x, double y);
+    shared_ptr<Entity> make_object(unsigned type, double x, double y);
 
 private:
-    unordered_map<string, entity_creator> constructors;
+    unordered_map<unsigned, entity_creator> constructors;
     EntityManager* entityManager;
 };
 #endif // OBJECTFACTORY_H
