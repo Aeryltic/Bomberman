@@ -11,29 +11,52 @@
 class GoapAgent;
 class Entity;
 
-struct ActionExecutor { /// wrapper dla procedury egzekucji akcji - potem tu będą skrypty pewnie
+struct ActionExecutor { /// to chyba powoduje HeapCorruptionException
     using exec_fun = LuaRef;//std::function<bool(Entity*, Entity*)>;
+    using fun_init = LuaRef;//std::function<bool(Entity*, Entity*)>;
 
-    ActionExecutor() : fun(fun0) {}
-    ActionExecutor(exec_fun fun) : fun(fun) {}
+    ActionExecutor() :
+        f_init(fun0),
+        exec(ScriptSystem::getInstance()->getLuaState()),
+        running(false) {}
+    ActionExecutor(const fun_init& init) :
+        f_init(init),
+        exec(ScriptSystem::getInstance()->getLuaState()),
+        running(false) {}
 
-    void operator()(Entity* doer, Entity* target) {
-        fun(doer, target);
+    bool operator()(Entity* doer, Entity* target, int ms_passed) {
+        return exec(doer, target, ms_passed); // uważać z tym, bo nie chcę dodawać tu zbędnego if'a
     }
 
-    void set(exec_fun fun) {
-        this->fun = fun;
+    void set(fun_init init){
+        f_init = init;
+    }
+
+    void start() {
+        exec = f_init();
+        running = true;
+    }
+
+    void stop() {
+        running = false;
+    }
+
+    bool is_running() {
+        return running;
     }
 
 private:
-    exec_fun fun;
+    fun_init f_init;
+    exec_fun exec;
 
-    const static exec_fun fun0;
+    bool running;
+
+    const static fun_init fun0;
 };
 //-------------------------------------------------------------------------------------------------
 class Action {
 public:
-    Action() {}
+//    Action() {}
     Action(std::string name, int cost, unsigned duration, std::string target_name="");
     virtual ~Action();
 
@@ -49,10 +72,10 @@ public:
     const std::string& get_name() const {
         return name;
     }
-    int get_cost() {
+    int get_cost() const {
         return cost;
     }
-    bool does_need_target() {
+    bool does_need_target() const {
         return needs_target;
     }
     bool has_target();
@@ -67,14 +90,15 @@ public:
     }
 
     bool find_target(std::unordered_map<std::string, std::vector<std::weak_ptr<Entity>>>& targets);
-    bool perform();
+    bool perform(int ms_passed);
     void reset();
 
-    void set_exec(ActionExecutor::exec_fun fun){
+    void set_exec(ActionExecutor::fun_init fun){
         execute.set(fun);
     }
 
-    bool is_being_performed(){return start_tick!=0;}
+    void start() {execute.start();}
+    bool is_being_performed() {return execute.is_running();}
 
 
     static void init_actions();
@@ -88,11 +112,13 @@ protected:
     std::string target_name;
     bool needs_target;
 
-    unsigned start_tick;
+    unsigned start_tick; // nie wiem czy to tak...
+    //bool performing;
 
     WorldState precondition;
     WorldState effect;
 
+    //ActionInitializer a_init;
     ActionExecutor execute; /// to powinien być jakiś pointer
 
     //std::weak_ptr<Entity> owner;

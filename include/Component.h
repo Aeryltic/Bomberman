@@ -7,11 +7,12 @@ class Entity;
 class EntityManager;
 
 struct Component {
-    Component() {}
+    //const int id; // może później
+    Component();
     virtual ~Component();
 
     virtual void set_owner(std::weak_ptr<Entity> owner);
-    void set_id(int id) { this->id = id; }
+    //void set_id(int id) { this->id = id; }
     int get_id() { return id; }
 
     std::weak_ptr<Entity> owner;
@@ -22,6 +23,7 @@ private:
     int id;
 
     static EntityManager* entity_manager;
+    static int nextID;
 };
 
 #endif // COMPONENT_H

@@ -29,7 +29,7 @@ public:
 
     component_map& get_components() { return components; }
 
-    void set_id(int id) { this->id = id; }
+    //void set_id(int id) { this->id = id; }
     int get_id() { return id; }
     bool is_active() { return active; }
 
@@ -50,6 +50,7 @@ private:
     inline bool has(type_index key) const;
 // static
     static EntityManager* entityManager;
+    static int nextID;
 };
 
 // TEMPLATES

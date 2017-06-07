@@ -1,0 +1,11 @@
+#ifndef SETUPS_H
+#define SETUPS_H
+
+#include "ScriptSystem.h"
+#include "EntityManager.h"
+
+namespace setups {
+void setup_entity_manager();
+}
+
+#endif // SETUPS_H

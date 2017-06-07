@@ -7,7 +7,7 @@
 
 #include "StringIndexer.h"
 
-ObjectFactory::ObjectFactory(EntityManager* entityManager) : entityManager(entityManager) {
+ObjectFactory::ObjectFactory(EntityManager* entityManager) : entityManager(entityManager) { /// to ma wylądować w skryptach
     Action::init_actions();
 
     constructors[StringIndexer::get_id("nest")] = ([=](double x, double y) {
@@ -61,7 +61,7 @@ ObjectFactory::ObjectFactory(EntityManager* entityManager) : entityManager(entit
         shared_ptr<Entity> e = entityManager->make_entity();
         e->add(entityManager->make_component<CPhysicalForm>(x, y, 0, 20, 20));
         e->add(entityManager->make_component<CAspect>( SDL_Color{.r=50,.g=40,.b=20,.a=255}));
-        e->add(entityManager->make_component<CMovement>(60));
+        e->add(entityManager->make_component<CMovement>(20));
 
         auto agent = entityManager->make_component<GoapAgent>();
         agent->set_state("enemy_killed", false);

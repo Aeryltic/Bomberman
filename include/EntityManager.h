@@ -49,15 +49,18 @@ public:
 protected:
 
 private:
+    /*
     int next_eid; /// to wszystko będzie crashować po przepełnieniu
     int getNextEID() {
         return next_eid++;
     }
+    */
+    /*
     int next_cid;
     int getNextCID() {
         return next_cid++;
     }
-
+    */
     unordered_map<int, entity_ptr> entities; // na vector?
     unordered_map<type_index, unordered_map<int, weak_ptr<Component>>>  components;
 
@@ -74,11 +77,11 @@ private:
 
 
 template<class C, class ... Args>
-shared_ptr<C> EntityManager::make_component(Args && ... args) { /// tworzy nowy komponent, ustawia jego id i zwraca go do dalszej obróbki
+shared_ptr<C> EntityManager::make_component(Args && ... args) { /// ta funkcja jest do wywalenia
     shared_ptr<C> component = make_shared<C>(args...);
-    int id = getNextCID();
-    component->set_id(id);
-    components[tindex(C)].insert({id, component});
+    //int id = getNextCID();
+    //component->set_id(id);
+    components[tindex(C)].insert({component->get_id(), component}); // to chyba nie powinno tutaj być
     return component;
 }
 

@@ -8,21 +8,66 @@ function wait_time(ms)
 end
 ]]
 
-function do_nothing(agent, target)
-  return true
+
+--[[
+function do()
+  return function f(agent, target, ms_passed)
+    return true
+  end
+end
+]]
+
+function do_nothing() -- najprostsza funkcja, która nie robi nic
+  -- zmienne inicjowane na starcie akcji
+  return function(agent, target, ms_passed)
+    return true
+  end
 end
 
-function pickup_grain(agent, target)
-  target:destroy_me()
-  return true
+-- podnoszenie ziaren przez mrówki
+function pickup_grain()
+  time_passed = 0
+  duration = 500
+  
+  return function(agent, target, ms_passed)
+    time_passed = time_passed + ms_passed
+    if time_passed >= duration then
+      target:destroy_me()
+      return true
+    end
+    return false
+  end
 end
 
-function deliver_grain(agent, target)
-  e = target:getEnergyStore()
-  if(e ~= nil) then e.amount = e.amount + 100 end -- nie wiem czy ten if działa jak należy
+-- upuszczenie ziarna do gniazda
+function deliver_grain()
+  time_passed = 0
+  duration = 500
+  
+  return function(agent, target, ms_passed)
+    time_passed = time_passed + ms_passed
+    if time_passed >= duration then
+      e = target:getEnergyStore()
+      if(e ~= nil) then 
+        e.amount = e.amount + 100 
+      end -- nie wiem czy ten if działa jak należy
+      return true
+    end
+    return false
+  end
 end
 
-function kill_enemy(agent, target)
-  target:destroy_me()
-  return true
+-- zabicie wroga
+function kill_enemy()
+  time_passed = 0
+  duration = 100
+  
+  return function(agent, target, ms_passed)
+    time_passed = time_passed + ms_passed -- tak na prawdę to tutaj będzie coś bardziej skomplikowanego - jak wykonywanie pojedynczych ciosów, odejmowanie stoponiowe hp wroga itp
+    if time_passed >= duration then
+      target:destroy_me()
+      return true
+    end
+    return false
+  end
 end

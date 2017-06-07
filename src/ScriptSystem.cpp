@@ -5,7 +5,7 @@
 using namespace luabridge;
 using namespace std;
 
-ScriptSystem ScriptSystem::instance;
+ScriptSystem ScriptSystem::instance; // dlaczego jeśli to wyląduje w get_instance to program przy zamykaniu zapętla się na czymś?
 
 ScriptSystem::ScriptSystem()
 {

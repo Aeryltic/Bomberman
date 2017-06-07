@@ -11,8 +11,8 @@ EntityManager::EntityManager() : factory(this) {
     Entity::set_manager(this);
     Component::set_manager(this);
     active = true;
-    next_eid = 0;
-    next_cid = 0;
+//    next_eid = 0;
+//    next_cid = 0;
 }
 
 EntityManager::~EntityManager() {
@@ -59,9 +59,9 @@ void EntityManager::request_component_removal(type_index t_index, int id) { /// 
 
 shared_ptr<Entity> EntityManager::make_entity() {
     shared_ptr<Entity> e = make_shared<Entity>();
-    int id = getNextEID();
-    entities[id] = e;
-    e->set_id(id);
+//    int id = getNextEID();
+    entities[e->get_id()] = e;
+    //e->set_id(id);
     return e;
 }
 

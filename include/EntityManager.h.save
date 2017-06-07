@@ -26,11 +26,11 @@ public:
     void request_entity_removal(int id);
     void request_component_removal(type_index t_index, int id);
 
-    unordered_map<int,entity_ptr> &getEntities();
+    unordered_map<int,entity_ptr> &get_entities(){ return entities; }
 
     bool exists(int id);
 
-    bool isActive();
+    bool isActive(){ if(!active)printf("EntityManager is not active\n"); return active;}
 
     //ObjectFactory *getFactory(){return &objectFactory;}
 
@@ -42,7 +42,7 @@ public:
     unordered_map<type_index, unordered_map<int, weak_ptr<Component>>> &get_components() { return components; }
 
     shared_ptr<Entity> make_entity();
-    shared_ptr<Entity> make_object(string type, double x, double y);
+    shared_ptr<Entity> make_object(unsigned type, double x, double y);
 
     void delete_component(type_index t_index, int id);
 
@@ -65,6 +65,7 @@ private:
 
     //queue<entity_ptr> toAdd;
     queue<int> entities_to_remove;
+    queue<pair<type_index,int>> components_to_remove;
 
     ResourceManager resourceManager;
 
@@ -75,9 +76,9 @@ private:
 template<class C, class ... Args>
 shared_ptr<C> EntityManager::make_component(Args && ... args) { /// tworzy nowy komponent, ustawia jego id i zwraca go do dalszej obróbki
     shared_ptr<C> component = make_shared<C>(args...);
-    int id = getNextCID();
-    component->set_id(id);
-    components[tindex(C)].insert({id, component});
+    //int id = getNextCID();
+    //component->set_id(id);
+    components[tindex(C)].insert({id, component}); // to chyba nie powinno tutaj być
     return component;
 }
 

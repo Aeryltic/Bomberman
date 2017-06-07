@@ -95,3 +95,15 @@
 	3. myœleæ nad wielow¹tkowoœci¹?
 	4. funkcje update'uj¹ce wykonanie akcji musz¹ przyjmowaæ wykonawce, cel oraz czas, który up³yn¹³
 	5. std::remove_if - dla garbage collectora
+05.06.2017
+	trzeba przebudowaæ tak ¿eby przerzucaæ raw pointery do Lua'y
+06.06.2017
+	zmieniæ g³ówn¹ pêtlê na bardziej singlow¹ ni¿ multikow¹
+	logika za akcjami wrzucona ca³kowicie do skryptów, jestem ciekaw jak bêdzie z wydajnoœci¹ - ale to nie jest do koñca fajne
+	dodaæ w jakiœ sposób szukanie nowych celów jeœli gonienie za aktualnym trwa za d³ugo
+	no grubo HeapCorruptionException - to pewnie przez Lua'e... czasem jest to, a czasem zamyka siê ³adnie
+	czy ten mój kod musi byæ taki obleœny?
+	pozbyæ siê tego lagu kiedy trac¹ target
+	mniej regularne checki czy cel jest nadal aktywny... to by trzeba jednak iœæ za punktem a nie Entity'em konkretnym.... to póŸnej
+	dodaæ te "procedural precondition checkers"
+	jakiœ wygodniejszy sposób generowania tych wrapperów - najlepiej ¿eby pomin¹æ je, a robiæ tylko w³asciwie funkcje... tylko jak wtedy z tymi zmiennymi tworzonymi we wrapperze?

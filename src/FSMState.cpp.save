@@ -44,8 +44,8 @@ GotoState::~GotoState() {}
 bool GotoState::is_in_range() {
     CPhysicalForm *pf = get_owner()->get<CPhysicalForm>();
     if(pf) {
-        if(!dest.expired() && !dest.lock()->is_active()) {
-            auto d = pf->pos.dist(dest.lock()->get<CPhysicalForm>()->);
+        if(!dest.expired() && dest.lock()->is_active()) {
+            auto d = pf->pos.dist(dest.lock()->get<CPhysicalForm>()->pos);
             //printf("pos: %s, dest: %s, distance: %.2f\n", pf->pos.repr().c_str(), dest.repr().c_str(), d);
             return d <= min_range;
         }
@@ -58,8 +58,13 @@ void GotoState::update(int ms) {
     //printf("GotoState::update\n");
     CPhysicalForm *pf = get_owner()->get<CPhysicalForm>();
     CMovement *mv = get_owner()->get<CMovement>();
-    if(pf && mv)
-        pf->pos = pf->pos.moved_towards(dest, mv->max_speed * ms / 1000.0);
+    if(pf && mv) {
+        if(!dest.expired() && dest.lock()->is_active())
+            pf->pos = pf->pos.moved_towards(dest.lock()->get<CPhysicalForm>()->pos, mv->max_speed * ms / 1000.0);
+        else 
+        {
+            fsm->pop_state(); // zamiast tego - szukaj nowego celu
+    }
 
     if(is_in_range()) {
         fsm->pop_state();
@@ -69,7 +74,8 @@ void GotoState::update(int ms) {
 PerformActionState::PerformActionState(FSM *fsm): FSMState(fsm) {}
 PerformActionState::~PerformActionState() {}
 
-void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy... to źle wygląda
+void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy... to obrzydliwie wygląda
+    /// można by po prostu licznik już wyszukanych celów dodać
     //printf("PerformActionState::update\n");
     GoapAgent* agent = fsm->get_agent();
     if(agent->has_plan()) {
@@ -84,14 +90,16 @@ void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy... to źle
             if(!action->is_in_range()) {
                 CPhysicalForm *tpf = action->get_target().lock()->get<CPhysicalForm>();
                 if(tpf) {
-                    vec3d dest = tpf->pos;
-                    fsm->push_state(make_unique<GotoState>(fsm, dest, 10));
+                    //vec3d dest = tpf->pos;
+                    fsm->push_state(make_unique<GotoState>(fsm, action->get_target(), 10));
                     return;
                 } else {
                     printf("invalid target!\n");
                     fsm->pop_state();
                     return;
                 }
+            } else {
+                action->start();
             }
         } else {
             if(action->does_need_target() && !action->has_target()) {
@@ -101,9 +109,10 @@ void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy... to źle
                 return;
             }
         }
-        if(action->perform()) {
+        if(action->perform(ms)) {
             agent->ws = action->act_on(agent->ws); /// trzeba dodać sprawdzenie, czy worldstate nadal spełnia warunki
             agent->current_actions.pop_front();
+            return;
         }
 
     } else {

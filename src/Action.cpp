@@ -52,7 +52,7 @@ void Action::init_actions() {
             std::string scr_name = a["script"];
             LuaRef script = getGlobal(L, scr_name.c_str());
             action.set_exec(script);
-            actions.insert({action.name, action});
+            actions.insert({action.name, std::move(action)});
             //printf(" done.\n");
         } catch(invalid_argument& e) {
             printf("error while loading from data/actions.json: %s\n", e.what());
@@ -60,22 +60,22 @@ void Action::init_actions() {
 
     }
 /// to tak samo powinno nie być tu - ale w skryptach
-/*
-    actions["pickup_grain"].set_exec([](Entity* doer, Entity* target) {
-        target->destroy_me();
-        return true;
-    });
-    actions["deliver_grain"].set_exec([](Entity* doer, Entity* target) {
-        auto e = target->get<CEnergyStore>();
-        if(e) e->amount += 100;
-        return true;
-    });
-    actions["kill_enemy"].set_exec([](Entity* doer, Entity* target) {
-        printf("killing: %d\n", target->get_id());
-        target->destroy_me();
-        return true;
-    });
-    */
+    /*
+        actions["pickup_grain"].set_exec([](Entity* doer, Entity* target) {
+            target->destroy_me();
+            return true;
+        });
+        actions["deliver_grain"].set_exec([](Entity* doer, Entity* target) {
+            auto e = target->get<CEnergyStore>();
+            if(e) e->amount += 100;
+            return true;
+        });
+        actions["kill_enemy"].set_exec([](Entity* doer, Entity* target) {
+            printf("killing: %d\n", target->get_id());
+            target->destroy_me();
+            return true;
+        });
+        */
 }
 
 Action Action::get_action(std::string name) {
@@ -90,6 +90,7 @@ Action::Action(std::string name, int cost, unsigned duration, std::string target
     needs_target = (target_name != "");
     start_tick = 0;
 }
+
 Action::~Action() {
     //dtor
 }
@@ -181,9 +182,11 @@ bool Action::find_target(std::unordered_map<std::string, std::vector<std::weak_p
 void Action::reset() {
     start_tick = 0;
     target.reset();
+    execute.stop();
 }
 
-bool Action::perform() {
+bool Action::perform(int ms_passed) {
+    /*
     if(start_tick == 0) {
         start_tick = SDL_GetTicks();
     }
@@ -191,6 +194,12 @@ bool Action::perform() {
         // tu się odpali jakiś przypisany skrypt...
         execute(get_owner(), get_target().lock().get()); /// no ale co jeśli ta akcja jest ciągła?
         reset();
+        return true;
+    }
+    */
+    if(execute(get_owner(), get_target().lock().get(), ms_passed))
+    {
+        execute.stop();
         return true;
     }
     return false;

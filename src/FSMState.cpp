@@ -59,11 +59,14 @@ void GotoState::update(int ms) {
     CPhysicalForm *pf = get_owner()->get<CPhysicalForm>();
     CMovement *mv = get_owner()->get<CMovement>();
     if(pf && mv) {
-        if(!dest.expired() && dest.lock()->is_active())
+        if(!dest.expired() && dest.lock()->is_active()) {
             pf->pos = pf->pos.moved_towards(dest.lock()->get<CPhysicalForm>()->pos, mv->max_speed * ms / 1000.0);
-        else fsm->pop_state();
+        }
+        else {
+            fsm->pop_state(); // zamiast tego - szukaj nowego celu
+            return;
+        }
     }
-
     if(is_in_range()) {
         fsm->pop_state();
     }
@@ -72,7 +75,8 @@ void GotoState::update(int ms) {
 PerformActionState::PerformActionState(FSM *fsm): FSMState(fsm) {}
 PerformActionState::~PerformActionState() {}
 
-void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy... to źle wygląda
+void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy... to obrzydliwie wygląda
+    /// można by po prostu licznik już wyszukanych celów dodać
     //printf("PerformActionState::update\n");
     GoapAgent* agent = fsm->get_agent();
     if(agent->has_plan()) {
@@ -95,6 +99,8 @@ void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy... to źle
                     fsm->pop_state();
                     return;
                 }
+            } else {
+                action->start();
             }
         } else {
             if(action->does_need_target() && !action->has_target()) {
@@ -104,9 +110,10 @@ void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy... to źle
                 return;
             }
         }
-        if(action->perform()) {
+        if(action->perform(ms)) {
             agent->ws = action->act_on(agent->ws); /// trzeba dodać sprawdzenie, czy worldstate nadal spełnia warunki
             agent->current_actions.pop_front();
+            return;
         }
 
     } else {

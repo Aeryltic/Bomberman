@@ -8,9 +8,11 @@
 #include "Components.h"
 
 EntityManager* Entity::entityManager = nullptr;
+int Entity::nextID = 0;
 
 Entity::Entity() {
-    active = true;
+    active = true; // na pewno?
+    id = nextID++;
 }
 
 Entity::~Entity() {
