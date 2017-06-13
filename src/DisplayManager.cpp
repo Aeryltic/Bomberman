@@ -70,7 +70,7 @@ DisplayManager::~DisplayManager() {
 */
 
 void DisplayManager::render(EntityManager *entityManager, int ms) {
-    //printf("ms: %d\n", ms);
+    double interpolation = ms / 1000.0;
     if(!GameInstance::isPaused()) {
         // renderowanie
         SDL_SetRenderTarget(_window.getRenderer(), _gameWorldView);
@@ -82,19 +82,19 @@ void DisplayManager::render(EntityManager *entityManager, int ms) {
             if(component.expired()) continue;
             CAspect *asp = static_cast<CAspect*>(component.lock().get());
             CPhysicalForm *pf = static_cast<CPhysicalForm*>(component.lock()->owner.lock()->get<CPhysicalForm>());
-            float r = pf->vol.x / 2;
 
-            SDL_Rect rect{.x = (int)pf->pos.x, .y = (int)pf->pos.y, .w = (int)pf->vol.x, .h = (int)pf->vol.y};
+            vec3d pos(pf->pos.x, pf->pos.y, pf->pos.y);
+            double r = pf->vol.x / 2;
 
-//            CMovement *m = component.lock()->owner.lock()->get<CMovement>(); /// "piękne"
-//            if(m != nullptr)
-//            {
-//                rect.x += m->speed.x * ms / 1000.0;
-//                rect.y += m->speed.y * ms / 1000.0;
-//            }
+            CMovement *m = component.lock()->owner.lock()->get<CMovement>();
+            if(m != nullptr) {
+                pos.x += m->speed.x * interpolation;
+                pos.y += m->speed.y * interpolation;
+            }
             //drawRectangle(rect, SDL_Color{.r=255,.g=0,.b=0,.a=255});
-            filledCircleRGBA (_window.getRenderer(), rect.x, rect.y, r, asp->color.r, asp->color.g, asp->color.b, asp->color.a);
+            filledCircleRGBA (_window.getRenderer(), pos.x, pos.y, r, asp->color.r, asp->color.g, asp->color.b, asp->color.a);
         }
+        /// to potem
         /*
                 while(!trt.empty())
                 {
@@ -238,9 +238,9 @@ void DisplayManager::init() {
     lua_State *L = ScriptSystem::getInstance()->getLuaState();
 
     getGlobalNamespace (L)
-        .beginClass <DisplayManager> ("DisplayManager")
-            .addProperty ("text", &DisplayManager::getText, &DisplayManager::setText)
-        .endClass();
+    .beginClass <DisplayManager> ("DisplayManager")
+    .addProperty ("text", &DisplayManager::getText, &DisplayManager::setText)
+    .endClass();
 
     push (L, this);
     lua_setglobal (L, "display");

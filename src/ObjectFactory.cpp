@@ -42,7 +42,7 @@ ObjectFactory::ObjectFactory(EntityManager* entityManager) : entityManager(entit
         shared_ptr<Entity> e = entityManager->make_entity();
         e->add(entityManager->make_component<CPhysicalForm>(x,y,0,30,30));
         e->add(entityManager->make_component<CAspect>(SDL_Color{.r=50,.g=155,.b=0,.a=155}));
-        e->add(entityManager->make_component<CEnergyStore>(400));
+        e->add(entityManager->make_component<CEnergyStore>(200));
         e->add(entityManager->make_component<CBreeder>("grain", 500, 1, 5));
 
         return e;
@@ -57,10 +57,20 @@ ObjectFactory::ObjectFactory(EntityManager* entityManager) : entityManager(entit
         return e;
     });
 
+    constructors[StringIndexer::get_id("water_source")] = ([=](double x, double y) {
+        shared_ptr<Entity> e = entityManager->make_entity();
+        e->add(entityManager->make_component<CPhysicalForm>(x,y,0,50,50));
+        e->add(entityManager->make_component<CAspect>(SDL_Color{.r=70,.g=130,.b=180,.a=220}));
+        e->add(entityManager->make_component<CEnergyStore>(200));
+        e->add(entityManager->make_component<CActionTarget>("TARGET_WATER"));
+
+        return e;
+    });
+
     constructors[StringIndexer::get_id("monster")] = ([=](double x, double y) {
         shared_ptr<Entity> e = entityManager->make_entity();
         e->add(entityManager->make_component<CPhysicalForm>(x, y, 0, 20, 20));
-        e->add(entityManager->make_component<CAspect>( SDL_Color{.r=50,.g=40,.b=20,.a=255}));
+        e->add(entityManager->make_component<CAspect>(SDL_Color{.r=50,.g=40,.b=20,.a=255}));
         e->add(entityManager->make_component<CMovement>(20));
 
         auto agent = entityManager->make_component<GoapAgent>();

@@ -12,7 +12,7 @@ ScriptSystem::ScriptSystem()
     L = luaL_newstate();
     luaL_openlibs(L);
 
-    string filename("scripts/init.lua");
+    string filename("data/scripts/init.lua");
 
     if (luaL_dofile(L, filename.c_str()))
     {
@@ -30,32 +30,18 @@ ScriptSystem::~ScriptSystem()
 {
     if(L) lua_close(L);
 }
+
 void ScriptSystem::initialize()
 {
-    //LuaRef passDisplay = getGlobal(L, "passDisplay");
-    //passDisplay(*_displayManager);
+
 }
+
 void ScriptSystem::update(int ms)
 {
     LuaRef updateTime = getGlobal(L, "updateTime");
     updateTime();
 }
-/*
-void ScriptSystem::registerEverything()
-{
-    printf("registering\n");
-/// TESTY
-    getGlobalNamespace (L)
-        .beginClass <DisplayManager> ("DisplayManager")
-            .addProperty ("text", &DisplayManager::getText, &DisplayManager::setText)
-        .endClass();
 
-    push (L, displayManager);
-    lua_setglobal (L, "display");
-/// -------
-    printf("done\n");
-}
-*/
 string ScriptSystem::execute(const string &command)
 {
     /// to by trzeba dopracować, żeby syfu nie robić

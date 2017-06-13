@@ -15,7 +15,7 @@
 using json = nlohmann::json;
 std::unordered_map<std::string, Action> Action::actions;
 
-const ActionExecutor::exec_fun ActionExecutor::fun0(ScriptSystem::getInstance()->getLuaState(), "do_nothing");// = [](Entity* doer, Entity* target) {return true;};
+//const ActionExecutor::exec_fun ActionExecutor::fun0(ScriptSystem::getInstance()->getLuaState(), "do_nothing");// = [](Entity* doer, Entity* target) {return true;};
 
 void Action::init_actions() {
     std::ifstream t("data/actions.json");
@@ -37,10 +37,8 @@ void Action::init_actions() {
         return;
     }
 
-    for(auto a : j) { /// obsługa wyjątków!
+    for(auto a : j) {
         try {
-            //std::string name = a["name"];
-            //printf("adding action: %s...", name.c_str());
             Action action(a["name"], a["cost"], a["duration"], a["target"]);
             for(auto p: a["preconditions"]) {
                 action.add_precondition(p[0],p[1]);
@@ -53,29 +51,11 @@ void Action::init_actions() {
             LuaRef script = getGlobal(L, scr_name.c_str());
             action.set_exec(script);
             actions.insert({action.name, std::move(action)});
-            //printf(" done.\n");
         } catch(invalid_argument& e) {
             printf("error while loading from data/actions.json: %s\n", e.what());
         }
 
     }
-/// to tak samo powinno nie być tu - ale w skryptach
-    /*
-        actions["pickup_grain"].set_exec([](Entity* doer, Entity* target) {
-            target->destroy_me();
-            return true;
-        });
-        actions["deliver_grain"].set_exec([](Entity* doer, Entity* target) {
-            auto e = target->get<CEnergyStore>();
-            if(e) e->amount += 100;
-            return true;
-        });
-        actions["kill_enemy"].set_exec([](Entity* doer, Entity* target) {
-            printf("killing: %d\n", target->get_id());
-            target->destroy_me();
-            return true;
-        });
-        */
 }
 
 Action Action::get_action(std::string name) {
@@ -85,6 +65,7 @@ Action Action::get_action(std::string name) {
     }
     return f->second;
 }
+
 /// NIE-STATIC
 Action::Action(std::string name, int cost, unsigned duration, std::string target_name): name(name), cost(cost), duration(duration), target_name(target_name) {
     needs_target = (target_name != "");

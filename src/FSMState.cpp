@@ -60,7 +60,8 @@ void GotoState::update(int ms) {
     CMovement *mv = get_owner()->get<CMovement>();
     if(pf && mv) {
         if(!dest.expired() && dest.lock()->is_active()) {
-            pf->pos = pf->pos.moved_towards(dest.lock()->get<CPhysicalForm>()->pos, mv->max_speed * ms / 1000.0);
+            //pf->pos = pf->pos.moved_towards(dest.lock()->get<CPhysicalForm>()->pos, mv->max_speed * ms / 1000.0); // stara wersja dość niefajna
+            mv->speed = pf->pos.movement_step(dest.lock()->get<CPhysicalForm>()->pos, mv->max_speed * ms / 1000.0);
         }
         else {
             fsm->pop_state(); // zamiast tego - szukaj nowego celu
@@ -68,6 +69,7 @@ void GotoState::update(int ms) {
         }
     }
     if(is_in_range()) {
+        mv->stop();
         fsm->pop_state();
     }
 }

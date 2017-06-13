@@ -6,8 +6,7 @@
 #include <sstream>
 using namespace std;
 
-struct vec3d
-{
+struct vec3d {
     double x, y, z;
 
     vec3d(double x, double y, double z) : x(x), y(y), z(z) {}
@@ -15,6 +14,10 @@ struct vec3d
 
     double dist(const vec3d &other) const {
         return sqrt((x-other.x)*(x-other.x)+(y-other.y)*(y-other.y)+(z-other.z)*(z-other.z));
+    }
+
+    double len() const {
+        return sqrt(x*x+y*y+z*z);
     }
 
     vec3d operator+(const vec3d &other) const {
@@ -42,12 +45,17 @@ struct vec3d
         return step >= distance ? other : (*this) + (other - *this) * step / distance;
     }
 
-    vec3d normalized() const {
-        return *this / dist(vec3d(0,0,0));
+    vec3d movement_step(const vec3d &other, double step) const {
+        double distance = dist(other);
+        return step >= distance ? (other - *this) : (other - *this) * step / distance;
     }
 
-    string repr()
-    {
+    vec3d normalized() const {
+        double l = len();
+        return l > 0.00001 ? *this / l : vec3d(0,0,0);
+    }
+
+    string repr() {
         std::stringstream fmt;
         fmt << x << " " << y << " " << z;
         return fmt.str();

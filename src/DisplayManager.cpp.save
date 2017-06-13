@@ -14,34 +14,28 @@
 
 
 
-DisplayManager::DisplayManager(GameInstance *gameInstance) : _window(WINDOW_WIDTH, WINDOW_HEIGHT)//, _graphicsManager(GraphicsManager(_window.getRenderer()))
-{
+DisplayManager::DisplayManager(GameInstance *gameInstance) : _window(WINDOW_WIDTH, WINDOW_HEIGHT) { //, _graphicsManager(GraphicsManager(_window.getRenderer()))
     printf("new DisplayManager\n");
 
-    if(IMG_Init(IMG_INIT_PNG) == -1)
-    {
+    if(IMG_Init(IMG_INIT_PNG) == -1) {
         printf("IMG_Init: %s\n", IMG_GetError());
         exit(-1);
     }
-    if(TTF_Init() == -1)
-    {
+    if(TTF_Init() == -1) {
         printf("TTF_Init: %s\n", TTF_GetError());
         exit(-1);
     }
 
-    if(_window.isReady())
-    {
+    if(_window.isReady()) {
         _windowRect.x = 0;
         _windowRect.y = 0;
         SDL_GetWindowSize(_window.getWindow(), &_windowRect.w, &_windowRect.h);
         printf("_windowRect: %d %d %d %d\n",_windowRect.x,_windowRect.y,_windowRect.w,_windowRect.h);
         _active = true;
-    }
-    else _active = false;
+    } else _active = false;
 
     consoleFontSize = 20;
-    if((consoleFont = TTF_OpenFont("fonts/FORCED_SQUARE.ttf", consoleFontSize)) == NULL)
-    {
+    if((consoleFont = TTF_OpenFont("fonts/FORCED_SQUARE.ttf", consoleFontSize)) == NULL) {
         printf("FONT ERROR\n");
     }
     consoleFontColor = {.r=0, .g=155, .b=0, .a=255};
@@ -52,8 +46,7 @@ DisplayManager::DisplayManager(GameInstance *gameInstance) : _window(WINDOW_WIDT
     _gameWorldView = SDL_CreateTexture(_window.getRenderer(), SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, _windowRect.w, _windowRect.h);
 }
 
-DisplayManager::~DisplayManager()
-{
+DisplayManager::~DisplayManager() {
     printf("delete DisplayManager\n");
 
     SDL_DestroyTexture(_gameWorldView);
@@ -76,37 +69,32 @@ DisplayManager::~DisplayManager()
             renderuje
 */
 
-void DisplayManager::render(EntityManager *entityManager, int ms)
-{
-    //printf("ms: %d\n", ms);
-    if(!GameInstance::isPaused())
-    {
+void DisplayManager::render(EntityManager *entityManager, int ms) {
+    double interpolation = ms / 1000.0;
+    if(!GameInstance::isPaused()) {
         // renderowanie
         SDL_SetRenderTarget(_window.getRenderer(), _gameWorldView);
         SDL_RenderClear(_window.getRenderer());
 
         //priority_queue<ToRender> trt;
-        for(auto &p : entityManager->getComponents()[tindex(CAspect)])
-        {
-//            auto component = p.second;
+        for(auto &p : entityManager->get_components()[tindex(CAspect)]) {
+            auto component = p.second;
             if(component.expired()) continue;
             CAspect *asp = static_cast<CAspect*>(component.lock().get());
             CPhysicalForm *pf = static_cast<CPhysicalForm*>(component.lock()->owner.lock()->get<CPhysicalForm>());
-            float r = pf->vol.x / 2;
 
-            SDL_Rect rect{.x = (int)pf->pos.x, .y = (int)pf->pos.y, .w = (int)pf->vol.x, .h = (int)pf->vol.y};
+            vec3d pos(pf->pos.x, pf->pos.y, pf->pos.y);
+            double r = pf->vol.x / 2;
 
-//            CMovement *m = component.lock()->owner.lock()->get<CMovement>(); /// "piękne"
-//            if(m != nullptr)
-//            {
-//                rect.x += m->speed.x * ms / 1000.0;
-//                rect.y += m->speed.y * ms / 1000.0;
-//            }
+            CMovement *m = component.lock()->owner.lock()->get<CMovement>();
+            if(m != nullptr) {
+                pos.x += m->speed.x * interpolation;
+                pos.y += m->speed.y * interpolation;
+            }
             //drawRectangle(rect, SDL_Color{.r=255,.g=0,.b=0,.a=255});
-            filledCircleRGBA (_window.getRenderer(), rect.x, rect.y, r, asp->color.r, asp->color.g, asp->color.b, asp->color.a);
+            filledCircleRGBA (_window.getRenderer(), pos.x, pos.y, r, asp->color.r, asp->color.g, asp->color.b, asp->color.a);
         }
-
-
+        /// to potem
         /*
                 while(!trt.empty())
                 {
@@ -128,8 +116,7 @@ void DisplayManager::render(EntityManager *entityManager, int ms)
     }
 }
 
-void DisplayManager::drawConsole(const string &buffer, const deque<string> &commandHistory)
-{
+void DisplayManager::drawConsole(const string &buffer, const deque<string> &commandHistory) { /// to jest słabe
     SDL_RenderClear(_window.getRenderer());
 
     SDL_RenderCopy(_window.getRenderer(), _gameWorldView, nullptr, nullptr);
@@ -142,16 +129,14 @@ void DisplayManager::drawConsole(const string &buffer, const deque<string> &comm
     int x0 = 20;
     int y0 = _windowRect.h - consoleFontSize*2;
     drawText(formatted_buffer, x0, y0, consoleFontColor);
-    for(unsigned i=0; (i<5) && (i<commandHistory.size()); i++)
-    {
+    for(unsigned i=0; (i<5) && (i<commandHistory.size()); i++) {
         drawText(commandHistory[i], x0, y0 - (i+1)*consoleFontSize, consoleFontColor);
     }
 
     SDL_RenderPresent(_window.getRenderer());
 }
 
-bool DisplayManager::isVisible(const SDL_Rect &rect) /// ta funkcja powinna uwzgledniać obrot, bo tak obiekty na skraju moga sie nie pojawic mimo ze powinny
-{
+bool DisplayManager::isVisible(const SDL_Rect &rect) { /// ta funkcja powinna uwzgledniać obrot, bo tak obiekty na skraju moga sie nie pojawic mimo ze powinny
     SDL_Point p;
     p.x = rect.x;
     p.y = rect.y;
@@ -165,8 +150,7 @@ bool DisplayManager::isVisible(const SDL_Rect &rect) /// ta funkcja powinna uwzg
     return false;
 }
 
-void DisplayManager::showDialog(const string &text, BoxPosition position)
-{
+void DisplayManager::showDialog(const string &text, BoxPosition position) {
     //printf("dialog with: \"%s\"\n", text.c_str());
     int textW, textH;
     TTF_SizeText(consoleFont, text.c_str(), &textW, &textH);
@@ -175,8 +159,7 @@ void DisplayManager::showDialog(const string &text, BoxPosition position)
     textRect.w = textW + 50;
     textRect.h = textH + 50;
 
-    switch (position)
-    {
+    switch (position) {
     case POS_CENTER:
         textRect.x = (_windowRect.w - textRect.w) / 2;
         textRect.y = (_windowRect.h - textRect.h) / 2;
@@ -227,15 +210,13 @@ void DisplayManager::showDialog(const string &text, BoxPosition position)
     drawText(text, textRect.x + 25, textRect.y + 25, consoleFontColor);
 }
 
-void DisplayManager::drawRectangle(const SDL_Rect &rect, const SDL_Color &color)
-{
+void DisplayManager::drawRectangle(const SDL_Rect &rect, const SDL_Color &color) {
     SDL_SetRenderDrawColor(_window.getRenderer(), color.r, color.g, color.b, color.a);
     SDL_RenderFillRect(_window.getRenderer(), &rect);
     SDL_SetRenderDrawColor(_window.getRenderer(), clearColor.r, clearColor.g, clearColor.b, clearColor.a);
 }
 
-void DisplayManager::drawText(const string &text, int x, int y, const SDL_Color &color)
-{
+void DisplayManager::drawText(const string &text, int x, int y, const SDL_Color &color) {
     SDL_SetRenderDrawColor(_window.getRenderer(), color.r, color.g, color.b, color.a);
 
     SDL_Surface* messageSurface = TTF_RenderText_Solid(consoleFont, text.c_str(), consoleFontColor);
@@ -253,8 +234,7 @@ void DisplayManager::drawText(const string &text, int x, int y, const SDL_Color 
     SDL_SetRenderDrawColor(_window.getRenderer(), clearColor.r, clearColor.g, clearColor.b, clearColor.a);
 }
 
-void DisplayManager::init()
-{
+void DisplayManager::init() {
     lua_State *L = ScriptSystem::getInstance()->getLuaState();
 
     getGlobalNamespace (L)

@@ -13,27 +13,41 @@ class Entity;
 
 struct ActionExecutor { /// to chyba powoduje HeapCorruptionException
     using exec_fun = LuaRef;//std::function<bool(Entity*, Entity*)>;
-    using fun_init = LuaRef;//std::function<bool(Entity*, Entity*)>;
+//    using fun_init = LuaRef;//std::function<bool(Entity*, Entity*)>;
 
     ActionExecutor() :
-        f_init(fun0),
+//        f_init(fun0),
         exec(ScriptSystem::getInstance()->getLuaState()),
         running(false) {}
-    ActionExecutor(const fun_init& init) :
-        f_init(init),
+/*    ActionExecutor(const fun_init& init) :
+//        f_init(init),
         exec(ScriptSystem::getInstance()->getLuaState()),
         running(false) {}
-
+*/
     bool operator()(Entity* doer, Entity* target, int ms_passed) {
-        return exec(doer, target, ms_passed); // uważać z tym, bo nie chcę dodawać tu zbędnego if'a
+        ms_running += ms_passed;
+        bool result = false;
+        try {
+            result = exec(doer, target, ms_running);
+        } catch (LuaException const& e) {
+            printf("%s\n", e.what());
+            result = false;
+        }
+        return result;
     }
-
-    void set(fun_init init){
+/*
+    void set(fun_init init) {
         f_init = init;
+    }
+    */
+    void set(exec_fun fun) {
+        exec = fun;
     }
 
     void start() {
-        exec = f_init();
+        //exec = Nil();
+        //exec = f_init();
+        ms_running = 0;
         running = true;
     }
 
@@ -46,12 +60,13 @@ struct ActionExecutor { /// to chyba powoduje HeapCorruptionException
     }
 
 private:
-    fun_init f_init;
+    //fun_init f_init;
     exec_fun exec;
 
     bool running;
+    int ms_running;
 
-    const static fun_init fun0;
+    //const static fun_init fun0;
 };
 //-------------------------------------------------------------------------------------------------
 class Action {
@@ -93,7 +108,7 @@ public:
     bool perform(int ms_passed);
     void reset();
 
-    void set_exec(ActionExecutor::fun_init fun){
+    void set_exec(ActionExecutor::exec_fun fun) {
         execute.set(fun);
     }
 

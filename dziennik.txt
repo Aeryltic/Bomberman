@@ -107,3 +107,15 @@
 	mniej regularne checki czy cel jest nadal aktywny... to by trzeba jednak iœæ za punktem a nie Entity'em konkretnym.... to póŸnej
 	dodaæ te "procedural precondition checkers"
 	jakiœ wygodniejszy sposób generowania tych wrapperów - najlepiej ¿eby pomin¹æ je, a robiæ tylko w³asciwie funkcje... tylko jak wtedy z tymi zmiennymi tworzonymi we wrapperze?
+09.06.2017
+	nie wiem jak rozwi¹zaæ tworzenie komponentów po stronie Lua'y
+	czy w ogóle te smart pointery maj¹ sens w tym projekcie? no okej, maj¹... chocia¿ pewnie gdyby konstrukcja systemu by³a lepsza to by potrzebne nie by³y
+10.06.2017
+	jakiœ komponent "Automat", który by po prostu ca³y czas dzia³a³ jakimœ skryptem
+13.06.2017
+	zmieniæ podejœcie do skryptów AI
+	zmini³em, ale nie wiem czy to nie utrudni pracy (chocia¿ no skrypty wygl¹daj¹ ³adniej)
+	zrobiæ, ¿eby GotoState ustawia³ tylko prêdkoœci, a samo poruszanie by³o ju¿ na zewn¹trz
+	zdaje siê ¿e jest jakiœ drobny wyciek pamiêci
+	zamiast pickup/deliver grain/water -> deliver resource. chocia¿ nie, to zbyt abstrakcyjne dla planisty, nie wiem jak to zaprogramowaæ póki co
+	HEAPCORRUPTION NADAL SIÊ POJAWIA

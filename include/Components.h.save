@@ -20,18 +20,19 @@ void register_components();
 
 
 struct CPhysicalForm : public Component {
-    explicit CPhysicalForm(double x, double y, double z, double w, double h, double d = 0)
-        : pos(x, y, z), vol(w, h, d), rot(0,0,0) { }
-    virtual ~CPhysicalForm() {/*printf("pf_destr\n");*/}
-
     vec3d pos;
     vec3d vol;
     vec3d rot;
+
+    explicit CPhysicalForm(double x, double y, double z, double w, double h, double d = 0)
+        : pos(x, y, z), vol(w, h, d), rot(0,0,0) { }
+    virtual ~CPhysicalForm() {/*printf("pf_destr\n");*/}
 };
 
 /// Animation/SpriteComponent?
 struct CAspect : public Component { /// uses CPhysicalForm
-    //CAspect(SDL_Texture *texture, SDL_Rect *source) : , texture(texture), source(source) {}
+    SDL_Color color;
+
     CAspect(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
         this->color = {r,g,b,a};
     }
@@ -39,23 +40,24 @@ struct CAspect : public Component { /// uses CPhysicalForm
         this->color = (color);
     }
     virtual ~CAspect() {}
-
-    SDL_Color color;
-//    SDL_Texture *texture; /// tu chyba shared_ptr powinien być, a w GraphicsManagerze weak_ptr, albo jeszcze jakoś inaczej
-//    SDL_Rect *source;
-
 };
 
 struct CMovement : public Component {
-    CMovement(float max_speed) {
+    float max_speed;
+    vec3d speed;
+
+    CMovement(float max_speed) : speed(0,0,0) {
         this->max_speed = max_speed;
     }
     virtual ~CMovement() {};
-
-    float max_speed;
+    
+    void stop(){
+    }
 };
 
 struct CActionTarget : public Component { /// to nie jest chyba dobry pomysł
+    string target_type;
+
     CActionTarget(string target_type) {
         this->target_type = target_type;
     }
@@ -69,8 +71,8 @@ struct CActionTarget : public Component { /// to nie jest chyba dobry pomysł
         targets[target_type].push_back(owner);
     }
 
-    string target_type;
-    /// to niżej nie działa, dlatego lepsze byłby po prostu identyfikatory obiektów zamiast wskaźników
+    // static
+    static unordered_map<string, vector<weak_ptr<Entity>>> targets;
 
     static void remove_target(string s, weak_ptr<Entity> target) {
         auto it  = find_if(targets[s].begin(), targets[s].end(), [&target](const weak_ptr<Entity>& p) {return target.lock().get() == p.lock().get();});
@@ -78,25 +80,28 @@ struct CActionTarget : public Component { /// to nie jest chyba dobry pomysł
             targets[s].erase(it);
         }
     }
-
-    static unordered_map<string, vector<weak_ptr<Entity>>> targets;
 };
 
 
 struct CEnergyStore : public Component {
+    float amount;
+    float pace;
+
     CEnergyStore(float pace) {
         this->pace = pace;
         amount = 100.0;
     }
     virtual ~CEnergyStore() {};
-    
-    void set_amount(float amount){this->amount = a}
 
-    float amount;
-    float pace; /// to nie powinno tu być
+    void set_amount(float amount){this->amount = amount;}
+    float get_amount() const { return amount; }
 };
 
 struct CBreeder : public Component { /// zamiast tego - akcja ze skryptem zwracającym czy można rodzić
+    string child_type;
+    float required_energy;
+    int min_amount, max_amount;
+
     CBreeder(string child_type, float required_energy, int min_amount, int max_amount) {
         this->child_type = (child_type);
         this->required_energy = (required_energy);
@@ -105,14 +110,22 @@ struct CBreeder : public Component { /// zamiast tego - akcja ze skryptem zwraca
     }
     virtual ~CBreeder() {};
 
-    string child_type;
-    float required_energy;
-    int min_amount, max_amount;
-
     bool ready() {
         CEnergyStore *es = owner.lock()->get<CEnergyStore>();
         return (es && es->amount >= required_energy);
     }
+};
+
+struct CAbstractObjectContainer : public Component {
+    std::unordered_map<int, weak_ptr<Entity>> obj;
+
+    CAbstractObjectContainer() {}
+};
+
+struct CParameterContainer : public Component {
+    std::unordered_map<string, double> param;
+
+    CParameterContainer() {}
 };
 ///-------------------------------------------------------------------------------------------
 /*

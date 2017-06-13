@@ -21,10 +21,19 @@ void ComponentSystem::addUpdateFunction(int priority, update_function ufunction)
     ufunctions.emplace(it, p);
 }
 
-bool ComponentSystem::init() { /// póki co nie ma w ogóle sortowania tych funkcji
+bool ComponentSystem::init() {
+    /// jakiś tam ruch
+    addUpdateFunction(1, [](int ms, EntityManager* entityManager) /// tylko test
+    {
+        vector<MovementView> views = ViewCreator::createViews<MovementView>(entityManager);
+        for(auto &v: views)
+        {
+            v.pf->pos += v.m->speed;
+        }
+    });
+
     /// breedery - to też AI, chociaż może nie nadużywajmy AI, to jest zwykły automat... ale jakieś metaautomaty też można by zrobić
     addUpdateFunction(20, [](int ms, EntityManager* entityManager) {
-        //printf("breedery... ");
         vector<BreederView> views = ViewCreator::createViews<BreederView>(entityManager);
         for(auto &view: views) {
             if(view.breeder->ready()) {
@@ -36,51 +45,28 @@ bool ComponentSystem::init() { /// póki co nie ma w ogóle sortowania tych funk
                 }
             }
         }
-        //printf("done\n");
     });
 
     /// odnawianie energii
     addUpdateFunction(30, [](int ms, EntityManager* entityManager) {
-        //printf("energy... ");
         vector<EnergyView> views = ViewCreator::createViews<EnergyView>(entityManager);
         for(auto &view: views) {
             view.energy->amount += view.energy->pace * ms / 1000.0;
         }
-        //printf("done\n");
     });
 
-    /// AI
-    addUpdateFunction(30, [](int ms, EntityManager* entityManager) {
-        //printf("AI... ");
+    /// AI - raczej na samym końcu...
+    addUpdateFunction(100, [](int ms, EntityManager* entityManager) {
         for(auto &wagent: entityManager->get_components()[tindex(GoapAgent)]) {
-            //printf("(");
             if(!wagent.second.expired()) {
                 GoapAgent* agent = static_cast<GoapAgent*>(wagent.second.lock().get());
                 agent->update(ms);
             }
-            //else printf("goap_agent expired!\n");
-            //printf(")");
-        }
-        //printf("done\n");
-    });
-
-    /// jakiś tam ruch
-    /*
-    addUpdateFunction(10, [](int ms, EntityManager* entityManager) /// tylko test
-    {
-        vector<MovementView> views = ViewCreator::createViews<MovementView>(entityManager);
-        for(auto &v: views)
-        {
-            if(v.m->has_dest)
-            {
-                v.pf->pos += v.m->speed; // wektory
-
-                v.m->speed.x = v.m->max_speed * cos(v.m->movement_angle) * ms / 1000;
-                v.m->speed.y = v.m->max_speed * sin(v.m->movement_angle) * ms / 1000;
-            }
         }
     });
-    */
+
+
+
 
     /// kolizje
     /*

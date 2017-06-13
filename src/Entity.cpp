@@ -16,7 +16,7 @@ Entity::Entity() {
 }
 
 Entity::~Entity() {
-    printf("del %d\n", id);
+    //printf("del %d\n", id);
     if(entityManager) {
         //printf("removing components...");
         for(auto p: components) {
@@ -69,6 +69,6 @@ void Entity::setup()
             .beginClass<Entity>("Entity")
                 .addConstructor<void(*)()>()
                 .addFunction("destroy_me", &Entity::destroy_me)
-                .addFunction("getEnergyStore", &Entity::get<CEnergyStore>)
+                .addFunction("energy_store", &Entity::get<CEnergyStore>)
             .endClass();
 }

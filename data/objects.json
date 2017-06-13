@@ -23,7 +23,7 @@
 		"components": [
 			["CPhysicalForm", 0, 30, 30],
 			["CAspect", [50,155,0,255]],
-			["CEnergyStore", 400],
+			["CEnergyStore", 200],
 			["CBreeder", "grain", 500, 1, 5]
 		]
 	},
