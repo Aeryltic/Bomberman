@@ -10,14 +10,25 @@
 ObjectFactory::ObjectFactory(EntityManager* entityManager) : entityManager(entityManager) { /// to ma wylądować w skryptach
     Action::init_actions();
 
-    constructors[StringIndexer::get_id("nest")] = ([=](double x, double y) {
+    constructors[StringIndexer::get_id("store")] = ([=](double x, double y) {
         shared_ptr<Entity> e = entityManager->make_entity();
         e->add(entityManager->make_component<CPhysicalForm>(x,y,0,50,50));
         e->add(entityManager->make_component<CAspect>(SDL_Color{.r=100,.g=50,.b=50,.a=255}));
 
         e->add(entityManager->make_component<CEnergyStore>(0));
         e->add(entityManager->make_component<CBreeder>("ant", 500, 1, 2));
-        e->add(entityManager->make_component<CActionTarget>("TARGET_NEST"));
+        e->add(entityManager->make_component<CActionTarget>("TARGET_STORE"));
+        return e;
+    });
+
+    constructors[StringIndexer::get_id("inn")] = ([=](double x, double y) {
+        shared_ptr<Entity> e = entityManager->make_entity();
+        e->add(entityManager->make_component<CPhysicalForm>(x,y,0,50,50));
+        e->add(entityManager->make_component<CAspect>(SDL_Color{.r=140,.g=100,.b=70,.a=255}));
+
+        //e->add(entityManager->make_component<CEnergyStore>(0));
+        //e->add(entityManager->make_component<CBreeder>("ant", 500, 1, 2));
+        e->add(entityManager->make_component<CActionTarget>("TARGET_INN"));
         return e;
     });
 
@@ -26,15 +37,24 @@ ObjectFactory::ObjectFactory(EntityManager* entityManager) : entityManager(entit
         e->add(entityManager->make_component<CPhysicalForm>(x,y,0,10,10));
         e->add(entityManager->make_component<CAspect>(SDL_Color{.r=255,.g=0,.b=0,.a=255}));
         e->add(entityManager->make_component<CMovement>(100));
+        e->add(entityManager->make_component<CRigidBody>(5));
+
         e->add(entityManager->make_component<CActionTarget>("TARGET_ANT"));
 
         auto agent = entityManager->make_component<GoapAgent>();
         agent->set_state("have_grain", false);
         agent->add_action(Action::get_action("deliver_grain"));
         agent->add_action(Action::get_action("pickup_grain"));
-        agent->add_goal("grain_delivered", true, 1);
+        agent->add_action(Action::get_action("drink"));
+        agent->add_action(Action::get_action("eat"));
+        agent->add_action(Action::get_action("rest"));
+        agent->add_goal("thirsty", false, 1);
+        agent->add_goal("hungry", false, 3);
+        agent->add_goal("weary", false, 2);
+        agent->add_goal("grain_delivered", true, 10);
         e->add(agent);
 
+        e->add(entityManager->make_component<CNeeds>(0,0,0));
         return e;
     });
 
@@ -72,6 +92,7 @@ ObjectFactory::ObjectFactory(EntityManager* entityManager) : entityManager(entit
         e->add(entityManager->make_component<CPhysicalForm>(x, y, 0, 20, 20));
         e->add(entityManager->make_component<CAspect>(SDL_Color{.r=50,.g=40,.b=20,.a=255}));
         e->add(entityManager->make_component<CMovement>(20));
+        e->add(entityManager->make_component<CRigidBody>(10));
 
         auto agent = entityManager->make_component<GoapAgent>();
         agent->set_state("enemy_killed", false);

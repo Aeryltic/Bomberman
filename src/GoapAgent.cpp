@@ -42,7 +42,10 @@ void GoapAgent::add_goal(std::string goal_name, bool goal_state, unsigned priori
 WorldState GoapAgent::find_goal() {
     WorldState goal;
     for(auto p: goals) {
-        goal.add(p.second.first, p.second.second); // to tylko na chwilę
+        if(p.second.second != ws[p.second.first]){
+            goal.add(p.second.first, p.second.second); // to tylko na chwilę
+            break;
+        }
     }
     return goal;
     /*
@@ -57,5 +60,8 @@ void GoapAgent::scan_world() {
     //owner.lock()->receive_message(Message(MSG_SCANNING, owner));
     set_state("grain_delivered", false);    /// to tu nie może być
     set_state("enemy_killed", false);       /// tak samo to
-                                            /// trzeba rozwinąć jednak sensory
+                                            /// trzeba rozwinąć sensory
+    for(auto a: available_actions){ /// to też nie jest dobre rozwiązanie
+        a.second.scan();
+    }
 }

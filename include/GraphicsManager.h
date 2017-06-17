@@ -4,25 +4,25 @@
 /* przechowuje i zarzadza teksturami */
 
 #include <unordered_map>
+#include <memory>
+
+#include <SDL.h>
+
 //#include "AppWindow.h"
-#include "Constants.h"
+//#include "Constants.h"
 
 using namespace std;
-class GraphicsManager
-{
-    class Texture
-    {
+
+class GraphicsManager {
+    class Texture {
     public:
-        Texture(SDL_Texture *texture = nullptr)
-        {
+        Texture(SDL_Texture *texture = nullptr) {
             _texture = texture;
         }
-        ~Texture()
-        {
+        ~Texture() {
             SDL_DestroyTexture(_texture);
         }
-        SDL_Texture *texture()
-        {
+        SDL_Texture *texture() {
             return _texture;
         }
     private:
@@ -38,8 +38,7 @@ public:
     bool loadTexture(string tex_path);
     int copyTexToRenderer(const char *tex, SDL_Rect *rect);
 
-    bool isActive()
-    {
+    bool isActive() {
         return _active;
     }
 

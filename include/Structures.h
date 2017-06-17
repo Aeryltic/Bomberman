@@ -1,5 +1,10 @@
 #ifndef STRUCTURES_H_INCLUDED
 #define STRUCTURES_H_INCLUDED
+
+#ifndef _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
+#endif // _USE_MATH_DEFINES
+
 #include <cmath>
 //#include <SDL.h>
 #include <memory>
@@ -40,6 +45,10 @@ struct vec3d {
         return vec3d(x/v, y/v, z/v);
     }
 
+    vec3d operator-() const {
+        return vec3d(-x,-y,-z);
+    }
+
     vec3d moved_towards(const vec3d &other, double step) const {
         double distance = dist(other);
         return step >= distance ? other : (*this) + (other - *this) * step / distance;
@@ -55,7 +64,27 @@ struct vec3d {
         return l > 0.00001 ? *this / l : vec3d(0,0,0);
     }
 
-    string repr() {
+    double angle_to(const vec3d& other) const {
+        vec3d n1 = normalized();
+        vec3d n2 = other.normalized();
+        return acos(n1.x * n2.x + n1.y * n2.y + n1.z * n2.z);
+    }
+
+    double dot_product(const vec3d& other) const {
+        return x * other.x + y * other.y + z * other.z;
+    }
+
+    vec3d slided_along(vec3d other) const {
+        //printf("sliding %s along %s: ",repr().c_str(), other.repr().c_str());
+        //double angle = angle_to(other);
+        //if(abs(angle) > M_PI / 2)other = -other;
+        //printf("angle = %f", angle * 180.0 / M_PI);
+        //if(abs(angle) > M_PI || angle < 0.00001) return *this;
+        //double l = dot_product(other) / other.len();
+        return other.normalized() * len();
+    }
+
+    string repr() const {
         std::stringstream fmt;
         fmt << x << " " << y << " " << z;
         return fmt.str();
@@ -112,23 +141,6 @@ struct Vector2D_int
 */
 
 /*
-typedef Vector2D_double vector2d;
-typedef Vector2D_int int_vector2d;
-struct PositionAndSpeed // obsolete
-{
-    PositionAndSpeed() {}
-    vector2d pos,v;
-    void updatePosition(int ms_passed)
-    {
-        pos.x += v.x * ms_passed / 1000.0;
-        pos.y += v.y * ms_passed / 1000.0;
-    }
-    vector2d interpolated(int ms_passed) const /// "interpolated"
-    {
-        return vector2d(pos.x + v.x * ms_passed / 1000.0, pos.y + v.y * ms_passed / 1000.0);
-    }
-};
-
 struct Circle
 {
     Circle(double x, double y, double r) : x(x), y(y), r(r) {}

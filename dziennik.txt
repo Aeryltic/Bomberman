@@ -119,3 +119,21 @@
 	zdaje siê ¿e jest jakiœ drobny wyciek pamiêci
 	zamiast pickup/deliver grain/water -> deliver resource. chocia¿ nie, to zbyt abstrakcyjne dla planisty, nie wiem jak to zaprogramowaæ póki co
 	HEAPCORRUPTION NADAL SIÊ POJAWIA
+14.06.2017
+	inaczej rozwi¹zaæ poruszanie siê AI, bo nie wszystkie akcje wymagaj¹ poruszania siê do celu by coœ stoj¹c zrobiæ, niektóre to ruch sam w sobie (uciekanie przed czymœ) lub powinny byæ wykonywane w ruchu
+	poruszanie siê powinno byæ przezroczyœcie wpecione w AI nie jako osobny stan
+	(z)merge'owaæ GotoState z PerformActionState...
+	a mo¿e jeszcze inaczej - spleœæ w same skrypty
+15.06.2017
+	komponenty skupiaj¹ce inne komponenty? np. ogólna "fizycznoœæ" na któr¹ sk³ada³yby siê Transformation, RigidBody, Aspect, Movement, Mass(itp)
+	odrobina dziedziczenia w komponentach DynamicBody, StaticBody, KinematicBody
+17.06.2017
+	dodaæ jakieœ wagi do worldstate'ów czy coœ ¿eby np. zaznaczyæ poziom g³odu, ¿e jeszcze nie jest a¿ tak du¿y mo¿na zaj¹æ siê czymœ innym, ale jeœli bêdzie za du¿y to nie ma wyboru trzeba jeœæ
+	scannery w aktualnej formie nie maj¹ odpowiedniego zasiêgu (tylko agent)
+	zrobiæ ¿eby przestali chodziæ gdy nie potrzeba
+	naprawiæ ten heapcorruption
+	no i dalej rozwijaæ
+	jak zrobiæ ¿eby mrówka by³a jedzeniem ale ¿eby mrówki jej nie jad³y, tylko potwór?
+	JAKAŒ HIERARCHIA W ACTIONHANDLERZE? ¿eby ró¿n¹ iloœæ argumentów przyjmowa³y czy coœ
+	naprawiæ "beztargetowe" akcje
+	rzadko s¹ g³odni, a zmêczeni to ju¿ wcale

@@ -1,8 +1,10 @@
 #include "AudioManager.h"
 
+#include <cstdio>
+
 AudioManager::AudioManager()
 {
-    //ctor
+    printf("new AudioManager\n");
 }
 
 AudioManager::~AudioManager()

@@ -5,7 +5,8 @@
 #include <memory>
 #include <list>
 
-#include "Components.h"
+//#include "Components.h"
+#include "Component.h"
 #include "FSM.h"
 #include "WorldState.h"
 #include "Action.h"

@@ -11,42 +11,31 @@
 class GoapAgent;
 class Entity;
 
-struct ActionExecutor { /// to chyba powoduje HeapCorruptionException
-    using exec_fun = LuaRef;//std::function<bool(Entity*, Entity*)>;
-//    using fun_init = LuaRef;//std::function<bool(Entity*, Entity*)>;
+struct ActionExecutor {
+    using exec_fun = LuaRef;
 
     ActionExecutor() :
-//        f_init(fun0),
-        exec(ScriptSystem::getInstance()->getLuaState()),
+        exec(ScriptSystem::instance()->state()),
         running(false) {}
-/*    ActionExecutor(const fun_init& init) :
-//        f_init(init),
-        exec(ScriptSystem::getInstance()->getLuaState()),
-        running(false) {}
-*/
+
     bool operator()(Entity* doer, Entity* target, int ms_passed) {
         ms_running += ms_passed;
         bool result = false;
         try {
-            result = exec(doer, target, ms_running);
+            if(target != nullptr) result = exec(doer, target, ms_running);
+            else result = exec(doer, ms_running);
         } catch (LuaException const& e) {
             printf("%s\n", e.what());
             result = false;
         }
         return result;
     }
-/*
-    void set(fun_init init) {
-        f_init = init;
-    }
-    */
+
     void set(exec_fun fun) {
         exec = fun;
     }
 
     void start() {
-        //exec = Nil();
-        //exec = f_init();
         ms_running = 0;
         running = true;
     }
@@ -60,19 +49,18 @@ struct ActionExecutor { /// to chyba powoduje HeapCorruptionException
     }
 
 private:
-    //fun_init f_init;
     exec_fun exec;
 
     bool running;
     int ms_running;
 
-    //const static fun_init fun0;
 };
+
 //-------------------------------------------------------------------------------------------------
 class Action {
+    using PreconditionScanner = LuaRef;
 public:
-//    Action() {}
-    Action(std::string name, int cost, unsigned duration, std::string target_name="");
+    Action(std::string name, int cost, std::string target_name="");
     virtual ~Action();
 
     Action& add_precondition(std::string name, bool value);
@@ -82,7 +70,7 @@ public:
 
     bool is_doable(const WorldState &ws);
 
-    WorldState act_on(WorldState ws); /// to raczej powinien być test po wykonaniu akcji - tylko dla planisty
+    WorldState act_on(WorldState ws); /// to raczej powininno być tylko dla planisty
 
     const std::string& get_name() const {
         return name;
@@ -112,34 +100,36 @@ public:
         execute.set(fun);
     }
 
-    void start() {execute.start();}
-    bool is_being_performed() {return execute.is_running();}
+    void set_scanner(PreconditionScanner scanner) {
+        this->scanner = scanner;
+    }
 
+    void scan() {
+        scanner(get_owner());
+    }
+
+    void start() {execute.start();}
+    bool is_performed() {return execute.is_running();}
 
     static void init_actions();
     static Action get_action(std::string name);
-    //static std::type_index void_index;
 
 protected:
     std::string name;
     int cost;
-    unsigned duration;
     std::string target_name;
     bool needs_target;
-
-    unsigned start_tick; // nie wiem czy to tak...
-    //bool performing;
 
     WorldState precondition;
     WorldState effect;
 
-    //ActionInitializer a_init;
-    ActionExecutor execute; /// to powinien być jakiś pointer
+    PreconditionScanner scanner;
+    ActionExecutor execute;
 
-    //std::weak_ptr<Entity> owner;
     GoapAgent* agent;
     std::weak_ptr<Entity> target;
 
+    /// STATIC
     static std::unordered_map<std::string, Action> actions;
 };
 

@@ -1,5 +1,7 @@
 #include "ComponentSystem.h"
 
+#include <iterator>
+
 #include "EntityManager.h"
 #include "Views.h"
 #include "GoapAgent.h"
@@ -22,13 +24,14 @@ void ComponentSystem::addUpdateFunction(int priority, update_function ufunction)
 }
 
 bool ComponentSystem::init() {
+    printf("initializing component systems...");
+
     /// jakiś tam ruch
-    addUpdateFunction(1, [](int ms, EntityManager* entityManager) /// tylko test
-    {
+    addUpdateFunction(1, [](int ms, EntityManager* entityManager) {
+        //double fraction = ms / 1000.0;
         vector<MovementView> views = ViewCreator::createViews<MovementView>(entityManager);
-        for(auto &v: views)
-        {
-            v.pf->pos += v.m->speed;
+        for(auto &v: views) {
+            v.pf->pos += v.m->speed;// * fraction;
         }
     });
 
@@ -49,13 +52,26 @@ bool ComponentSystem::init() {
 
     /// odnawianie energii
     addUpdateFunction(30, [](int ms, EntityManager* entityManager) {
+        double fraction = ms / 1000.0;
         vector<EnergyView> views = ViewCreator::createViews<EnergyView>(entityManager);
         for(auto &view: views) {
-            view.energy->amount += view.energy->pace * ms / 1000.0;
+            view.energy->amount += view.energy->pace * fraction;
         }
     });
 
-    /// AI - raczej na samym końcu...
+    /// needs
+    addUpdateFunction(50, [](int ms, EntityManager* entityManager) {
+        for(auto &p: entityManager->get_components()[tindex(CNeeds)]) {
+            if(!p.second.expired()) {
+                CNeeds* needs = static_cast<CNeeds*>(p.second.lock().get());
+                needs->thirst += 0.1;
+                needs->hunger += 0.05;
+                needs->weariness += 0.1;
+            }
+        }
+    });
+
+    /// AI
     addUpdateFunction(100, [](int ms, EntityManager* entityManager) {
         for(auto &wagent: entityManager->get_components()[tindex(GoapAgent)]) {
             if(!wagent.second.expired()) {
@@ -65,120 +81,34 @@ bool ComponentSystem::init() {
         }
     });
 
-
-
-
     /// kolizje
-    /*
-    addUpdateFunction(50, [](int ms, EntityManager* entityManager)
-    {
-        for(auto &wpf: entityManager->getComponents()[tindex(CPhysicalForm)])   /// trzeba było zostawić na indeksach
-        {
-            CPhysicalForm *pf = static_cast<CPhysicalForm*>(wpf.lock().get());
-            if(!(pf->owner.lock()->has<CMovement>())) continue; /// badamy z perspektywy poruszających się, to tak nie dokońca jest fajne; poprawka - to jest do dupy, bo każdy z każdym poruszającym testuje się dwa razy
-            for(auto &wpf2: entityManager->getComponents()[tindex(CPhysicalForm)])
-            {
-                CPhysicalForm *pf2 = static_cast<CPhysicalForm*>(wpf2.lock().get());
-                if(pf == pf2)continue;
-                if(pf->pos.dist(pf2->pos) < (pf->vol.x + pf2->vol.x) / 2)   /// jeśli koliza to coś
-                {
-                    pf->owner.lock()->receive_message(Message{.type=MSG_COLLISION, pf2->owner});
-                    pf2->owner.lock()->receive_message(Message{.type=MSG_COLLISION, pf->owner});
+    addUpdateFunction(1001, [](int ms, EntityManager* entityManager) {
+        auto& rbodies = entityManager->get_components()[tindex(CRigidBody)];
+        unordered_map<int, weak_ptr<Component>>::iterator c1;
+        for(c1 = rbodies.begin(); c1 != rbodies.end(); c1 = std::next(c1)) {
+            CRigidBody *rb = static_cast<CRigidBody*>(c1->second.lock().get());
+            CMovement *mv = rb->owner.lock()->get<CMovement>();
+            CPhysicalForm *pf = rb->owner.lock()->get<CPhysicalForm>();
+            if(mv == nullptr || pf == nullptr) continue;
+
+            unordered_map<int, weak_ptr<Component>>::iterator c2;
+            for(c2 = next(c1); c2 != rbodies.end(); c2 = std::next(c2)) {
+                CRigidBody *rb2 = static_cast<CRigidBody*>(c2->second.lock().get());
+                CPhysicalForm *pf2 = rb2->owner.lock()->get<CPhysicalForm>();
+                if(pf2 == nullptr) continue;
+                if(pf->pos.dist(pf2->pos) < rb->r + rb2->r) { /// kolizja
+                    vec3d normal = vec3d(pf->pos.y - pf2->pos.y, pf2->pos.x - pf->pos.x, 0).normalized();
+                    mv->speed = normal * mv->speed.len();
+
+                    CMovement *mv2 = rb2->owner.lock()->get<CMovement>();
+                    if(mv2 != nullptr) {
+                        mv2->speed = -normal * mv2->speed.len();
+                    }
                 }
             }
         }
     });
-    */
 
-    /// przesuwanie carryablów na parentów - to w ogóle też jest do dupy
-    /*
-    addUpdateFunction(50, [](int ms, EntityManager* entityManager)
-    {
-        for(auto &component: entityManager->getComponents()[tindex(CCarryable)])
-        {
-            CCarryable *carryable = static_cast<CCarryable*>(component.lock().get());
-            if(!carryable->parent.expired())
-            {
-                CPhysicalForm *pfo = carryable->owner.lock()->get<CPhysicalForm>();
-                CPhysicalForm *pfp = carryable->parent.lock()->get<CPhysicalForm>();
-                if(pfo && pfp)
-                {
-                    pfo->pos = pfp->pos;
-                }
-            }
-        }
-    });*/
-
-    /*
-    /// oddziaływanie zapachów na węch
-    addUpdateFunction(40, [](int ms, EntityManager* entityManager)
-    {
-        vector<ScentView> scent_views = ViewCreator::createViews<ScentView>(entityManager);
-        vector<SmellSensorView> smell_views = ViewCreator::createViews<SmellSensorView>(entityManager);
-        for(auto &scent: scent_views)
-        {
-            const unsigned &type = scent.scent->type;
-            //printf("scnt ");
-            vec3d &scent_pos = scent.pf->pos;
-            for(auto &nose: smell_views)
-            {
-                //printf("nose ");
-                vec3d &nose_pos = nose.pf->pos;
-                nose.smell->stimuli[type].push(nose_pos.dist(scent_pos));
-    //                printf()
-            }
-        }
-    });
-
-    /// przetwarzanie zapachów - to pewnie da się jakoś uogólnić
-    addUpdateFunction(50, [](int ms, EntityManager* entityManager)
-    {
-        for(auto &smell: entityManager->getComponents()[tindex(CSmellSensor)])
-        {
-            CSmellSensor *sensor = static_cast<CSmellSensor*>(smell.lock().get());
-            GoapAgent *ai = sensor->owner.lock()->get<GoapAgent>();
-            if(ai)
-            {
-                for(auto &stimulant_p : sensor->stimuli)
-                {
-
-    //                    auto &stimulant = stimulant_p.second;
-    //                    unsigned smell_type = stimulant_p.first;
-    //
-    //                    if((smell_type == ai->followed_scent) && (!stimulant.empty()))
-    //                    {
-    //                        //printf("stim ");
-    //                        double curr = stimulant.top();
-    //                        stimulant.pop();
-    //                        while(!stimulant.empty()) {
-    //
-    //                            curr = (curr < stimulant.top()) ? stimulant.top() : curr;
-    //                            stimulant.pop();
-    //                        }
-    //                       // if(sensor->last[smell_type] >= 0)
-    //                        {
-    //                            //printf("c ");
-    //
-    //                            if(curr < sensor->last[smell_type]) { /// to w ogóle o kant dupy rozbić
-    //                                sensor->owner.lock()->receive_message(Message{.type=MSG_GOOD_DIRECTION, sensor->owner});
-    //                            }
-    //                            else sensor->owner.lock()->receive_message(Message{.type=MSG_BAD_DIRECTION, sensor->owner});
-    //
-    //                        }
-    //                        sensor->last[smell_type] = curr;
-    //                    }
-    //                    else sensor->last[smell_type] = -1;
-
-                }
-            }
-            for(auto &stimulant_p : sensor->stimuli)
-            {
-                while(!stimulant_p.second.empty())stimulant_p.second.pop();
-            }
-            //printf("nose: %d, ", int(sensor->stimuli.empty()));
-
-        }
-    });
-    */
+    printf(" done.\n");
     return 0;
 }

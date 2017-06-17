@@ -2,7 +2,7 @@
 
 ResourceManager::ResourceManager()
 {
-    //ctor
+    printf("new ResourceManager\n");
 }
 
 ResourceManager::~ResourceManager()

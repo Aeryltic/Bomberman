@@ -19,7 +19,7 @@ protected:
     FSM *fsm;
 };
 
-class IdleState : public FSMState
+class IdleState : public FSMState /// szukanie planu lub czekanie
 {
 public:
     IdleState(FSM *fsm);

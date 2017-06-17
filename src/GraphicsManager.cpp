@@ -1,6 +1,9 @@
 #include "GraphicsManager.h"
 #include <fstream>
 #include <SDL_image.h>
+
+const string BLANK_TEX("BLANK");
+
 GraphicsManager::GraphicsManager()
 {
     printf("new GraphicsManager\n");

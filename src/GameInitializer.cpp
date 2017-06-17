@@ -1,7 +1,7 @@
 #include "GameInitializer.h"
 
 #include "EntityManager.h"
-#include "Components.h"
+//#include "Components.h"
 
 #include "StringIndexer.h"
 
@@ -20,10 +20,12 @@ void GameInitializer::init_entities(EntityManager *entityManager) {
     entityManager->make_object(StringIndexer::get_id("tree"), 500, 500);
     entityManager->make_object(StringIndexer::get_id("tree"), 800, 500);
 
-    entityManager->make_object(StringIndexer::get_id("nest"), 300, 300);
-    entityManager->make_object(StringIndexer::get_id("nest"), 700, 300);
+    entityManager->make_object(StringIndexer::get_id("store"), 300, 300);
+    entityManager->make_object(StringIndexer::get_id("store"), 700, 300);
 
-    entityManager->make_object(StringIndexer::get_id("monster"), 10, 10);
+    entityManager->make_object(StringIndexer::get_id("inn"), 600, 600);
+
+    //entityManager->make_object(StringIndexer::get_id("monster"), 10, 10);
     int x = 3,
         y = 3;
     for(int i=1; i<=y; i++) {

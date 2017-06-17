@@ -32,6 +32,43 @@ function kill_enemy(agent, target, time_passed)
   return false
 end
 
+-- picie
+function drink_something(agent, target, time_passed)
+  --print("perform drinking")
+  agent:aspect():set_color(50, 50, 200)
+  if time_passed >= 2000 then
+    --print("drinking")
+    agent:needs().thirst = 0
+    agent:aspect():reset_color()
+    return true
+  end
+  return false
+end
+
+-- jedzenie
+function eat_something(agent, target, time_passed)
+  agent:aspect():set_color(50, 150, 50)
+  if time_passed >= 5000 then
+      --print("eating")
+      agent:needs().hunger = 0
+      agent:aspect():reset_color()
+    return true
+  end
+  return false
+end
+
+-- odpoczywanie
+function rest_for_a_while(agent, target, time_passed)
+  agent:aspect():set_color(50, 50, 50)
+  if time_passed >= 10 then
+      --print("resting")
+      agent:needs().weariness = 0
+      agent:aspect():reset_color()
+    return true
+  end
+  return false
+end
+
 -- SDL_GetTicks() - funkcja z poziomu c++
 --[[
 function wait_time(ms)

@@ -7,30 +7,82 @@
 #include "Entity.h"
 #include "Component.h"
 
+#include "Components.h"
+#include "GoapAgent.h"
+
 #include "ScriptSystem.h"
 #include "EntityManager.h"
 
 namespace setups {
+void register_all(){
+    setup_entity();
+    //setup_entity_manager();
+    register_components();
+}
 
 void setup_entity(){
-    lua_State* L = ScriptSystem::getInstance()->getLuaState();
+    lua_State* L = ScriptSystem::instance()->state();
     getGlobalNamespace(L)
         .beginClass<Entity>("Entity")
-            .addFunction("get_id", &Entity::get_id)
-            .addFunction("add", &Entity::add)
+            .addConstructor<void(*)()>()
+            .addFunction("destroy_me", &Entity::destroy_me)
+
+            .addFunction("physical_form", &Entity::get<CPhysicalForm>)
+            .addFunction("movement", &Entity::get<CMovement>)
+            .addFunction("energy_store", &Entity::get<CEnergyStore>)
+            .addFunction("needs", &Entity::get<CNeeds>)
+            .addFunction("goap", &Entity::get<GoapAgent>)
+            .addFunction("aspect", &Entity::get<CAspect>)
         .endClass()
-        .beginClass<std::shared_ptr<Entity>>("shared_ptr_Entity")
-            .addFunction("get", &std::shared_ptr<Entity>::get) // tylko czy to zadziała prawidłowo?
-        .endClass();
+    ;
 }
 
 void setup_entity_manager() {
-    lua_State* L = ScriptSystem::getInstance()->getLuaState();
+    lua_State* L = ScriptSystem::instance()->state();
     getGlobalNamespace(L)
         .beginClass<EntityManager>("EntityManager")
             .addFunction("make_entity", &EntityManager::make_entity)
-//            .addFunction("make_component", &EntityManager::make_component)
         .endClass();
+}
+
+void register_components() {
+    lua_State *L = ScriptSystem::instance()->state();
+    getGlobalNamespace(L)
+        .beginNamespace("components")
+
+            .beginClass<CPhysicalForm>("CPhysicalForm")
+                .addConstructor<void(*)(double x, double y, double z, double w, double h, double d)>()
+            .endClass()
+
+            .beginClass<CAspect>("CAspect")
+                .addConstructor<void(*)(Uint8 r, Uint8 g, Uint8 b, Uint8 a)>()
+                .addFunction("set_color", &CAspect::set_color)
+                .addFunction("reset_color", &CAspect::reset_color)
+            .endClass()
+
+            .beginClass<CMovement>("CMovement")
+                .addConstructor<void(*)(float)>()
+                .addProperty("max_speed", &CMovement::get_max_speed, &CMovement::set_max_speed)
+            .endClass()
+
+            .beginClass<CEnergyStore>("CEnergyStore")
+                .addConstructor<void(*)(float)>()
+                .addProperty("amount", &CEnergyStore::get_amount, &CEnergyStore::set_amount)
+            .endClass()
+
+            .beginClass<CNeeds>("CNeeds")
+                .addConstructor<void(*)(double, double, double)>()
+                .addProperty("thirst", &CNeeds::get_thirst, &CNeeds::set_thirst)
+                .addProperty("hunger", &CNeeds::get_hunger, &CNeeds::set_hunger)
+                .addProperty("weariness", &CNeeds::get_weariness, &CNeeds::set_weariness)
+            .endClass()
+
+            .beginClass<GoapAgent>("GoapAgent")
+                .addConstructor<void(*)()>()
+                .addFunction("set_state", &GoapAgent::set_state)
+            .endClass()
+
+        .endNamespace();
 }
 
 }

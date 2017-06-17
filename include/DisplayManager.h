@@ -41,11 +41,12 @@ class DisplayManager
     };
     /// -----------------------------------
 public:
-    DisplayManager(GameInstance *gameInstance); /// to tylko fake
+    DisplayManager(GameInstance *gameInstance); /// pic na wodę, fotomontaż
     virtual ~DisplayManager();
 
     void drawConsole(const string &buffer, const deque<string> &commandHistory);
-    void render(EntityManager *entityManager, int ms);
+    //void render(EntityManager *entityManager, int ms);
+    void render(EntityManager *entityManager, double interpolation);
 
     bool isVisible(const SDL_Rect &rect);
 

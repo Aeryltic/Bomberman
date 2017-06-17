@@ -34,7 +34,7 @@ void Console::run()
 }
 void Console::execute(const string &command)
 {
-    string output = ScriptSystem::getInstance()->execute(command);
+    string output = ScriptSystem::instance()->execute(command);
     commandHistory.push_front(command);
     history.push_front(command);
     if(output.length())history.push_front(output);

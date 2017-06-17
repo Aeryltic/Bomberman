@@ -1,9 +1,9 @@
 [
 	{
-	"name": "deliver_grain",
+		"name": "deliver_grain",
 		"cost": 10,
 		"duration": 500,
-		"target": "TARGET_NEST",
+		"target": "TARGET_STORE",
 		"preconditions": [
 			["have_grain", true]
 		],
@@ -14,7 +14,7 @@
 		"script": "deliver_grain"
 	},
 	{
-	"name": "pickup_grain",
+		"name": "pickup_grain",
 		"cost": 1,
 		"duration": 500,
 		"target": "TARGET_GRAIN",
@@ -27,7 +27,7 @@
 		"script": "pickup_grain"
 	},
 	{
-	"name": "kill_enemy",
+		"name": "kill_enemy",
 		"cost": 1,
 		"duration": 10,
 		"target": "TARGET_ANT",
@@ -38,5 +38,44 @@
 			["enemy_killed", true]
 		],
 		"script": "kill_enemy"
+	},
+	{
+		"name": "drink",
+		"cost": 1,
+		"scanner": "needs_to_drink",
+		"target": "TARGET_WATER",
+		"preconditions": [
+			["thirsty", true]
+		],
+		"effects": [
+			["thirsty", false]
+		],
+		"script": "drink_something"
+	},
+	{
+		"name": "eat",
+		"cost": 1,
+		"scanner": "needs_to_eat",
+		"target": "TARGET_INN",
+		"preconditions": [
+			["hungry", true]
+		],
+		"effects": [
+			["hungry", false]
+		],
+		"script": "eat_something"
+	},
+	{
+		"name": "rest",
+		"cost": 1,
+		"scanner": "needs_to_rest",
+		"target": "TARGET_INN",
+		"preconditions": [
+			["weary", true]
+		],
+		"effects": [
+			["weary", false]
+		],
+		"script": "rest_for_a_while"
 	}
 ]

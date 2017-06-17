@@ -15,8 +15,6 @@
 using json = nlohmann::json;
 std::unordered_map<std::string, Action> Action::actions;
 
-//const ActionExecutor::exec_fun ActionExecutor::fun0(ScriptSystem::getInstance()->getLuaState(), "do_nothing");// = [](Entity* doer, Entity* target) {return true;};
-
 void Action::init_actions() {
     std::ifstream t("data/actions.json");
     std::string str;
@@ -39,17 +37,25 @@ void Action::init_actions() {
 
     for(auto a : j) {
         try {
-            Action action(a["name"], a["cost"], a["duration"], a["target"]);
+            Action action(a["name"], a["cost"], a["target"]);
             for(auto p: a["preconditions"]) {
                 action.add_precondition(p[0],p[1]);
             }
             for(auto e: a["effects"]) {
                 action.add_effect(e[0],e[1]);
             }
-            lua_State* L  = ScriptSystem::getInstance()->getLuaState();
+            lua_State* L  = ScriptSystem::instance()->state();
             std::string scr_name = a["script"];
             LuaRef script = getGlobal(L, scr_name.c_str());
             action.set_exec(script);
+            try {
+                std::string scanner_name = a["scanner"];
+                action.set_scanner(getGlobal(L, scanner_name.c_str()));
+            } catch(domain_error& e) {
+                printf("no scanner: %s\n", e.what());
+                action.set_scanner(getGlobal(L, "empty_scanner"));
+            }
+
             actions.insert({action.name, std::move(action)});
         } catch(invalid_argument& e) {
             printf("error while loading from data/actions.json: %s\n", e.what());
@@ -67,9 +73,9 @@ Action Action::get_action(std::string name) {
 }
 
 /// NIE-STATIC
-Action::Action(std::string name, int cost, unsigned duration, std::string target_name): name(name), cost(cost), duration(duration), target_name(target_name) {
+Action::Action(std::string name, int cost, std::string target_name): name(name), cost(cost), target_name(target_name), scanner(ScriptSystem::state()) {
     needs_target = (target_name != "");
-    start_tick = 0;
+    //printf("%s needs target: %s\n", name.c_str(), needs_target ? "true" : "false");
 }
 
 Action::~Action() {
@@ -78,41 +84,33 @@ Action::~Action() {
 
 Action& Action::add_precondition(std::string name, bool value) {
     precondition.add(name, value);
-//    preconditions.insert({name, value});
     return *this;
 }
 Action& Action::remove_precondition(std::string name) {
     precondition.remove(name);
-//    preconditions.erase(name);
     return *this;
 }
 Action& Action::add_effect(std::string name, bool value) {
     effect.add(name, value);
-//    effects.insert({name, value});
     return *this;
 }
 Action& Action::remove_effect(std::string name) {
     effect.remove(name);
-//    effects.erase(name);
     return *this;
 }
 void Action::set_agent(GoapAgent* agent) {
     this->agent = agent;
 }
 Entity* Action::get_owner() {
-    //printf("Action::get_owner()... ");
     return agent->owner.lock().get();
 }
 bool Action::is_doable(const WorldState &ws) {
-    //printf("\"%s\": checking doability on \n\tworldstate: %s\n\tneeded %s\n", name.c_str(), ws.repr().c_str(), precondition.repr().c_str());
     for(auto v : precondition.attrs) {
         auto f = ws.attrs.find(v.first);
         if(f == ws.attrs.end() || f->second != v.second) {
-            //printf("  not passed\n");
             return false;
         }
     }
-    //printf("  passed\n");
     return true;
 }
 
@@ -124,15 +122,16 @@ WorldState Action::act_on(WorldState ws) {
 }
 
 bool Action::find_target(std::unordered_map<std::string, std::vector<std::weak_ptr<Entity>>>& targets) {
-    //printf("looking for targets\n");
+    if(!needs_target) {
+        target.reset();
+        return true;
+    }
+
     std::weak_ptr<Entity> closest;
     double dist = 0;
-    //printf("trying owner... ");
     auto opf = get_owner()->get<CPhysicalForm>();
-    //printf("-opf\n");
     if(opf) {
         for(auto target: targets[target_name]) {
-            //printf("+");
             if(!target.expired()) {
                 auto pf = target.lock()->get<CPhysicalForm>();
                 if(pf) {
@@ -147,47 +146,38 @@ bool Action::find_target(std::unordered_map<std::string, std::vector<std::weak_p
                         }
                     }
                 }
-            } //else printf("possible target expired!\n");
+            }
         }
-        //printf("\n");
     }
     if(closest.expired()) {
-//        printf("couldn't find a target...");
         return false;
     }
-//    printf("target found!");
     target = closest;
     return true;
 }
 
 void Action::reset() {
-    start_tick = 0;
     target.reset();
     execute.stop();
 }
 
-bool Action::perform(int ms_passed) {
-    /*
-    if(start_tick == 0) {
-        start_tick = SDL_GetTicks();
-    }
-    if(SDL_GetTicks() >= start_tick + duration) { /// to jest zło - to skrypt powinien decydować
-        // tu się odpali jakiś przypisany skrypt...
-        execute(get_owner(), get_target().lock().get()); /// no ale co jeśli ta akcja jest ciągła?
-        reset();
-        return true;
-    }
-    */
-    if(execute(get_owner(), get_target().lock().get(), ms_passed))
-    {
+bool Action::perform(int ms_passed) { /// heavy
+
+    if(execute(get_owner(), (get_target().expired() ? nullptr : get_target().lock().get()), ms_passed)) {
         execute.stop();
         return true;
     }
     return false;
 }
 
-bool Action::is_in_range() {
-    return needs_target ? (has_target() ? (get_owner()->get<CPhysicalForm>()->pos.dist(target.lock()->get<CPhysicalForm>()->pos) <= 10) : false) : true; // piękne
+bool Action::is_in_range() { /// to nie powinno mieć dwóch implementacji (druga jest w GotoState)
+    if(needs_target) {
+        if(target.expired()) return false;
+        CPhysicalForm* pf = get_owner()->get<CPhysicalForm>();
+        CPhysicalForm* tpf = target.lock()->get<CPhysicalForm>();
+        return has_target() ? (pf->pos.dist(tpf->pos) <= (pf->vol.x + tpf->vol.x) / 2) : false;
+    }
+    return true;
 }
 
 bool Action::has_target() {

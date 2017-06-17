@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "Constants.h"
-#include "Typedefs.h"
+//#include "Typedefs.h"
 
 
 #include "ObjectFactory.h"
@@ -16,6 +16,8 @@ using namespace std;
 
 class EntityManager {
     friend class ObjectFactory;
+    using entity_ptr = shared_ptr<Entity>;
+    using component_ptr = shared_ptr<Component>;
     using component_map = unordered_map<type_index, unordered_map<int, weak_ptr<Component>>>;
 public:
     EntityManager(/*GameInstance *gameInstance*/);

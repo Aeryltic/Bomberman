@@ -14,7 +14,7 @@
 //#include "ScriptSystem.h"
 
 //using message_callback = function<void(Message &)>;
-namespace comp_setup{
+namespace comp_setup {
 void register_components();
 }
 
@@ -26,34 +26,61 @@ struct CPhysicalForm : public Component {
 
     explicit CPhysicalForm(double x, double y, double z, double w, double h, double d = 0)
         : pos(x, y, z), vol(w, h, d), rot(0,0,0) { }
+    explicit CPhysicalForm(const vec3d& pos, const vec3d& vol, const vec3d& rot)
+        : pos(pos), vol(vol), rot(rot) { }
     virtual ~CPhysicalForm() {/*printf("pf_destr\n");*/}
+};
+
+struct CRigidBody : public Component {
+    double r;
+
+    CRigidBody(double r) : r(r) {}
 };
 
 /// Animation/SpriteComponent?
 struct CAspect : public Component { /// uses CPhysicalForm
+    SDL_Color base_color;
     SDL_Color color;
 
     CAspect(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
-        this->color = {r,g,b,a};
+        this->color = {.r=r,.g=g,.b=b,.a=a};
+        this->base_color = {.r=r,.g=g,.b=b,.a=a};
     }
     CAspect(SDL_Color color) {
-        this->color = (color);
+        this->color = color;
+        this->base_color = color;
     }
     virtual ~CAspect() {}
+
+    void set_color(Uint8 r, Uint8 g, Uint8 b){
+        this->color.r = r;
+        this->color.g = g;
+        this->color.b = b;
+    }
+
+    void reset_color(){
+        color.r = base_color.r;
+        color.g = base_color.g;
+        color.b = base_color.b;
+        color.a = 255;
+    }
 };
 
 struct CMovement : public Component {
-    float max_speed;
+    double max_speed;
     vec3d speed;
 
-    CMovement(float max_speed) : speed(0,0,0) {
+    CMovement(double max_speed) : speed(0,0,0) {
         this->max_speed = max_speed;
     }
     virtual ~CMovement() {};
 
-    void stop(){
+    void stop() {
         speed = {0,0,0};
     }
+
+    double get_max_speed() const {return max_speed;}
+    void set_max_speed(double new_speed) {max_speed = new_speed;}
 };
 
 struct CActionTarget : public Component { /// to nie jest chyba dobry pomysł
@@ -94,7 +121,7 @@ struct CEnergyStore : public Component {
     }
     virtual ~CEnergyStore() {};
 
-    void set_amount(float amount){this->amount = amount;}
+    void set_amount(float amount) {this->amount = amount;}
     float get_amount() const { return amount; }
 };
 
@@ -117,6 +144,22 @@ struct CBreeder : public Component { /// zamiast tego - akcja ze skryptem zwraca
     }
 };
 
+struct CNeeds : public Component {
+    double thirst;
+    double hunger;
+    double weariness;
+
+    CNeeds(double thirst, double hunger, double weariness) : thirst(thirst), hunger(hunger), weariness(weariness) {}
+
+    double get_thirst() const { return thirst; }
+    double get_hunger() const { return hunger; }
+    double get_weariness() const { return weariness; }
+
+    void set_thirst(double v) { thirst = v; }
+    void set_hunger(double v) { hunger = v; }
+    void set_weariness(double v) { weariness = v; }
+};
+
 struct CAbstractObjectContainer : public Component {
     std::unordered_map<int, weak_ptr<Entity>> obj;
 
@@ -128,189 +171,5 @@ struct CParameterContainer : public Component {
 
     CParameterContainer() {}
 };
-///-------------------------------------------------------------------------------------------
-/*
-struct CSensor : public Component
-{
-    CSensor() {
-        owner.lock()->register_listener(MSG_SCANNING, [=](Message& msg)
-        {
-            scan();
-        });
-    }
-    virtual ~CSensor() {};
-
-    virtual void scan()
-    {
-        printf("default scan\n");
-    }
-
-    float effectiveness;
-};
-*/
-/// to sie chyba jeszcze wykorzysta
-/*
-struct CClosestTargetSensor : public CSensor
-{
-    CClosestTargetSensor() : CSensor(owner) {}
-    virtual ~CClosestTargetSensor() {};
-
-    //string target_type;
-
-    void scan(string target_type)
-    {
-        printf("looking for: %s\n", target_type.c_str());
-        weak_ptr<Entity> closest;
-        float dist = 0;
-        auto opf = owner.lock()->get<CPhysicalForm>();
-        if(opf)
-        {
-            for(auto target: CActionTarget::targets[target_type])
-            {
-                auto pf = target.lock()->get<CPhysicalForm>();
-                if(pf)
-                {
-                    if(closest.expired())
-                    {
-                        closest = target;
-                        dist = opf->pos.dist(pf->pos);
-                    }
-                    else
-                    {
-                        float temp = opf->pos.dist(pf->pos);
-                        if(temp < dist)
-                        {
-                            closest = target;
-                            dist = temp;
-                        }
-                    }
-                }
-            }
-        }
-        owner.lock()->receive_message(Message(MSG_TARGET, closest));
-    }
-};
-*/
-/*
-struct CSmellSensor : public CSensor
-{
-    CSmellSensor()
-        : CSensor(owner) {}
-    virtual ~CSmellSensor() {};
-
-    void scan()
-    {
-        printf("smell scan\n");
-        //Entity *close
-    }
-
-    //unordered_map<unsigned, double> last; /// tego tu być nie winno, jeśli już to w CAIBlackboard
-    //unordered_map<unsigned, stack<double>> stimuli;
-};
-
-struct CSightSensor : public CSensor
-{
-
-};
- // chyba jednak niepoczebne
-struct CLifeSignsSensor : public CSensor
-{
-
-};
-
-struct CStimulusSource : public Component /// czy to ma sens? dźwięki, zapachy... co jeszcze?
-{
-    CStimulusSource(float intensity)
-        : intensity(intensity) {}
-    virtual ~CStimulusSource() {};
-
-    //float radius; /// to powinno być jakoś inaczej liczone
-    float intensity; /// tylko to powinno tu być, radius liczony jakaś funkcją
-};
-
-struct CScentSource : public CStimulusSource
-{
-    CScentSource(float intensity, ScentType type)
-        : CStimulusSource(owner, intensity), type(type) {}
-    virtual ~CScentSource() {};
-
-    ScentType type;
-};
-*/
-///-------------------------------------------------------------------------------------------
-/*
-struct CCarryable : public Component
-{
-    CCarryable(): {
-        parent.reset();
-        owner.lock()->register_listener(MSG_COLLISION, [=](Message &msg)
-        {
-            if(parent.expired())/// już go kilku nie poniesie
-            {
-                msg.publisher.lock()->receive_message(Message{.type=MSG_IM_CARRYABLE, owner});
-            }
-        });
-    }
-    virtual ~CCarryable() {};
-
-    weak_ptr<Entity> parent;
-};
-
-
-struct CConsumable : public Component
-{
-    CConsumable(ConsumableType type, float value) {
-        this->type = type;
-        this->value = value;
-//        owner.lock()->register_listener(MSG_COLLISION, [=](Message &msg) {
-//            msg.publisher.lock()->receive_message(Message{.type=MSG_IM_EDIBLE, owner});
-//        });
-    }
-    virtual ~CConsumable() {};
-
-    ConsumableType type;
-    float value;
-};
-*/
-
-/*
-struct CBackpack : public Component
-{
-    CBackpack()
-        :
-    {
-//        owner.lock()->register_listener(MSG_IM_CARRYABLE, [=](Message &msg){
-//            items[msg.publisher.lock()->getID()] = msg.publisher;
-//            CCarryable *c = msg.publisher.lock()->get<CCarryable>();
-//            if(c) {
-//                c->parent = owner;
-//                /// tylko eksperyment, normalnie to to będzie jedno z Action
-//                auto ai = owner.lock()->get<GoapAgent>();
-//                if(ai)
-//                {
-//                    ai->followed_scent = SCENT_NEST;
-//                }
-//                /// -----------------
-//            }
-//            else printf("wtf, error... ");
-//        });
-    }
-    virtual ~CBackpack() {};
-
-    unordered_map<unsigned, weak_ptr<Entity>> items; /// szkoda tylko, że kilku może nosić to samo
-};
-*/
-
-
-/*
-struct CNeeds : public Component
-{
-    CNeeds(): {}
-    virtual ~CNeeds(){};
-
-    float   hunger, thirst, weariness,
-            hungerV, thirstV, wearinessV;
-};
-*/
 
 #endif // COMPONENTS_H

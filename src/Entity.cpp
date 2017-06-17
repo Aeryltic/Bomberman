@@ -5,7 +5,7 @@
 
 #include "ScriptSystem.h"
 
-#include "Components.h"
+//#include "Components.h"
 
 EntityManager* Entity::entityManager = nullptr;
 int Entity::nextID = 0;
@@ -61,7 +61,7 @@ void Entity::destroy_me() {
 void Entity::set_manager(EntityManager *manager) {
     entityManager = manager;
 }
-
+/*
 void Entity::setup()
 {
     lua_State* L = ScriptSystem::getInstance()->getLuaState();
@@ -72,3 +72,4 @@ void Entity::setup()
                 .addFunction("energy_store", &Entity::get<CEnergyStore>)
             .endClass();
 }
+*/

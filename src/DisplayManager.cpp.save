@@ -235,7 +235,7 @@ void DisplayManager::drawText(const string &text, int x, int y, const SDL_Color 
 }
 
 void DisplayManager::init() {
-    lua_State *L = ScriptSystem::getInstance()->getLuaState();
+    lua_State *L = ScriptSystem::instance()->getLuaState();
 
     getGlobalNamespace (L)
     .beginClass <DisplayManager> ("DisplayManager")

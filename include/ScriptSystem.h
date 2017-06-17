@@ -14,9 +14,9 @@ using namespace std;
 class ScriptSystem
 {
 public:
-    static ScriptSystem *getInstance()
+    static ScriptSystem *instance()
     {
-        return &instance;
+        return &_instance;
     }
     virtual ~ScriptSystem();
 
@@ -26,9 +26,9 @@ public:
         return active;
     }
     //void registerEverything();
-    lua_State* getLuaState()
+    static lua_State* state()
     {
-        return L;
+        return _instance.L;
     }
     string execute(const string &command);
 protected:
@@ -40,7 +40,7 @@ private:
     lua_State* L;
     void initialize();
 
-    static ScriptSystem instance;
+    static ScriptSystem _instance;
 };
 
 #endif // SCRIPTSYSTEM_H

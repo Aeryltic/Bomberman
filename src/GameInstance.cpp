@@ -15,10 +15,12 @@
 #include "Console.h"
 /// TEST
 #include "ComponentSystem.h"
-#include "Enumerations.h"
+//#include "Enumerations.h"
 #include "GameInitializer.h"
 
-#include "Components.h"
+//#include "Components.h"
+
+#include "setups.h"
 ///
 bool GameInstance::paused = false;
 
@@ -76,13 +78,13 @@ int GameInstance::run() {
             while (lag >= TIMESTEP) {
                 entityManager->update();
                 componentSystem->update(TIMESTEP, entityManager);
-                ScriptSystem::getInstance()->update(TIMESTEP);
+                ScriptSystem::instance()->update(TIMESTEP);
                 lag -= TIMESTEP;
                 last_update = SDL_GetTicks();
             }
         }
 
-        displayManager->render(entityManager, SDL_GetTicks() - last_update);
+        displayManager->render(entityManager, double(SDL_GetTicks() - last_update) / TIMESTEP);
         frames++;
 
         if(SDL_GetTicks() - last_check >= 1000) {
@@ -115,7 +117,9 @@ int GameInstance::init() {
     //timerID = SDL_AddTimer()
 
     displayManager = new DisplayManager(this);
+    printf("creating EntityManager\n");
     entityManager = new EntityManager();
+    printf("done!\n");
     eventManager = new EventManager(this);
 //    logicManager = new LogicManager(this);
     console = new Console(this);
@@ -130,7 +134,7 @@ int GameInstance::init() {
                 entityManager->isActive()     &&
 //         logicManager->isActive()      &&
                 eventManager->isActive()      &&
-                ScriptSystem::getInstance()->isActive()
+                ScriptSystem::instance()->isActive()
             )) {
         printf("some systems are not active\n");
         return -1;
@@ -178,8 +182,9 @@ int GameInstance::init() {
         }
     });
 
-    comp_setup::register_components();
-    Entity::setup();
+//    comp_setup::register_components();
+    setups::register_all();
+    //Entity::setup();
 
     GameInitializer().init_entities(entityManager);
 

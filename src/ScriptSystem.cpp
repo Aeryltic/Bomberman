@@ -5,7 +5,7 @@
 using namespace luabridge;
 using namespace std;
 
-ScriptSystem ScriptSystem::instance; // dlaczego jeśli to wyląduje w get_instance to program przy zamykaniu zapętla się na czymś?
+ScriptSystem ScriptSystem::_instance; // dlaczego jeśli to wyląduje w get_instance to program przy zamykaniu zapętla się na czymś?
 
 ScriptSystem::ScriptSystem()
 {
@@ -29,6 +29,7 @@ ScriptSystem::ScriptSystem()
 ScriptSystem::~ScriptSystem()
 {
     if(L) lua_close(L);
+    printf("delete ScriptSystem");
 }
 
 void ScriptSystem::initialize()
