@@ -69,7 +69,9 @@ DisplayManager::~DisplayManager() {
 
 //void DisplayManager::render(EntityManager *entityManager, int ms) {
 void DisplayManager::render(EntityManager *entityManager, double interpolation) {
+    //printf("rendering...");
     if(!GameInstance::isPaused()) {
+            //printf(" ok.");
         // renderowanie
         SDL_SetRenderTarget(_window.getRenderer(), _gameWorldView);
         SDL_RenderClear(_window.getRenderer());
@@ -77,9 +79,15 @@ void DisplayManager::render(EntityManager *entityManager, double interpolation) 
         //priority_queue<ToRender> trt;
         for(auto &p : entityManager->get_components()[tindex(CAspect)]) {
             auto component = p.second;
-            if(component.expired()) continue;
+            if(component.expired()){
+                    //printf("component expired!\n");
+                continue;
+            }
+
             CAspect *asp = static_cast<CAspect*>(component.lock().get());
             CPhysicalForm *pf = static_cast<CPhysicalForm*>(component.lock()->owner.lock()->get<CPhysicalForm>());
+
+            //printf("aspect: %d %d %d at pos: %s", asp->color.r, asp->color.g, asp->color.b, pf->pos.repr().c_str());
 
             vec3d pos(pf->pos.x, pf->pos.y, pf->pos.y);
             double r = pf->vol.x / 2;
@@ -112,6 +120,7 @@ void DisplayManager::render(EntityManager *entityManager, double interpolation) 
         SDL_RenderCopy(_window.getRenderer(), _gameWorldView, nullptr, nullptr);
         SDL_RenderPresent(_window.getRenderer());
     }
+    //printf("\n");
 }
 
 void DisplayManager::drawConsole(const string &buffer, const deque<string> &commandHistory) { /// to jest słabe

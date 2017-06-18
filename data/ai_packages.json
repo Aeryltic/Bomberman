@@ -1,0 +1,31 @@
+[
+	{
+		"name": "needs_satisfying",
+		"goals": [
+			["thirsty", false, 1],
+			["hungry", false, 2],
+			["weary", false, 3]
+		],
+		"actions": [
+			"drink", "eat", "rest"
+		]
+	},
+	{
+		"name": "standard_work",
+		"goals": [
+			["grain_delivered", true, 10]
+		],
+		"actions": [
+			"pick_up_grain", "deliver_grain"
+		]
+	},
+		{
+		"name": "killer",
+		"goals": [
+			["enemy_killed", true, 10]
+		],
+		"actions": [
+			"kill_enemy"
+		]
+	}
+]

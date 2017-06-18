@@ -1,6 +1,6 @@
 16.05.2017
 	1. mrówki chodz¹ do ziaren, zbieraj¹ je, ale póki co jest sieczka
-	2. nie chce mi siê naprawiaæ, ale kilku mo¿e nosiæ ten sam obiekt, a nawet jak ktoœ nosi, to ca³y czas wywo³uje to kolizje - no masakra
+	2. nie chce mi siê naprawiaæ, ale kilku mo¿e nosiæ ten sam obiekt, a nawet jak ktoœ nosi, to ca³y czas wywo³uje to kolizje - masakra
 	3. zrobiæ ¿eby chodzili za tym co w followed_scent
 17.05.2017
 	1. dziwne zamieszanie - czêœæ mrówek z póŸniejszego okresu zatrzymuje siê w po³owie drogi i kr¹¿¹ w miejscu
@@ -137,3 +137,11 @@
 	JAKAŒ HIERARCHIA W ACTIONHANDLERZE? ¿eby ró¿n¹ iloœæ argumentów przyjmowa³y czy coœ
 	naprawiæ "beztargetowe" akcje
 	rzadko s¹ g³odni, a zmêczeni to ju¿ wcale
+18.06.2017
+	akcje akcjami, ale handlery powinny byæ jakoœ osobno, bo inaczej jada wilk, a inaczej owca
+	HeapCorruptionException oczywiœcie przed usuwaniem ScriptSystemu
+	tego jsona "objects.json" trzeba przeparsowaæ tak aby tworzyæ jakieœ szkielety obiektów, a potem tylko je instancjonowaæ
+	ZBUDOWAÆ JAKIŒ £ADNY SYSTEM DLA LOGÓW
+	wszystko jest niewidzialne
+	okej, praktycznie wszystko kontekstowe przeniesione do skryptów
+	monsterowi siê nie chce chodziæ

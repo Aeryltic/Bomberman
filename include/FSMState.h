@@ -45,6 +45,7 @@ public:
 
 class PerformActionState : public FSMState
 {
+    unsigned target_counter;
 public:
     PerformActionState(FSM *fsm);
     virtual ~PerformActionState();

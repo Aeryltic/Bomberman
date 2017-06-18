@@ -3418,7 +3418,7 @@ mo&#380;e dzia&#322;a&#263; na danych typach JobStation
 <XPD:OBJ name="DiagramView" type="UMLClassDiagramView" guid="7PMS4UO38Ue3WAExS73eAQAA">
 <XPD:REF name="Model">4urAsNZSVUq/MIWGIa5t9AAA</XPD:REF>
 <XPD:REF name="Diagram">4urAsNZSVUq/MIWGIa5t9AAA</XPD:REF>
-<XPD:ATTR name="#OwnedViews" type="integer">15</XPD:ATTR>
+<XPD:ATTR name="#OwnedViews" type="integer">16</XPD:ATTR>
 <XPD:OBJ name="OwnedViews[0]" type="UMLClassView" guid="oZBlh5CcqUmHZ5RPoxr0LwAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
@@ -3849,6 +3849,16 @@ mo&#380;e dzia&#322;a&#263; na danych typach JobStation
 <XPD:ATTR name="Distance" type="real">15</XPD:ATTR>
 <XPD:REF name="Model">UfrFAtfeEkGAlmoD0nWE6AAA</XPD:REF>
 </XPD:OBJ>
+</XPD:OBJ>
+<XPD:OBJ name="OwnedViews[15]" type="UMLNoteView" guid="nQnqVuTGVkKxoyAE+6MegQAA">
+<XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
+<XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">580</XPD:ATTR>
+<XPD:ATTR name="Top" type="integer">556</XPD:ATTR>
+<XPD:ATTR name="Width" type="integer">100</XPD:ATTR>
+<XPD:ATTR name="Height" type="integer">30</XPD:ATTR>
+<XPD:ATTR name="Text" type="string">chyba bez sensu
+</XPD:ATTR>
 </XPD:OBJ>
 </XPD:OBJ>
 </XPD:OBJ>

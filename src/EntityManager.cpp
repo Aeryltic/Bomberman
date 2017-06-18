@@ -48,8 +48,13 @@ shared_ptr<Entity> EntityManager::make_entity() {
     return e;
 }
 
-shared_ptr<Entity> EntityManager::make_object(unsigned type, double x, double y) {
+shared_ptr<Entity> EntityManager::new_object(std::string type, double x, double y) {
     return factory.make_object(type, x, y);
+}
+
+void EntityManager::make_object(std::string type, double x, double y)
+{
+    new_object(type, x, y);
 }
 
 inline bool EntityManager::exists(int id) {

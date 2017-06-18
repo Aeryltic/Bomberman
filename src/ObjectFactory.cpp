@@ -1,5 +1,7 @@
 #include "ObjectFactory.h"
 
+#include <fstream>
+
 #include "Entity.h"
 #include "EntityManager.h"
 #include "Components.h"
@@ -7,113 +9,132 @@
 
 #include "StringIndexer.h"
 
+#include "AIPackage.h"
+
+
 ObjectFactory::ObjectFactory(EntityManager* entityManager) : entityManager(entityManager) { /// to ma wylądować w skryptach
     Action::init_actions();
+    Action::init_action_packs();
 
-    constructors[StringIndexer::get_id("store")] = ([=](double x, double y) {
-        shared_ptr<Entity> e = entityManager->make_entity();
-        e->add(entityManager->make_component<CPhysicalForm>(x,y,0,50,50));
-        e->add(entityManager->make_component<CAspect>(SDL_Color{.r=100,.g=50,.b=50,.a=255}));
+    init_component_constructors();
+    init_entity_constructors();
+}
 
-        e->add(entityManager->make_component<CEnergyStore>(0));
-        e->add(entityManager->make_component<CBreeder>("ant", 500, 1, 2));
-        e->add(entityManager->make_component<CActionTarget>("TARGET_STORE"));
-        return e;
+void ObjectFactory::init_component_constructors() {
+    components["CPhysicalForm"] = ([=](json j_obj) {
+        return entityManager->make_component<CPhysicalForm>(0, 0, 0, j_obj[3], j_obj[4]); /// to jest problematyczne
     });
-
-    constructors[StringIndexer::get_id("inn")] = ([=](double x, double y) {
-        shared_ptr<Entity> e = entityManager->make_entity();
-        e->add(entityManager->make_component<CPhysicalForm>(x,y,0,50,50));
-        e->add(entityManager->make_component<CAspect>(SDL_Color{.r=140,.g=100,.b=70,.a=255}));
-
-        //e->add(entityManager->make_component<CEnergyStore>(0));
-        //e->add(entityManager->make_component<CBreeder>("ant", 500, 1, 2));
-        e->add(entityManager->make_component<CActionTarget>("TARGET_INN"));
-        return e;
+    components["CAspect"] = ([=](json j_obj) {
+        return entityManager->make_component<CAspect>(j_obj[0], j_obj[1], j_obj[2], j_obj[3]);
     });
-
-    constructors[StringIndexer::get_id("ant")] = ([=](double x, double y) {
-        shared_ptr<Entity> e = entityManager->make_entity();
-        e->add(entityManager->make_component<CPhysicalForm>(x,y,0,10,10));
-        e->add(entityManager->make_component<CAspect>(SDL_Color{.r=255,.g=0,.b=0,.a=255}));
-        e->add(entityManager->make_component<CMovement>(100));
-        e->add(entityManager->make_component<CRigidBody>(5));
-
-        e->add(entityManager->make_component<CActionTarget>("TARGET_ANT"));
-
-        auto agent = entityManager->make_component<GoapAgent>();
-        agent->set_state("have_grain", false);
-        agent->add_action(Action::get_action("deliver_grain"));
-        agent->add_action(Action::get_action("pickup_grain"));
-        agent->add_action(Action::get_action("drink"));
-        agent->add_action(Action::get_action("eat"));
-        agent->add_action(Action::get_action("rest"));
-        agent->add_goal("thirsty", false, 1);
-        agent->add_goal("hungry", false, 3);
-        agent->add_goal("weary", false, 2);
-        agent->add_goal("grain_delivered", true, 10);
-        e->add(agent);
-
-        e->add(entityManager->make_component<CNeeds>(0,0,0));
-        return e;
+    components["CMovement"] = ([=](json j_obj) {
+        return entityManager->make_component<CMovement>(j_obj[0].get<double>());
     });
-
-    constructors[StringIndexer::get_id("tree")] = ([=](double x, double y) {
-        shared_ptr<Entity> e = entityManager->make_entity();
-        e->add(entityManager->make_component<CPhysicalForm>(x,y,0,30,30));
-        e->add(entityManager->make_component<CAspect>(SDL_Color{.r=50,.g=155,.b=0,.a=155}));
-        e->add(entityManager->make_component<CEnergyStore>(200));
-        e->add(entityManager->make_component<CBreeder>("grain", 500, 1, 5));
-
-        return e;
+    components["CActionTarget"] = ([=](json j_obj) {
+        return entityManager->make_component<CActionTarget>(j_obj[0].get<string>());
     });
-
-    constructors[StringIndexer::get_id("grain")] = ([=](double x, double y) {
-        shared_ptr<Entity> e = entityManager->make_entity();
-        e->add(entityManager->make_component<CPhysicalForm>(x, y, 0, 10, 10));
-        e->add(entityManager->make_component<CAspect>( SDL_Color{.r=0,.g=155,.b=0,.a=255}));
-        e->add(entityManager->make_component<CActionTarget>("TARGET_GRAIN"));
-
-        return e;
+    components["CEnergyStore"] = ([=](json j_obj) {
+        return entityManager->make_component<CEnergyStore>(j_obj[0].get<double>());
     });
-
-    constructors[StringIndexer::get_id("water_source")] = ([=](double x, double y) {
-        shared_ptr<Entity> e = entityManager->make_entity();
-        e->add(entityManager->make_component<CPhysicalForm>(x,y,0,50,50));
-        e->add(entityManager->make_component<CAspect>(SDL_Color{.r=70,.g=130,.b=180,.a=220}));
-        e->add(entityManager->make_component<CEnergyStore>(200));
-        e->add(entityManager->make_component<CActionTarget>("TARGET_WATER"));
-
-        return e;
+    components["CBreeder"] = ([=](json j_obj) {
+        return entityManager->make_component<CBreeder>(j_obj[0], j_obj[1], j_obj[2], j_obj[3]);
     });
-
-    constructors[StringIndexer::get_id("monster")] = ([=](double x, double y) {
-        shared_ptr<Entity> e = entityManager->make_entity();
-        e->add(entityManager->make_component<CPhysicalForm>(x, y, 0, 20, 20));
-        e->add(entityManager->make_component<CAspect>(SDL_Color{.r=50,.g=40,.b=20,.a=255}));
-        e->add(entityManager->make_component<CMovement>(20));
-        e->add(entityManager->make_component<CRigidBody>(10));
-
-        auto agent = entityManager->make_component<GoapAgent>();
-        agent->set_state("enemy_killed", false);
-        agent->add_action(Action::get_action("kill_enemy"));
-        agent->add_goal("enemy_killed", true, 1);
-        e->add(agent);
-
-        return e;
+    components["CNeeds"] = ([=](json j_obj) {
+        return entityManager->make_component<CNeeds>(j_obj[0], j_obj[1], j_obj[2]);
     });
+    components["CRigidBody"] = ([=](json j_obj) {
+        return entityManager->make_component<CRigidBody>(j_obj[0].get<double>());
+    });
+    components["GoapAgent"] = ([=](json j_obj) { /// wiem, dużo kopiowania - to się potem zmieni, ale nie chce mi się wymyślać wszystkiego na nowo. drobnymi kroczkami...
+        std::shared_ptr<Component> c = entityManager->make_component<GoapAgent>();
+        GoapAgent* agent = static_cast<GoapAgent*>(c.get());
+        for(string pack_name: j_obj) {
+            const AIPackage& ai_pack = Action::get_ai_package(pack_name);
+            for(const string& action_name: ai_pack.get_actions()) {
+                agent->add_action(Action::get_action(action_name));
+            }
+            for(const auto& p: ai_pack.get_goals()) {
+                agent->add_goal(p.second.first, p.second.second, p.first);
+            }
+        }
+        return c;
+    });
+    components["CAbstractObjectContainer"] = ([=](json j_obj) {
+        return entityManager->make_component<CAbstractObjectContainer>();
+    });
+}
+
+void ObjectFactory::init_entity_constructors() {
+    printf("initializing object schemas...\n");
+    std::string filename("data/objects.json");
+    std::ifstream t(filename);
+    std::string str;
+
+    t.seekg(0, std::ios::end);
+    str.reserve(t.tellg());
+    t.seekg(0, std::ios::beg);
+
+    json j;
+    str.assign((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
+    try {
+        j = json::parse(str);
+    } catch(runtime_error& e) {
+        printf("runtime_error error while loading from %s: %s\n", filename.c_str(), e.what());
+        return;
+    } catch(invalid_argument& e) {
+        printf("invalid_argument error while loading from %s: %s\n", filename.c_str(), e.what());
+        return;
+    }
+
+    for(auto p : j) {
+        try {
+            std::string schema_name = p["name"];
+            printf("\tnew schema: %s!\n", schema_name.c_str());
+            ObjectSchema os;
+            for(auto c: p["components"]) {
+                try {
+                    os.add_component(c[0], c[1]);
+                } catch(domain_error& e) {
+                    printf("bad component table: %s (%s)\n", e.what(), c.get<std::string>().c_str());
+                }
+            }
+            object_schemas.insert({(schema_name), std::move(os)});
+        } catch(invalid_argument& e) {
+            printf("error while loading from %s: %s\n", filename.c_str(), e.what());
+        } catch(domain_error& e) {
+            printf("bad package: %s (%s)\n", e.what(), p.get<std::string>().c_str());
+        }
+    }
+    printf("schemas initialized!\n");
 }
 
 ObjectFactory::~ObjectFactory() {
     //dtor
 }
 
-shared_ptr<Entity> ObjectFactory::make_object(unsigned type, double x, double y) {
+shared_ptr<Entity> ObjectFactory::make_object(std::string type, double x, double y) {
     shared_ptr<Entity> e = nullptr;
-    if(constructors.find(type) != constructors.end()) {
-        e = constructors[type](x, y);
+    if(object_schemas.find(type) != object_schemas.end()) {
+        //e = constructors[type](x, y);
+        e = entityManager->make_entity();
+
+        for(const auto& p: object_schemas[type].get_components()) {
+            try {
+                e->add(components[p.first](p.second));
+                //printf("\t'%s' added\n", p.first.c_str());
+            } catch(bad_function_call& e) {
+                printf("%s (tried to call component[%s](%s))\n", e.what(), p.first.c_str(), p.second.dump().c_str());
+            }
+        }
+        CPhysicalForm* pf = e->get<CPhysicalForm>();
+        if(pf) {
+            pf->pos = {x, y, 0};
+        } else {
+            printf("object has no PhysicalForm\n");
+        }
+        //printf("new %s (#%d) at (%f,%f)\n", type.c_str(), e->get_id(), x, y);
     } else {
-        printf("%d does not exists in object of object's references.\n", type);
+        printf("unknown object type: \"%s\".\n", type.c_str());
     }
     return e;
 }

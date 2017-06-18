@@ -2,9 +2,11 @@
 	{
 		"name": "deliver_grain",
 		"cost": 10,
+		"scanner": "delivery_scanner",
 		"duration": 500,
 		"target": "TARGET_STORE",
 		"preconditions": [
+			["grain_delivered", false],
 			["have_grain", true]
 		],
 		"effects": [
@@ -14,8 +16,9 @@
 		"script": "deliver_grain"
 	},
 	{
-		"name": "pickup_grain",
+		"name": "pick_up_grain",
 		"cost": 1,
+		"scanner": "grain_scanner",
 		"duration": 500,
 		"target": "TARGET_GRAIN",
 		"preconditions": [
@@ -29,6 +32,7 @@
 	{
 		"name": "kill_enemy",
 		"cost": 1,
+		"scanner": "enemy_scanner",
 		"duration": 10,
 		"target": "TARGET_ANT",
 		"preconditions": [
@@ -42,7 +46,7 @@
 	{
 		"name": "drink",
 		"cost": 1,
-		"scanner": "needs_to_drink",
+		"scanner": "thirst_scanner",
 		"target": "TARGET_WATER",
 		"preconditions": [
 			["thirsty", true]
@@ -55,7 +59,7 @@
 	{
 		"name": "eat",
 		"cost": 1,
-		"scanner": "needs_to_eat",
+		"scanner": "hunger_scanner",
 		"target": "TARGET_INN",
 		"preconditions": [
 			["hungry", true]
@@ -68,7 +72,7 @@
 	{
 		"name": "rest",
 		"cost": 1,
-		"scanner": "needs_to_rest",
+		"scanner": "weariness_scanner",
 		"target": "TARGET_INN",
 		"preconditions": [
 			["weary", true]

@@ -16,7 +16,7 @@
 namespace setups {
 void register_all(){
     setup_entity();
-    //setup_entity_manager();
+    setup_entity_manager();
     register_components();
 }
 
@@ -33,6 +33,7 @@ void setup_entity(){
             .addFunction("needs", &Entity::get<CNeeds>)
             .addFunction("goap", &Entity::get<GoapAgent>)
             .addFunction("aspect", &Entity::get<CAspect>)
+            .addFunction("bag", &Entity::get<CAbstractObjectContainer>)
         .endClass()
     ;
 }
@@ -41,7 +42,7 @@ void setup_entity_manager() {
     lua_State* L = ScriptSystem::instance()->state();
     getGlobalNamespace(L)
         .beginClass<EntityManager>("EntityManager")
-            .addFunction("make_entity", &EntityManager::make_entity)
+            .addFunction("make_object", &EntityManager::make_object)
         .endClass();
 }
 
@@ -80,6 +81,11 @@ void register_components() {
             .beginClass<GoapAgent>("GoapAgent")
                 .addConstructor<void(*)()>()
                 .addFunction("set_state", &GoapAgent::set_state)
+            .endClass()
+
+            .beginClass<CAbstractObjectContainer>("CAbstractObjectContainer")
+                .addConstructor<void(*)()>()
+                .addProperty("grains", &CAbstractObjectContainer::get_grains, &CAbstractObjectContainer::set_grains)
             .endClass()
 
         .endNamespace();

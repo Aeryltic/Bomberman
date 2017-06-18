@@ -11,11 +11,15 @@
 #include "Entity.h"
 #include "Components.h"
 
+#include "AIPackage.h"
+
 ///STATIC
 using json = nlohmann::json;
 std::unordered_map<std::string, Action> Action::actions;
+std::unordered_map<std::string, AIPackage> Action::ai_packages;
 
 void Action::init_actions() {
+    /// raw actions
     std::ifstream t("data/actions.json");
     std::string str;
 
@@ -44,14 +48,14 @@ void Action::init_actions() {
             for(auto e: a["effects"]) {
                 action.add_effect(e[0],e[1]);
             }
-            lua_State* L  = ScriptSystem::instance()->state();
+            lua_State* L  = ScriptSystem::state();
             std::string scr_name = a["script"];
             LuaRef script = getGlobal(L, scr_name.c_str());
             action.set_exec(script);
             try {
                 std::string scanner_name = a["scanner"];
                 action.set_scanner(getGlobal(L, scanner_name.c_str()));
-            } catch(domain_error& e){
+            } catch(domain_error& e) {
                 printf("no scanner: %s\n", e.what());
                 action.set_scanner(getGlobal(L, "empty_scanner"));
             }
@@ -60,10 +64,55 @@ void Action::init_actions() {
         } catch(invalid_argument& e) {
             printf("error while loading from data/actions.json: %s\n", e.what());
         }
-
     }
 }
+void Action::init_action_packs() {
+    /// action packs
+    std::string filename("data/ai_packages.json");
+    std::ifstream t(filename);
+    std::string str;
 
+    t.seekg(0, std::ios::end);
+    str.reserve(t.tellg());
+    t.seekg(0, std::ios::beg);
+
+    json j;
+    str.assign((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
+    try {
+        j = json::parse(str);
+    } catch(runtime_error& e) {
+        printf("runtime_error error while loading from %s: %s\n", filename.c_str(), e.what());
+        return;
+    } catch(invalid_argument& e) {
+        printf("invalid_argument error while loading from %s: %s\n", filename.c_str(), e.what());
+        return;
+    }
+
+    for(auto p : j) {
+        try {
+            AIPackage ai_pack(p["name"].get<std::string>());
+            for(auto g: p["goals"]) {
+                try {
+                    ai_pack.add_goal(g[0], g[1], g[2]);
+                } catch(domain_error& e) {
+                    printf("bad table: %s (%s)\n", e.what(), g.get<std::string>().c_str());
+                }
+            }
+            for(auto a: p["actions"]) {
+                try {
+                    ai_pack.add_action(a);
+                } catch(domain_error& e) {
+                    printf("bad action: %s (%s)\n", e.what(), a.get<std::string>().c_str());
+                }
+            }
+            ai_packages.insert({ai_pack.name, std::move(ai_pack)});
+        } catch(invalid_argument& e) {
+            printf("error while loading from data/actions.json: %s\n", e.what());
+        } catch(domain_error& e) {
+            printf("bad package: %s (%s)\n", e.what(), p.get<std::string>().c_str());
+        }
+    }
+}
 Action Action::get_action(std::string name) {
     auto f = actions.find(name);
     if(f == actions.end()) {
@@ -71,6 +120,11 @@ Action Action::get_action(std::string name) {
     }
     return f->second;
 }
+
+const AIPackage& Action::get_ai_package(std::string name) {
+    return ai_packages[name];
+}
+
 
 /// NIE-STATIC
 Action::Action(std::string name, int cost, std::string target_name): name(name), cost(cost), target_name(target_name), scanner(ScriptSystem::state()) {
@@ -122,7 +176,7 @@ WorldState Action::act_on(WorldState ws) {
 }
 
 bool Action::find_target(std::unordered_map<std::string, std::vector<std::weak_ptr<Entity>>>& targets) {
-    if(!needs_target){
+    if(!needs_target) {
         target.reset();
         return true;
     }
@@ -163,8 +217,7 @@ void Action::reset() {
 
 bool Action::perform(int ms_passed) { /// heavy
 
-    if(execute(get_owner(), (get_target().expired() ? nullptr : get_target().lock().get()), ms_passed))
-    {
+    if(execute(get_owner(), (get_target().expired() ? nullptr : get_target().lock().get()), ms_passed)) {
         execute.stop();
         return true;
     }
@@ -172,10 +225,13 @@ bool Action::perform(int ms_passed) { /// heavy
 }
 
 bool Action::is_in_range() { /// to nie powinno mieć dwóch implementacji (druga jest w GotoState)
-    
-    CPhysicalForm* pf = get_owner()->get<CPhysicalForm>();
-    CPhysicalForm* tpf = target.lock()->get<CPhysicalForm>();
-    return needs_target ? (has_target() ? (pf->pos.dist(tpf->pos) <= (pf->vol.x + tpf->vol.x) / 2) : false) : true;
+    if(needs_target) {
+        if(target.expired()) return false;
+        CPhysicalForm* pf = get_owner()->get<CPhysicalForm>();
+        CPhysicalForm* tpf = target.lock()->get<CPhysicalForm>();
+        return has_target() ? (pf->pos.dist(tpf->pos) <= (pf->vol.x + tpf->vol.x) / 2) : false;
+    }
+    return true;
 }
 
 bool Action::has_target() {

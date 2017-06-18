@@ -21,15 +21,14 @@ IdleState::IdleState(FSM *fsm): FSMState(fsm) {
 }
 IdleState::~IdleState() {}
 void IdleState::update(int ms) {
-    //printf("IdleState::update\n");
     if((wait_end == 0) || (wait_end <= SDL_GetTicks())) {
         wait_end = 0;
         GoapPlanner planner;
         GoapAgent* agent = fsm->get_agent();
 
+        agent->scan_world();
         WorldState goal = agent->find_goal();
 
-        agent->scan_world();
         agent->set_plan(planner.plan(agent, goal));
 
         if(!agent->has_plan()) { /// jeśli nie znalazł planu czeka sekundę
@@ -48,23 +47,8 @@ GotoState::~GotoState() {}
 
 bool GotoState::is_in_range() {
     CPhysicalForm* pf = get_owner()->get<CPhysicalForm>();
-    CPhysicalForm* tpf = target.lock()->get<CPhysicalForm>();
-    return needs_target ? (has_target() ? (pf->pos.dist(tpf->pos) <= (pf->vol.x + tpf->vol.x) / 2) : false) : true;
-    
-    
-    CPhysicalForm *pf = get_owner()->get<CPhysicalForm>();
-    if(pf) {
-        if(!dest.expired() && dest.lock()->is_active()) {
-            auto d = pf->pos.dist(dest.lock()->get<CPhysicalForm>()->pos);
-            //printf("pos: %s, dest: %s, distance: %.2f\n", pf->pos.repr().c_str(), dest.repr().c_str(), d);
-            return d <= min_range;
-        } else {
-            CMovement *mv = get_owner()->get<CMovement>();
-            if(mv)mv->stop();
-        }
-    }
-    return false;
-    //return pf && (pf->pos.dist(dest) <= min_range);
+    CPhysicalForm* tpf = dest.lock()->get<CPhysicalForm>();
+    return pf && tpf ? (pf->pos.dist(tpf->pos) <= (pf->vol.x + tpf->vol.x) / 2) : false;
 }
 
 void GotoState::update(int ms) {
@@ -84,21 +68,21 @@ void GotoState::update(int ms) {
     }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------
-PerformActionState::PerformActionState(FSM *fsm): FSMState(fsm) {}
+PerformActionState::PerformActionState(FSM *fsm): FSMState(fsm), target_counter(0) {}
 PerformActionState::~PerformActionState() {}
 
 void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy... to obrzydliwie wygląda
     /// można by po prostu licznik już wyszukanych celów dodać
-    //printf("PerformActionState::update\n");
     GoapAgent* agent = fsm->get_agent();
     if(agent->has_plan()) {
         Action* action = agent->current_actions.front();
         if(!action->is_performed()) {
             if(action->does_need_target() && !action->has_target()) {
-                if(!action->find_target(CActionTarget::targets)) { // nie można kontynuować, olać to
+                if(target_counter && !action->find_target(CActionTarget::targets)) { // nie można kontynuować, olać to
                     fsm->pop_state();
                     return;
                 }
+                //target_counter++;
             }
             if(!action->is_in_range()) {
                 CPhysicalForm *tpf = action->get_target().lock()->get<CPhysicalForm>();
@@ -117,7 +101,7 @@ void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy... to obrz
         } else {
             if(action->does_need_target() && !action->has_target()) {
                 //printf("target lost or sth!\n");
-                fsm->pop_state(); /// to nie działa jak należy
+                fsm->pop_state();
                 action->reset();
                 return;
             }

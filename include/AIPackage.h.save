@@ -1,0 +1,21 @@
+#ifndef AIPACKAGE_H
+#define AIPACKAGE_H
+
+#include <vector>
+
+class AIPackage
+{
+    public:
+        AIPackage();
+        virtual ~AIPackage();
+
+        void add_action(s)
+    protected:
+
+    private:
+        string name;
+        vector<std::pair<int, std::pair<std::string, bool>> goals;
+        vector<std::string> actions;
+};
+
+#endif // AIPACKAGE_H

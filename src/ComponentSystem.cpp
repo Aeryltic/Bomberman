@@ -28,10 +28,11 @@ bool ComponentSystem::init() {
 
     /// jakiś tam ruch
     addUpdateFunction(1, [](int ms, EntityManager* entityManager) {
-        //double fraction = ms / 1000.0;
         vector<MovementView> views = ViewCreator::createViews<MovementView>(entityManager);
         for(auto &v: views) {
-            v.pf->pos += v.m->speed;// * fraction;
+            //printf("moving by %s\n", v.m->speed.repr().c_str());
+            //printf("pos: %s\n", v.pf->pos.repr().c_str());
+            v.pf->pos += v.m->speed;
         }
     });
 
@@ -44,7 +45,7 @@ bool ComponentSystem::init() {
                 int amount = rand()%(view.breeder->max_amount - view.breeder->min_amount) + view.breeder->min_amount;
                 while(amount--) {
                     vec3d p = random_point_in_range(view.pf->pos.x, view.pf->pos.y, view.pf->vol.x/2, view.pf->vol.x*2);
-                    entityManager->make_object(StringIndexer::get_id(view.breeder->child_type), p.x, p.y);
+                    entityManager->make_object(view.breeder->child_type, p.x, p.y);
                 }
             }
         }

@@ -28,13 +28,12 @@ void IdleState::update(int ms) {
 
         agent->scan_world();
         WorldState goal = agent->find_goal();
-
         agent->set_plan(planner.plan(agent, goal));
 
         if(!agent->has_plan()) { /// jeśli nie znalazł planu czeka sekundę
             wait_end = SDL_GetTicks() + 1000;
             CMovement *mv = get_owner()->get<CMovement>();
-            if(mv)mv->stop();
+            if(mv)mv->stop(); /// nie działa, bo kolizje
         } else {
             fsm->pop_state();
             fsm->push_state(make_unique<PerformActionState>(fsm));
@@ -68,7 +67,7 @@ void GotoState::update(int ms) {
     }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------
-PerformActionState::PerformActionState(FSM *fsm): FSMState(fsm) {}
+PerformActionState::PerformActionState(FSM *fsm): FSMState(fsm), target_counter(0) {}
 PerformActionState::~PerformActionState() {}
 
 void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy... to obrzydliwie wygląda
@@ -78,10 +77,11 @@ void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy... to obrz
         Action* action = agent->current_actions.front();
         if(!action->is_performed()) {
             if(action->does_need_target() && !action->has_target()) {
-                if(!action->find_target(CActionTarget::targets)) { // nie można kontynuować, olać to
+                if(target_counter || !action->find_target(CActionTarget::targets)) { // nie można kontynuować, olać to
                     fsm->pop_state();
                     return;
                 }
+                target_counter++;
             }
             if(!action->is_in_range()) {
                 CPhysicalForm *tpf = action->get_target().lock()->get<CPhysicalForm>();

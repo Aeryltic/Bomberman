@@ -8,6 +8,8 @@
 
 #include "WorldState.h"
 #include "ScriptSystem.h"
+
+class AIPackage;
 class GoapAgent;
 class Entity;
 
@@ -22,7 +24,8 @@ struct ActionExecutor {
         ms_running += ms_passed;
         bool result = false;
         try {
-            result = exec(doer, target, ms_running);
+            if(target != nullptr) result = exec(doer, target, ms_running);
+            else result = exec(doer, ms_running);
         } catch (LuaException const& e) {
             printf("%s\n", e.what());
             result = false;
@@ -99,19 +102,21 @@ public:
         execute.set(fun);
     }
 
-    void set_scanner(PreconditionScanner scanner){
-        this.scanner = scanner;
+    void set_scanner(PreconditionScanner scanner) {
+        this->scanner = scanner;
     }
 
-    void scan(){
-        scanner(get_)
+    void scan() {
+        scanner(get_owner());
     }
 
     void start() {execute.start();}
     bool is_performed() {return execute.is_running();}
 
     static void init_actions();
+    static void init_action_packs();
     static Action get_action(std::string name);
+    static AIPackage
 
 protected:
     std::string name;
@@ -130,6 +135,7 @@ protected:
 
     /// STATIC
     static std::unordered_map<std::string, Action> actions;
+    static std::unordered_map<std::string, AIPackage> ai_packages;
 };
 
 #endif // ACTION_H

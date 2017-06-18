@@ -6,6 +6,7 @@ end
 function pickup_grain(agent, target, time_passed)
   if time_passed >= 500 then
     target:destroy_me()
+    agent:bag().grains = agent:bag().grains + 1
     return true
   end
   return false
@@ -17,6 +18,7 @@ function deliver_grain(agent, target, time_passed)
     e = target:energy_store()
     if(e ~= nil and e ~= 0) then -- nie wiem czy ten if wogóle działa jak należy
       e.amount = e.amount + 100 
+      agent:bag().grains = agent:bag().grains - 1
     end
     return true
   end

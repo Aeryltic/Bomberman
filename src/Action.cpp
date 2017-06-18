@@ -11,11 +11,15 @@
 #include "Entity.h"
 #include "Components.h"
 
+#include "AIPackage.h"
+
 ///STATIC
 using json = nlohmann::json;
 std::unordered_map<std::string, Action> Action::actions;
+std::unordered_map<std::string, AIPackage> Action::ai_packages;
 
 void Action::init_actions() {
+    /// raw actions
     std::ifstream t("data/actions.json");
     std::string str;
 
@@ -44,7 +48,7 @@ void Action::init_actions() {
             for(auto e: a["effects"]) {
                 action.add_effect(e[0],e[1]);
             }
-            lua_State* L  = ScriptSystem::instance()->state();
+            lua_State* L  = ScriptSystem::state();
             std::string scr_name = a["script"];
             LuaRef script = getGlobal(L, scr_name.c_str());
             action.set_exec(script);
@@ -60,17 +64,71 @@ void Action::init_actions() {
         } catch(invalid_argument& e) {
             printf("error while loading from data/actions.json: %s\n", e.what());
         }
-
     }
 }
+void Action::init_action_packs() {
+    /// action packs
+    std::string filename("data/ai_packages.json");
+    std::ifstream t(filename);
+    std::string str;
 
+    t.seekg(0, std::ios::end);
+    str.reserve(t.tellg());
+    t.seekg(0, std::ios::beg);
+
+    json j;
+    str.assign((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
+    try {
+        j = json::parse(str);
+    } catch(runtime_error& e) {
+        printf("runtime_error error while loading from %s: %s\n", filename.c_str(), e.what());
+        return;
+    } catch(invalid_argument& e) {
+        printf("invalid_argument error while loading from %s: %s\n", filename.c_str(), e.what());
+        return;
+    }
+
+    for(auto p : j) {
+        try {
+            AIPackage ai_pack(p["name"].get<std::string>());
+            for(auto g: p["goals"]) {
+                try {
+                    ai_pack.add_goal(g[0], g[1], g[2]);
+                } catch(domain_error& e) {
+                    printf("bad table: %s (%s)\n", e.what(), g.get<std::string>().c_str());
+                }
+            }
+            for(auto a: p["actions"]) {
+                try {
+                    ai_pack.add_action(a);
+                } catch(domain_error& e) {
+                    printf("bad action: %s (%s)\n", e.what(), a.get<std::string>().c_str());
+                }
+            }
+            ai_packages.insert({ai_pack.name, std::move(ai_pack)});
+        } catch(invalid_argument& e) {
+            printf("error while loading from data/actions.json: %s\n", e.what());
+        } catch(domain_error& e) {
+            printf("bad package: %s (%s)\n", e.what(), p.get<std::string>().c_str());
+        }
+    }
+}
 Action Action::get_action(std::string name) {
+    /*
     auto f = actions.find(name);
     if(f == actions.end()) {
+        printf("bad action name: '%s'", name.c_str());
         throw std::runtime_error("bad action name");
     }
     return f->second;
+    */
+    return actions.at(name);
 }
+
+AIPackage Action::get_ai_package(std::string name) {
+    return ai_packages.at(name);
+}
+
 
 /// NIE-STATIC
 Action::Action(std::string name, int cost, std::string target_name): name(name), cost(cost), target_name(target_name), scanner(ScriptSystem::state()) {

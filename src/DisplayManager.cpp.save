@@ -9,20 +9,17 @@
 #include "ScriptSystem.h"
 #include "Components.h"
 
-
 #include "SDL2_gfxPrimitives.h"
 
-
-
-DisplayManager::DisplayManager(GameInstance *gameInstance) : _window(WINDOW_WIDTH, WINDOW_HEIGHT) { //, _graphicsManager(GraphicsManager(_window.getRenderer()))
-    printf("new DisplayManager\n");
+DisplayManager::DisplayManager(GameInstance *gameInstance) : _window(WINDOW_WIDTH, WINDOW_HEIGHT) {
+    printf("creating DisplayManager...(");
 
     if(IMG_Init(IMG_INIT_PNG) == -1) {
-        printf("IMG_Init: %s\n", IMG_GetError());
+        printf("IMG_Init: %s ", IMG_GetError());
         exit(-1);
     }
     if(TTF_Init() == -1) {
-        printf("TTF_Init: %s\n", TTF_GetError());
+        printf("TTF_Init: %s ", TTF_GetError());
         exit(-1);
     }
 
@@ -30,13 +27,13 @@ DisplayManager::DisplayManager(GameInstance *gameInstance) : _window(WINDOW_WIDT
         _windowRect.x = 0;
         _windowRect.y = 0;
         SDL_GetWindowSize(_window.getWindow(), &_windowRect.w, &_windowRect.h);
-        printf("_windowRect: %d %d %d %d\n",_windowRect.x,_windowRect.y,_windowRect.w,_windowRect.h);
+        printf("_windowRect: %d %d %d %d ",_windowRect.x,_windowRect.y,_windowRect.w,_windowRect.h);
         _active = true;
     } else _active = false;
 
     consoleFontSize = 20;
-    if((consoleFont = TTF_OpenFont("fonts/FORCED_SQUARE.ttf", consoleFontSize)) == NULL) {
-        printf("FONT ERROR\n");
+    if((consoleFont = TTF_OpenFont("fonts/FORCED_SQUARE.ttf ", consoleFontSize)) == NULL) {
+        printf("FONT ERROR ");
     }
     consoleFontColor = {.r=0, .g=155, .b=0, .a=255};
 
@@ -44,6 +41,7 @@ DisplayManager::DisplayManager(GameInstance *gameInstance) : _window(WINDOW_WIDT
     SDL_SetRenderDrawColor(_window.getRenderer(), clearColor.r, clearColor.g, clearColor.b, clearColor.a);
 
     _gameWorldView = SDL_CreateTexture(_window.getRenderer(), SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, _windowRect.w, _windowRect.h);
+    printf(") done.\n");
 }
 
 DisplayManager::~DisplayManager() {
@@ -58,7 +56,7 @@ DisplayManager::~DisplayManager() {
     TTF_Quit();
 }
 
-/*  render():
+/*  render(...):
         tworzy priority_queue
         dla kazdej instancji:
             jesli na ekranie
@@ -69,8 +67,8 @@ DisplayManager::~DisplayManager() {
             renderuje
 */
 
-void DisplayManager::render(EntityManager *entityManager, int ms) {
-    double interpolation = ms / 1000.0;
+//void DisplayManager::render(EntityManager *entityManager, int ms) {
+void DisplayManager::render(EntityManager *entityManager, double interpolation) {
     if(!GameInstance::isPaused()) {
         // renderowanie
         SDL_SetRenderTarget(_window.getRenderer(), _gameWorldView);
@@ -80,8 +78,10 @@ void DisplayManager::render(EntityManager *entityManager, int ms) {
         for(auto &p : entityManager->get_components()[tindex(CAspect)]) {
             auto component = p.second;
             if(component.expired()) continue;
+
             CAspect *asp = static_cast<CAspect*>(component.lock().get());
             CPhysicalForm *pf = static_cast<CPhysicalForm*>(component.lock()->owner.lock()->get<CPhysicalForm>());
+            printf("aspect: %s")
 
             vec3d pos(pf->pos.x, pf->pos.y, pf->pos.y);
             double r = pf->vol.x / 2;
@@ -106,7 +106,7 @@ void DisplayManager::render(EntityManager *entityManager, int ms) {
                     trt.pop();
                 }
         */
-        showDialog(text, POS_RIGHT_TOP); /// TEST
+        showDialog(text, POS_RIGHT_TOP); // TEST
 
         SDL_SetRenderTarget(_window.getRenderer(), nullptr); // przywracam właściwy renderer
 
@@ -159,7 +159,7 @@ void DisplayManager::showDialog(const string &text, BoxPosition position) {
     textRect.w = textW + 50;
     textRect.h = textH + 50;
 
-    switch (position) {
+    switch (position) { /// to jest dopiero głupie...
     case POS_CENTER:
         textRect.x = (_windowRect.w - textRect.w) / 2;
         textRect.y = (_windowRect.h - textRect.h) / 2;
@@ -235,7 +235,7 @@ void DisplayManager::drawText(const string &text, int x, int y, const SDL_Color 
 }
 
 void DisplayManager::init() {
-    lua_State *L = ScriptSystem::instance()->getLuaState();
+    lua_State *L = ScriptSystem::instance()->state();
 
     getGlobalNamespace (L)
     .beginClass <DisplayManager> ("DisplayManager")

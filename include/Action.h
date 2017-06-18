@@ -8,6 +8,8 @@
 
 #include "WorldState.h"
 #include "ScriptSystem.h"
+
+class AIPackage;
 class GoapAgent;
 class Entity;
 
@@ -111,8 +113,11 @@ public:
     void start() {execute.start();}
     bool is_performed() {return execute.is_running();}
 
+    /// STATIC
     static void init_actions();
+    static void init_action_packs();
     static Action get_action(std::string name);
+    static AIPackage get_ai_package(std::string name);
 
 protected:
     std::string name;
@@ -131,6 +136,7 @@ protected:
 
     /// STATIC
     static std::unordered_map<std::string, Action> actions;
+    static std::unordered_map<std::string, AIPackage> ai_packages;
 };
 
 #endif // ACTION_H

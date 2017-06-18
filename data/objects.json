@@ -1,39 +1,69 @@
 [
 	{
-		"name": "nest",
+		"name": "store",
 		"components": [
-			["CPhysicalForm", 0, 50 ,50],
+			["CPhysicalForm", ["x", "y", "z", 50 ,50]],
 			["CAspect", [100,50,50,255]],
-			["CEnergyStore", 100],
-			["CBreeder", "ant", 500, 1, 2],
-			["CActionTarget", "TARGET_NEST"]
+			["CEnergyStore", [0]],
+			["CBreeder", ["ant", 500, 1, 2]],
+			["CActionTarget", ["TARGET_STORE"]]
+		]
+	},
+	{
+		"name": "inn",
+		"components": [
+			["CPhysicalForm", ["x", "y", "z", 50 ,50]],
+			["CAspect", [140,100,70,255]],
+			["CActionTarget", ["TARGET_INN"]]
 		]
 	},
 	{
 		"name": "ant",
 		"components": [
-			["CPhysicalForm", 0, 10, 10],
+			["CPhysicalForm", ["x", "y", "z", 10, 10]],
 			["CAspect", [255,0,0,255]],
-			["CMovement", 100],
-			["GoapAgent"]
+			["CMovement", [100]],
+			["CRigidBody", [5]],
+			["GoapAgent", ["needs_satisfying", "standard_work"]],
+			["CNeeds", [0,0,0]],
+			["CAbstractObjectContainer", []]
 		]
 	},
 	{
 		"name": "tree",
 		"components": [
-			["CPhysicalForm", 0, 30, 30],
+			["CPhysicalForm", ["x", "y", "z", 30, 30]],
 			["CAspect", [50,155,0,255]],
-			["CEnergyStore", 200],
-			["CBreeder", "grain", 500, 1, 5]
+			["CEnergyStore", [200]],
+			["CBreeder", ["grain", 500, 1, 5]]
 		]
 	},
 	{
 		"name": "grain",
 		"components": [
-			["CPhysicalForm", 0, 10, 10],
+			["CPhysicalForm", ["x", "y", "z", 10, 10]],
 			["CAspect", [0,155,0,255]],
-			["CActionTarget", "TARGET_GRAIN"]
+			["CActionTarget", ["TARGET_GRAIN"]]
 		]
 	},
-
+	{
+		"name": "water_source",
+		"components": [
+			["CPhysicalForm", ["x", "y", "z", 50 ,50]],
+			["CAspect", [70,130,180,255]],
+			["CEnergyStore", [200]],
+			["CActionTarget", ["TARGET_WATER"]]
+		]
+	},
+	{
+		"name": "monster",
+		"components": [
+			["CPhysicalForm", ["x", "y", "z", 20, 20]],
+			["CAspect", [50,40,20,255]],
+			["CMovement", [20]],
+			["CRigidBody", [10]],
+			["GoapAgent", ["killer"]],
+			["CNeeds", [0,0,0]]
+		]
+	}
 ]

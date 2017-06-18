@@ -55,6 +55,7 @@
 			<Add library="C:/Dev_Libs/lua-5.3.3/liblua53.a" />
 			<Add directory="C:/Dev_Libs/x86_64-w64-mingw32/lib" />
 		</Linker>
+		<Unit filename="include/AIPackage.h" />
 		<Unit filename="include/ANode.h">
 			<Option virtualFolder="AI/include/" />
 		</Unit>
@@ -153,6 +154,7 @@
 		</Unit>
 		<Unit filename="include/setups.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/AIPackage.cpp" />
 		<Unit filename="src/ANode.cpp">
 			<Option virtualFolder="AI/src/" />
 		</Unit>

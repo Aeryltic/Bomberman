@@ -14,9 +14,9 @@
 //#include "ScriptSystem.h"
 
 //using message_callback = function<void(Message &)>;
-namespace comp_setup {
-void register_components();
-}
+//namespace comp_setup {
+//void register_components();
+//}
 
 
 struct CPhysicalForm : public Component {
@@ -70,7 +70,7 @@ struct CMovement : public Component {
     double max_speed;
     vec3d speed;
 
-    CMovement(double max_speed) : speed(0,0,0) {
+    explicit CMovement(double max_speed) : speed(0,0,0) {
         this->max_speed = max_speed;
     }
     virtual ~CMovement() {};
@@ -83,7 +83,7 @@ struct CMovement : public Component {
     void set_max_speed(double new_speed) {max_speed = new_speed;}
 };
 
-struct CActionTarget : public Component { /// to nie jest chyba dobry pomysł
+struct CActionTarget : public Component { /// to nie jest chyba dobry pomysł (nie lubię tego komponentu)
     string target_type;
 
     CActionTarget(string target_type) {
@@ -112,25 +112,25 @@ struct CActionTarget : public Component { /// to nie jest chyba dobry pomysł
 
 
 struct CEnergyStore : public Component {
-    float amount;
-    float pace;
+    double amount;
+    double pace;
 
-    CEnergyStore(float pace) {
+    CEnergyStore(double pace) {
         this->pace = pace;
         amount = 100.0;
     }
     virtual ~CEnergyStore() {};
 
-    void set_amount(float amount) {this->amount = amount;}
-    float get_amount() const { return amount; }
+    void set_amount(double amount) {this->amount = amount;}
+    double get_amount() const { return amount; }
 };
 
 struct CBreeder : public Component { /// zamiast tego - akcja ze skryptem zwracającym czy można rodzić
     string child_type;
-    float required_energy;
+    double required_energy;
     int min_amount, max_amount;
 
-    CBreeder(string child_type, float required_energy, int min_amount, int max_amount) {
+    CBreeder(string child_type, double required_energy, int min_amount, int max_amount) {
         this->child_type = (child_type);
         this->required_energy = (required_energy);
         this->min_amount = (min_amount);
@@ -161,15 +161,21 @@ struct CNeeds : public Component {
 };
 
 struct CAbstractObjectContainer : public Component {
-    std::unordered_map<int, weak_ptr<Entity>> obj;
+    //std::unordered_map<int, weak_ptr<Entity>> obj;
+    unsigned grains;
 
-    CAbstractObjectContainer() {}
+    CAbstractObjectContainer() {grains = 0;}
+    virtual ~CAbstractObjectContainer(){}
+
+    unsigned get_grains() const {return grains;}
+    void set_grains(unsigned v){grains = v;}
 };
 
 struct CParameterContainer : public Component {
     std::unordered_map<string, double> param;
 
     CParameterContainer() {}
+    virtual ~CParameterContainer() {}
 };
 
 #endif // COMPONENTS_H

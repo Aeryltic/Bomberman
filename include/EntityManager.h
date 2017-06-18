@@ -44,7 +44,8 @@ public:
     unordered_map<type_index, unordered_map<int, weak_ptr<Component>>> &get_components() { return components; }
 
     shared_ptr<Entity> make_entity();
-    shared_ptr<Entity> make_object(unsigned type, double x, double y);
+    shared_ptr<Entity> new_object(std::string type, double x, double y);
+    void make_object(std::string type, double x, double y);
 
     void delete_component(type_index t_index, int id);
 
