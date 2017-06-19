@@ -30,14 +30,14 @@ GameInstance &GameInstance::getInstance() {
 }
 
 GameInstance::GameInstance() {
-    printf("creating GameInstance...");
+    logs::log("creating GameInstance...");
     working = true;
 
-    printf("done\n");
+    logs::log("done\n");
 }
 
 GameInstance::~GameInstance() {
-    printf("delete GameInstance\n");
+    logs::log("delete GameInstance\n");
 
     SDL_RemoveTimer(timerID);
 
@@ -88,7 +88,7 @@ int GameInstance::run() {
         frames++;
 
         if(SDL_GetTicks() - last_check >= 1000) {
-            printf("FPS: %d\n",frames);
+            logs::log("FPS: %d\n",frames);
             frames = 0;
             last_check = SDL_GetTicks();
         }
@@ -107,7 +107,7 @@ void GameInstance::run()
 */
 int GameInstance::init() {
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0) {
-        printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+        logs::log("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
         return -1;
     }
     /// rozdzielić konstrukcję i inicjalizację systemów, bo crashe przy innej kolejności konstrukcji
@@ -117,9 +117,9 @@ int GameInstance::init() {
     //timerID = SDL_AddTimer()
 
     displayManager = new DisplayManager(this);
-    printf("creating EntityManager\n");
+    logs::log("creating EntityManager\n");
     entityManager = new EntityManager();
-    printf("done!\n");
+    logs::log("done!\n");
     eventManager = new EventManager(this);
 //    logicManager = new LogicManager(this);
     console = new Console(this);
@@ -136,7 +136,7 @@ int GameInstance::init() {
                 eventManager->isActive()      &&
                 ScriptSystem::instance()->isActive()
             )) {
-        printf("some systems are not active\n");
+        logs::log("some systems are not active\n");
         return -1;
     }
 
@@ -148,13 +148,13 @@ int GameInstance::init() {
         SDL_Event pushed;
         switch (event.user.code) {
         case EVENT_LOST:
-            printf("EVENT_LOST\n");
+            logs::log("EVENT_LOST\n");
             SDL_memset(&pushed, 0, sizeof(pushed));
             pushed.type = SDL_QUIT;
             SDL_PushEvent(&pushed);
             break;
         case EVENT_WON:
-            printf("EVENT_WON\n");
+            logs::log("EVENT_WON\n");
             SDL_memset(&pushed, 0, sizeof(pushed));
             pushed.type = SDL_QUIT;
             SDL_PushEvent(&pushed);

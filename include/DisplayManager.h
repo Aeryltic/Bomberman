@@ -12,8 +12,10 @@
 
 #include "Enumerations.h"
 
+#include "Logs.h"
+
 const int WINDOW_WIDTH = 1280;
-const int WINDOW_HEIGHT = 720;
+const int WINDOW_HEIGHT = 1024;
 
 class EntityManager;
 //class ObjectContainer;
@@ -53,7 +55,7 @@ public:
 //        GraphicsManager *getGraphicsManager(){return &_graphicsManager;}
     bool isActive()
     {
-        if(!_active)printf("DisplayManager is not active\n");
+        if(!_active)logs::log("DisplayManager is not active\n");
         return _active;
     }
 

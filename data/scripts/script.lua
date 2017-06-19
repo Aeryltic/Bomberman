@@ -8,15 +8,15 @@ protected = {
 function pass(item)
   return item
 end
-
-function updateTime()
-  display.text = os.date("%H:%M:%S") -- display - obiekt klasy DisplayManager z c++
-end
-
 function printsin(angle)
   print(math.sin(angle*math.pi/180))
   return "clean execution"
 end
+function updateTime()
+  display.text = os.date("%H:%M:%S") -- display - obiekt klasy DisplayManager z c++
+end
+
+
 
 function safelyExecute(command)
   -- docelowo ma sprawdzać czy można wykonać, chociaż o to powinniśmy zadbać już na poziomie C++

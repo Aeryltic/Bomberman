@@ -11,6 +11,8 @@
 #include <deque>
 #include <algorithm>
 
+#include <SDL.h> /// tego tu być nie winno
+
 //#include "ScriptSystem.h"
 
 //using message_callback = function<void(Message &)>;
@@ -162,13 +164,15 @@ struct CNeeds : public Component {
 
 struct CAbstractObjectContainer : public Component {
     //std::unordered_map<int, weak_ptr<Entity>> obj;
-    unsigned grains;
+    std::unordered_map<string, double> items;
+    //unsigned grains;
 
-    CAbstractObjectContainer() {grains = 0;}
+    CAbstractObjectContainer() {}
     virtual ~CAbstractObjectContainer(){}
-    
-    unsigned get_grains(){return grains;}
-    vi set_grains(){return grains;}
+
+    //unsigned get_grains() const {return grains;}
+    //void set_grains(unsigned v){grains = v;}
+    void set_item(std::string name, double )
 };
 
 struct CParameterContainer : public Component {

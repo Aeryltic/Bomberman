@@ -1,6 +1,8 @@
 #ifndef FSMSTATE_H
 #define FSMSTATE_H
 
+#include <memory>
+
 #include "Structures.h"
 
 class Entity;
@@ -29,15 +31,15 @@ public:
     unsigned wait_end;
 };
 
-class GotoState : public FSMState /// będzie korzystał z A* w przyszłości
+class GotoState : public FSMState
 {
 public:
-    GotoState(FSM *fsm, weak_ptr<Entity> dest, float min_range);
+    GotoState(FSM *fsm, std::weak_ptr<Entity> dest, float min_range);
     virtual ~GotoState();
 
     void update(int ms);
 
-    weak_ptr<Entity> dest;
+    std::weak_ptr<Entity> dest;
     float min_range;
 
     bool is_in_range();
@@ -51,7 +53,7 @@ public:
     virtual ~PerformActionState();
 
     void update(int ms);
-    void set_target(weak_ptr<Entity> target);
+    void set_target(std::weak_ptr<Entity> target);
 };
 
 #endif // FSMSTATE_H

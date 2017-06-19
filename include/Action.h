@@ -9,6 +9,8 @@
 #include "WorldState.h"
 #include "ScriptSystem.h"
 
+#include "Logs.h"
+
 class AIPackage;
 class GoapAgent;
 class Entity;
@@ -27,7 +29,7 @@ struct ActionExecutor {
             if(target != nullptr) result = exec(doer, target, ms_running);
             else result = exec(doer, ms_running);
         } catch (LuaException const& e) {
-            printf("%s\n", e.what());
+            logs::log("%s\n", e.what());
             result = false;
         }
         return result;

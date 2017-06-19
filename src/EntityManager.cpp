@@ -4,7 +4,7 @@
 #include "Component.h"
 
 EntityManager::EntityManager() : factory(this) {
-    printf("new EntityManager\n");
+    logs::log("new EntityManager\n");
     Entity::set_manager(this);
     Component::set_manager(this);
     active = true;
@@ -13,7 +13,7 @@ EntityManager::EntityManager() : factory(this) {
 }
 
 EntityManager::~EntityManager() {
-    printf("delete EntityManager\n");
+    logs::log("delete EntityManager\n");
 }
 
 void EntityManager::update() {

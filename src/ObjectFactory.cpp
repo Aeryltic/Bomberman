@@ -1,6 +1,6 @@
 #include "ObjectFactory.h"
 
-#include <fstream>
+//#include <fstream>
 
 #include "Entity.h"
 #include "EntityManager.h"
@@ -62,50 +62,38 @@ void ObjectFactory::init_component_constructors() {
     components["CAbstractObjectContainer"] = ([=](json j_obj) {
         return entityManager->make_component<CAbstractObjectContainer>();
     });
+    components["CProperties"] = ([=](json j_obj) {
+        return entityManager->make_component<CProperties>();
+    });
 }
 
 void ObjectFactory::init_entity_constructors() {
-    printf("initializing object schemas...\n");
+    logs::open("initializing object schemas...\n");
+
     std::string filename("data/objects.json");
-    std::ifstream t(filename);
-    std::string str;
-
-    t.seekg(0, std::ios::end);
-    str.reserve(t.tellg());
-    t.seekg(0, std::ios::beg);
-
     json j;
-    str.assign((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
-    try {
-        j = json::parse(str);
-    } catch(runtime_error& e) {
-        printf("runtime_error error while loading from %s: %s\n", filename.c_str(), e.what());
-        return;
-    } catch(invalid_argument& e) {
-        printf("invalid_argument error while loading from %s: %s\n", filename.c_str(), e.what());
-        return;
-    }
+    file_to_json(j, filename);
 
     for(auto p : j) {
         try {
             std::string schema_name = p["name"];
-            printf("\tnew schema: %s!\n", schema_name.c_str());
+            logs::log("new schema: %s!\n", schema_name.c_str());
             ObjectSchema os;
             for(auto c: p["components"]) {
                 try {
                     os.add_component(c[0], c[1]);
                 } catch(domain_error& e) {
-                    printf("bad component table: %s (%s)\n", e.what(), c.get<std::string>().c_str());
+                    logs::log("bad component table: %s (%s)\n", e.what(), c.get<std::string>().c_str());
                 }
             }
             object_schemas.insert({(schema_name), std::move(os)});
         } catch(invalid_argument& e) {
-            printf("error while loading from %s: %s\n", filename.c_str(), e.what());
+            logs::log("error while loading from %s: %s\n", filename.c_str(), e.what());
         } catch(domain_error& e) {
-            printf("bad package: %s (%s)\n", e.what(), p.get<std::string>().c_str());
+            logs::log("bad package: %s (%s)\n", e.what(), p.get<std::string>().c_str());
         }
     }
-    printf("schemas initialized!\n");
+    logs::close("schemas initialized!\n");
 }
 
 ObjectFactory::~ObjectFactory() {
@@ -123,18 +111,18 @@ shared_ptr<Entity> ObjectFactory::make_object(std::string type, double x, double
                 e->add(components[p.first](p.second));
                 //printf("\t'%s' added\n", p.first.c_str());
             } catch(bad_function_call& e) {
-                printf("%s (tried to call component[%s](%s))\n", e.what(), p.first.c_str(), p.second.dump().c_str());
+                logs::log("%s (tried to call component[%s](%s))\n", e.what(), p.first.c_str(), p.second.dump().c_str());
             }
         }
         CPhysicalForm* pf = e->get<CPhysicalForm>();
         if(pf) {
             pf->pos = {x, y, 0};
         } else {
-            printf("object has no PhysicalForm\n");
+            logs::log("object has no PhysicalForm\n");
         }
         //printf("new %s (#%d) at (%f,%f)\n", type.c_str(), e->get_id(), x, y);
     } else {
-        printf("unknown object type: \"%s\".\n", type.c_str());
+        logs::log("unknown object type: \"%s\".\n", type.c_str());
     }
     return e;
 }

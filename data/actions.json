@@ -30,6 +30,34 @@
 		"script": "pickup_grain"
 	},
 	{
+		"name": "deliver_wood",
+		"cost": 10,
+		"scanner": "wood_delivery_scanner",
+		"target": "TARGET_STORE",
+		"preconditions": [
+			["wood_delivered", false],
+			["have_wood", true]
+		],
+		"effects": [
+			["have_wood", false],
+			["wood_delivered", true]
+		],
+		"script": "deliver_wood"
+	},
+	{
+		"name": "chop_wood",
+		"cost": 1,
+		"scanner": "wood_scanner",
+		"target": "TARGET_TREE",
+		"preconditions": [
+			["have_wood", false]
+		],
+		"effects": [
+			["have_wood", true]
+		],
+		"script": "chop_wood"
+	},
+	{
 		"name": "kill_enemy",
 		"cost": 1,
 		"scanner": "enemy_scanner",

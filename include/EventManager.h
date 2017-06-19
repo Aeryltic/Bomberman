@@ -8,6 +8,8 @@
 
 #include <SDL.h>
 
+#include "Logs.h"
+
 class Console;
 class GameInstance;
 class Entity;
@@ -40,7 +42,7 @@ public:
     // void EventManager::pushEvent(int eventNum, int eventCode, shared_ptr<Entity> publisher, shared_ptr<Entity> subscriber);
     bool isActive()
     {
-        if(!_active)printf("EventManager is not active\n");
+        if(!_active)logs::log("EventManager is not active\n");
         return _active;
     }
 

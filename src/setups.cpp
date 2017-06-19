@@ -34,6 +34,7 @@ void setup_entity(){
             .addFunction("goap", &Entity::get<GoapAgent>)
             .addFunction("aspect", &Entity::get<CAspect>)
             .addFunction("bag", &Entity::get<CAbstractObjectContainer>)
+            .addFunction("property", &Entity::get<CProperties>)
         .endClass()
     ;
 }
@@ -85,7 +86,14 @@ void register_components() {
 
             .beginClass<CAbstractObjectContainer>("CAbstractObjectContainer")
                 .addConstructor<void(*)()>()
-                .addProperty("grains", &CAbstractObjectContainer::get_grains, &CAbstractObjectContainer::set_grains)
+                .addFunction("get_item", &CAbstractObjectContainer::get_item)
+                .addFunction("set_item", &CAbstractObjectContainer::set_item)
+            .endClass()
+
+            .beginClass<CProperties>("CProperties")
+                .addConstructor<void(*)()>()
+                .addFunction("get", &CProperties::get)
+                .addFunction("set", &CProperties::set)
             .endClass()
 
         .endNamespace();

@@ -15,7 +15,7 @@ GameInitializer::~GameInitializer() {
 }
 
 void GameInitializer::init_entities(EntityManager *entityManager) {
-    printf("initializing game...\n");
+    logs::log("initializing game...\n");
     getGlobal(ScriptSystem::state(), "init_game")(entityManager);
-    printf(" done!\n");
+    logs::log(" done!\n");
 }

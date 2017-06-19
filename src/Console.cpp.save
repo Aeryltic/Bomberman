@@ -38,7 +38,7 @@ void Console::execute(const string &command)
     commandHistory.push_front(command);
     history.push_front(command);
     if(output.length())history.push_front(output);
-    printf("executed: %s\n", command.c_str());
+    logs::log("executed: %s\n", command.c_str());
 }
 
 void Console::init()
@@ -62,7 +62,7 @@ void Console::init()
             Update the cursor position.
             Update the selection length (if any).
             */
-            printf("EDITING: %s\n", event.edit.text);
+            logs::log("EDITING: %s\n", event.edit.text);
             //buffer = string(event.edit.text);
             //composition = event.edit.text;
             //cursor = event.edit.start;
@@ -140,5 +140,5 @@ void Console::toggle()
     {
         SDL_StopTextInput();
     }
-    printf("console toggled %s\n", ((visible) ? "ON" : "OFF"));
+    logs::log("console toggled %s\n", ((visible) ? "ON" : "OFF"));
 }

@@ -122,6 +122,7 @@
 		<Unit filename="include/GraphicsManager.h">
 			<Option virtualFolder="GraphicsModule/include/" />
 		</Unit>
+		<Unit filename="include/Logs.h" />
 		<Unit filename="include/MainMenuGS.h" />
 		<Unit filename="include/Message.h" />
 		<Unit filename="include/MiscFunctions.h">
@@ -152,7 +153,9 @@
 		<Unit filename="include/WorldState.h">
 			<Option virtualFolder="AI/include/" />
 		</Unit>
-		<Unit filename="include/setups.h" />
+		<Unit filename="include/setups.h">
+			<Option virtualFolder="ScriptModule/include/" />
+		</Unit>
 		<Unit filename="main.cpp" />
 		<Unit filename="src/AIPackage.cpp" />
 		<Unit filename="src/ANode.cpp">
@@ -212,6 +215,7 @@
 		<Unit filename="src/GraphicsManager.cpp">
 			<Option virtualFolder="GraphicsModule/src/" />
 		</Unit>
+		<Unit filename="src/Logs.cpp" />
 		<Unit filename="src/MainMenuGS.cpp" />
 		<Unit filename="src/Message.cpp" />
 		<Unit filename="src/MiscFunctions.cpp">
@@ -233,7 +237,9 @@
 		<Unit filename="src/WorldState.cpp">
 			<Option virtualFolder="AI/src/" />
 		</Unit>
-		<Unit filename="src/setups.cpp" />
+		<Unit filename="src/setups.cpp">
+			<Option virtualFolder="ScriptModule/src/" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<envvars />

@@ -6,7 +6,7 @@ end
 function pickup_grain(agent, target, time_passed)
   if time_passed >= 500 then
     target:destroy_me()
-    agent:bag().grains = agent:bag().grains + 1
+    agent:bag():set_item("grains", agent:bag():get_item("grains") + 1)
     return true
   end
   return false
@@ -15,11 +15,44 @@ end
 -- upuszczenie ziarna do gniazda
 function deliver_grain(agent, target, time_passed)
   if time_passed >= 500 then
-    e = target:energy_store()
-    if(e ~= nil and e ~= 0) then -- nie wiem czy ten if wogóle działa jak należy
-      e.amount = e.amount + 100 
-      agent:bag().grains = agent:bag().grains - 1
+    --e = target:energy_store()
+    --if(e ~= nil and e ~= 0) then -- nie wiem czy ten if wogóle działa jak należy
+      target:energy_store().amount = target:energy_store().amount + 100 
+      agent:bag():set_item("grains", agent:bag():get_item("grains") - 1)
+    --end
+    --e = nil
+    return true
+  end
+  return false
+end
+
+-- 
+function chop_wood(agent, target, time_passed) -- tu już jest problem, bo nie mogę zrobić dynamicznego dodawania względem czasu, bo co jeśli już miał?
+  if time_passed >= 1500 then
+    c = target:property():get("condition")
+    if c > 10 then
+      agent:bag():set_item("wood", agent:bag():get_item("wood") + 10)
+      target:property():set("condition", target:property():get("condition") - 10)
+    else
+      agent:bag():set_item("wood", agent:bag():get_item("wood") + c)
+      target:property():set("condition", 0)
+      target:destroy_me()
     end
+    return true
+  end
+  return false
+end
+
+-- upuszczenie ziarna do gniazda
+function deliver_wood(agent, target, time_passed)
+  if time_passed >= 500 then
+    --e = target:energy_store()
+    --if(e ~= nil and e ~= 0) then -- nie wiem czy ten if wogóle działa jak należy
+      --target:energy_store().amount = target:energy_store().amount + 100 
+      target:bag():set_item("wood", agent:bag():get_item("wood"))
+      agent:bag():set_item("wood", 0)
+    --end
+    --e = nil
     return true
   end
   return false
@@ -49,7 +82,7 @@ end
 
 -- jedzenie
 function eat_something(agent, target, time_passed)
-  agent:aspect():set_color(50, 150, 50)
+  agent:aspect():set_color(150, 150, 50)
   if time_passed >= 5000 then
       --print("eating")
       agent:needs().hunger = 0
@@ -62,7 +95,7 @@ end
 -- odpoczywanie
 function rest_for_a_while(agent, target, time_passed)
   agent:aspect():set_color(50, 50, 50)
-  if time_passed >= 10 then
+  if time_passed >= 10000 then
       --print("resting")
       agent:needs().weariness = 0
       agent:aspect():reset_color()

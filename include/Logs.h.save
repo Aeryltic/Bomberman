@@ -1,0 +1,24 @@
+#ifndef LOGS_H
+#define LOGS_H
+
+#inc
+
+using log = Logs;
+
+class Logs
+{
+    public:
+        virtual ~Logs();
+        static void open(string format, Args...);
+        static void log(string format, Args...);
+        static void close(string format, Args...);
+    protected:
+
+    private:
+        Logs();
+
+
+        unsigned indent;
+};
+
+#endif // LOGS_H

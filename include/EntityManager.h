@@ -12,6 +12,7 @@
 #include "Entity.h"
 #include <queue>
 
+#include "Logs.h"
 using namespace std;
 
 class EntityManager {
@@ -32,7 +33,7 @@ public:
 
     bool exists(int id);
 
-    bool isActive(){ if(!active)printf("EntityManager is not active\n"); return active;}
+    bool isActive(){ if(!active)logs::log("EntityManager is not active\n"); return active;}
 
     //ObjectFactory *getFactory(){return &objectFactory;}
 

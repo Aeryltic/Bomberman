@@ -31,7 +31,9 @@ void IdleState::update(int ms) {
         agent->set_plan(planner.plan(agent, goal));
 
         if(!agent->has_plan()) { /// jeśli nie znalazł planu czeka sekundę
-            wait_end = SDL_GetTicks() + 1000;
+            unsigned wait_time = 1000 + rand() % 10000;
+            wait_end = SDL_GetTicks() + wait_time;
+            logs::log("no plan - waiting for: %d\n", wait_time);
             CMovement *mv = get_owner()->get<CMovement>();
             if(mv)mv->stop(); /// nie działa, bo kolizje
         } else {
@@ -57,6 +59,7 @@ void GotoState::update(int ms) {
         if(!dest.expired() && dest.lock()->is_active()) {
             mv->speed = pf->pos.movement_step(dest.lock()->get<CPhysicalForm>()->pos, mv->max_speed * ms / 1000.0);
         } else {
+            //mv->stop();
             fsm->pop_state();
             return;
         }
@@ -78,6 +81,9 @@ void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy... to obrz
         if(!action->is_performed()) {
             if(action->does_need_target() && !action->has_target()) {
                 if(target_counter || !action->find_target(CActionTarget::targets)) { // nie można kontynuować, olać to
+                    CMovement *mv = get_owner()->get<CMovement>();
+                    if(mv)mv->stop(); /// nie działa, bo kolizje
+
                     fsm->pop_state();
                     return;
                 }
@@ -90,7 +96,7 @@ void PerformActionState::update(int ms) { /// tu potrzeba dużo pracy... to obrz
                     fsm->push_state(make_unique<GotoState>(fsm, action->get_target(), 10));
                     return;
                 } else {
-                    printf("invalid target!\n");
+                    logs::log("invalid target!\n");
                     fsm->pop_state();
                     return;
                 }

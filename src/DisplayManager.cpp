@@ -12,14 +12,14 @@
 #include "SDL2_gfxPrimitives.h"
 
 DisplayManager::DisplayManager(GameInstance *gameInstance) : _window(WINDOW_WIDTH, WINDOW_HEIGHT) {
-    printf("creating DisplayManager...(");
+    logs::open("creating DisplayManager...\n");
 
     if(IMG_Init(IMG_INIT_PNG) == -1) {
-        printf("IMG_Init: %s ", IMG_GetError());
+        logs::log("IMG_Init: %s ", IMG_GetError());
         exit(-1);
     }
     if(TTF_Init() == -1) {
-        printf("TTF_Init: %s ", TTF_GetError());
+        logs::log("TTF_Init: %s ", TTF_GetError());
         exit(-1);
     }
 
@@ -27,13 +27,13 @@ DisplayManager::DisplayManager(GameInstance *gameInstance) : _window(WINDOW_WIDT
         _windowRect.x = 0;
         _windowRect.y = 0;
         SDL_GetWindowSize(_window.getWindow(), &_windowRect.w, &_windowRect.h);
-        printf("_windowRect: %d %d %d %d ",_windowRect.x,_windowRect.y,_windowRect.w,_windowRect.h);
+        logs::log("_windowRect: %d %d %d %d ",_windowRect.x,_windowRect.y,_windowRect.w,_windowRect.h);
         _active = true;
     } else _active = false;
 
     consoleFontSize = 20;
     if((consoleFont = TTF_OpenFont("fonts/FORCED_SQUARE.ttf ", consoleFontSize)) == NULL) {
-        printf("FONT ERROR ");
+        logs::log("FONT ERROR ");
     }
     consoleFontColor = {.r=0, .g=155, .b=0, .a=255};
 
@@ -41,11 +41,11 @@ DisplayManager::DisplayManager(GameInstance *gameInstance) : _window(WINDOW_WIDT
     SDL_SetRenderDrawColor(_window.getRenderer(), clearColor.r, clearColor.g, clearColor.b, clearColor.a);
 
     _gameWorldView = SDL_CreateTexture(_window.getRenderer(), SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, _windowRect.w, _windowRect.h);
-    printf(") done.\n");
+    logs::close("done.\n");
 }
 
 DisplayManager::~DisplayManager() {
-    printf("delete DisplayManager\n");
+    logs::log("delete DisplayManager\n");
 
     SDL_DestroyTexture(_gameWorldView);
 

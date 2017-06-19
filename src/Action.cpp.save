@@ -1,9 +1,8 @@
 #include "Action.h"
 
-//#include <functional>
-#include <string>
-#include <fstream>
-#include <streambuf>
+//#include <string>
+//#include <fstream>
+//#include <streambuf>
 
 #include "json.hpp"
 
@@ -19,25 +18,11 @@ std::unordered_map<std::string, Action> Action::actions;
 std::unordered_map<std::string, AIPackage> Action::ai_packages;
 
 void Action::init_actions() {
+    logs::open("initializing actions...");
     /// raw actions
-    std::ifstream t("data/actions.json");
-    std::string str;
-
-    t.seekg(0, std::ios::end);
-    str.reserve(t.tellg());
-    t.seekg(0, std::ios::beg);
-
+    std::string filename("data/actions.json");
     json j;
-    str.assign((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
-    try {
-        j = json::parse(str);
-    } catch(runtime_error& e) {
-        printf("runtime_error error while loading from data/actions.json: %s\n", e.what());
-        return;
-    } catch(invalid_argument& e) {
-        printf("invalid_argument error while loading from data/actions.json: %s\n", e.what());
-        return;
-    }
+    file_to_json(j, filename);
 
     for(auto a : j) {
         try {
@@ -56,37 +41,22 @@ void Action::init_actions() {
                 std::string scanner_name = a["scanner"];
                 action.set_scanner(getGlobal(L, scanner_name.c_str()));
             } catch(domain_error& e) {
-                printf("no scanner: %s\n", e.what());
+                logs::log("no scanner: %s\n", e.what());
                 action.set_scanner(getGlobal(L, "empty_scanner"));
             }
 
             actions.insert({action.name, std::move(action)});
         } catch(invalid_argument& e) {
-            printf("error while loading from data/actions.json: %s\n", e.what());
+            logs::log("error while loading from data/actions.json: %s\n", e.what());
         }
     }
 }
 void Action::init_action_packs() {
     /// action packs
     std::string filename("data/ai_packages.json");
-    std::ifstream t(filename);
-    std::string str;
-
-    t.seekg(0, std::ios::end);
-    str.reserve(t.tellg());
-    t.seekg(0, std::ios::beg);
-
     json j;
-    str.assign((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
-    try {
-        j = json::parse(str);
-    } catch(runtime_error& e) {
-        printf("runtime_error error while loading from %s: %s\n", filename.c_str(), e.what());
-        return;
-    } catch(invalid_argument& e) {
-        printf("invalid_argument error while loading from %s: %s\n", filename.c_str(), e.what());
-        return;
-    }
+
+    file_to_json(j, filename);
 
     for(auto p : j) {
         try {
@@ -95,34 +65,38 @@ void Action::init_action_packs() {
                 try {
                     ai_pack.add_goal(g[0], g[1], g[2]);
                 } catch(domain_error& e) {
-                    printf("bad table: %s (%s)\n", e.what(), g.get<std::string>().c_str());
+                    logs::log("bad table: %s (%s)\n", e.what(), g.get<std::string>().c_str());
                 }
             }
             for(auto a: p["actions"]) {
                 try {
                     ai_pack.add_action(a);
                 } catch(domain_error& e) {
-                    printf("bad action: %s (%s)\n", e.what(), a.get<std::string>().c_str());
+                    logs::log("bad action: %s (%s)\n", e.what(), a.get<std::string>().c_str());
                 }
             }
             ai_packages.insert({ai_pack.name, std::move(ai_pack)});
         } catch(invalid_argument& e) {
-            printf("error while loading from data/actions.json: %s\n", e.what());
+            logs::log("error while loading from data/actions.json: %s\n", e.what());
         } catch(domain_error& e) {
-            printf("bad package: %s (%s)\n", e.what(), p.get<std::string>().c_str());
+            logs::log("bad package: %s (%s)\n", e.what(), p.get<std::string>().c_str());
         }
     }
 }
 Action Action::get_action(std::string name) {
+    /*
     auto f = actions.find(name);
     if(f == actions.end()) {
+        printf("bad action name: '%s'", name.c_str());
         throw std::runtime_error("bad action name");
     }
     return f->second;
+    */
+    return actions.at(name);
 }
 
-const AIPackage& Action::get_ai_package(std::string name) {
-    return ai_packages[name];
+AIPackage Action::get_ai_package(std::string name) {
+    return ai_packages.at(name);
 }
 
 

@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "Constants.h"
-#include "Typedefs.h"
+//#include "Typedefs.h"
 
 
 #include "ObjectFactory.h"
@@ -16,8 +16,8 @@ using namespace std;
 
 class EntityManager {
     friend class ObjectFactory;
-    using shared_ptr<Entity>  entity_ptr;
-    using shared_ptr<Component>  component_ptr;
+    using entity_ptr = shared_ptr<Entity>;
+    using component_ptr = shared_ptr<Component>;
     using component_map = unordered_map<type_index, unordered_map<int, weak_ptr<Component>>>;
 public:
     EntityManager(/*GameInstance *gameInstance*/);
@@ -32,7 +32,7 @@ public:
 
     bool exists(int id);
 
-    bool isActive(){ if(!active)printf("EntityManager is not active\n"); return active;}
+    bool isActive(){ if(!active)logs::log("EntityManager is not active\n"); return active;}
 
     //ObjectFactory *getFactory(){return &objectFactory;}
 
@@ -44,7 +44,8 @@ public:
     unordered_map<type_index, unordered_map<int, weak_ptr<Component>>> &get_components() { return components; }
 
     shared_ptr<Entity> make_entity();
-    shared_ptr<Entity> make_object(unsigned type, double x, double y);
+    shared_ptr<Entity> new_object(std::string type, double x, double y);
+    void make_object(std::string type, double x, double y);
 
     void delete_component(type_index t_index, int id);
 

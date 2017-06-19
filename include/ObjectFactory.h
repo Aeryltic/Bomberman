@@ -12,19 +12,21 @@ class Entity;
 class EntityManager;
 class Component;
 
+using data_object = json;
+
 class ObjectSchema {
 public:
-    void add_component(std::string cname, json j_obj) {
+    void add_component(std::string cname, data_object j_obj) {
         components.push_back(make_pair(cname, j_obj));
     }
-    std::vector<std::pair<std::string, json>>& get_components(){return components;}
+    std::vector<std::pair<std::string, data_object>>& get_components(){return components;}
 private:
-    std::vector<std::pair<std::string, json>> components;
+    std::vector<std::pair<std::string, data_object>> components;
 };
 
 class ObjectFactory {
     using entity_creator = std::function<std::shared_ptr<Entity>(double, double)>;
-    using component_creator = std::function<std::shared_ptr<Component>(json j_obj)>;
+    using component_creator = std::function<std::shared_ptr<Component>(data_object j_obj)>;
 
 public:
     ObjectFactory(EntityManager* entityManager);

@@ -1,10 +1,25 @@
 #include "MiscFunctions.h"
 
-vec3d random_point_in_range(double x, double y, double r_min, double r_max)
-{
-    double angle = (rand()%360) * M_PI / 180.0;
-    double dist = rand()%int(r_max-r_min) + r_min;
-    double px = dist * cos(angle) + x,
-           py = dist * sin(angle) + y;
-    return vec3d(px, py, 0);
+#include <fstream>
+#include <Logs.h>
+
+bool file_to_json(json& j, std::string filename){
+    std::ifstream t(filename);
+    std::string str;
+
+    t.seekg(0, std::ios::end);
+    str.reserve(t.tellg());
+    t.seekg(0, std::ios::beg);
+
+    str.assign((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
+    try {
+        j = json::parse(str);
+    } catch(std::runtime_error& e) {
+        logs::log("runtime_error error while loading from %s: %s\n", filename.c_str(), e.what());
+        return false;
+    } catch(std::invalid_argument& e) {
+        logs::log("invalid_argument error while loading from %s: %s\n", filename.c_str(), e.what());
+        return false;
+    }
+    return true;
 }

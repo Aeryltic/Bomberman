@@ -12,14 +12,14 @@
 #include "SDL2_gfxPrimitives.h"
 
 DisplayManager::DisplayManager(GameInstance *gameInstance) : _window(WINDOW_WIDTH, WINDOW_HEIGHT) {
-    printf("creating DisplayManager...(");
+    logs::log("creating DisplayManager...(");
 
     if(IMG_Init(IMG_INIT_PNG) == -1) {
-        printf("IMG_Init: %s ", IMG_GetError());
+        logs::log("IMG_Init: %s ", IMG_GetError());
         exit(-1);
     }
     if(TTF_Init() == -1) {
-        printf("TTF_Init: %s ", TTF_GetError());
+        logs::log("TTF_Init: %s ", TTF_GetError());
         exit(-1);
     }
 
@@ -27,13 +27,13 @@ DisplayManager::DisplayManager(GameInstance *gameInstance) : _window(WINDOW_WIDT
         _windowRect.x = 0;
         _windowRect.y = 0;
         SDL_GetWindowSize(_window.getWindow(), &_windowRect.w, &_windowRect.h);
-        printf("_windowRect: %d %d %d %d ",_windowRect.x,_windowRect.y,_windowRect.w,_windowRect.h);
+        logs::log("_windowRect: %d %d %d %d ",_windowRect.x,_windowRect.y,_windowRect.w,_windowRect.h);
         _active = true;
     } else _active = false;
 
     consoleFontSize = 20;
     if((consoleFont = TTF_OpenFont("fonts/FORCED_SQUARE.ttf ", consoleFontSize)) == NULL) {
-        printf("FONT ERROR ");
+        logs::log("FONT ERROR ");
     }
     consoleFontColor = {.r=0, .g=155, .b=0, .a=255};
 
@@ -69,7 +69,9 @@ DisplayManager::~DisplayManager() {
 
 //void DisplayManager::render(EntityManager *entityManager, int ms) {
 void DisplayManager::render(EntityManager *entityManager, double interpolation) {
+    //printf("rendering...");
     if(!GameInstance::isPaused()) {
+            //printf(" ok.");
         // renderowanie
         SDL_SetRenderTarget(_window.getRenderer(), _gameWorldView);
         SDL_RenderClear(_window.getRenderer());
@@ -77,11 +79,15 @@ void DisplayManager::render(EntityManager *entityManager, double interpolation) 
         //priority_queue<ToRender> trt;
         for(auto &p : entityManager->get_components()[tindex(CAspect)]) {
             auto component = p.second;
-            if(component.expired()) continue;
+            if(component.expired()){
+                    //printf("component expired!\n");
+                continue;
+            }
 
             CAspect *asp = static_cast<CAspect*>(component.lock().get());
             CPhysicalForm *pf = static_cast<CPhysicalForm*>(component.lock()->owner.lock()->get<CPhysicalForm>());
-            printf("aspect: %s")
+
+            //printf("aspect: %d %d %d at pos: %s", asp->color.r, asp->color.g, asp->color.b, pf->pos.repr().c_str());
 
             vec3d pos(pf->pos.x, pf->pos.y, pf->pos.y);
             double r = pf->vol.x / 2;
@@ -114,6 +120,7 @@ void DisplayManager::render(EntityManager *entityManager, double interpolation) 
         SDL_RenderCopy(_window.getRenderer(), _gameWorldView, nullptr, nullptr);
         SDL_RenderPresent(_window.getRenderer());
     }
+    //printf("\n");
 }
 
 void DisplayManager::drawConsole(const string &buffer, const deque<string> &commandHistory) { /// to jest słabe

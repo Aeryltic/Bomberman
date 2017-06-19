@@ -76,12 +76,12 @@ struct vec3d {
 
     vec3d slided_along(vec3d other) const {
         //printf("sliding %s along %s: ",repr().c_str(), other.repr().c_str());
-        double angle = angle_to(other);
-        if(abs(angle) > M_PI / 2)other = -other;
+        //double angle = angle_to(other);
+        //if(abs(angle) > M_PI / 2)other = -other;
         //printf("angle = %f", angle * 180.0 / M_PI);
         //if(abs(angle) > M_PI || angle < 0.00001) return *this;
-        double l = dot_product(other) / other.len();
-        return other.normalized() * l;
+        //double l = dot_product(other) / other.len();
+        return other.normalized() * len();
     }
 
     string repr() const {
@@ -89,6 +89,8 @@ struct vec3d {
         fmt << x << " " << y << " " << z;
         return fmt.str();
     }
+    
+    vec3d 
 };
 /*
 struct EntityEvent

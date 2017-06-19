@@ -24,7 +24,7 @@ void ComponentSystem::addUpdateFunction(int priority, update_function ufunction)
 }
 
 bool ComponentSystem::init() {
-    printf("initializing component systems...");
+    logs::open("initializing component systems...");
 
     /// jakiś tam ruch
     addUpdateFunction(1, [](int ms, EntityManager* entityManager) {
@@ -44,7 +44,7 @@ bool ComponentSystem::init() {
                 view.energy->amount -= view.breeder->required_energy;
                 int amount = rand()%(view.breeder->max_amount - view.breeder->min_amount) + view.breeder->min_amount;
                 while(amount--) {
-                    vec3d p = random_point_in_range(view.pf->pos.x, view.pf->pos.y, view.pf->vol.x/2, view.pf->vol.x*2);
+                    vec3d p = view.pf->pos.random_in_range(view.pf->vol.x/2, view.pf->vol.x*2);
                     entityManager->make_object(view.breeder->child_type, p.x, p.y);
                 }
             }
@@ -110,6 +110,6 @@ bool ComponentSystem::init() {
         }
     });
 
-    printf(" done.\n");
+    logs::close(" done.\n");
     return 0;
 }

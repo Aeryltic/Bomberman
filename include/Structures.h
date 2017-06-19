@@ -1,15 +1,17 @@
 #ifndef STRUCTURES_H_INCLUDED
 #define STRUCTURES_H_INCLUDED
 
+#include <cmath>
+//#include <memory>
+#include <sstream>
+
 #ifndef _USE_MATH_DEFINES
 #define _USE_MATH_DEFINES
 #endif // _USE_MATH_DEFINES
 
-#include <cmath>
-//#include <SDL.h>
-#include <memory>
-#include <sstream>
-using namespace std;
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 struct vec3d {
     double x, y, z;
@@ -84,10 +86,19 @@ struct vec3d {
         return other.normalized() * len();
     }
 
-    string repr() const {
+    std::string repr() const {
         std::stringstream fmt;
         fmt << x << " " << y << " " << z;
         return fmt.str();
+    }
+
+    vec3d random_in_range(double r_min, double r_max)
+    {
+        double angle = (rand()%360) * M_PI / 180.0;
+        double dist = rand()%int(r_max - r_min) + r_min;
+        double px = dist * cos(angle) + x,
+               py = dist * sin(angle) + y;
+        return vec3d(px, py, 0);
     }
 };
 /*

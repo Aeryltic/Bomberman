@@ -11,6 +11,8 @@
 #include <deque>
 #include <algorithm>
 
+#include <SDL.h> /// tego tu być nie winno
+
 //#include "ScriptSystem.h"
 
 //using message_callback = function<void(Message &)>;
@@ -162,20 +164,37 @@ struct CNeeds : public Component {
 
 struct CAbstractObjectContainer : public Component {
     //std::unordered_map<int, weak_ptr<Entity>> obj;
-    unsigned grains;
+    std::unordered_map<string, double> items;
+    //unsigned grains;
 
-    CAbstractObjectContainer() {grains = 0;}
+    CAbstractObjectContainer() {}
     virtual ~CAbstractObjectContainer(){}
 
-    unsigned get_grains() const {return grains;}
-    void set_grains(unsigned v){grains = v;}
+    //unsigned get_grains() const {return grains;}
+    //void set_grains(unsigned v){grains = v;}
+    void set_item(std::string name, double v){
+        items[name] = v;
+    }
+    double get_item(std::string name){
+        //return items.at(name);
+        return items[name];
+    }
 };
 
-struct CParameterContainer : public Component {
-    std::unordered_map<string, double> param;
+struct CProperties : public Component {
+    std::unordered_map<string, double> prop;
 
-    CParameterContainer() {}
-    virtual ~CParameterContainer() {}
+    CProperties() {
+        prop["condition"] = 100;
+    }
+    virtual ~CProperties() {}
+
+    void set(std::string name, double v){
+        prop[name] = v;
+    }
+    double get(std::string name){
+        return prop[name];
+    }
 };
 
 #endif // COMPONENTS_H

@@ -5,8 +5,9 @@
 			["CPhysicalForm", ["x", "y", "z", 50 ,50]],
 			["CAspect", [100,50,50,255]],
 			["CEnergyStore", [0]],
-			["CBreeder", ["ant", 500, 1, 2]],
-			["CActionTarget", ["TARGET_STORE"]]
+			["CBreeder", ["unemployed", 500, 1, 2]],
+			["CActionTarget", ["TARGET_STORE"]],
+			["CAbstractObjectContainer", []]
 		]
 	},
 	{
@@ -18,19 +19,43 @@
 		]
 	},
 	{
-		"name": "ant",
+		"name": "unemployed",
 		"components": [
 			["CPhysicalForm", ["x", "y", "z", 10, 10]],
-			["CAspect", [255,0,0,255]],
+			["CAspect", [100,100,100,255]],
 			["CMovement", [100]],
 			["CRigidBody", [5]],
-			["GoapAgent", ["needs_satisfying", "standard_work"]],
+			["GoapAgent", ["needs_satisfying"]],
 			["CNeeds", [0,0,0]],
 			["CAbstractObjectContainer", []]
 		]
 	},
 	{
-		"name": "tree",
+		"name": "food_picker",
+		"components": [
+			["CPhysicalForm", ["x", "y", "z", 10, 10]],
+			["CAspect", [255,0,0,255]],
+			["CMovement", [100]],
+			["CRigidBody", [5]],
+			["GoapAgent", ["needs_satisfying", "food_picking"]],
+			["CNeeds", [0,0,0]],
+			["CAbstractObjectContainer", []]
+		]
+	},
+	{
+		"name": "wood_picker",
+		"components": [
+			["CPhysicalForm", ["x", "y", "z", 10, 10]],
+			["CAspect", [155,20,20,255]],
+			["CMovement", [100]],
+			["CRigidBody", [5]],
+			["GoapAgent", ["needs_satisfying", "wood_picking"]],
+			["CNeeds", [0,0,0]],
+			["CAbstractObjectContainer", []]
+		]
+	},
+	{
+		"name": "bush",
 		"components": [
 			["CPhysicalForm", ["x", "y", "z", 30, 30]],
 			["CAspect", [50,155,0,255]],
@@ -44,6 +69,15 @@
 			["CPhysicalForm", ["x", "y", "z", 10, 10]],
 			["CAspect", [0,155,0,255]],
 			["CActionTarget", ["TARGET_GRAIN"]]
+		]
+	},
+	{
+		"name": "tree",
+		"components": [
+			["CPhysicalForm", ["x", "y", "z", 20, 20]],
+			["CAspect", [0,100,0,255]],
+			["CActionTarget", ["TARGET_TREE"]],
+			["CProperties", []]
 		]
 	},
 	{

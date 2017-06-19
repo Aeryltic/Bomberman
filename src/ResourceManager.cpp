@@ -1,8 +1,8 @@
 #include "ResourceManager.h"
-
+#include "Logs.h"
 ResourceManager::ResourceManager()
 {
-    printf("new ResourceManager\n");
+    logs::log("new ResourceManager\n");
 }
 
 ResourceManager::~ResourceManager()

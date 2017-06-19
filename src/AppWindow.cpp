@@ -1,9 +1,10 @@
 #include "AppWindow.h"
 #include <stdio.h>
+#include "Logs.h"
 AppWindow::AppWindow(int w, int h) /* to nie powinno byc tak - raczej po prostu przekazac gotowe window i renderer */
 {
-    printf("new AppWindow\n");
-    _window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_SHOWN );
+    logs::log("new AppWindow\n");
+    _window = SDL_CreateWindow("Engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_SHOWN);
     _renderer = nullptr;
     if(_window)
     {
@@ -14,13 +15,13 @@ AppWindow::AppWindow(int w, int h) /* to nie powinno byc tak - raczej po prostu 
 
 AppWindow::~AppWindow()
 {
-    printf("delete AppWindow\n");
-    printf("SDL_DestroyRenderer\n");
+    logs::open("delete AppWindow\n");
+    logs::log("SDL_DestroyRenderer\n");
     SDL_DestroyRenderer(_renderer);
-    printf("destroyed\n");
-    printf("SDL_DestroyWindow\n");
+    logs::log("destroyed\n");
+    logs::log("SDL_DestroyWindow\n");
     SDL_DestroyWindow(_window);
-    printf("destroyed\n");
+    logs::close("destroyed\n");
 }
 
 bool AppWindow::isReady()

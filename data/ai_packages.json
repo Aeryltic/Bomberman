@@ -11,12 +11,21 @@
 		]
 	},
 	{
-		"name": "standard_work",
+		"name": "food_picking",
 		"goals": [
 			["grain_delivered", true, 10]
 		],
 		"actions": [
 			"pick_up_grain", "deliver_grain"
+		]
+	},
+	{
+		"name": "wood_picking",
+		"goals": [
+			["wood_delivered", true, 10]
+		],
+		"actions": [
+			"chop_wood", "deliver_wood"
 		]
 	},
 		{

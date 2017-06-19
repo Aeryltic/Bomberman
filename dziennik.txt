@@ -145,3 +145,9 @@
 	wszystko jest niewidzialne
 	okej, praktycznie wszystko kontekstowe przeniesione do skryptów
 	monsterowi siê nie chce chodziæ
+	chyba pope³niam b³¹d wyrzucaj¹c to wszystko poza g³ówny kod ju¿ teraz...
+	NIEBEZPOŒREDNI DOSTÊP DO SKRYPTÓW - w ScriptSystem mapa <string, LuaRef> przez ni¹ odwo³ania... tylko czy to nie spowolni a¿ za bardzo?
+19.06.2017
+	skrypty akcji musz¹ przyjmowaæ deltê czasu
+	jak ustawiæ niestandardowe parametry?
+	do definicji dodaæ coœ w stylu "base" który przechowywa³by nazwê typu(typów) który ten dany rozszerza... tylko ¿e to nie jest takie ³atwe (to potem)

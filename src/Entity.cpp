@@ -38,7 +38,7 @@ bool Entity::add(shared_ptr<Component> component) {
         components.insert(make_pair(key, component));
         return true;
     }
-    printf("can't add component (already exists)\n"); /// lepsza ta wiadomosc mogla byc
+    logs::log("can't add component (already exists)\n"); /// lepsza ta wiadomosc mogla byc
     return false;
 }
 /*

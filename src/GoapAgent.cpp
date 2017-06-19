@@ -13,7 +13,7 @@ void GoapAgent::remove_action(std::string name) {
     available_actions.erase(name);
 }
 
-void GoapAgent::set_state(string name, bool value) {
+void GoapAgent::set_state(std::string name, bool value) {
     ws[name] = value;
 }
 

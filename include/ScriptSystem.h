@@ -1,6 +1,8 @@
 #ifndef SCRIPTSYSTEM_H
 #define SCRIPTSYSTEM_H
 
+#include <unordered_map>
+
 #include <LuaBridge.h>
 extern "C" {
 # include "lua.h"
@@ -9,7 +11,6 @@ extern "C" {
 }
 
 using namespace luabridge;
-using namespace std;
 
 class ScriptSystem
 {
@@ -30,7 +31,9 @@ public:
     {
         return _instance.L;
     }
-    string execute(const string &command);
+    std::string execute(const std::string &command);
+
+    LuaRef& get_ref(std::string rname);
 protected:
 
 private:
@@ -41,6 +44,8 @@ private:
     void initialize();
 
     static ScriptSystem _instance;
+
+    std::unordered_map<std::string, LuaRef> references;
 };
 
 #endif // SCRIPTSYSTEM_H

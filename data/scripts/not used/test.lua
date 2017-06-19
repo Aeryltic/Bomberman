@@ -2,7 +2,7 @@ local socket = require'socket'
 
 get_time = socket.gettime
 
-function prepare_action() -- tego typu funkcje bedą wywoływane przy rozpoczynaniu akcji
+function prepare_action() -- tego typu funkcje bedą wywoływane przy rozpoczynaniu akcji (edit. nie, nie będą)
   start = get_time()
   duration = .500
   function action()

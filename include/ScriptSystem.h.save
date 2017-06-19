@@ -9,7 +9,6 @@ extern "C" {
 }
 
 using namespace luabridge;
-using namespace std;
 
 class ScriptSystem
 {
@@ -26,9 +25,9 @@ public:
         return active;
     }
     //void registerEverything();
-    lua_State* getLuaState()
+    static lua_State* state()
     {
-        return L;
+        return _instance.L;
     }
     string execute(const string &command);
 protected:
@@ -41,6 +40,8 @@ private:
     void initialize();
 
     static ScriptSystem _instance;
+
+    std::unordered_map<std::string, LuaR
 };
 
 #endif // SCRIPTSYSTEM_H

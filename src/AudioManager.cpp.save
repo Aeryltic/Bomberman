@@ -1,0 +1,13 @@
+#include "AudioManager.h"
+
+#include <cstdio>
+
+AudioManager::AudioManager()
+{
+    logs::log("new AudioManager\n");
+}
+
+AudioManager::~AudioManager()
+{
+    //dtor
+}

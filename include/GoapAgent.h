@@ -20,7 +20,7 @@ public:
     void add_action(Action a);
     void remove_action(std::string name);
 
-    void set_state(string name, bool value);
+    void set_state(std::string name, bool value);
     WorldState& get_world_state();
 
     std::unordered_map<std::string, Action>& get_actions();

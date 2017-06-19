@@ -12,7 +12,7 @@ FSM::~FSM() {
 
 void FSM::update(int ms) {
     if(states.empty())
-        push_state(make_unique<IdleState>(this));
+        push_state(std::make_unique<IdleState>(this));
     states.top()->update(ms);
 }
 
