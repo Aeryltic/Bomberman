@@ -2,12 +2,10 @@
 
 #include <cstdio>
 #include "Logs.h"
-AudioManager::AudioManager()
-{
+AudioManager::AudioManager() {
     logs::log("new AudioManager\n");
 }
 
-AudioManager::~AudioManager()
-{
+AudioManager::~AudioManager() {
     //dtor
 }

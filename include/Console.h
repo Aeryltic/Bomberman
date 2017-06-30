@@ -3,16 +3,15 @@
 
 #include <deque>
 #include <string>
-class GameInstance;
+class Engine;
 class DisplayManager;
 class ScriptSystem;
 
 using namespace std;
 
-class Console
-{
+class Console {
 public:
-    Console(GameInstance *gameInstance);
+    Console();
     virtual ~Console();
     void execute(const string &command);
     void run();

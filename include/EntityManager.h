@@ -4,8 +4,6 @@
 #include <vector>
 
 #include "Constants.h"
-//#include "Typedefs.h"
-
 
 #include "ObjectFactory.h"
 #include "ResourceManager.h"
@@ -24,20 +22,22 @@ public:
     EntityManager(/*GameInstance *gameInstance*/);
     virtual ~EntityManager();
 
+    void init();
+
     void update();
 
     void request_entity_removal(int id);
-    void request_component_removal(type_index t_index, int id);
+    void request_component_removal(const type_index& t_index, int id);
 
-    unordered_map<int,entity_ptr> &get_entities(){ return entities; }
+    unordered_map<int,entity_ptr> &get_entities() { return entities; }
 
     bool exists(int id);
 
-    bool isActive(){ if(!active)logs::log("EntityManager is not active\n"); return active;}
+    bool isActive() { if(!active)logs::log("EntityManager is not active\n"); return active;}
 
     //ObjectFactory *getFactory(){return &objectFactory;}
 
-   // void loadEntitiesFromFile(string filepath);
+    // void loadEntitiesFromFile(string filepath);
 
     template<class C, class ... Args>
     shared_ptr<C> make_component(Args && ... args);

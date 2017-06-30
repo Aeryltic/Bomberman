@@ -1,0 +1,21 @@
+#include <exception>
+
+#include "Logs.h"
+#include "Engine.h"
+
+int main( int argc, char* args[] ) {
+    try {
+        //Engine::run();
+        char *c = 
+        logs::log("SHUTTING DOWN...\n");
+        return 0;
+    }
+    catch(std::exception& e){
+        logs::log("exception: %s", e.what());
+        return -1;
+    }
+    catch(...){
+        logs::log("some other exception...\n");
+        return -1;
+    }
+}

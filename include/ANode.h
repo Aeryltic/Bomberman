@@ -3,20 +3,17 @@
 
 #include "WorldState.h"
 class Action;
-struct ANode
-{
+struct ANode {
     static int next_id;
 
     ANode(const WorldState& world_state, int g, int h, ANode *parent, Action *action);
     virtual ~ANode();
 
-    int f() const
-    {
+    int f() const {
         return g + h;
     }
 
-    bool operator<(const ANode& other)
-    {
+    bool operator<(const ANode& other) {
         return f() < other.f();
     }
 

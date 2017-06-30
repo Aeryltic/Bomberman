@@ -1,10 +1,2 @@
 # Bomberman
-Version 0.0.0.0.0.0.0.1: it doesn't compile, it doesn't work, it's nothing
-
-Version 0.0.0.0.0.0.0.2: it compiles, it "works", it's still nothing 
-
-Version 0.0.0.0.0.0.0.3: tons of code that do nothing
-
-Version 0.0.0.0.0.0.0.4: it looks like a game (but ofc it's still nothing)
-
-Version 0.0.0.0.0.0.0.5: it moves, you can even "play" it
+It's not really a Bomberman but an Entity-Component-System Engine with Goal-Oriented AI done through Lua scripts. My goal is to create modular and dynamic engine that does not need to be modified on C++ lvl - just configured and all object definitions packed as pure data (if anything I just said makes any sense) using tools i'll create. I guess it will be slow, but I want to achieve those goals anyway.

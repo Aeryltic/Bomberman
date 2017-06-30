@@ -1,10 +1,11 @@
 #include "GameInitializer.h"
 
+#include "Engine.h"
+
 #include "EntityManager.h"
+#include "ScriptSystem.h"
 
 #include "StringIndexer.h"
-
-#include "ScriptSystem.h"
 
 GameInitializer::GameInitializer() {
 
@@ -16,6 +17,6 @@ GameInitializer::~GameInitializer() {
 
 void GameInitializer::init_entities(EntityManager *entityManager) {
     logs::log("initializing game...\n");
-    getGlobal(ScriptSystem::state(), "init_game")(entityManager);
+    getGlobal(Engine::lua()->state(), "init_game")(entityManager);
     logs::log(" done!\n");
 }

@@ -3,8 +3,7 @@
 
 #include "GameState.h"
 
-class MainMenuGS : public GameState
-{
+class MainMenuGS : public GameState {
 public:
     MainMenuGS();
     virtual ~MainMenuGS();

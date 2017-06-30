@@ -2,10 +2,10 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="Bomberman" />
+		<Option title="Engine" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="GraphicsModule\;GraphicsModule\include\;GraphicsModule\src\;Others\;GameObjects\;LogicModule\;LogicModule\src\;LogicModule\include\;Other\;Other\src\;Other\include\;EventModule\;MainModule\;MainModule\src\;MainModule\include\;EventModule\include\;EventModule\src\;AudioModule\;AudioModule\include\;AudioModule\src\;GameObjects\src\;GameObjects\include\;ScriptModule\;ScriptModule\src\;ScriptModule\include\;AI\;AI\src\;AI\include\;Components\;Components\src\;Components\include\;" />
+		<Option virtualFolders="GraphicsModule\;GraphicsModule\include\;GraphicsModule\src\;Others\;Objects\;LogicModule\;LogicModule\src\;LogicModule\include\;Other\;Other\src\;Other\include\;EventModule\;MainModule\;MainModule\src\;MainModule\include\;EventModule\include\;EventModule\src\;AudioModule\;AudioModule\include\;AudioModule\src\;GameObjects\src\;GameObjects\include\;ScriptModule\;ScriptModule\src\;ScriptModule\include\;AI\;AI\src\;AI\include\;Components\;Components\src\;Components\include\;Objects\src\;Objects\include\;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/Bomberman" prefix_auto="1" extension_auto="1" />
@@ -55,11 +55,16 @@
 			<Add library="C:/Dev_Libs/lua-5.3.3/liblua53.a" />
 			<Add directory="C:/Dev_Libs/x86_64-w64-mingw32/lib" />
 		</Linker>
-		<Unit filename="include/AIPackage.h" />
+		<Unit filename="include/AIPackage.h">
+			<Option virtualFolder="AI/include/" />
+		</Unit>
 		<Unit filename="include/ANode.h">
 			<Option virtualFolder="AI/include/" />
 		</Unit>
 		<Unit filename="include/Action.h">
+			<Option virtualFolder="AI/include/" />
+		</Unit>
+		<Unit filename="include/ActionExecutor.h">
 			<Option virtualFolder="AI/include/" />
 		</Unit>
 		<Unit filename="include/AppWindow.h">
@@ -86,11 +91,14 @@
 		<Unit filename="include/DisplayManager.h">
 			<Option virtualFolder="GraphicsModule/include/" />
 		</Unit>
+		<Unit filename="include/Engine.h">
+			<Option virtualFolder="MainModule/include/" />
+		</Unit>
 		<Unit filename="include/Entity.h">
-			<Option virtualFolder="GameObjects/include/" />
+			<Option virtualFolder="Objects/include/" />
 		</Unit>
 		<Unit filename="include/EntityManager.h">
-			<Option virtualFolder="GameObjects/include/" />
+			<Option virtualFolder="Objects/include/" />
 		</Unit>
 		<Unit filename="include/Enumerations.h">
 			<Option virtualFolder="Other/include/" />
@@ -105,10 +113,7 @@
 			<Option virtualFolder="AI/include/" />
 		</Unit>
 		<Unit filename="include/GameInitializer.h">
-			<Option virtualFolder="GameObjects/include/" />
-		</Unit>
-		<Unit filename="include/GameInstance.h">
-			<Option virtualFolder="MainModule/include/" />
+			<Option virtualFolder="Objects/include/" />
 		</Unit>
 		<Unit filename="include/GameState.h">
 			<Option virtualFolder="MainModule/include/" />
@@ -129,7 +134,7 @@
 			<Option virtualFolder="Other/include/" />
 		</Unit>
 		<Unit filename="include/ObjectFactory.h">
-			<Option virtualFolder="GameObjects/include/" />
+			<Option virtualFolder="Objects/include/" />
 		</Unit>
 		<Unit filename="include/ResourceManager.h" />
 		<Unit filename="include/ScriptSystem.h">
@@ -148,7 +153,7 @@
 			<Option virtualFolder="Other/include/" />
 		</Unit>
 		<Unit filename="include/Views.h">
-			<Option virtualFolder="GameObjects/include/" />
+			<Option virtualFolder="Objects/include/" />
 		</Unit>
 		<Unit filename="include/WorldState.h">
 			<Option virtualFolder="AI/include/" />
@@ -157,11 +162,16 @@
 			<Option virtualFolder="ScriptModule/include/" />
 		</Unit>
 		<Unit filename="main.cpp" />
-		<Unit filename="src/AIPackage.cpp" />
+		<Unit filename="src/AIPackage.cpp">
+			<Option virtualFolder="AI/src/" />
+		</Unit>
 		<Unit filename="src/ANode.cpp">
 			<Option virtualFolder="AI/src/" />
 		</Unit>
 		<Unit filename="src/Action.cpp">
+			<Option virtualFolder="AI/src/" />
+		</Unit>
+		<Unit filename="src/ActionExecutor.cpp">
 			<Option virtualFolder="AI/src/" />
 		</Unit>
 		<Unit filename="src/AppWindow.cpp">
@@ -185,11 +195,14 @@
 		<Unit filename="src/DisplayManager.cpp">
 			<Option virtualFolder="GraphicsModule/src/" />
 		</Unit>
+		<Unit filename="src/Engine.cpp">
+			<Option virtualFolder="MainModule/src/" />
+		</Unit>
 		<Unit filename="src/Entity.cpp">
-			<Option virtualFolder="GameObjects/src/" />
+			<Option virtualFolder="Objects/src/" />
 		</Unit>
 		<Unit filename="src/EntityManager.cpp">
-			<Option virtualFolder="GameObjects/src/" />
+			<Option virtualFolder="Objects/src/" />
 		</Unit>
 		<Unit filename="src/EventManager.cpp">
 			<Option virtualFolder="EventModule/src/" />
@@ -201,10 +214,7 @@
 			<Option virtualFolder="AI/src/" />
 		</Unit>
 		<Unit filename="src/GameInitializer.cpp">
-			<Option virtualFolder="GameObjects/src/" />
-		</Unit>
-		<Unit filename="src/GameInstance.cpp">
-			<Option virtualFolder="MainModule/src/" />
+			<Option virtualFolder="Objects/src/" />
 		</Unit>
 		<Unit filename="src/GoapAgent.cpp">
 			<Option virtualFolder="AI/src/" />
@@ -222,7 +232,7 @@
 			<Option virtualFolder="Other/src/" />
 		</Unit>
 		<Unit filename="src/ObjectFactory.cpp">
-			<Option virtualFolder="GameObjects/src/" />
+			<Option virtualFolder="Objects/src/" />
 		</Unit>
 		<Unit filename="src/ResourceManager.cpp" />
 		<Unit filename="src/ScriptSystem.cpp">

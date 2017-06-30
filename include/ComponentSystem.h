@@ -8,8 +8,7 @@ using namespace std;
 
 class EntityManager;
 
-class ComponentSystem
-{
+class ComponentSystem {
     using update_function = function<void(int, EntityManager*)>;
 public:
     ComponentSystem() {}

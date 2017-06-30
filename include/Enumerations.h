@@ -1,8 +1,7 @@
 #ifndef ENUMERATIONS_H_INCLUDED
 #define ENUMERATIONS_H_INCLUDED
 
-enum EventType
-{
+enum EventType {
     EVENT_LOST = 0,
     EVENT_WON,
     EVENT_REMOVE,
@@ -15,8 +14,7 @@ enum EventType
     NUMEVENTS   /// to ma tu być
 };
 
-enum BoxPosition
-{
+enum BoxPosition {
     POS_CENTER,
     POS_LEFT,
     POS_RIGHT,
@@ -28,21 +26,18 @@ enum BoxPosition
     POS_RIGHT_BOTTOM
 };
 
-enum ConsumableType
-{
+enum ConsumableType {
     CONSUMABLE_FOOD,
     CONSUMABLE_WATER
 };
 
-enum ScentType
-{
+enum ScentType {
     SCENT_FOOD,
     SCENT_NEST,
     SCENT_DANGER
 };
 
-enum MessageType
-{
+enum MessageType {
     MSG_COLLISION,
     MSG_ACTIVATION,
 

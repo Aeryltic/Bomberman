@@ -12,38 +12,30 @@ extern "C" {
 
 using namespace luabridge;
 
-class ScriptSystem
-{
+class ScriptSystem {
 public:
-    static ScriptSystem *instance()
-    {
-        return &_instance;
-    }
+    ScriptSystem();
     virtual ~ScriptSystem();
 
     void update(int ms);
-    bool isActive()
-    {
+    bool isActive() {
         return active;
     }
-    //void registerEverything();
-    static lua_State* state()
-    {
-        return _instance.L;
+
+    lua_State* state() {
+        return L;
     }
     std::string execute(const std::string &command);
 
-    LuaRef& get_ref(std::string rname);
+    LuaRef get(std::string rname);
+
+    bool do_file(const std::string& filename);
 protected:
 
 private:
-    ScriptSystem();
-
     bool active;
     lua_State* L;
     void initialize();
-
-    static ScriptSystem _instance;
 
     std::unordered_map<std::string, LuaRef> references;
 };

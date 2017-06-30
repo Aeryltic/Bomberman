@@ -3,7 +3,7 @@
 #include <SDL_image.h>
 
 #include <queue>
-#include "GameInstance.h"
+#include "Engine.h"
 #include "EntityManager.h"
 
 #include "ScriptSystem.h"
@@ -11,49 +11,24 @@
 
 #include "SDL2_gfxPrimitives.h"
 
-DisplayManager::DisplayManager(GameInstance *gameInstance) : _window(WINDOW_WIDTH, WINDOW_HEIGHT) {
+DisplayManager::DisplayManager() {
     logs::open("creating DisplayManager...\n");
 
-    if(IMG_Init(IMG_INIT_PNG) == -1) {
-        logs::log("IMG_Init: %s ", IMG_GetError());
-        exit(-1);
-    }
-    if(TTF_Init() == -1) {
-        logs::log("TTF_Init: %s ", TTF_GetError());
-        exit(-1);
-    }
-
-    if(_window.isReady()) {
-        _windowRect.x = 0;
-        _windowRect.y = 0;
-        SDL_GetWindowSize(_window.getWindow(), &_windowRect.w, &_windowRect.h);
-        logs::log("_windowRect: %d %d %d %d ",_windowRect.x,_windowRect.y,_windowRect.w,_windowRect.h);
-        _active = true;
-    } else _active = false;
-
-    consoleFontSize = 20;
-    if((consoleFont = TTF_OpenFont("fonts/FORCED_SQUARE.ttf ", consoleFontSize)) == NULL) {
-        logs::log("FONT ERROR ");
-    }
-    consoleFontColor = {.r=0, .g=155, .b=0, .a=255};
-
-    clearColor = {.r=0, .g=0, .b=0, .a=255};
-    SDL_SetRenderDrawColor(_window.getRenderer(), clearColor.r, clearColor.g, clearColor.b, clearColor.a);
-
-    _gameWorldView = SDL_CreateTexture(_window.getRenderer(), SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, _windowRect.w, _windowRect.h);
     logs::close("done.\n");
 }
 
 DisplayManager::~DisplayManager() {
-    logs::log("delete DisplayManager\n");
+    logs::log("deleting DisplayManager...");
 
     SDL_DestroyTexture(_gameWorldView);
+    delete _window;
 
     IMG_Quit();
 
     TTF_CloseFont(consoleFont);
     consoleFont=NULL;
     TTF_Quit();
+    logs::log(" done.\n");
 }
 
 /*  render(...):
@@ -70,17 +45,17 @@ DisplayManager::~DisplayManager() {
 //void DisplayManager::render(EntityManager *entityManager, int ms) {
 void DisplayManager::render(EntityManager *entityManager, double interpolation) {
     //printf("rendering...");
-    if(!GameInstance::isPaused()) {
-            //printf(" ok.");
+    if(!Engine::isPaused()) {
+        //printf(" ok.");
         // renderowanie
-        SDL_SetRenderTarget(_window.getRenderer(), _gameWorldView);
-        SDL_RenderClear(_window.getRenderer());
+        SDL_SetRenderTarget(_window->getRenderer(), _gameWorldView);
+        SDL_RenderClear(_window->getRenderer());
 
         //priority_queue<ToRender> trt;
         for(auto &p : entityManager->get_components()[tindex(CAspect)]) {
             auto component = p.second;
-            if(component.expired()){
-                    //printf("component expired!\n");
+            if(component.expired()) {
+                //printf("component expired!\n");
                 continue;
             }
 
@@ -98,14 +73,14 @@ void DisplayManager::render(EntityManager *entityManager, double interpolation) 
                 pos.y += m->speed.y * interpolation;
             }
             //drawRectangle(rect, SDL_Color{.r=255,.g=0,.b=0,.a=255});
-            filledCircleRGBA (_window.getRenderer(), pos.x, pos.y, r, asp->color.r, asp->color.g, asp->color.b, asp->color.a);
+            filledCircleRGBA (_window->getRenderer(), pos.x, pos.y, r, asp->color.r, asp->color.g, asp->color.b, asp->color.a);
         }
         /// to potem
         /*
                 while(!trt.empty())
                 {
                     auto &sth = trt.top();
-                    if(SDL_RenderCopyEx(_window.getRenderer(), sth.texture, NULL, &sth.rect, degrees(sth.angle), NULL, SDL_FLIP_NONE) < 0)
+                    if(SDL_RenderCopyEx(_window->getRenderer(), sth.texture, NULL, &sth.rect, degrees(sth.angle), NULL, SDL_FLIP_NONE) < 0)
                     {
                         printf("SDL_RenderCopy - Error\n");
                     }
@@ -114,19 +89,19 @@ void DisplayManager::render(EntityManager *entityManager, double interpolation) 
         */
         showDialog(text, POS_RIGHT_TOP); // TEST
 
-        SDL_SetRenderTarget(_window.getRenderer(), nullptr); // przywracam właściwy renderer
+        SDL_SetRenderTarget(_window->getRenderer(), nullptr); // przywracam właściwy renderer
 
-        SDL_RenderClear(_window.getRenderer());
-        SDL_RenderCopy(_window.getRenderer(), _gameWorldView, nullptr, nullptr);
-        SDL_RenderPresent(_window.getRenderer());
+        SDL_RenderClear(_window->getRenderer());
+        SDL_RenderCopy(_window->getRenderer(), _gameWorldView, nullptr, nullptr);
+        SDL_RenderPresent(_window->getRenderer());
     }
     //printf("\n");
 }
 
 void DisplayManager::drawConsole(const string &buffer, const deque<string> &commandHistory) { /// to jest słabe
-    SDL_RenderClear(_window.getRenderer());
+    SDL_RenderClear(_window->getRenderer());
 
-    SDL_RenderCopy(_window.getRenderer(), _gameWorldView, nullptr, nullptr);
+    SDL_RenderCopy(_window->getRenderer(), _gameWorldView, nullptr, nullptr);
 
     SDL_Color consoleColor = {.r=50, .g=50, .b=50, .a=255};
     SDL_Rect consoleRect = {.x=0, .y=_windowRect.h - 7*(consoleFontSize+2), .w=_windowRect.w, .h=7*(consoleFontSize+2)};
@@ -140,7 +115,7 @@ void DisplayManager::drawConsole(const string &buffer, const deque<string> &comm
         drawText(commandHistory[i], x0, y0 - (i+1)*consoleFontSize, consoleFontColor);
     }
 
-    SDL_RenderPresent(_window.getRenderer());
+    SDL_RenderPresent(_window->getRenderer());
 }
 
 bool DisplayManager::isVisible(const SDL_Rect &rect) { /// ta funkcja powinna uwzgledniać obrot, bo tak obiekty na skraju moga sie nie pojawic mimo ze powinny
@@ -218,16 +193,16 @@ void DisplayManager::showDialog(const string &text, BoxPosition position) {
 }
 
 void DisplayManager::drawRectangle(const SDL_Rect &rect, const SDL_Color &color) {
-    SDL_SetRenderDrawColor(_window.getRenderer(), color.r, color.g, color.b, color.a);
-    SDL_RenderFillRect(_window.getRenderer(), &rect);
-    SDL_SetRenderDrawColor(_window.getRenderer(), clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+    SDL_SetRenderDrawColor(_window->getRenderer(), color.r, color.g, color.b, color.a);
+    SDL_RenderFillRect(_window->getRenderer(), &rect);
+    SDL_SetRenderDrawColor(_window->getRenderer(), clearColor.r, clearColor.g, clearColor.b, clearColor.a);
 }
 
 void DisplayManager::drawText(const string &text, int x, int y, const SDL_Color &color) {
-    SDL_SetRenderDrawColor(_window.getRenderer(), color.r, color.g, color.b, color.a);
+    SDL_SetRenderDrawColor(_window->getRenderer(), color.r, color.g, color.b, color.a);
 
     SDL_Surface* messageSurface = TTF_RenderText_Solid(consoleFont, text.c_str(), consoleFontColor);
-    SDL_Texture* message = SDL_CreateTextureFromSurface(_window.getRenderer(), messageSurface);
+    SDL_Texture* message = SDL_CreateTextureFromSurface(_window->getRenderer(), messageSurface);
     SDL_FreeSurface(messageSurface);
 
     SDL_Rect textRect;
@@ -235,21 +210,56 @@ void DisplayManager::drawText(const string &text, int x, int y, const SDL_Color 
     textRect.x = x;
     textRect.y = y;
 
-    SDL_RenderCopy(_window.getRenderer(), message, NULL, &textRect);
+    SDL_RenderCopy(_window->getRenderer(), message, NULL, &textRect);
     SDL_DestroyTexture(message);
 
-    SDL_SetRenderDrawColor(_window.getRenderer(), clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+    SDL_SetRenderDrawColor(_window->getRenderer(), clearColor.r, clearColor.g, clearColor.b, clearColor.a);
 }
 
 void DisplayManager::init() {
-    lua_State *L = ScriptSystem::instance()->state();
+    logs::open("initializing display...\n");
 
-    getGlobalNamespace (L)
-    .beginClass <DisplayManager> ("DisplayManager")
-    .addProperty ("text", &DisplayManager::getText, &DisplayManager::setText)
-    .endClass();
+    if(IMG_Init(IMG_INIT_PNG) == -1) {
+        logs::log("IMG_Init: %s ", IMG_GetError());
+        exit(-1);
+    }
+    if(TTF_Init() == -1) {
+        logs::log("TTF_Init: %s ", TTF_GetError());
+        exit(-1);
+    }
 
-    push (L, this);
-    lua_setglobal (L, "display");
+    _window = new AppWindow(WINDOW_WIDTH, WINDOW_HEIGHT);
+    if(_window->isReady()) {
+        _windowRect.x = 0;
+        _windowRect.y = 0;
+        SDL_GetWindowSize(_window->getWindow(), &_windowRect.w, &_windowRect.h);
+        logs::log("_windowRect: %d %d %d %d ", _windowRect.x, _windowRect.y, _windowRect.w, _windowRect.h);
+        _active = true;
+    } else _active = false;
+
+    consoleFontSize = 20;
+    if((consoleFont = TTF_OpenFont("fonts/FORCED_SQUARE.ttf ", consoleFontSize)) == NULL) {
+        logs::log("FONT ERROR ");
+    }
+    consoleFontColor = {.r=0, .g=155, .b=0, .a=255};
+
+    clearColor = {.r=0, .g=0, .b=0, .a=255};
+    SDL_SetRenderDrawColor(_window->getRenderer(), clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+
+    _gameWorldView = SDL_CreateTexture(_window->getRenderer(), SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, _windowRect.w, _windowRect.h);
+
+//-----------------------------------------------------
+
+    lua_State *L = Engine::lua()->state();
+
+    getGlobalNamespace(L)
+        .beginClass<DisplayManager>("DisplayManager")
+            .addProperty("text", &DisplayManager::getText, &DisplayManager::setText)
+        .endClass();
+
+    push(L, this);
+    lua_setglobal(L, "display");
+
+    logs::close("display initialized.\n");
 }
 

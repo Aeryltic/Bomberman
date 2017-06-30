@@ -8,7 +8,7 @@
 //#include "Components.h"
 
 EntityManager* Entity::entityManager = nullptr;
-int Entity::nextID = 0;
+int Entity::nextID = 1;
 
 Entity::Entity() {
     active = true; // na pewno?
@@ -38,7 +38,7 @@ bool Entity::add(shared_ptr<Component> component) {
         components.insert(make_pair(key, component));
         return true;
     }
-    logs::log("can't add component (already exists)\n"); /// lepsza ta wiadomosc mogla byc
+    logs::log("can't add component (already exists)\n");
     return false;
 }
 /*

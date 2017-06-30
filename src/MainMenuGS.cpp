@@ -1,21 +1,17 @@
 #include "MainMenuGS.h"
 
-MainMenuGS::MainMenuGS()
-{
+MainMenuGS::MainMenuGS() {
     //ctor
 }
 
-MainMenuGS::~MainMenuGS()
-{
+MainMenuGS::~MainMenuGS() {
     //dtor
 }
 
-void MainMenuGS::init()
-{
+void MainMenuGS::init() {
 
 }
-void MainMenuGS::cleanup()
-{
+void MainMenuGS::cleanup() {
 
 }
 /*

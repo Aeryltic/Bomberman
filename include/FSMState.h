@@ -2,58 +2,75 @@
 #define FSMSTATE_H
 
 #include <memory>
+#include <list>
+#include <unordered_map>
+#include <vector>
 
 #include "Structures.h"
 
-class Entity;
-class FSM;
+#include "GoapPlanner.h"
 
-class FSMState
-{
+class Entity;
+class GoapAgent;
+class Action;
+
+class FSMState {
 public:
-    FSMState(FSM *fsm);
+    FSMState(GoapAgent* agent, FSMState* parent);
     virtual ~FSMState();
 
     virtual void update(int ms) = 0;
     Entity* get_owner();
 
 protected:
-    FSM *fsm;
+    GoapAgent* agent;
+    FSMState* parent;
 };
 
-class IdleState : public FSMState /// szukanie planu lub czekanie
-{
+class IdleState : public FSMState { /// szukanie planu lub czekanie
 public:
-    IdleState(FSM *fsm);
+    IdleState(GoapAgent* agent, FSMState* parent);
     virtual ~IdleState();
 
     void update(int ms);
+
+private:
     unsigned wait_end;
+    GoapPlanner planner;
 };
 
-class GotoState : public FSMState
-{
+class PlanExecutionState : public FSMState {
 public:
-    GotoState(FSM *fsm, std::weak_ptr<Entity> dest, float min_range);
-    virtual ~GotoState();
+    using ActionPlan = std::list<Action*>;
+
+    PlanExecutionState(GoapAgent* agent, FSMState* parent, ActionPlan plan);
+    virtual ~PlanExecutionState();
 
     void update(int ms);
 
-    std::weak_ptr<Entity> dest;
-    float min_range;
+    std::weak_ptr<Entity> find_target(std::string target_name, std::unordered_map<std::string, std::vector<std::weak_ptr<Entity>>>& targets); /// ta funkcja tutaj jakoś mi nie pasuje
 
-    bool is_in_range();
+    Action* action() {return plan.front();}
+    void next_action() {plan.pop_front();}
+private:
+    ActionPlan plan;
 };
 
-class PerformActionState : public FSMState
-{
-    unsigned target_counter;
+class PerformActionState : public FSMState {
 public:
-    PerformActionState(FSM *fsm);
+    PerformActionState(GoapAgent* agent, FSMState* parent, Action* action, std::weak_ptr<Entity> target);
     virtual ~PerformActionState();
 
     void update(int ms);
     void set_target(std::weak_ptr<Entity> target);
+
+    unsigned get_time() {return action_perform_time;}
+
+private:
+    Action* action;
+    std::weak_ptr<Entity> target;
+    unsigned target_counter;
+    unsigned action_perform_time;
 };
 
 #endif // FSMSTATE_H

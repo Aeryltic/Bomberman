@@ -24,7 +24,7 @@ void ComponentSystem::addUpdateFunction(int priority, update_function ufunction)
 }
 
 bool ComponentSystem::init() {
-    logs::open("initializing component systems...");
+    logs::open("initializing component systems...\n");
 
     /// jakiś tam ruch
     addUpdateFunction(1, [](int ms, EntityManager* entityManager) {
@@ -110,6 +110,6 @@ bool ComponentSystem::init() {
         }
     });
 
-    logs::close(" done.\n");
+    logs::close("done.\n");
     return 0;
 }

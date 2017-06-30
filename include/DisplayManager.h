@@ -22,13 +22,11 @@ class EntityManager;
 
 using namespace std;
 
-class GameInstance;
+class Engine;
 
-class DisplayManager
-{
+class DisplayManager {
     /// -----------------------------------
-    struct ToRender
-    {
+    struct ToRender {
         ToRender(SDL_Texture *texture, const SDL_Rect &rect, int z, double angle = 0) : texture(texture), rect(rect), z(z), angle(angle) {}
 
         SDL_Texture *texture;
@@ -36,14 +34,13 @@ class DisplayManager
         int z;
         double angle;
 
-        friend bool operator<(const ToRender &a, const ToRender &b)
-        {
+        friend bool operator<(const ToRender &a, const ToRender &b) {
             return a.z > b.z;
         }
     };
     /// -----------------------------------
 public:
-    DisplayManager(GameInstance *gameInstance); /// pic na wodę, fotomontaż
+    DisplayManager(/*Engine *gameInstance*/);
     virtual ~DisplayManager();
 
     void drawConsole(const string &buffer, const deque<string> &commandHistory);
@@ -53,8 +50,7 @@ public:
     bool isVisible(const SDL_Rect &rect);
 
 //        GraphicsManager *getGraphicsManager(){return &_graphicsManager;}
-    bool isActive()
-    {
+    bool isActive() {
         if(!_active)logs::log("DisplayManager is not active\n");
         return _active;
     }
@@ -65,12 +61,10 @@ public:
 
     /// TESTY
     string text;
-    void setText(const std::string& test)
-    {
+    void setText(const std::string& test) {
         text = test;
     }
-    string getText() const
-    {
+    string getText() const {
         return text;
     }
 
@@ -80,7 +74,7 @@ protected:
 
 private:
     bool _active;
-    AppWindow _window;
+    AppWindow *_window;
 //        GraphicsManager _graphicsManager;
     SDL_Rect _windowRect;
 

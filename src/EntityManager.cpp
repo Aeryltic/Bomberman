@@ -2,6 +2,7 @@
 
 #include "Entity.h"
 #include "Component.h"
+#include "Action.h"
 
 EntityManager::EntityManager() : factory(this) {
     logs::log("new EntityManager\n");
@@ -14,6 +15,17 @@ EntityManager::EntityManager() : factory(this) {
 
 EntityManager::~EntityManager() {
     logs::log("delete EntityManager\n");
+    logs::open("removing entities\n");
+    entities.clear();
+    logs::close("entities removed\n");
+    logs::open("removing components\n");
+    components.clear();
+    Action::clear();
+    logs::close("components removed\n");
+}
+
+void EntityManager::init() {
+    factory.init();
 }
 
 void EntityManager::update() {
@@ -38,7 +50,7 @@ void EntityManager::request_entity_removal(int id) {
     entities_to_remove.push(id);
 }
 
-void EntityManager::request_component_removal(type_index t_index, int id) { /// ta funkcja nie działa wywoływana ze środka ~Component destruktora
+void EntityManager::request_component_removal(const type_index& t_index, int id) { /// ta funkcja nie działa wywoływana ze środka ~Component destruktora
     components_to_remove.push(make_pair(t_index, id));
 }
 
@@ -52,8 +64,7 @@ shared_ptr<Entity> EntityManager::new_object(std::string type, double x, double 
     return factory.make_object(type, x, y);
 }
 
-void EntityManager::make_object(std::string type, double x, double y)
-{
+void EntityManager::make_object(std::string type, double x, double y) {
     new_object(type, x, y);
 }
 
@@ -66,5 +77,3 @@ void EntityManager::delete_component(type_index t_index, int id) {
     if(it != components[t_index].end())
         components[t_index].erase(id);
 }
-
-

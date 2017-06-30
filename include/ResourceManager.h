@@ -4,8 +4,7 @@
 #include <GraphicsManager.h>
 #include <AudioManager.h>
 
-class ResourceManager
-{
+class ResourceManager {
 public:
     ResourceManager();
     virtual ~ResourceManager();

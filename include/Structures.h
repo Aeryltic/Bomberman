@@ -92,8 +92,7 @@ struct vec3d {
         return fmt.str();
     }
 
-    vec3d random_in_range(double r_min, double r_max)
-    {
+    vec3d random_in_range(double r_min, double r_max) {
         double angle = (rand()%360) * M_PI / 180.0;
         double dist = rand()%int(r_max - r_min) + r_min;
         double px = dist * cos(angle) + x,

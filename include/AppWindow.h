@@ -5,18 +5,15 @@
 
 using namespace std;
 
-class AppWindow
-{
+class AppWindow {
 public:
     AppWindow(int w, int h);
     virtual ~AppWindow();
     bool isReady();
-    SDL_Renderer* getRenderer()
-    {
+    SDL_Renderer* getRenderer() {
         return _renderer;
     }
-    SDL_Window* getWindow()
-    {
+    SDL_Window* getWindow() {
         return _window;
     }
 protected:

@@ -1,0 +1,1183 @@
+# depslib dependency file v1.0
+1498081606 source:c:\users\user\desktop\bomberman\main.cpp
+	"GameInstance.h"
+
+1498081606 c:\users\user\desktop\bomberman\include\gameinstance.h
+	<stdio.h>
+	<GameState.h>
+	<vector>
+
+1498081606 c:\users\user\desktop\bomberman\include\gamestate.h
+
+1497904825 source:c:\users\user\desktop\bomberman\src\action.cpp
+	"Action.h"
+	"json.hpp"
+	"GoapAgent.h"
+	"Entity.h"
+	"Components.h"
+	"AIPackage.h"
+
+1498081637 c:\users\user\desktop\bomberman\include\action.h
+	<unordered_map>
+	<string>
+	<memory>
+	<vector>
+	"WorldState.h"
+	"ScriptSystem.h"
+	"Logs.h"
+
+1498081606 c:\users\user\desktop\bomberman\include\worldstate.h
+	<unordered_map>
+
+1498081606 c:\users\user\desktop\bomberman\include\scriptsystem.h
+	<unordered_map>
+	<LuaBridge.h>
+	"lua.h"
+	"lauxlib.h"
+	"lualib.h"
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\luabridge.h
+	<cassert>
+	<sstream>
+	<stdexcept>
+	<string>
+	<typeinfo>
+	"detail/LuaHelpers.h"
+	"detail/TypeTraits.h"
+	"detail/TypeList.h"
+	"detail/FuncTraits.h"
+	"detail/Constructor.h"
+	"detail/Stack.h"
+	"detail/ClassInfo.h"
+	"detail/LuaException.h"
+	"detail/LuaRef.h"
+	"detail/Iterator.h"
+	"detail/Userdata.h"
+	"detail/CFunctions.h"
+	"detail/Namespace.h"
+
+1493667372 c:\dev_libs\luabridge\source\luabridge\detail\luahelpers.h
+	"lua.h"
+	"lauxlib.h"
+	"lualib.h"
+
+1493666744 c:\dev_libs\lua-5.3.3\include\lua.h
+	<stdarg.h>
+	<stddef.h>
+	"luaconf.h"
+
+1493666744 c:\dev_libs\lua-5.3.3\include\luaconf.h
+	<limits.h>
+	<stddef.h>
+	<stdint.h>
+	<assert.h>
+
+1493666744 c:\dev_libs\lua-5.3.3\include\lauxlib.h
+	<stddef.h>
+	<stdio.h>
+	"lua.h"
+
+1493666744 c:\dev_libs\lua-5.3.3\include\lualib.h
+	"lua.h"
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\typetraits.h
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\typelist.h
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\functraits.h
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\constructor.h
+
+1493667438 c:\dev_libs\luabridge\source\luabridge\detail\stack.h
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\classinfo.h
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\luaexception.h
+
+1497306479 c:\dev_libs\luabridge\source\luabridge\detail\luaref.h
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\iterator.h
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\userdata.h
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\cfunctions.h
+
+1493666366 c:\dev_libs\luabridge\source\luabridge\detail\namespace.h
+
+1498081606 c:\users\user\desktop\bomberman\include\logs.h
+	<string>
+
+1496015718 c:\dev_libs\other\json.hpp
+	<algorithm>
+	<array>
+	<cassert>
+	<cctype>
+	<ciso646>
+	<cmath>
+	<cstddef>
+	<cstdint>
+	<cstdlib>
+	<cstring>
+	<forward_list>
+	<functional>
+	<initializer_list>
+	<iomanip>
+	<iostream>
+	<iterator>
+	<limits>
+	<locale>
+	<map>
+	<memory>
+	<numeric>
+	<sstream>
+	<stdexcept>
+	<string>
+	<type_traits>
+	<utility>
+	<vector>
+
+1497821351 c:\users\user\desktop\bomberman\include\goapagent.h
+	<unordered_map>
+	<memory>
+	<list>
+	"Component.h"
+	"FSM.h"
+	"WorldState.h"
+	"Action.h"
+
+1497102036 c:\users\user\desktop\bomberman\include\component.h
+	<memory>
+
+1496172866 c:\users\user\desktop\bomberman\include\fsm.h
+	<memory>
+	<stack>
+
+1497102036 c:\users\user\desktop\bomberman\include\entity.h
+	<unordered_map>
+	<vector>
+	<typeinfo>
+	<typeindex>
+	"MiscFunctions.h"
+
+1497895214 c:\users\user\desktop\bomberman\include\miscfunctions.h
+	<typeindex>
+	<typeinfo>
+	"json.hpp"
+
+1498081606 c:\users\user\desktop\bomberman\include\components.h
+	"Entity.h"
+	"Component.h"
+	"Structures.h"
+	"Enumerations.h"
+	<stack>
+	<deque>
+	<algorithm>
+	<SDL.h>
+
+1498081606 c:\users\user\desktop\bomberman\include\structures.h
+	<cmath>
+	<sstream>
+
+1498081606 c:\users\user\desktop\bomberman\include\enumerations.h
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl.h
+	"SDL_main.h"
+	"SDL_stdinc.h"
+	"SDL_assert.h"
+	"SDL_atomic.h"
+	"SDL_audio.h"
+	"SDL_clipboard.h"
+	"SDL_cpuinfo.h"
+	"SDL_endian.h"
+	"SDL_error.h"
+	"SDL_events.h"
+	"SDL_filesystem.h"
+	"SDL_joystick.h"
+	"SDL_gamecontroller.h"
+	"SDL_haptic.h"
+	"SDL_hints.h"
+	"SDL_loadso.h"
+	"SDL_log.h"
+	"SDL_messagebox.h"
+	"SDL_mutex.h"
+	"SDL_power.h"
+	"SDL_render.h"
+	"SDL_rwops.h"
+	"SDL_system.h"
+	"SDL_thread.h"
+	"SDL_timer.h"
+	"SDL_version.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_main.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_stdinc.h
+	"SDL_config.h"
+	<sys/types.h>
+	<stdio.h>
+	<stdlib.h>
+	<stddef.h>
+	<stdarg.h>
+	<stdlib.h>
+	<malloc.h>
+	<stddef.h>
+	<stdarg.h>
+	<memory.h>
+	<string.h>
+	<strings.h>
+	<inttypes.h>
+	<stdint.h>
+	<ctype.h>
+	<math.h>
+	<float.h>
+	<sal.h>
+	"begin_code.h"
+	<alloca.h>
+	<malloc.h>
+	<malloc.h>
+	<malloc.h>
+	<stdlib.h>
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_config.h
+	"SDL_platform.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_platform.h
+	"AvailabilityMacros.h"
+	"TargetConditionals.h"
+	<winapifamily.h>
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\begin_code.h
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\close_code.h
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_assert.h
+	"SDL_config.h"
+	"begin_code.h"
+	<signal.h>
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_atomic.h
+	"SDL_stdinc.h"
+	"SDL_platform.h"
+	"begin_code.h"
+	<mbarrier.h>
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_audio.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_endian.h"
+	"SDL_mutex.h"
+	"SDL_thread.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_error.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_endian.h
+	"SDL_stdinc.h"
+	<endian.h>
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_mutex.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_thread.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_atomic.h"
+	"SDL_mutex.h"
+	"begin_code.h"
+	<process.h>
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_rwops.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_clipboard.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_cpuinfo.h
+	"SDL_stdinc.h"
+	<intrin.h>
+	<intrin.h>
+	<altivec.h>
+	<mmintrin.h>
+	<mm3dnow.h>
+	<xmmintrin.h>
+	<emmintrin.h>
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_events.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"SDL_keyboard.h"
+	"SDL_mouse.h"
+	"SDL_joystick.h"
+	"SDL_gamecontroller.h"
+	"SDL_quit.h"
+	"SDL_gesture.h"
+	"SDL_touch.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_video.h
+	"SDL_stdinc.h"
+	"SDL_pixels.h"
+	"SDL_rect.h"
+	"SDL_surface.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_pixels.h
+	"SDL_stdinc.h"
+	"SDL_endian.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_rect.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_pixels.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_surface.h
+	"SDL_stdinc.h"
+	"SDL_pixels.h"
+	"SDL_rect.h"
+	"SDL_blendmode.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_blendmode.h
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_keyboard.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_keycode.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_keycode.h
+	"SDL_stdinc.h"
+	"SDL_scancode.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_scancode.h
+	"SDL_stdinc.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_mouse.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_joystick.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_gamecontroller.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_rwops.h"
+	"SDL_joystick.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_quit.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_gesture.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"SDL_touch.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_touch.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_filesystem.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_haptic.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_joystick.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_hints.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_loadso.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_log.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_messagebox.h
+	"SDL_stdinc.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_power.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_render.h
+	"SDL_stdinc.h"
+	"SDL_rect.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_system.h
+	"SDL_stdinc.h"
+	"SDL_keyboard.h"
+	"SDL_render.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_timer.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1476939575 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_version.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1498081606 c:\users\user\desktop\bomberman\include\aipackage.h
+	<vector>
+	<string>
+
+1497897173 source:c:\users\user\desktop\bomberman\src\aipackage.cpp
+	"AIPackage.h"
+	<algorithm>
+	"Logs.h"
+
+1498081606 source:c:\users\user\desktop\bomberman\src\anode.cpp
+	"ANode.h"
+
+1498081606 c:\users\user\desktop\bomberman\include\anode.h
+	"WorldState.h"
+
+1498081606 source:c:\users\user\desktop\bomberman\src\appwindow.cpp
+	"AppWindow.h"
+	<stdio.h>
+	"Logs.h"
+
+1498081606 c:\users\user\desktop\bomberman\include\appwindow.h
+	"SDL.h"
+
+1498081606 source:c:\users\user\desktop\bomberman\src\audiomanager.cpp
+	"AudioManager.h"
+	<cstdio>
+	"Logs.h"
+
+1498081606 c:\users\user\desktop\bomberman\include\audiomanager.h
+
+1496697869 source:c:\users\user\desktop\bomberman\src\component.cpp
+	"Component.h"
+	"EntityManager.h"
+
+1498081606 c:\users\user\desktop\bomberman\include\entitymanager.h
+	<vector>
+	"Constants.h"
+	"ObjectFactory.h"
+	"ResourceManager.h"
+	"Entity.h"
+	<queue>
+	"Logs.h"
+
+1497732750 c:\users\user\desktop\bomberman\include\constants.h
+
+1498081606 c:\users\user\desktop\bomberman\include\objectfactory.h
+	<memory>
+	<unordered_map>
+	"json.hpp"
+
+1498081606 c:\users\user\desktop\bomberman\include\resourcemanager.h
+	<GraphicsManager.h>
+	<AudioManager.h>
+
+1497730394 c:\users\user\desktop\bomberman\include\graphicsmanager.h
+	<unordered_map>
+	<memory>
+	<SDL.h>
+
+1497644039 source:c:\users\user\desktop\bomberman\src\components.cpp
+	"Components.h"
+
+1497897060 source:c:\users\user\desktop\bomberman\src\componentsystem.cpp
+	"ComponentSystem.h"
+	<iterator>
+	"EntityManager.h"
+	"Views.h"
+	"GoapAgent.h"
+	"GoapPlanner.h"
+	"StringIndexer.h"
+	<algorithm>
+
+1498081606 c:\users\user\desktop\bomberman\include\componentsystem.h
+	<functional>
+	<vector>
+	<stdio.h>
+
+1498081606 c:\users\user\desktop\bomberman\include\views.h
+	"Components.h"
+	"Entity.h"
+	"GoapAgent.h"
+
+1498081606 c:\users\user\desktop\bomberman\include\goapplanner.h
+	<deque>
+	<list>
+
+1496516718 c:\users\user\desktop\bomberman\include\stringindexer.h
+	<string>
+
+1498081606 source:c:\users\user\desktop\bomberman\src\console.cpp
+	"Console.h"
+	<SDL.h>
+	"GameInstance.h"
+	"DisplayManager.h"
+	"ScriptSystem.h"
+	"EventManager.h"
+	"Enumerations.h"
+
+1498081606 c:\users\user\desktop\bomberman\include\console.h
+	<deque>
+	<string>
+
+1498081606 c:\users\user\desktop\bomberman\include\displaymanager.h
+	"AppWindow.h"
+	<memory>
+	<SDL.h>
+	"SDL_ttf.h"
+	<deque>
+	"Enumerations.h"
+	"Logs.h"
+
+1454366547 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_ttf.h
+	"SDL.h"
+	"begin_code.h"
+	"close_code.h"
+
+1498081606 c:\users\user\desktop\bomberman\include\eventmanager.h
+	<unordered_map>
+	<vector>
+	<functional>
+	<memory>
+	<SDL.h>
+	"Logs.h"
+
+1498081606 source:c:\users\user\desktop\bomberman\src\displaymanager.cpp
+	"DisplayManager.h"
+	<SDL.h>
+	<SDL_image.h>
+	<queue>
+	"GameInstance.h"
+	"EntityManager.h"
+	"ScriptSystem.h"
+	"Components.h"
+	"SDL2_gfxPrimitives.h"
+
+1451803986 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl_image.h
+	"SDL.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
+
+1487657770 c:\dev_libs\x86_64-w64-mingw32\include\sdl2\sdl2_gfxprimitives.h
+	<math.h>
+	"SDL.h"
+
+1497897146 source:c:\users\user\desktop\bomberman\src\entity.cpp
+	"Entity.h"
+	"Component.h"
+	"EntityManager.h"
+	"ScriptSystem.h"
+
+1498081606 source:c:\users\user\desktop\bomberman\src\entitymanager.cpp
+	"EntityManager.h"
+	"Entity.h"
+	"Component.h"
+
+1498081606 source:c:\users\user\desktop\bomberman\src\eventmanager.cpp
+	"EventManager.h"
+	"GameInstance.h"
+	"Entity.h"
+	"Enumerations.h"
+
+1497895124 source:c:\users\user\desktop\bomberman\src\fsm.cpp
+	"FSM.h"
+	"FSMState.h"
+
+1498081606 c:\users\user\desktop\bomberman\include\fsmstate.h
+	<memory>
+	"Structures.h"
+
+1497899724 source:c:\users\user\desktop\bomberman\src\fsmstate.cpp
+	"FSMState.h"
+	<SDL.h>
+	"FSM.h"
+	"GoapPlanner.h"
+	"WorldState.h"
+	"GoapAgent.h"
+	"Components.h"
+
+1497897146 source:c:\users\user\desktop\bomberman\src\gameinitializer.cpp
+	"GameInitializer.h"
+	"EntityManager.h"
+	"StringIndexer.h"
+	"ScriptSystem.h"
+
+1497102036 c:\users\user\desktop\bomberman\include\gameinitializer.h
+	<memory>
+	<unordered_map>
+
+1497897404 source:c:\users\user\desktop\bomberman\src\gameinstance.cpp
+	"GameInstance.h"
+	<SDL.h>
+	<stdio.h>
+	"Structures.h"
+	<ctime>
+	<cstdlib>
+	"DisplayManager.h"
+	"EntityManager.h"
+	"EventManager.h"
+	"ScriptSystem.h"
+	"Console.h"
+	"ComponentSystem.h"
+	"GameInitializer.h"
+	"setups.h"
+
+1497397240 c:\users\user\desktop\bomberman\include\setups.h
+
+1497997662 source:c:\users\user\desktop\bomberman\src\goapagent.cpp
+	"GoapAgent.h"
+
+1498081606 source:c:\users\user\desktop\bomberman\src\goapplanner.cpp
+	"GoapPlanner.h"
+	<unordered_map>
+	<algorithm>
+	"ANode.h"
+	"Action.h"
+	"GoapAgent.h"
+	"WorldState.h"
+
+1498081606 source:c:\users\user\desktop\bomberman\src\graphicsmanager.cpp
+	"GraphicsManager.h"
+	<fstream>
+	<SDL_image.h>
+	"Logs.h"
+
+1497896932 source:c:\users\user\desktop\bomberman\src\logs.cpp
+	"Logs.h"
+	<cstdio>
+	<cstdarg>
+
+1498081606 source:c:\users\user\desktop\bomberman\src\mainmenugs.cpp
+	"MainMenuGS.h"
+
+1498081606 c:\users\user\desktop\bomberman\include\mainmenugs.h
+	"GameState.h"
+
+1498081606 source:c:\users\user\desktop\bomberman\src\message.cpp
+	"Message.h"
+
+1498081606 c:\users\user\desktop\bomberman\include\message.h
+	<memory>
+
+1498081606 source:c:\users\user\desktop\bomberman\src\miscfunctions.cpp
+	"MiscFunctions.h"
+	<fstream>
+	<Logs.h>
+
+1497992239 source:c:\users\user\desktop\bomberman\src\objectfactory.cpp
+	"ObjectFactory.h"
+	"Entity.h"
+	"EntityManager.h"
+	"Components.h"
+	"GoapAgent.h"
+	"StringIndexer.h"
+	"AIPackage.h"
+
+1498081606 source:c:\users\user\desktop\bomberman\src\resourcemanager.cpp
+	"ResourceManager.h"
+	"Logs.h"
+
+1498081606 source:c:\users\user\desktop\bomberman\src\scriptsystem.cpp
+	"ScriptSystem.h"
+	"GameInstance.h"
+	"DisplayManager.h"
+
+1498081606 source:c:\users\user\desktop\bomberman\src\setups.cpp
+	"setups.h"
+	<memory>
+	"LuaBridge.h"
+	"Entity.h"
+	"Component.h"
+	"Components.h"
+	"GoapAgent.h"
+	"ScriptSystem.h"
+	"EntityManager.h"
+
+1496516626 source:c:\users\user\desktop\bomberman\src\stringindexer.cpp
+	"StringIndexer.h"
+	<unordered_map>
+
+1496484112 source:c:\users\user\desktop\bomberman\src\typeindexer.cpp
+	"TypeIndexer.h"
+
+1496484763 c:\users\user\desktop\bomberman\include\typeindexer.h
+
+1498081606 source:c:\users\user\desktop\bomberman\src\worldstate.cpp
+	"WorldState.h"
+
+1498771168 source:c:\users\user\desktop\engine\main.cpp
+	<exception>
+	"Logs.h"
+	"Engine.h"
+
+1498742405 c:\users\user\desktop\engine\include\gameinstance.h
+	<stdio.h>
+	<GameState.h>
+	<vector>
+
+1498743471 c:\users\user\desktop\engine\include\gamestate.h
+
+1498779276 source:c:\users\user\desktop\engine\src\action.cpp
+	"Action.h"
+	"Engine.h"
+	"ScriptSystem.h"
+	"json.hpp"
+	"Entity.h"
+	"Components.h"
+	"GoapAgent.h"
+	"AIPackage.h"
+
+1498780316 c:\users\user\desktop\engine\include\action.h
+	<unordered_map>
+	<string>
+	<memory>
+	<vector>
+	"LuaBridge.h"
+	"ActionExecutor.h"
+	"WorldState.h"
+	"Logs.h"
+
+1498081606 c:\users\user\desktop\engine\include\worldstate.h
+	<unordered_map>
+
+1498753155 c:\users\user\desktop\engine\include\scriptsystem.h
+	<unordered_map>
+	<LuaBridge.h>
+	"lua.h"
+	"lauxlib.h"
+	"lualib.h"
+
+1498081606 c:\users\user\desktop\engine\include\logs.h
+	<string>
+
+1498781480 c:\users\user\desktop\engine\include\goapagent.h
+	<unordered_map>
+	<memory>
+	<list>
+	<stack>
+	"Component.h"
+	"FSMState.h"
+	"WorldState.h"
+	"Action.h"
+
+1497102036 c:\users\user\desktop\engine\include\component.h
+	<memory>
+
+1498772952 c:\users\user\desktop\engine\include\fsm.h
+
+1497102036 c:\users\user\desktop\engine\include\entity.h
+	<unordered_map>
+	<vector>
+	<typeinfo>
+	<typeindex>
+	"MiscFunctions.h"
+
+1497895214 c:\users\user\desktop\engine\include\miscfunctions.h
+	<typeindex>
+	<typeinfo>
+	"json.hpp"
+
+1498175244 c:\users\user\desktop\engine\include\components.h
+	"Entity.h"
+	"Component.h"
+	"Structures.h"
+	"Enumerations.h"
+	<stack>
+	<deque>
+	<algorithm>
+	<SDL.h>
+
+1498081606 c:\users\user\desktop\engine\include\structures.h
+	<cmath>
+	<sstream>
+
+1498081606 c:\users\user\desktop\engine\include\enumerations.h
+
+1498081606 c:\users\user\desktop\engine\include\aipackage.h
+	<vector>
+	<string>
+
+1497897173 source:c:\users\user\desktop\engine\src\aipackage.cpp
+	"AIPackage.h"
+	<algorithm>
+	"Logs.h"
+
+1498081606 source:c:\users\user\desktop\engine\src\anode.cpp
+	"ANode.h"
+
+1498081606 c:\users\user\desktop\engine\include\anode.h
+	"WorldState.h"
+
+1498765253 source:c:\users\user\desktop\engine\src\appwindow.cpp
+	"AppWindow.h"
+	<stdio.h>
+	"Logs.h"
+
+1498081606 c:\users\user\desktop\engine\include\appwindow.h
+	"SDL.h"
+
+1498081606 source:c:\users\user\desktop\engine\src\audiomanager.cpp
+	"AudioManager.h"
+	<cstdio>
+	"Logs.h"
+
+1498081606 c:\users\user\desktop\engine\include\audiomanager.h
+
+1496697869 source:c:\users\user\desktop\engine\src\component.cpp
+	"Component.h"
+	"EntityManager.h"
+
+1498765709 c:\users\user\desktop\engine\include\entitymanager.h
+	<vector>
+	"Constants.h"
+	"ObjectFactory.h"
+	"ResourceManager.h"
+	"Entity.h"
+	<queue>
+	"Logs.h"
+
+1497732750 c:\users\user\desktop\engine\include\constants.h
+
+1498758553 c:\users\user\desktop\engine\include\objectfactory.h
+	<memory>
+	<unordered_map>
+	"json.hpp"
+
+1498081606 c:\users\user\desktop\engine\include\resourcemanager.h
+	<GraphicsManager.h>
+	<AudioManager.h>
+
+1497730394 c:\users\user\desktop\engine\include\graphicsmanager.h
+	<unordered_map>
+	<memory>
+	<SDL.h>
+
+1497644039 source:c:\users\user\desktop\engine\src\components.cpp
+	"Components.h"
+
+1498769931 source:c:\users\user\desktop\engine\src\componentsystem.cpp
+	"ComponentSystem.h"
+	<iterator>
+	"EntityManager.h"
+	"Views.h"
+	"GoapAgent.h"
+	"GoapPlanner.h"
+	"StringIndexer.h"
+	<algorithm>
+
+1498081606 c:\users\user\desktop\engine\include\componentsystem.h
+	<functional>
+	<vector>
+	<stdio.h>
+
+1498081606 c:\users\user\desktop\engine\include\views.h
+	"Components.h"
+	"Entity.h"
+	"GoapAgent.h"
+
+1498081606 c:\users\user\desktop\engine\include\goapplanner.h
+	<deque>
+	<list>
+
+1496516718 c:\users\user\desktop\engine\include\stringindexer.h
+	<string>
+
+1498778604 source:c:\users\user\desktop\engine\src\console.cpp
+	"Console.h"
+	<SDL.h>
+	"Engine.h"
+	"DisplayManager.h"
+	"ScriptSystem.h"
+	"EventManager.h"
+	"Enumerations.h"
+
+1498760033 c:\users\user\desktop\engine\include\console.h
+	<deque>
+	<string>
+
+1498762168 c:\users\user\desktop\engine\include\displaymanager.h
+	"AppWindow.h"
+	<memory>
+	<SDL.h>
+	"SDL_ttf.h"
+	<deque>
+	"Enumerations.h"
+	"Logs.h"
+
+1498751364 c:\users\user\desktop\engine\include\eventmanager.h
+	<unordered_map>
+	<vector>
+	<functional>
+	<memory>
+	<SDL.h>
+	"Logs.h"
+
+1498778604 source:c:\users\user\desktop\engine\src\displaymanager.cpp
+	"DisplayManager.h"
+	<SDL.h>
+	<SDL_image.h>
+	<queue>
+	"Engine.h"
+	"EntityManager.h"
+	"ScriptSystem.h"
+	"Components.h"
+	"SDL2_gfxPrimitives.h"
+
+1498084461 source:c:\users\user\desktop\engine\src\entity.cpp
+	"Entity.h"
+	"Component.h"
+	"EntityManager.h"
+	"ScriptSystem.h"
+
+1498769836 source:c:\users\user\desktop\engine\src\entitymanager.cpp
+	"EntityManager.h"
+	"Entity.h"
+	"Component.h"
+	"Action.h"
+
+1498751196 source:c:\users\user\desktop\engine\src\eventmanager.cpp
+	"EventManager.h"
+	"Entity.h"
+	"Enumerations.h"
+
+1498772951 source:c:\users\user\desktop\engine\src\fsm.cpp
+	"FSM.h"
+
+1498781621 c:\users\user\desktop\engine\include\fsmstate.h
+	<memory>
+	<list>
+	<unordered_map>
+	<vector>
+	"Structures.h"
+	"GoapPlanner.h"
+
+1498780943 source:c:\users\user\desktop\engine\src\fsmstate.cpp
+	"FSMState.h"
+	<SDL.h>
+	"FSM.h"
+	"WorldState.h"
+	"GoapAgent.h"
+	"Components.h"
+
+1498778604 source:c:\users\user\desktop\engine\src\gameinitializer.cpp
+	"GameInitializer.h"
+	"Engine.h"
+	"EntityManager.h"
+	"ScriptSystem.h"
+	"StringIndexer.h"
+
+1497102036 c:\users\user\desktop\engine\include\gameinitializer.h
+	<memory>
+	<unordered_map>
+
+1497897404 source:c:\users\user\desktop\engine\src\gameinstance.cpp
+	"GameInstance.h"
+	<SDL.h>
+	<stdio.h>
+	"Structures.h"
+	<ctime>
+	<cstdlib>
+	"DisplayManager.h"
+	"EntityManager.h"
+	"EventManager.h"
+	"ScriptSystem.h"
+	"Console.h"
+	"ComponentSystem.h"
+	"GameInitializer.h"
+	"setups.h"
+
+1498742544 c:\users\user\desktop\engine\include\setups.h
+
+1498781652 source:c:\users\user\desktop\engine\src\goapagent.cpp
+	"GoapAgent.h"
+
+1498779227 source:c:\users\user\desktop\engine\src\goapplanner.cpp
+	"GoapPlanner.h"
+	<unordered_map>
+	<algorithm>
+	"ANode.h"
+	"Action.h"
+	"GoapAgent.h"
+	"WorldState.h"
+
+1498770950 source:c:\users\user\desktop\engine\src\graphicsmanager.cpp
+	"GraphicsManager.h"
+	<fstream>
+	<SDL_image.h>
+	"Logs.h"
+
+1498770758 source:c:\users\user\desktop\engine\src\logs.cpp
+	"Logs.h"
+	<cstdio>
+	<cstdarg>
+
+1498081606 source:c:\users\user\desktop\engine\src\mainmenugs.cpp
+	"MainMenuGS.h"
+
+1498081606 c:\users\user\desktop\engine\include\mainmenugs.h
+	"GameState.h"
+
+1498081606 source:c:\users\user\desktop\engine\src\message.cpp
+	"Message.h"
+
+1498081606 c:\users\user\desktop\engine\include\message.h
+	<memory>
+
+1498749674 source:c:\users\user\desktop\engine\src\miscfunctions.cpp
+	"MiscFunctions.h"
+	<fstream>
+	<Logs.h>
+
+1498758535 source:c:\users\user\desktop\engine\src\objectfactory.cpp
+	"ObjectFactory.h"
+	"Entity.h"
+	"EntityManager.h"
+	"Components.h"
+	"GoapAgent.h"
+	"StringIndexer.h"
+	"AIPackage.h"
+
+1498081606 source:c:\users\user\desktop\engine\src\resourcemanager.cpp
+	"ResourceManager.h"
+	"Logs.h"
+
+1498766348 source:c:\users\user\desktop\engine\src\scriptsystem.cpp
+	"ScriptSystem.h"
+	"Engine.h"
+	"DisplayManager.h"
+
+1498783275 source:c:\users\user\desktop\engine\src\setups.cpp
+	"setups.h"
+	<memory>
+	"LuaBridge.h"
+	"Engine.h"
+	"Entity.h"
+	"Component.h"
+	"Components.h"
+	"GoapAgent.h"
+	"ScriptSystem.h"
+	"EntityManager.h"
+
+1496516626 source:c:\users\user\desktop\engine\src\stringindexer.cpp
+	"StringIndexer.h"
+	<unordered_map>
+
+1496484112 source:c:\users\user\desktop\engine\src\typeindexer.cpp
+	"TypeIndexer.h"
+
+1496484763 c:\users\user\desktop\engine\include\typeindexer.h
+
+1498081606 source:c:\users\user\desktop\engine\src\worldstate.cpp
+	"WorldState.h"
+
+1498778604 c:\users\user\desktop\engine\include\engine.h
+	<stdio.h>
+	<vector>
+
+1498778637 source:c:\users\user\desktop\engine\src\engine.cpp
+	"Engine.h"
+	<SDL.h>
+	<stdio.h>
+	"Structures.h"
+	<ctime>
+	<cstdlib>
+	"DisplayManager.h"
+	"EntityManager.h"
+	"EventManager.h"
+	"ScriptSystem.h"
+	"Console.h"
+	"ComponentSystem.h"
+	"GameInitializer.h"
+	"setups.h"
+
+1498771877 c:\users\user\desktop\engine\include\actionexecutor.h
+	"LuaBridge.h"
+
+1498778604 source:c:\users\user\desktop\engine\src\actionexecutor.cpp
+	"ActionExecutor.h"
+	"Engine.h"
+	"ScriptSystem.h"
+	"Logs.h"
+

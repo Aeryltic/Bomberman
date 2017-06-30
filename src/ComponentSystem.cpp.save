@@ -24,14 +24,15 @@ void ComponentSystem::addUpdateFunction(int priority, update_function ufunction)
 }
 
 bool ComponentSystem::init() {
-    printf("initializing component systems...");
+    logs::open("initializing component systems...");
 
     /// jakiś tam ruch
     addUpdateFunction(1, [](int ms, EntityManager* entityManager) {
-        //double fraction = ms / 1000.0;
         vector<MovementView> views = ViewCreator::createViews<MovementView>(entityManager);
         for(auto &v: views) {
-            v.pf->pos += v.m->speed;// * fraction;
+            //printf("moving by %s\n", v.m->speed.repr().c_str());
+            //printf("pos: %s\n", v.pf->pos.repr().c_str());
+            v.pf->pos += v.m->speed;
         }
     });
 
@@ -43,8 +44,8 @@ bool ComponentSystem::init() {
                 view.energy->amount -= view.breeder->required_energy;
                 int amount = rand()%(view.breeder->max_amount - view.breeder->min_amount) + view.breeder->min_amount;
                 while(amount--) {
-                    vec3d p = random_point_in_range(view.pf->pos.x, view.pf->pos.y, view.pf->vol.x/2, view.pf->vol.x*2);
-                    entityManager->make_object(StringIndexer::get_id(view.breeder->child_type), p.x, p.y);
+                    vec3d p = view.pf->pos.random_in_range(view.pf->vol.x/2, view.pf->vol.x*2);
+                    entityManager->make_object(view.breeder->child_type, p.x, p.y);
                 }
             }
         }
@@ -67,10 +68,6 @@ bool ComponentSystem::init() {
                 needs->thirst += 0.1;
                 needs->hunger += 0.05;
                 needs->weariness += 0.1;
-
-                if(needs->thirst > 10){
-                    
-                }
             }
         }
     });
@@ -113,6 +110,6 @@ bool ComponentSystem::init() {
         }
     });
 
-    printf(" done.\n");
+    logs::close("done.\n");
     return 0;
 }

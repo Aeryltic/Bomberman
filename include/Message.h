@@ -4,8 +4,7 @@
 #include <memory>
 class Entity;
 
-struct Message
-{
+struct Message {
     Message(unsigned type, std::weak_ptr<Entity> publisher);
     virtual ~Message();
 

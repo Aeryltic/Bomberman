@@ -6,59 +6,18 @@
 #include <memory>
 #include <vector>
 
+#include "LuaBridge.h"
+
+using namespace luabridge;
+
+#include "ActionExecutor.h"
 #include "WorldState.h"
-#include "ScriptSystem.h"
 
 #include "Logs.h"
 
 class AIPackage;
 class GoapAgent;
 class Entity;
-
-struct ActionExecutor {
-    using exec_fun = LuaRef;
-
-    ActionExecutor() :
-        exec(ScriptSystem::instance()->state()),
-        running(false) {}
-
-    bool operator()(Entity* doer, Entity* target, int ms_passed) {
-        ms_running += ms_passed;
-        bool result = false;
-        try {
-            if(target != nullptr) result = exec(doer, target, ms_running);
-            else result = exec(doer, ms_running);
-        } catch (LuaException const& e) {
-            logs::log("%s\n", e.what());
-            result = false;
-        }
-        return result;
-    }
-
-    void set(exec_fun fun) {
-        exec = fun;
-    }
-
-    void start() {
-        ms_running = 0;
-        running = true;
-    }
-
-    void stop() {
-        running = false;
-    }
-
-    bool is_running() {
-        return running;
-    }
-
-private:
-    exec_fun exec;
-
-    bool running;
-    int ms_running;
-
-};
 
 //-------------------------------------------------------------------------------------------------
 class Action {
@@ -85,22 +44,11 @@ public:
     bool does_need_target() const {
         return needs_target;
     }
-    bool has_target();
+    std::string get_target_name() { return target_name;}
 
-    void set_agent(GoapAgent* agent);
-    Entity* get_owner();
+    bool perform(Entity* agent, Entity* target, int ms_passed);
 
-    bool is_in_range();
-
-    std::weak_ptr<Entity> get_target() {
-        return target;
-    }
-
-    bool find_target(std::unordered_map<std::string, std::vector<std::weak_ptr<Entity>>>& targets);
-    bool perform(int ms_passed);
-    void reset();
-
-    void set_exec(ActionExecutor::exec_fun fun) {
+    void set_exec(ActionExecutor::ExecScript fun) {
         execute.set(fun);
     }
 
@@ -108,18 +56,17 @@ public:
         this->scanner = scanner;
     }
 
-    void scan() {
-        scanner(get_owner());
+    void scan(Entity* agent) {
+        scanner(agent);
     }
-
-    void start() {execute.start();}
-    bool is_performed() {return execute.is_running();}
 
     /// STATIC
     static void init_actions();
     static void init_action_packs();
-    static Action get_action(std::string name);
+    static Action* get_action(std::string name);
     static AIPackage get_ai_package(std::string name);
+
+    static void clear();
 
 protected:
     std::string name;
@@ -133,8 +80,6 @@ protected:
     PreconditionScanner scanner;
     ActionExecutor execute;
 
-    GoapAgent* agent;
-    std::weak_ptr<Entity> target;
 
     /// STATIC
     static std::unordered_map<std::string, Action> actions;

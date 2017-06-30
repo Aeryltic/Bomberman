@@ -1,10 +1,17 @@
+-- timestep - stała z poziomu C++
+
 function do_nothing(agent, target, ms_passed) -- najprostsza funkcja, która nie robi nic
   return true
 end
 
+function go_to(agent, target, ms_passed)
+  agent:movement():set_speed(agent:physical_form().pos:movement_step(target:physical_form().pos, agent:movement().max_speed / timestep))
+  return false
+end
+
 -- podnoszenie ziaren przez mrówki
-function pickup_grain(agent, target, time_passed)
-  if time_passed >= 500 then
+function pickup_grain(agent, target, ms_passed)
+  if agent:goap():time_passed() >= 500 then
     target:destroy_me()
     agent:bag():set_item("grains", agent:bag():get_item("grains") + 1)
     return true
@@ -13,22 +20,22 @@ function pickup_grain(agent, target, time_passed)
 end
 
 -- upuszczenie ziarna do gniazda
-function deliver_grain(agent, target, time_passed)
-  if time_passed >= 500 then
+function deliver_grain(agent, target, ms_passed)
+  if agent:goap():time_passed() >= 500 then
     --e = target:energy_store()
     --if(e ~= nil and e ~= 0) then -- nie wiem czy ten if wogóle działa jak należy
       target:energy_store().amount = target:energy_store().amount + 100 
       agent:bag():set_item("grains", agent:bag():get_item("grains") - 1)
     --end
     --e = nil
-    return true
+    return agent:bag():get_item("grains") == 0
   end
   return false
 end
 
 -- 
-function chop_wood(agent, target, time_passed) -- tu już jest problem, bo nie mogę zrobić dynamicznego dodawania względem czasu, bo co jeśli już miał?
-  if time_passed >= 1500 then
+function chop_wood(agent, target, ms_passed) -- tu już jest problem, bo nie mogę zrobić dynamicznego dodawania względem czasu, bo co jeśli już miał?
+  if agent:goap():time_passed() >= 1500 then
     c = target:property():get("condition")
     if c > 10 then
       agent:bag():set_item("wood", agent:bag():get_item("wood") + 10)
@@ -43,9 +50,9 @@ function chop_wood(agent, target, time_passed) -- tu już jest problem, bo nie m
   return false
 end
 
--- upuszczenie ziarna do gniazda
-function deliver_wood(agent, target, time_passed)
-  if time_passed >= 500 then
+-- 
+function deliver_wood(agent, target, ms_passed)
+  if agent:goap():time_passed() >= 500 then
     --e = target:energy_store()
     --if(e ~= nil and e ~= 0) then -- nie wiem czy ten if wogóle działa jak należy
       --target:energy_store().amount = target:energy_store().amount + 100 
@@ -59,8 +66,8 @@ function deliver_wood(agent, target, time_passed)
 end
 
 -- zabicie wroga
-function kill_enemy(agent, target, time_passed)
-  if time_passed >= 100 then
+function kill_enemy(agent, target, ms_passed)
+  if agent:goap():time_passed() >= 100 then
     target:destroy_me()
     return true
   end
@@ -68,10 +75,10 @@ function kill_enemy(agent, target, time_passed)
 end
 
 -- picie
-function drink_something(agent, target, time_passed)
+function drink_something(agent, target, ms_passed)
   --print("perform drinking")
   agent:aspect():set_color(50, 50, 200)
-  if time_passed >= 2000 then
+  if agent:goap():time_passed() >= 2000 then
     --print("drinking")
     agent:needs().thirst = 0
     agent:aspect():reset_color()
@@ -81,9 +88,9 @@ function drink_something(agent, target, time_passed)
 end
 
 -- jedzenie
-function eat_something(agent, target, time_passed)
+function eat_something(agent, target, ms_passed)
   agent:aspect():set_color(150, 150, 50)
-  if time_passed >= 5000 then
+  if agent:goap():time_passed() >= 5000 then
       --print("eating")
       agent:needs().hunger = 0
       agent:aspect():reset_color()
@@ -93,9 +100,9 @@ function eat_something(agent, target, time_passed)
 end
 
 -- odpoczywanie
-function rest_for_a_while(agent, target, time_passed)
+function rest_for_a_while(agent, target, ms_passed)
   agent:aspect():set_color(50, 50, 50)
-  if time_passed >= 10000 then
+  if agent:goap():time_passed() >= 10000 then
       --print("resting")
       agent:needs().weariness = 0
       agent:aspect():reset_color()
@@ -103,96 +110,3 @@ function rest_for_a_while(agent, target, time_passed)
   end
   return false
 end
-
--- SDL_GetTicks() - funkcja z poziomu c++
---[[
-function wait_time(ms)
-  start_time = SDL_GetTicks()
-  return function()
-    return (start_time + ms >= SDL_GetTicks())
-  end
-end
-]]
-
-
---[[
-function do()
-  return function f(agent, target, ms_passed)
-    return true
-  end
-end
-]]
-
---[[
-function do_nothing() -- najprostsza funkcja, która nie robi nic
-  -- zmienne inicjowane na starcie akcji
-  return function(agent, target, ms_passed)
-    return true
-  end
-end
-
--- podnoszenie ziaren przez mrówki
-function pickup_grain()
-  --print("init pickup_grain")
-  --local time_passed = 0 -- to (i wszystkie pozostałe zmienne lokalne) powoduje memory leak i HeapCorruptionException, fajnie
-  --local duration = 500
-  time_passed = 0 -- to (i wszystkie pozostałe zmienne lokalne) powoduje memory leak i HeapCorruptionException, fajnie
-  duration = 500
-  
-  return function(agent, target, ms_passed)
-    --print("picking up grain")
-    time_passed = time_passed + ms_passed
-    if time_passed >= duration then
-      target:destroy_me()
-      return true
-    end
-    return false
-  end
-end
-
--- upuszczenie ziarna do gniazda
-function deliver_grain()
-  --print("init deliver_grain")
-  time_passed = 0
-  duration = 500
-  
-  return function(agent, target, time_passed)
-    time_passed = time_passed + ms_passed
-    if time_passed >= duration then
-      e = target:getEnergyStore()
-      if(e ~= nil) then -- nie wiem czy ten if wogóle działa jak należy
-        print("got energy store")
-        e.amount = e.amount + 100 
-      end
-      return true
-    end
-    return false
-  end
-end
-
--- zabicie wroga
-function kill_enemy()
-  --print("init kill_enemy")
-  time_passed = 0
-  duration = 100
-  
-  return function(agent, target, ms_passed)
-    time_passed = time_passed + ms_passed -- tak na prawdę to tutaj będzie coś bardziej skomplikowanego - jak wykonywanie pojedynczych ciosów, odejmowanie stoponiowe hp wroga itp
-    if time_passed >= duration then
-      target:destroy_me()
-      return true
-    end
-    return false
-  end
-end
-
--- test
-function test()
-  local v = nil
-  for i=1,100000 do
-    v = kill_enemy()
-  end
-end
-
-test()
-]]

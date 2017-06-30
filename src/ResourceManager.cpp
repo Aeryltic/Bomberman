@@ -1,11 +1,9 @@
 #include "ResourceManager.h"
 #include "Logs.h"
-ResourceManager::ResourceManager()
-{
+ResourceManager::ResourceManager() {
     logs::log("new ResourceManager\n");
 }
 
-ResourceManager::~ResourceManager()
-{
+ResourceManager::~ResourceManager() {
     //dtor
 }

@@ -14,8 +14,9 @@ Logs::~Logs() {
 }
 
 void Logs::open(std::string format, ...) {
+    format = ">" + format;
     for(unsigned i=0; i < instance.indent; i++) {
-        format = "  " + format;
+        format = "| " + format;
     }
     va_list args;
     va_start(args, format);
@@ -23,19 +24,23 @@ void Logs::open(std::string format, ...) {
     va_end(args);
     instance.indent++;
 }
+
 void Logs::log(std::string format, ...) {
+    //format = " " + format;
     for(unsigned i=0; i < instance.indent; i++) {
-        format = "  " + format;
+        format = "| " + format;
     }
     va_list args;
     va_start(args, format);
     vprintf(format.c_str(), args);
     va_end(args);
 }
+
 void Logs::close(std::string format, ...) {
+    format = ">" + format;
     if(instance.indent) instance.indent--;
     for(unsigned i=0; i < instance.indent; i++) {
-        format = "  " + format;
+        format = "| " + format;
     }
     va_list args;
     va_start(args, format);

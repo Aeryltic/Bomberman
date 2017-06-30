@@ -1,12 +1,14 @@
 #include "GoapAgent.h"
 
-GoapAgent::GoapAgent() : fsm(this) { }
+GoapAgent::GoapAgent() {
+    push_state<IdleState>();
+}
 
 GoapAgent::~GoapAgent() { }
 
-void GoapAgent::add_action(Action a) {
-    a.set_agent(this);
-    available_actions.insert({a.get_name(),a});
+void GoapAgent::add_action(Action *a) {
+//    a.set_agent(this);
+    available_actions.insert({a->get_name(), a});
 }
 
 void GoapAgent::remove_action(std::string name) {
@@ -21,17 +23,22 @@ WorldState& GoapAgent::get_world_state() {
     return ws;
 }
 
-std::unordered_map<std::string, Action>& GoapAgent::get_actions() {
+std::unordered_map<std::string, Action*>& GoapAgent::get_actions() {
     return available_actions;
 }
-
-bool GoapAgent::has_plan() const {
-    return !current_actions.empty();
+int GoapAgent::get_action_perform_time() {
+    try {
+        return static_cast<PerformActionState*>(states.top().get())->get_time();
+    } catch(...) { }
+    return 0;
 }
-
-void GoapAgent::set_plan(std::list<Action*> plan) {
-    current_actions = plan;
-}
+//bool GoapAgent::has_plan() const {
+//    return !current_actions.empty();
+//}
+//
+//void GoapAgent::set_plan(std::list<Action*> plan) {
+//    current_actions = plan;
+//}
 
 void GoapAgent::add_goal(std::string goal_name, bool goal_state, unsigned priority) {
     auto it = goals.begin();//std::lower_bound(open.begin(), open.end(), node);
@@ -42,26 +49,29 @@ void GoapAgent::add_goal(std::string goal_name, bool goal_state, unsigned priori
 WorldState GoapAgent::find_goal() {
     WorldState goal;
     for(auto p: goals) {
-        if(p.second.second != ws[p.second.first]){
+        if(p.second.second != ws[p.second.first]) {
             goal.add(p.second.first, p.second.second); // to tylko na chwilę
             break;
         }
     }
     return goal;
-    /*
-    WorldState goal;
-    goal
-        .add("grain_delivered", true);
-    return goal;
-    */
 }
 
 void GoapAgent::scan_world() {
-    //owner.lock()->receive_message(Message(MSG_SCANNING, owner));
-    set_state("grain_delivered", false);    /// to tu nie może być
-    set_state("enemy_killed", false);       /// tak samo to
-                                            /// trzeba rozwinąć sensory
-    for(auto a: available_actions){ /// to też nie jest dobre rozwiązanie
-        a.second.scan();
+    /// trzeba rozwinąć sensory
+    Entity* _owner = owner.lock().get();
+    for(auto a: available_actions) { /// skrypty powinny być powiązane z celami, nie z akcjami - to jak jest teraz to nie jest goal-oriented
+        try {
+            a.second->scan(_owner);
+        } catch(LuaException const& e) {
+            logs::log("%s\n", e.what());
+        }
     }
+}
+
+void GoapAgent::pop_state() {
+    states.pop();
+
+    if(states.empty())
+        push_state<IdleState>();
 }

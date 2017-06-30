@@ -11,14 +11,13 @@
 #include "Logs.h"
 
 class Console;
-class GameInstance;
+//class Engine;
 class Entity;
 
 using namespace std;
 
 
-class EventManager
-{
+class EventManager {
     using EventCallback = function<void(SDL_Event const&)>;
     /// --------------------------------------------------------------------------
 public:
@@ -31,7 +30,7 @@ private:
     /// by Kolja from gamedev.stackexchange.com just formatted by me
     /// --------------------------------------------------------------------------
 public:
-    EventManager(GameInstance *gameInstance);
+    EventManager(/*Engine *gameInstance*/);
     virtual ~EventManager();
 
     static void pushUserEvent(int eventcode, void *data1, void *data2); /// nic nie wrzucac do data1 ani data2 poki co
@@ -40,8 +39,7 @@ public:
 
     //template <class T>
     // void EventManager::pushEvent(int eventNum, int eventCode, shared_ptr<Entity> publisher, shared_ptr<Entity> subscriber);
-    bool isActive()
-    {
+    bool isActive() {
         if(!_active)logs::log("EventManager is not active\n");
         return _active;
     }
@@ -51,6 +49,6 @@ protected:
 private:
     bool _active;
     static Uint32 eventFirstNum;
-    GameInstance *gameInstance;
+    //Engine *gameInstance;
 };
 #endif // EVENTMANAGER_H

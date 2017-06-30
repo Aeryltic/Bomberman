@@ -9,8 +9,7 @@ class Action;
 class GoapAgent;
 class WorldState;
 
-class GoapPlanner
-{
+class GoapPlanner {
 public:
     GoapPlanner();
     virtual ~GoapPlanner();

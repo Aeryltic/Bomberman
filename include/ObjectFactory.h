@@ -19,7 +19,7 @@ public:
     void add_component(std::string cname, data_object j_obj) {
         components.push_back(make_pair(cname, j_obj));
     }
-    std::vector<std::pair<std::string, data_object>>& get_components(){return components;}
+    std::vector<std::pair<std::string, data_object>>& get_components() {return components;}
 private:
     std::vector<std::pair<std::string, data_object>> components;
 };
@@ -32,6 +32,8 @@ public:
     ObjectFactory(EntityManager* entityManager);
     virtual ~ObjectFactory();
     std::shared_ptr<Entity> make_object(std::string type, double x, double y);
+
+    void init();
 
 private:
     std::unordered_map<std::string, component_creator> components;

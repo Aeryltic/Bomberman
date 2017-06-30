@@ -44,7 +44,6 @@
 29.05.2017
 	1. DANE w jakimœ JSONie lub czymœ nawet l¿ejszym
 	2. podstawowy json dodany - akcje z pliku
-	3. mo¿na by jeszcze zmniejszyæ jsona
 	4. jakieœ wygodne narzêdzie do generowania jsonów
 	5. przebudowaæ wszystkie komponenty na mapy przechowuj¹ce dowolne dane?
 	6. definiowanie obiektów jednak poprzez skrypty
@@ -102,52 +101,77 @@
 	logika za akcjami wrzucona ca³kowicie do skryptów, jestem ciekaw jak bêdzie z wydajnoœci¹ - ale to nie jest do koñca fajne
 	dodaæ w jakiœ sposób szukanie nowych celów jeœli gonienie za aktualnym trwa za d³ugo
 	no grubo HeapCorruptionException - to pewnie przez Lua'e... czasem jest to, a czasem zamyka siê ³adnie
-	czy ten mój kod musi byæ taki obleœny?
 	pozbyæ siê tego lagu kiedy trac¹ target
 	mniej regularne checki czy cel jest nadal aktywny... to by trzeba jednak iœæ za punktem a nie Entity'em konkretnym.... to póŸnej
 	dodaæ te "procedural precondition checkers"
-	jakiœ wygodniejszy sposób generowania tych wrapperów - najlepiej ¿eby pomin¹æ je, a robiæ tylko w³asciwie funkcje... tylko jak wtedy z tymi zmiennymi tworzonymi we wrapperze?
+	jakiœ wygodniejszy sposób generowania tych wrapperów - najlepiej ¿eby pomin¹æ je, a robiæ tylko w³asciwe funkcje... tylko jak wtedy z tymi zmiennymi tworzonymi we wrapperze?
 09.06.2017
 	nie wiem jak rozwi¹zaæ tworzenie komponentów po stronie Lua'y
-	czy w ogóle te smart pointery maj¹ sens w tym projekcie? no okej, maj¹... chocia¿ pewnie gdyby konstrukcja systemu by³a lepsza to by potrzebne nie by³y
+!	czy w ogóle te smart pointery maj¹ sens w tym projekcie? no okej, maj¹... chocia¿ pewnie gdyby konstrukcja systemu by³a lepsza to by potrzebne nie by³y
 10.06.2017
 	jakiœ komponent "Automat", który by po prostu ca³y czas dzia³a³ jakimœ skryptem
 13.06.2017
 	zmieniæ podejœcie do skryptów AI
 	zmini³em, ale nie wiem czy to nie utrudni pracy (chocia¿ no skrypty wygl¹daj¹ ³adniej)
 	zrobiæ, ¿eby GotoState ustawia³ tylko prêdkoœci, a samo poruszanie by³o ju¿ na zewn¹trz
-	zdaje siê ¿e jest jakiœ drobny wyciek pamiêci
+!	zdaje siê ¿e jest jakiœ drobny wyciek pamiêci
 	zamiast pickup/deliver grain/water -> deliver resource. chocia¿ nie, to zbyt abstrakcyjne dla planisty, nie wiem jak to zaprogramowaæ póki co
-	HEAPCORRUPTION NADAL SIÊ POJAWIA
+!	HEAPCORRUPTION NADAL SIÊ POJAWIA
 14.06.2017
-	inaczej rozwi¹zaæ poruszanie siê AI, bo nie wszystkie akcje wymagaj¹ poruszania siê do celu by coœ stoj¹c zrobiæ, niektóre to ruch sam w sobie (uciekanie przed czymœ) lub powinny byæ wykonywane w ruchu
+!	inaczej rozwi¹zaæ poruszanie siê AI, bo nie wszystkie akcje wymagaj¹ poruszania siê do celu by coœ stoj¹c zrobiæ, niektóre to ruch sam w sobie (uciekanie przed czymœ) lub powinny byæ wykonywane w ruchu
 	poruszanie siê powinno byæ przezroczyœcie wpecione w AI nie jako osobny stan
-	(z)merge'owaæ GotoState z PerformActionState...
-	a mo¿e jeszcze inaczej - spleœæ w same skrypty
+	zmerge'owaæ GotoState z PerformActionState...
+	a mo¿e jeszcze inaczej - wpleœæ w same skrypty
 15.06.2017
-	komponenty skupiaj¹ce inne komponenty? np. ogólna "fizycznoœæ" na któr¹ sk³ada³yby siê Transformation, RigidBody, Aspect, Movement, Mass(itp)
+	komponenty skupiaj¹ce inne komponenty? np. ogólna "fizycznoœæ" na któr¹ sk³ada³yby siê Transformation, RigidBody, Aspect, Movement, Mass(?) itp.
 	odrobina dziedziczenia w komponentach DynamicBody, StaticBody, KinematicBody
 17.06.2017
 	dodaæ jakieœ wagi do worldstate'ów czy coœ ¿eby np. zaznaczyæ poziom g³odu, ¿e jeszcze nie jest a¿ tak du¿y mo¿na zaj¹æ siê czymœ innym, ale jeœli bêdzie za du¿y to nie ma wyboru trzeba jeœæ
-	scannery w aktualnej formie nie maj¹ odpowiedniego zasiêgu (tylko agent)
+!	scannery w aktualnej formie nie maj¹ odpowiedniego zasiêgu (tylko agent) (DOSTÊP Z POZIOMU SKRYPTÓW DO WSZYSTKICH OBIEKTÓW)
 	zrobiæ ¿eby przestali chodziæ gdy nie potrzeba
-	naprawiæ ten heapcorruption
-	no i dalej rozwijaæ
+!	naprawiæ ten heapcorruption
 	jak zrobiæ ¿eby mrówka by³a jedzeniem ale ¿eby mrówki jej nie jad³y, tylko potwór?
 	JAKAŒ HIERARCHIA W ACTIONHANDLERZE? ¿eby ró¿n¹ iloœæ argumentów przyjmowa³y czy coœ
 	naprawiæ "beztargetowe" akcje
 	rzadko s¹ g³odni, a zmêczeni to ju¿ wcale
 18.06.2017
 	akcje akcjami, ale handlery powinny byæ jakoœ osobno, bo inaczej jada wilk, a inaczej owca
-	HeapCorruptionException oczywiœcie przed usuwaniem ScriptSystemu
+!	HeapCorruptionException oczywiœcie przed usuwaniem ScriptSystemu
 	tego jsona "objects.json" trzeba przeparsowaæ tak aby tworzyæ jakieœ szkielety obiektów, a potem tylko je instancjonowaæ
 	ZBUDOWAÆ JAKIŒ £ADNY SYSTEM DLA LOGÓW
-	wszystko jest niewidzialne
 	okej, praktycznie wszystko kontekstowe przeniesione do skryptów
-	monsterowi siê nie chce chodziæ
 	chyba pope³niam b³¹d wyrzucaj¹c to wszystko poza g³ówny kod ju¿ teraz...
-	NIEBEZPOŒREDNI DOSTÊP DO SKRYPTÓW - w ScriptSystem mapa <string, LuaRef> przez ni¹ odwo³ania... tylko czy to nie spowolni a¿ za bardzo?
+!	NIEBEZPOŒREDNI DOSTÊP DO SKRYPTÓW - w ScriptSystem mapa <string, LuaRef> przez ni¹ odwo³ania... tylko czy to nie spowolni a¿ za bardzo?
 19.06.2017
-	skrypty akcji musz¹ przyjmowaæ deltê czasu
+!!	skrypty akcji musz¹ przyjmowaæ deltê czasu
 	jak ustawiæ niestandardowe parametry?
 	do definicji dodaæ coœ w stylu "base" który przechowywa³by nazwê typu(typów) który ten dany rozszerza... tylko ¿e to nie jest takie ³atwe (to potem)
+20.06.2017
+!	DODAÆ DO DEFINICJI OBIEKTÓW ODNOŒNIK DO SKRYPTU INICJALIZUJ¥CEGO ODPOWIEDNIE WARTOŒCI
+	niech skrypt akcji decyduje czy trzeba chodziæ + jak to robiæ
+	ró¿ne skrypty do wykonywania akcji dla ró¿nych typów obiektów? za du¿o roboty ¿eby to wszystko na go³ych danych parowaæ - trzeba narzêdzia i "bazy danych"
+!!!	STWORZYÆ NARZÊDZIE UMO¯LIWIAJ¥CE TWORZENIE I EDYCJÊ DANYCH (w tym skryptów - prosty edytor) I PRZEDE WSZYSTKIM DAJ¥CE CZYTELNY POGL¥D NA WSZELKIE POWI¥ZANIA
+!	rekalkulacja priorytetów - jakiœ skrypt dla ka¿dego info o œwiecie - nowe dane, które trzeba sformalizowaæ i potworzyæ
+++	sensory sprawdzaj¹ce warunki dla wykonania akcji to jedno, a sensory skanuj¹ce œwiat i ustawiaj¹ce worldstaty to drugie
+21.06.2017
+!!!	od nowa zaimplementowaæ wykonywanie akcji ¿eby nie by³o GotoState bo zmusza do ró¿nych dziwnych sztuczek i strasznie ogranicza
+	dane o celu trzymaæ po stronie Lua'y? bo to w sumie jest doœæ zale¿ne od samej akcji, nie wszystkie musz¹ mieæ cel
+	jakiœ dynamiczny system indeksowania obiektów, czy chocia¿ kategorii ¿eby poszukiwanie celów by³o szybsze - czy coœ
+!	zredukowaæ u¿ycie smart pointerów
+nie wiem co ja tu robiê...
+!!! potrzeba jakiœ zmiennych do sterowania skryptami po stronie Lua'y
+29.06.2017
+++	trochê przebudowa³em ca³y system, powinno byæ wygodniej
+++	pozby³em siê te¿ wszelkich crashy przy zamykaniu (nie ma ju¿ heap corruption exception ani nic)
+	OBOWI¥ZKI I CZAS WOLNY
+++	akcje to ju¿ tylko dane - nie maj¹ ¿adnego zwi¹zku z "posiadaczem"
+	gdzie umieœciæ poruszanie siê, ¿eby nie trzeba do ka¿dego skryptu tego wciskaæ? ale zarazem ¿eby nie by³o tak jak wczeœniej, czyli sztywny GotoState...
+	akcje wykonywane w ruchu...
+!	z tymi ró¿nymi skryptami do wykonywania akcji przez ka¿dy typ bytu to trochê przesada - tak na dobr¹ sprawê to chodzi po prostu o inn¹ animacjê w wiêkszoœci przypadków, bo w reszcie to ju¿ po prostu inna akcja
+	po prostu wpleœæ gdzieœ minimalny zasiêg i wykonywaæ, gdy jest w zasiêgu...
+	zasiêg zale¿y od "narzêdzia"
+!	hmm... zasiêg d³oni, kija, miecza, dzidy, grabii, toporka, ³uku...
+!!	skrypt wykonywaæ nawet jeœli poza zasiêgiem - mo¿e to nie byæ potrzebne, albo jakaœ reakcja gdy jest poza zasiêgiem, lub zrobienie czegoœ w czasie podchodzenia
+	to mo¿e byæ to.
+!!	za poruszanie siê i tak bêd¹ odpowiadaæ skrypty... jakieœ style poruszania siê czy coœ - osobna kategoria skryptów? hmmm... chyba tak
+	nadal widzê miejsce dla tych "mikroakcji"...

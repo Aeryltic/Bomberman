@@ -4,10 +4,11 @@
 namespace setups {
 void register_all();
 
-void setup_entity();
-void setup_entity_manager();
+void register_engine();
+void register_entity();
+void register_entity_manager();
 void register_components();
-
+void register_misc();
 }
 
 #endif // SETUPS_H

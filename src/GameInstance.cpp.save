@@ -1,4 +1,4 @@
-#include "GameInstance.h"
+#include "Engine.h"
 
 #include <SDL.h>
 #include <stdio.h>
@@ -15,29 +15,35 @@
 #include "Console.h"
 /// TEST
 #include "ComponentSystem.h"
-//#include "Enumerations.h"
 #include "GameInitializer.h"
-
-//#include "Components.h"
 
 #include "setups.h"
 ///
-bool GameInstance::paused = false;
+bool Engine::paused = false;
 
-GameInstance &GameInstance::getInstance() {
-    static GameInstance instance;
+Engine &Engine::getInstance() {
+    static Engine instance;
     return instance;
 }
 
-GameInstance::GameInstance() {
-    logs::log("creating GameInstance...");
+Engine::Engine() {
+    logs::open("creating GameInstance...");
+
+    displayManager = new DisplayManager(this);
+    entityManager = new EntityManager();
+    eventManager = new EventManager(this);
+    console = new Console(this);
+    componentSystem = new ComponentSystem();
+
+    scriptSystem = new ScriptSystem();
+
     working = true;
 
-    logs::log("done\n");
+    logs::close("done\n");
 }
 
-GameInstance::~GameInstance() {
-    logs::log("delete GameInstance\n");
+Engine::~Engine() {
+    logs::open("delete GameInstance\n");
 
     SDL_RemoveTimer(timerID);
 
@@ -48,10 +54,13 @@ GameInstance::~GameInstance() {
     delete entityManager;
     delete console;
 
+    delete scriptSystem;
+
     SDL_Quit();
+    logs::close("GAME CLOSED!");
 }
 
-int GameInstance::run() {
+int Engine::run() {
     if(init() < 0) {
         return -1;
     }
@@ -78,7 +87,7 @@ int GameInstance::run() {
             while (lag >= TIMESTEP) {
                 entityManager->update();
                 componentSystem->update(TIMESTEP, entityManager);
-                ScriptSystem::instance()->update(TIMESTEP);
+                Engine::instance()->getScriptSystem()->update(TIMESTEP);
                 lag -= TIMESTEP;
                 last_update = SDL_GetTicks();
             }
@@ -105,25 +114,11 @@ void GameInstance::run()
 
 }
 */
-int GameInstance::init() {
+int Engine::init() {
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0) {
         logs::log("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
         return -1;
     }
-    /// rozdzielić konstrukcję i inicjalizację systemów, bo crashe przy innej kolejności konstrukcji
-
-    //Uint32 delay = (33 / 10) * 10;  /* To round it down to the nearest 10 ms */
-    //SDL_TimerID my_timer_id = SDL_AddTimer(delay, my_callbackfunc, my_callback_param);
-    //timerID = SDL_AddTimer()
-
-    displayManager = new DisplayManager(this);
-    logs::log("creating EntityManager\n");
-    entityManager = new EntityManager();
-    logs::log("done!\n");
-    eventManager = new EventManager(this);
-//    logicManager = new LogicManager(this);
-    console = new Console(this);
-    componentSystem = new ComponentSystem();
 
     console->init();
     displayManager->init();
@@ -134,7 +129,7 @@ int GameInstance::init() {
                 entityManager->isActive()     &&
 //         logicManager->isActive()      &&
                 eventManager->isActive()      &&
-                ScriptSystem::instance()->isActive()
+                Engine::instance()->getScriptSystem()->isActive()
             )) {
         logs::log("some systems are not active\n");
         return -1;
@@ -202,20 +197,20 @@ int GameInstance::init() {
     return 0;
 }
 
-void GameInstance::quit() {
+void Engine::quit() {
     working = false;
 }
 
-DisplayManager  *GameInstance::getDisplayManager() {
+DisplayManager  *Engine::getDisplayManager() {
     return displayManager;
 }
-EntityManager   *GameInstance::getEntityManager() {
+EntityManager   *Engine::getEntityManager() {
     return entityManager;
 }
 //LogicManager    *GameInstance::getLogicManager(){return logicManager;}
-Console         *GameInstance::getConsole() {
+Console         *Engine::getConsole() {
     return console;
 }
-EventManager    *GameInstance::getEventManager() {
+EventManager    *Engine::getEventManager() {
     return eventManager;
 }

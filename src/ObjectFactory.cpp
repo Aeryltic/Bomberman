@@ -13,6 +13,10 @@
 
 
 ObjectFactory::ObjectFactory(EntityManager* entityManager) : entityManager(entityManager) { /// to ma wylądować w skryptach
+
+}
+
+void ObjectFactory::init(){
     Action::init_actions();
     Action::init_action_packs();
 
@@ -21,6 +25,7 @@ ObjectFactory::ObjectFactory(EntityManager* entityManager) : entityManager(entit
 }
 
 void ObjectFactory::init_component_constructors() {
+    /// POZBYĆ SIĘ TEGO SZAJSU
     components["CPhysicalForm"] = ([=](json j_obj) {
         return entityManager->make_component<CPhysicalForm>(0, 0, 0, j_obj[3], j_obj[4]); /// to jest problematyczne
     });

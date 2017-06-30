@@ -6,18 +6,14 @@
 
 #include "GoapAgent.h"
 
-class ViewCreator
-{
+class ViewCreator {
 public:
     template<class C>
-    static vector<C> createViews(EntityManager *entityManager) /// na dłuższą metę i tak będzie trzeba robić osobny creator dla każdego widoku, bo to jest niewydajne
-    {
+    static vector<C> createViews(EntityManager *entityManager) { /// na dłuższą metę i tak będzie trzeba robić osobny creator dla każdego widoku, bo to jest niewydajne
         vector<C> views;
-        for(auto &e : entityManager->get_entities())
-        {
+        for(auto &e : entityManager->get_entities()) {
             C view(e.second.get());
-            if(view.complete)
-            {
+            if(view.complete) {
                 views.push_back(view);
             }
         }
@@ -25,15 +21,12 @@ public:
     }
 };
 
-struct View
-{
+struct View {
     bool complete = false;
 };
 
-struct MovementView : View
-{
-    MovementView(Entity *e)
-    {
+struct MovementView : View {
+    MovementView(Entity *e) {
         pf = e->get<CPhysicalForm>();
         m = e->get<CMovement>();
         complete = (pf && m);
@@ -42,10 +35,8 @@ struct MovementView : View
     CMovement *m;
 };
 
-struct BreederView : View
-{
-    BreederView(Entity *e)
-    {
+struct BreederView : View {
+    BreederView(Entity *e) {
         breeder = e->get<CBreeder>();
         energy = e->get<CEnergyStore>();
         pf = e->get<CPhysicalForm>();
@@ -57,10 +48,8 @@ struct BreederView : View
     CPhysicalForm *pf;
 };
 
-struct EnergyView : View
-{
-    EnergyView(Entity *e)
-    {
+struct EnergyView : View {
+    EnergyView(Entity *e) {
         energy = e->get<CEnergyStore>();
 
         complete = (energy);
@@ -94,10 +83,8 @@ struct SmellSensorView : View
     CPhysicalForm *pf;
 };
 */
-struct AIView : View
-{
-    AIView(Entity *e)
-    {
+struct AIView : View {
+    AIView(Entity *e) {
         ai = e->get<GoapAgent>();
         pf = e->get<CPhysicalForm>();
         m  = e->get<CMovement>();

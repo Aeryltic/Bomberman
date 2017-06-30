@@ -4,13 +4,16 @@
 #include <unordered_map>
 #include <memory>
 #include <list>
+#include <stack>
 
-#include "Components.h"
-#include "FSM.h"
+//#include "Components.h"
+#include "Component.h"
+#include "FSMState.h"
 #include "WorldState.h"
 #include "Action.h"
 
 class GoapAgent : public Component {
+    friend class PerformActionState;
 public:
     GoapAgent();
     virtual ~GoapAgent();
@@ -18,7 +21,7 @@ public:
     void add_action(Action a);
     void remove_action(std::string name);
 
-    void set_state(string name, bool value);
+    void set_state(std::string name, bool value);
     WorldState& get_world_state();
 
     std::unordered_map<std::string, Action>& get_actions();
@@ -32,16 +35,41 @@ public:
     void add_goal(std::string goal_name, bool goal_state, unsigned priority);
 
     void update(int ms) {
-        fsm.update(ms);
+        //fsm.update(ms);
+        states.top()->update(ms);
     }
 
-protected:
-    FSM fsm;
-    WorldState ws;
-    std::unordered_map<std::string, Action> available_actions;
-    std::list<std::pair<unsigned, std::pair<std::string, bool>>> goals; // <priority, <goal_name, goal_state>>
+//    int get_action_perform_time() {return current_actions.front()->get_running_time();}
 
-    std::list<Action*> current_actions;
+    /// FSM
+    template<typename T, class ... Args>
+    void push_state(Args && ... args);
+
+    template<typename T, class ... Args>
+    void replace_state(Args && ... args);
+
+    void pop_state();
+
+protected:
+//    FSM fsm;
+    WorldState ws;
+    std::unordered_map<std::string, Action*> available_actions; /// to też nie tak, a raczej tymi "paczkami"
+    std::list<std::pair<unsigned, std::pair<std::string, bool>>> goals; // <priority, <goal_name, goal_state>>
+//    std::list<Action*> current_actions; /// to tu nie powinno być, ale w PerformActionState - żeby np. w trakcie wykonywania jednego planu zaplanować coś nowego, wykonać to a potem wrócić do starego planu
+
+    /// FSM
+    std::stack<std::unique_ptr<FSMState>> states;
 };
 
+
+template<typename T, class ... Args>
+void GoapAgent::push_state(Args && ... args) {
+    states.push(std::make_unique<T>(this, states.top().get(), args...));
+}
+
+template<typename T, class ... Args>
+void GoapAgent::replace_state(Args && ... args) {
+    states.pop();
+    states.push(std::make_unique<T>(this, states.top().get(), args...));
+}
 #endif // GOAPAGENT_H

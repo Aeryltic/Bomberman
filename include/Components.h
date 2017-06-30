@@ -13,14 +13,6 @@
 
 #include <SDL.h> /// tego tu być nie winno
 
-//#include "ScriptSystem.h"
-
-//using message_callback = function<void(Message &)>;
-//namespace comp_setup {
-//void register_components();
-//}
-
-
 struct CPhysicalForm : public Component {
     vec3d pos;
     vec3d vol;
@@ -31,6 +23,8 @@ struct CPhysicalForm : public Component {
     explicit CPhysicalForm(const vec3d& pos, const vec3d& vol, const vec3d& rot)
         : pos(pos), vol(vol), rot(rot) { }
     virtual ~CPhysicalForm() {/*printf("pf_destr\n");*/}
+
+    vec3d get_pos() const {return pos;}
 };
 
 struct CRigidBody : public Component {
@@ -54,13 +48,13 @@ struct CAspect : public Component { /// uses CPhysicalForm
     }
     virtual ~CAspect() {}
 
-    void set_color(Uint8 r, Uint8 g, Uint8 b){
+    void set_color(Uint8 r, Uint8 g, Uint8 b) {
         this->color.r = r;
         this->color.g = g;
         this->color.b = b;
     }
 
-    void reset_color(){
+    void reset_color() {
         color.r = base_color.r;
         color.g = base_color.g;
         color.b = base_color.b;
@@ -69,7 +63,7 @@ struct CAspect : public Component { /// uses CPhysicalForm
 };
 
 struct CMovement : public Component {
-    double max_speed;
+    double max_speed;   /// czy to tu w ogóle powinno być?
     vec3d speed;
 
     explicit CMovement(double max_speed) : speed(0,0,0) {
@@ -77,6 +71,9 @@ struct CMovement : public Component {
     }
     virtual ~CMovement() {};
 
+    void set_speed(double x, double y, double z) {
+        speed = {x, y, z};
+    }
     void stop() {
         speed = {0,0,0};
     }
@@ -163,20 +160,15 @@ struct CNeeds : public Component {
 };
 
 struct CAbstractObjectContainer : public Component {
-    //std::unordered_map<int, weak_ptr<Entity>> obj;
     std::unordered_map<string, double> items;
-    //unsigned grains;
 
     CAbstractObjectContainer() {}
-    virtual ~CAbstractObjectContainer(){}
+    virtual ~CAbstractObjectContainer() {}
 
-    //unsigned get_grains() const {return grains;}
-    //void set_grains(unsigned v){grains = v;}
-    void set_item(std::string name, double v){
+    void set_item(std::string name, double v) {
         items[name] = v;
     }
-    double get_item(std::string name){
-        //return items.at(name);
+    double get_item(std::string name) {
         return items[name];
     }
 };
@@ -185,14 +177,14 @@ struct CProperties : public Component {
     std::unordered_map<string, double> prop;
 
     CProperties() {
-        prop["condition"] = 100;
+        prop["condition"] = 100;    // może być ale to nie do końca fajne jest
     }
     virtual ~CProperties() {}
 
-    void set(std::string name, double v){
+    void set(std::string name, double v) {
         prop[name] = v;
     }
-    double get(std::string name){
+    double get(std::string name) {
         return prop[name];
     }
 };

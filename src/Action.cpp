@@ -1,14 +1,13 @@
 #include "Action.h"
 
-//#include <string>
-//#include <fstream>
-//#include <streambuf>
+#include "Engine.h"
+#include "ScriptSystem.h"
 
 #include "json.hpp"
 
-#include "GoapAgent.h"
 #include "Entity.h"
 #include "Components.h"
+#include "GoapAgent.h"
 
 #include "AIPackage.h"
 
@@ -19,35 +18,47 @@ std::unordered_map<std::string, AIPackage> Action::ai_packages;
 
 void Action::init_actions() {
     logs::open("initializing actions...\n");
-    /// raw actions
     std::string filename("data/actions.json");
     json j;
     file_to_json(j, filename);
 
     for(auto a : j) {
+        logs::open("next action\n");
         try {
             Action action(a["name"], a["cost"], a["target"]);
-            for(auto p: a["preconditions"]) {
-                action.add_precondition(p[0],p[1]);
+
+            try {
+                for(auto p: a["preconditions"]) {
+                    action.add_precondition(p[0],p[1]);
+                }
+            } catch(domain_error& e) {
+                logs::log("no preconditions: %s\n", e.what());
             }
-            for(auto e: a["effects"]) {
-                action.add_effect(e[0],e[1]);
+
+            try {
+                for(auto e: a["effects"]) {
+                    action.add_effect(e[0],e[1]);
+                }
+            } catch(domain_error& e) {
+                logs::log("no effects: %s\n", e.what());
             }
-            lua_State* L  = ScriptSystem::state();
+
             std::string scr_name = a["script"];
-            LuaRef script = getGlobal(L, scr_name.c_str());
-            action.set_exec(script);
+            action.set_exec(Engine::lua()->get(scr_name));
             try {
                 std::string scanner_name = a["scanner"];
-                action.set_scanner(getGlobal(L, scanner_name.c_str()));
+                action.set_scanner(Engine::lua()->get(scanner_name));
             } catch(domain_error& e) {
                 logs::log("no scanner: %s\n", e.what());
-                action.set_scanner(getGlobal(L, "empty_scanner"));
+                action.set_scanner(Engine::lua()->get("empty_scanner"));
             }
 
             actions.insert({action.name, std::move(action)});
+
+            logs::close("\n");
         } catch(invalid_argument& e) {
             logs::log("error while loading from data/actions.json: %s\n", e.what());
+            logs::close("error\n");
         }
     }
     logs::close("done!\n");
@@ -86,7 +97,7 @@ void Action::init_action_packs() {
     }
     logs::close("done!\n");
 }
-Action Action::get_action(std::string name) {
+Action* Action::get_action(std::string name) {
     /*
     auto f = actions.find(name);
     if(f == actions.end()) {
@@ -95,18 +106,22 @@ Action Action::get_action(std::string name) {
     }
     return f->second;
     */
-    return actions.at(name);
+    return &actions.at(name);
 }
 
 AIPackage Action::get_ai_package(std::string name) {
     return ai_packages.at(name);
 }
 
+void Action::clear(){
+    ai_packages.clear();
+    actions.clear();
+}
 
 /// NIE-STATIC
-Action::Action(std::string name, int cost, std::string target_name): name(name), cost(cost), target_name(target_name), scanner(ScriptSystem::state()) {
+Action::Action(std::string name, int cost, std::string target_name): name(name), cost(cost), target_name(target_name), scanner(Engine::lua()->state()) {
+    logs::log("new action: %s\n", name.c_str());
     needs_target = (target_name != "");
-    //printf("%s needs target: %s\n", name.c_str(), needs_target ? "true" : "false");
 }
 
 Action::~Action() {
@@ -121,20 +136,25 @@ Action& Action::remove_precondition(std::string name) {
     precondition.remove(name);
     return *this;
 }
+
 Action& Action::add_effect(std::string name, bool value) {
     effect.add(name, value);
     return *this;
 }
+
 Action& Action::remove_effect(std::string name) {
     effect.remove(name);
     return *this;
 }
-void Action::set_agent(GoapAgent* agent) {
-    this->agent = agent;
-}
-Entity* Action::get_owner() {
-    return agent->owner.lock().get();
-}
+
+//void Action::set_agent(GoapAgent* agent) {
+//    this->agent = agent;
+//}
+
+//Entity* Action::get_owner() {
+//    return agent->owner.lock().get();
+//}
+
 bool Action::is_doable(const WorldState &ws) {
     for(auto v : precondition.attrs) {
         auto f = ws.attrs.find(v.first);
@@ -152,55 +172,21 @@ WorldState Action::act_on(WorldState ws) {
     return ws;
 }
 
-bool Action::find_target(std::unordered_map<std::string, std::vector<std::weak_ptr<Entity>>>& targets) {
-    if(!needs_target) {
-        target.reset();
-        return true;
-    }
-
-    std::weak_ptr<Entity> closest;
-    double dist = 0;
-    auto opf = get_owner()->get<CPhysicalForm>();
-    if(opf) {
-        for(auto target: targets[target_name]) {
-            if(!target.expired()) {
-                auto pf = target.lock()->get<CPhysicalForm>();
-                if(pf) {
-                    if(closest.expired()) {
-                        closest = target;
-                        dist = opf->pos.dist(pf->pos);
-                    } else {
-                        double temp = opf->pos.dist(pf->pos);
-                        if(temp < dist) {
-                            closest = target;
-                            dist = temp;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    if(closest.expired()) {
-        return false;
-    }
-    target = closest;
-    return true;
-}
-
+/*
 void Action::reset() {
     target.reset();
     execute.stop();
 }
-
-bool Action::perform(int ms_passed) { /// heavy
-
-    if(execute(get_owner(), (get_target().expired() ? nullptr : get_target().lock().get()), ms_passed)) {
-        execute.stop();
-        return true;
-    }
-    return false;
+*/
+bool Action::perform(Entity* agent, Entity* target, int ms_passed) { /// heavy
+    return execute(agent, target, ms_passed);
+//    if(execute(agent, target, ms_passed)) {
+//        //execute.stop();
+//        return true;
+//    }
+//    return false;
 }
-
+/*
 bool Action::is_in_range() { /// to nie powinno mieć dwóch implementacji (druga jest w GotoState)
     if(needs_target) {
         if(target.expired()) return false;
@@ -214,3 +200,4 @@ bool Action::is_in_range() { /// to nie powinno mieć dwóch implementacji (drug
 bool Action::has_target() {
     return !target.expired() && target.lock()->is_active();
 }
+*/
