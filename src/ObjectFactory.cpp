@@ -11,6 +11,8 @@
 
 #include "AIPackage.h"
 
+#include "MiscFunctions.h"
+
 
 ObjectFactory::ObjectFactory(EntityManager* entityManager) : entityManager(entityManager) { /// to ma wylądować w skryptach
 
@@ -27,7 +29,7 @@ void ObjectFactory::init(){
 void ObjectFactory::init_component_constructors() {
     /// POZBYĆ SIĘ TEGO SZAJSU
     components["CPhysicalForm"] = ([=](json j_obj) {
-        return entityManager->make_component<CPhysicalForm>(0, 0, 0, j_obj[3], j_obj[4]); /// to jest problematyczne
+        return entityManager->make_component<CTransform>(0, 0, 0, j_obj[3], j_obj[4]); /// to jest problematyczne
     });
     components["CAspect"] = ([=](json j_obj) {
         return entityManager->make_component<CAspect>(j_obj[0], j_obj[1], j_obj[2], j_obj[3]);
@@ -119,7 +121,7 @@ shared_ptr<Entity> ObjectFactory::make_object(std::string type, double x, double
                 logs::log("%s (tried to call component[%s](%s))\n", e.what(), p.first.c_str(), p.second.dump().c_str());
             }
         }
-        CPhysicalForm* pf = e->get<CPhysicalForm>();
+        CTransform* pf = e->get<CTransform>();
         if(pf) {
             pf->pos = {x, y, 0};
         } else {

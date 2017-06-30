@@ -37,7 +37,7 @@ void Logs::log(std::string format, ...) {
 }
 
 void Logs::close(std::string format, ...) {
-    format = ">" + format;
+    format = "^" + format;
     if(instance.indent) instance.indent--;
     for(unsigned i=0; i < instance.indent; i++) {
         format = "| " + format;
@@ -46,4 +46,16 @@ void Logs::close(std::string format, ...) {
     va_start(args, format);
     vprintf(format.c_str(), args);
     va_end(args);
+}
+
+void Logs::sopen(std::string text){
+    open((text+'\n').c_str());
+}
+
+void Logs::slog(std::string text){
+    log((text+'\n').c_str());
+}
+
+void Logs::sclose(std::string text){
+    close((text+'\n').c_str());
 }

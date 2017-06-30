@@ -1,14 +1,19 @@
 #ifndef SETUPS_H
 #define SETUPS_H
 
-namespace setups {
-void register_all();
+#include "LuaBridge.h"
+using namespace luabridge;
 
-void register_engine();
-void register_entity();
-void register_entity_manager();
-void register_components();
-void register_misc();
+namespace setups {
+void register_all(lua_State* L);
+
+void register_logs(lua_State* L);
+void register_engine(lua_State* L);
+void register_systems(lua_State* L);
+void register_entity(lua_State* L);
+void register_entity_manager(lua_State* L);
+void register_components(lua_State* L);
+void register_misc(lua_State* L);
 }
 
 #endif // SETUPS_H

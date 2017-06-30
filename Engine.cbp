@@ -5,17 +5,17 @@
 		<Option title="Engine" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="GraphicsModule\;GraphicsModule\include\;GraphicsModule\src\;Others\;Objects\;LogicModule\;LogicModule\src\;LogicModule\include\;Other\;Other\src\;Other\include\;EventModule\;MainModule\;MainModule\src\;MainModule\include\;EventModule\include\;EventModule\src\;AudioModule\;AudioModule\include\;AudioModule\src\;GameObjects\src\;GameObjects\include\;ScriptModule\;ScriptModule\src\;ScriptModule\include\;AI\;AI\src\;AI\include\;Components\;Components\src\;Components\include\;Objects\src\;Objects\include\;" />
+		<Option virtualFolders="GraphicsModule\;GraphicsModule\include\;GraphicsModule\src\;Others\;Objects\;LogicModule\;LogicModule\src\;LogicModule\include\;Other\;Other\src\;Other\include\;EventModule\;MainModule\;MainModule\src\;MainModule\include\;EventModule\include\;EventModule\src\;AudioModule\;AudioModule\include\;AudioModule\src\;ScriptModule\;ScriptModule\src\;ScriptModule\include\;AI\;AI\src\;AI\include\;Components\;Components\src\;Components\include\;Objects\src\;Objects\include\;" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/Bomberman" prefix_auto="1" extension_auto="1" />
+				<Option output="Engine" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-O2" />
 					<Add option="-Wall" />
 					<Add option="-std=c++14" />
-					<Add option="-g" />
 					<Add directory="C:/Dev_Libs/x86_64-w64-mingw32/include/SDL2" />
 					<Add directory="include" />
 					<Add directory="C:/Dev_Libs/lua-5.3.3/include" />
@@ -106,9 +106,6 @@
 		<Unit filename="include/EventManager.h">
 			<Option virtualFolder="EventModule/include/" />
 		</Unit>
-		<Unit filename="include/FSM.h">
-			<Option virtualFolder="AI/include/" />
-		</Unit>
 		<Unit filename="include/FSMState.h">
 			<Option virtualFolder="AI/include/" />
 		</Unit>
@@ -161,6 +158,9 @@
 		<Unit filename="include/setups.h">
 			<Option virtualFolder="ScriptModule/include/" />
 		</Unit>
+		<Unit filename="include/tindex.h">
+			<Option virtualFolder="Other/include/" />
+		</Unit>
 		<Unit filename="main.cpp" />
 		<Unit filename="src/AIPackage.cpp">
 			<Option virtualFolder="AI/src/" />
@@ -206,9 +206,6 @@
 		</Unit>
 		<Unit filename="src/EventManager.cpp">
 			<Option virtualFolder="EventModule/src/" />
-		</Unit>
-		<Unit filename="src/FSM.cpp">
-			<Option virtualFolder="AI/src/" />
 		</Unit>
 		<Unit filename="src/FSMState.cpp">
 			<Option virtualFolder="AI/src/" />

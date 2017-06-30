@@ -2,7 +2,6 @@
 
 #include <SDL.h>
 
-#include "FSM.h"
 #include "WorldState.h"
 #include "GoapAgent.h"
 
@@ -12,7 +11,7 @@ FSMState::FSMState(GoapAgent* agent, FSMState* parent) : agent(agent), parent(pa
 FSMState::~FSMState() { }
 
 Entity* FSMState::get_owner() {
-    return agent->owner.lock().get();
+    return agent->get_owner().lock().get();
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------
 IdleState::IdleState(GoapAgent *agent, FSMState* parent): FSMState(agent, parent) {
@@ -32,9 +31,10 @@ void IdleState::update(int ms) {
         } else {
             unsigned wait_time = 1000 + rand() % 4000; // 1-5s czekania
             wait_end = SDL_GetTicks() + wait_time;
-            logs::log("no plan - waiting for: %d\n", wait_time);
-            CMovement *mv = get_owner()->get<CMovement>();
-            if(mv)mv->stop(); /// nie działa, bo kolizje... nie działa?
+//            logs::log("no plan - waiting for: %d\n", wait_time);
+            /// tego tu być nie winno, więc nie będzie
+//            CMovement *mv = get_owner()->get<CMovement>();
+//            if(mv)mv->stop(); /// nie działa, bo kolizje... nie działa? no chyba
         }
     }
 }
@@ -68,11 +68,11 @@ void PlanExecutionState::update(int ms) {
 std::weak_ptr<Entity> PlanExecutionState::find_target(std::string target_name, std::unordered_map<std::string, std::vector<std::weak_ptr<Entity>>>& targets) {
     std::weak_ptr<Entity> closest;
     double dist = 0;
-    auto opf = get_owner()->get<CPhysicalForm>();
+    auto opf = get_owner()->get<CTransform>();
     if(opf) {
         for(auto target: targets[target_name]) {
             if(!target.expired()) {
-                auto pf = target.lock()->get<CPhysicalForm>();
+                auto pf = target.lock()->get<CTransform>();
                 if(pf) {
                     if(closest.expired()) {
                         closest = target;

@@ -17,7 +17,7 @@
 #include "ComponentSystem.h"
 #include "GameInitializer.h"
 
-#include "setups.h"
+//#include "setups.h"
 ///
 
 Engine* Engine::_instance = nullptr;
@@ -164,8 +164,10 @@ int Engine::init() {
             break;
         }
     });
+
     logs::close("events registered.\n");
-    setups::register_all();
+    //setups::register_all();
+//    lua()->execute("print_table(_G)");
 
     GameInitializer().init_entities(entityManager);
 

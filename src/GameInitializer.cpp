@@ -16,7 +16,12 @@ GameInitializer::~GameInitializer() {
 }
 
 void GameInitializer::init_entities(EntityManager *entityManager) {
-    logs::log("initializing game...\n");
-    getGlobal(Engine::lua()->state(), "init_game")(entityManager);
-    logs::log(" done!\n");
+    logs::open("creating world...\n");
+    try {
+        Engine::lua()->get("init_game")(entityManager);
+    } catch(LuaException const& e) {
+        logs::close("LuaEx while initializing game: %s\n", e.what());
+        return;
+    }
+    logs::close("world created!\n");
 }

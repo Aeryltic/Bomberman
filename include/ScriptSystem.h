@@ -30,6 +30,8 @@ public:
     LuaRef get(std::string rname);
 
     bool do_file(const std::string& filename);
+
+    void refresh_refs();
 protected:
 
 private:

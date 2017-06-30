@@ -27,11 +27,11 @@ struct View {
 
 struct MovementView : View {
     MovementView(Entity *e) {
-        pf = e->get<CPhysicalForm>();
+        pf = e->get<CTransform>();
         m = e->get<CMovement>();
         complete = (pf && m);
     }
-    CPhysicalForm *pf;
+    CTransform *pf;
     CMovement *m;
 };
 
@@ -39,13 +39,13 @@ struct BreederView : View {
     BreederView(Entity *e) {
         breeder = e->get<CBreeder>();
         energy = e->get<CEnergyStore>();
-        pf = e->get<CPhysicalForm>();
+        pf = e->get<CTransform>();
 
         complete = (breeder && energy && pf);
     }
     CBreeder *breeder;
     CEnergyStore *energy;
-    CPhysicalForm *pf;
+    CTransform *pf;
 };
 
 struct EnergyView : View {
@@ -86,13 +86,13 @@ struct SmellSensorView : View
 struct AIView : View {
     AIView(Entity *e) {
         ai = e->get<GoapAgent>();
-        pf = e->get<CPhysicalForm>();
+        pf = e->get<CTransform>();
         m  = e->get<CMovement>();
 
         complete = (ai && pf && m);     /// to wszystko tylko teraz tak wygląda
     }
     GoapAgent *ai;
-    CPhysicalForm *pf;
+    CTransform *pf;
     CMovement *m;
 };
 

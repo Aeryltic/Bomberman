@@ -9,6 +9,10 @@ public:
     static void open(std::string format, ...);
     static void log(std::string format, ...);
     static void close(std::string format, ...);
+
+    static void sopen(std::string text);
+    static void slog(std::string text);
+    static void sclose(std::string text);
 protected:
 
 private:

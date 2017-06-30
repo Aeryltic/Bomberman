@@ -37,12 +37,14 @@ public:
 
 private:
     std::unordered_map<std::string, component_creator> components;
-    //std::unordered_map<unsigned, entity_creator> constructors;
     std::unordered_map<std::string, ObjectSchema> object_schemas;
 
     EntityManager* entityManager;
 
     void init_component_constructors();
     void init_entity_constructors();
+
+    /// TEST
+    std::unordered_map<std::string, entity_creator> testing_constructors;
 };
 #endif // OBJECTFACTORY_H

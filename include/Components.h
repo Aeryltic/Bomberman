@@ -13,28 +13,49 @@
 
 #include <SDL.h> /// tego tu być nie winno
 
-struct CPhysicalForm : public Component {
+struct CTransform : public Component {
     vec3d pos;
-    vec3d vol;
+    vec3d vol; /// to stąd wywalić i dodać raczej scale, czy coś
     vec3d rot;
+    weak_ptr<CTransform> parent;
 
-    explicit CPhysicalForm(double x, double y, double z, double w, double h, double d = 0)
+    explicit CTransform(double x, double y, double z, double w, double h, double d = 0)
         : pos(x, y, z), vol(w, h, d), rot(0,0,0) { }
-    explicit CPhysicalForm(const vec3d& pos, const vec3d& vol, const vec3d& rot)
+    explicit CTransform(const vec3d& pos, const vec3d& vol, const vec3d& rot)
         : pos(pos), vol(vol), rot(rot) { }
-    virtual ~CPhysicalForm() {/*printf("pf_destr\n");*/}
+    virtual ~CTransform() {/*printf("pf_destr\n");*/}
 
     vec3d get_pos() const {return pos;}
 };
+//-----------------------------------------------------------------------------------------------------------------------------------------------------
+/// to jest uzasadnione żeby trzymać pojemnik tych jointów...
+struct Joint {
+    //weak_ptr<CTransform> parent;
+    vec3d pos;
+};
 
+struct CJoints : public Component {
+    vector<std::shared_ptr<Joint>> joints;
+};
+//-----------------------------------------------------------------------------------------------------------------------------------------------------
+/// ... ale to? to chyba inaczej powinno działać
+/// to chyba w tej formie nie jest takie do końca super, bo wszystko może być instrumentem (tzn. powinno być)
+struct CInstrument : public Component{ /// to będzie w obiekcie, który może być "instrumentem", definiuje jego własności jako instrumentu
+    LuaRef handle;
+};
+/// to poniżej powinno być częścią jakiejś innej klasy, która już tych intrumentów używa - tego niskiego AI czy coś
+struct CInstrumentHandler : public Component { /// to te "intrumenty" mają odpowiadać za wykonywanie akcji. i znowu - jedno Entity, dowolna ilość intrumentów
+    vector<std::weak_ptr<CInstrument>> instruments;
+};
+//-----------------------------------------------------------------------------------------------------------------------------------------------------
 struct CRigidBody : public Component {
-    double r;
+    double r; // okrąg/sfera
 
     CRigidBody(double r) : r(r) {}
 };
 
-/// Animation/SpriteComponent?
-struct CAspect : public Component { /// uses CPhysicalForm
+/// Animation/SpriteComponent? Model+Texture+Skeleton+Animation
+struct CAspect : public Component { // uses CPhysicalForm
     SDL_Color base_color;
     SDL_Color color;
 
@@ -60,6 +81,13 @@ struct CAspect : public Component { /// uses CPhysicalForm
         color.b = base_color.b;
         color.a = 255;
     }
+};
+
+struct CDynamicBody : public Component { /// na razie traktowany jako punkt materialny
+    double mass;
+    vec3d net_force;
+    vec3d speed; /// CKinematicBody?
+
 };
 
 struct CMovement : public Component {

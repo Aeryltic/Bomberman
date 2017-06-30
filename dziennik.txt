@@ -127,30 +127,30 @@
 	odrobina dziedziczenia w komponentach DynamicBody, StaticBody, KinematicBody
 17.06.2017
 	dodaæ jakieœ wagi do worldstate'ów czy coœ ¿eby np. zaznaczyæ poziom g³odu, ¿e jeszcze nie jest a¿ tak du¿y mo¿na zaj¹æ siê czymœ innym, ale jeœli bêdzie za du¿y to nie ma wyboru trzeba jeœæ
-!	scannery w aktualnej formie nie maj¹ odpowiedniego zasiêgu (tylko agent) (DOSTÊP Z POZIOMU SKRYPTÓW DO WSZYSTKICH OBIEKTÓW)
++	scannery w aktualnej formie nie maj¹ odpowiedniego zasiêgu (tylko agent) (DOSTÊP Z POZIOMU SKRYPTÓW DO WSZYSTKICH OBIEKTÓW) +++ naprawiane przez rejestracjê Engine'u do Lua'y
 	zrobiæ ¿eby przestali chodziæ gdy nie potrzeba
-!	naprawiæ ten heapcorruption
++	naprawiæ ten heapcorruption
 	jak zrobiæ ¿eby mrówka by³a jedzeniem ale ¿eby mrówki jej nie jad³y, tylko potwór?
 	JAKAŒ HIERARCHIA W ACTIONHANDLERZE? ¿eby ró¿n¹ iloœæ argumentów przyjmowa³y czy coœ
 	naprawiæ "beztargetowe" akcje
 	rzadko s¹ g³odni, a zmêczeni to ju¿ wcale
 18.06.2017
 	akcje akcjami, ale handlery powinny byæ jakoœ osobno, bo inaczej jada wilk, a inaczej owca
-!	HeapCorruptionException oczywiœcie przed usuwaniem ScriptSystemu
++	HeapCorruptionException oczywiœcie przed usuwaniem ScriptSystemu
 	tego jsona "objects.json" trzeba przeparsowaæ tak aby tworzyæ jakieœ szkielety obiektów, a potem tylko je instancjonowaæ
 	ZBUDOWAÆ JAKIŒ £ADNY SYSTEM DLA LOGÓW
 	okej, praktycznie wszystko kontekstowe przeniesione do skryptów
 	chyba pope³niam b³¹d wyrzucaj¹c to wszystko poza g³ówny kod ju¿ teraz...
-!	NIEBEZPOŒREDNI DOSTÊP DO SKRYPTÓW - w ScriptSystem mapa <string, LuaRef> przez ni¹ odwo³ania... tylko czy to nie spowolni a¿ za bardzo?
++++	NIEBEZPOŒREDNI DOSTÊP DO SKRYPTÓW - w ScriptSystem mapa <string, LuaRef> przez ni¹ odwo³ania... tylko czy to nie spowolni a¿ za bardzo?
 19.06.2017
-!!	skrypty akcji musz¹ przyjmowaæ deltê czasu
+++	skrypty akcji musz¹ przyjmowaæ deltê czasu
 	jak ustawiæ niestandardowe parametry?
 	do definicji dodaæ coœ w stylu "base" który przechowywa³by nazwê typu(typów) który ten dany rozszerza... tylko ¿e to nie jest takie ³atwe (to potem)
 20.06.2017
-!	DODAÆ DO DEFINICJI OBIEKTÓW ODNOŒNIK DO SKRYPTU INICJALIZUJ¥CEGO ODPOWIEDNIE WARTOŒCI
+!	DODAÆ DO DEFINICJI OBIEKTÓW ODNOŒNIK DO SKRYPTU INICJALIZUJ¥CEGO ODPOWIEDNIE WARTOŒCI - to chyba dotyczy³o CProperties itp
 	niech skrypt akcji decyduje czy trzeba chodziæ + jak to robiæ
 	ró¿ne skrypty do wykonywania akcji dla ró¿nych typów obiektów? za du¿o roboty ¿eby to wszystko na go³ych danych parowaæ - trzeba narzêdzia i "bazy danych"
-!!!	STWORZYÆ NARZÊDZIE UMO¯LIWIAJ¥CE TWORZENIE I EDYCJÊ DANYCH (w tym skryptów - prosty edytor) I PRZEDE WSZYSTKIM DAJ¥CE CZYTELNY POGL¥D NA WSZELKIE POWI¥ZANIA
+###	STWORZYÆ NARZÊDZIE UMO¯LIWIAJ¥CE TWORZENIE I EDYCJÊ DANYCH (w tym skryptów - prosty edytor) I PRZEDE WSZYSTKIM DAJ¥CE CZYTELNY POGL¥D NA WSZELKIE POWI¥ZANIA
 !	rekalkulacja priorytetów - jakiœ skrypt dla ka¿dego info o œwiecie - nowe dane, które trzeba sformalizowaæ i potworzyæ
 ++	sensory sprawdzaj¹ce warunki dla wykonania akcji to jedno, a sensory skanuj¹ce œwiat i ustawiaj¹ce worldstaty to drugie
 21.06.2017
@@ -167,11 +167,18 @@ nie wiem co ja tu robiê...
 ++	akcje to ju¿ tylko dane - nie maj¹ ¿adnego zwi¹zku z "posiadaczem"
 	gdzie umieœciæ poruszanie siê, ¿eby nie trzeba do ka¿dego skryptu tego wciskaæ? ale zarazem ¿eby nie by³o tak jak wczeœniej, czyli sztywny GotoState...
 	akcje wykonywane w ruchu...
-!	z tymi ró¿nymi skryptami do wykonywania akcji przez ka¿dy typ bytu to trochê przesada - tak na dobr¹ sprawê to chodzi po prostu o inn¹ animacjê w wiêkszoœci przypadków, bo w reszcie to ju¿ po prostu inna akcja
+#	z tymi ró¿nymi skryptami do wykonywania akcji przez ka¿dy typ bytu to trochê przesada - tak na dobr¹ sprawê to chodzi po prostu o inn¹ animacjê w wiêkszoœci przypadków, bo w reszcie to ju¿ po prostu inna akcja
 	po prostu wpleœæ gdzieœ minimalny zasiêg i wykonywaæ, gdy jest w zasiêgu...
 	zasiêg zale¿y od "narzêdzia"
-!	hmm... zasiêg d³oni, kija, miecza, dzidy, grabii, toporka, ³uku...
-!!	skrypt wykonywaæ nawet jeœli poza zasiêgiem - mo¿e to nie byæ potrzebne, albo jakaœ reakcja gdy jest poza zasiêgiem, lub zrobienie czegoœ w czasie podchodzenia
+#	hmm... zasiêg d³oni, kija, miecza, dzidy, grabii, toporka, ³uku...
+##	skrypt wykonywaæ nawet jeœli poza zasiêgiem - mo¿e to nie byæ potrzebne, albo jakaœ reakcja gdy jest poza zasiêgiem, lub zrobienie czegoœ w czasie podchodzenia
 	to mo¿e byæ to.
-!!	za poruszanie siê i tak bêd¹ odpowiadaæ skrypty... jakieœ style poruszania siê czy coœ - osobna kategoria skryptów? hmmm... chyba tak
+##	za poruszanie siê i tak bêd¹ odpowiadaæ skrypty... jakieœ style poruszania siê czy coœ - osobna kategoria skryptów? hmmm... chyba tak
 	nadal widzê miejsce dla tych "mikroakcji"...
+##	jakiœ rodzaj niezale¿nej od g³ównego Goap'a warstwy AI, która odpowiada³aby za ró¿ne podstawowe czynnoœci jak np. chodzenie, odbieranie czynników, skanowanie otoczenia?
+30.06.2017
+	mo¿e kiedyœ siê ca³oœæ AI przeniesie do skryptów - mniej skakania miêdzy C++ a Lu¹
+####	"NARZÊDZIA" - ten pomys³ z narzêdziami... to jest dobry pomys³ - bardzo dobry: mo¿na "nauczyæ" ich obs³ugi narzêdzi, a akcje bêd¹ wykonywaæ wtedy ju¿ "instyktownie", jak np. "u¿yj d³oni/widelca/dzidy (wszystkie daj¹ mo¿liwoœæ przemieszczania obiektów o pewnych w³asnoœciach, tzn. "miekkich") by umieœciæ pokarm w ustach", skrypt ogranicza siê wtedy do "u¿yj narzêdzia by umieœciæ pokarm w ustach", a jakie to narzêdzie to bêdzie... to ju¿ mnie nie obchodzi :D
+	mo¿na bêdzie po prostu dodawaæ narzêdzia, uczyæ obs³ugi (która te¿ bêdzie w wielu przypadkach powieleniem jednego skryptu lub drobny dostosowaniem do konkretnego warunku)
+	czy CELE akcji potrzebuj¹ te¿ takich pojêæ? na razie nie wiem
+	³¹czenie narzêdzi: rêka trzyma miecz/widelec

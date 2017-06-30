@@ -88,20 +88,20 @@ bool ComponentSystem::init() {
         unordered_map<int, weak_ptr<Component>>::iterator c1;
         for(c1 = rbodies.begin(); c1 != rbodies.end(); c1 = std::next(c1)) {
             CRigidBody *rb = static_cast<CRigidBody*>(c1->second.lock().get());
-            CMovement *mv = rb->owner.lock()->get<CMovement>();
-            CPhysicalForm *pf = rb->owner.lock()->get<CPhysicalForm>();
+            CMovement *mv = rb->get_owner().lock()->get<CMovement>();
+            CTransform *pf = rb->get_owner().lock()->get<CTransform>();
             if(mv == nullptr || pf == nullptr) continue;
 
             unordered_map<int, weak_ptr<Component>>::iterator c2;
             for(c2 = next(c1); c2 != rbodies.end(); c2 = std::next(c2)) {
                 CRigidBody *rb2 = static_cast<CRigidBody*>(c2->second.lock().get());
-                CPhysicalForm *pf2 = rb2->owner.lock()->get<CPhysicalForm>();
+                CTransform *pf2 = rb2->get_owner().lock()->get<CTransform>();
                 if(pf2 == nullptr) continue;
                 if(pf->pos.dist(pf2->pos) < rb->r + rb2->r) { /// kolizja
                     vec3d normal = vec3d(pf->pos.y - pf2->pos.y, pf2->pos.x - pf->pos.x, 0).normalized();
                     mv->speed = normal * mv->speed.len();
 
-                    CMovement *mv2 = rb2->owner.lock()->get<CMovement>();
+                    CMovement *mv2 = rb2->get_owner().lock()->get<CMovement>();
                     if(mv2 != nullptr) {
                         mv2->speed = -normal * mv2->speed.len();
                     }

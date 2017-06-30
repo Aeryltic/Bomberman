@@ -18,7 +18,7 @@ DisplayManager::DisplayManager() {
 }
 
 DisplayManager::~DisplayManager() {
-    logs::log("deleting DisplayManager...");
+    logs::log("deleting DisplayManager...\n");
 
     SDL_DestroyTexture(_gameWorldView);
     delete _window;
@@ -44,9 +44,7 @@ DisplayManager::~DisplayManager() {
 
 //void DisplayManager::render(EntityManager *entityManager, int ms) {
 void DisplayManager::render(EntityManager *entityManager, double interpolation) {
-    //printf("rendering...");
     if(!Engine::isPaused()) {
-        //printf(" ok.");
         // renderowanie
         SDL_SetRenderTarget(_window->getRenderer(), _gameWorldView);
         SDL_RenderClear(_window->getRenderer());
@@ -55,24 +53,20 @@ void DisplayManager::render(EntityManager *entityManager, double interpolation) 
         for(auto &p : entityManager->get_components()[tindex(CAspect)]) {
             auto component = p.second;
             if(component.expired()) {
-                //printf("component expired!\n");
                 continue;
             }
 
             CAspect *asp = static_cast<CAspect*>(component.lock().get());
-            CPhysicalForm *pf = static_cast<CPhysicalForm*>(component.lock()->owner.lock()->get<CPhysicalForm>());
-
-            //printf("aspect: %d %d %d at pos: %s", asp->color.r, asp->color.g, asp->color.b, pf->pos.repr().c_str());
+            CTransform *pf = static_cast<CTransform*>(component.lock()->get_owner().lock()->get<CTransform>());
 
             vec3d pos(pf->pos.x, pf->pos.y, pf->pos.y);
             double r = pf->vol.x / 2;
 
-            CMovement *m = component.lock()->owner.lock()->get<CMovement>();
+            CMovement *m = component.lock()->get_owner().lock()->get<CMovement>();
             if(m != nullptr) {
                 pos.x += m->speed.x * interpolation;
                 pos.y += m->speed.y * interpolation;
             }
-            //drawRectangle(rect, SDL_Color{.r=255,.g=0,.b=0,.a=255});
             filledCircleRGBA (_window->getRenderer(), pos.x, pos.y, r, asp->color.r, asp->color.g, asp->color.b, asp->color.a);
         }
         /// to potem
@@ -95,7 +89,6 @@ void DisplayManager::render(EntityManager *entityManager, double interpolation) 
         SDL_RenderCopy(_window->getRenderer(), _gameWorldView, nullptr, nullptr);
         SDL_RenderPresent(_window->getRenderer());
     }
-    //printf("\n");
 }
 
 void DisplayManager::drawConsole(const string &buffer, const deque<string> &commandHistory) { /// to jest słabe
@@ -233,7 +226,7 @@ void DisplayManager::init() {
         _windowRect.x = 0;
         _windowRect.y = 0;
         SDL_GetWindowSize(_window->getWindow(), &_windowRect.w, &_windowRect.h);
-        logs::log("_windowRect: %d %d %d %d ", _windowRect.x, _windowRect.y, _windowRect.w, _windowRect.h);
+        logs::log("_windowRect: %d %d %d %d\n", _windowRect.x, _windowRect.y, _windowRect.w, _windowRect.h);
         _active = true;
     } else _active = false;
 

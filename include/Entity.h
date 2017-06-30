@@ -1,14 +1,13 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include <memory>
 #include <unordered_map>
 #include <vector>
 #include <typeinfo>
 #include <typeindex>
 
-#include "MiscFunctions.h"
-
-//#include "Message.h"
+#include "tindex.h"
 
 using namespace std;
 

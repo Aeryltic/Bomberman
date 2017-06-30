@@ -799,7 +799,7 @@
 
 1498743471 c:\users\user\desktop\engine\include\gamestate.h
 
-1498779276 source:c:\users\user\desktop\engine\src\action.cpp
+1498854836 source:c:\users\user\desktop\engine\src\action.cpp
 	"Action.h"
 	"Engine.h"
 	"ScriptSystem.h"
@@ -808,6 +808,7 @@
 	"Components.h"
 	"GoapAgent.h"
 	"AIPackage.h"
+	"MiscFunctions.h"
 
 1498780316 c:\users\user\desktop\engine\include\action.h
 	<unordered_map>
@@ -822,14 +823,14 @@
 1498081606 c:\users\user\desktop\engine\include\worldstate.h
 	<unordered_map>
 
-1498753155 c:\users\user\desktop\engine\include\scriptsystem.h
+1498844932 c:\users\user\desktop\engine\include\scriptsystem.h
 	<unordered_map>
 	<LuaBridge.h>
 	"lua.h"
 	"lauxlib.h"
 	"lualib.h"
 
-1498081606 c:\users\user\desktop\engine\include\logs.h
+1498852497 c:\users\user\desktop\engine\include\logs.h
 	<string>
 
 1498781480 c:\users\user\desktop\engine\include\goapagent.h
@@ -842,24 +843,23 @@
 	"WorldState.h"
 	"Action.h"
 
-1497102036 c:\users\user\desktop\engine\include\component.h
+1498838029 c:\users\user\desktop\engine\include\component.h
 	<memory>
 
 1498772952 c:\users\user\desktop\engine\include\fsm.h
 
-1497102036 c:\users\user\desktop\engine\include\entity.h
+1498847981 c:\users\user\desktop\engine\include\entity.h
+	<memory>
 	<unordered_map>
 	<vector>
 	<typeinfo>
 	<typeindex>
-	"MiscFunctions.h"
+	"tindex.h"
 
-1497895214 c:\users\user\desktop\engine\include\miscfunctions.h
-	<typeindex>
-	<typeinfo>
+1498847852 c:\users\user\desktop\engine\include\miscfunctions.h
 	"json.hpp"
 
-1498175244 c:\users\user\desktop\engine\include\components.h
+1498865663 c:\users\user\desktop\engine\include\components.h
 	"Entity.h"
 	"Component.h"
 	"Structures.h"
@@ -920,7 +920,7 @@
 
 1497732750 c:\users\user\desktop\engine\include\constants.h
 
-1498758553 c:\users\user\desktop\engine\include\objectfactory.h
+1498865654 c:\users\user\desktop\engine\include\objectfactory.h
 	<memory>
 	<unordered_map>
 	"json.hpp"
@@ -937,7 +937,7 @@
 1497644039 source:c:\users\user\desktop\engine\src\components.cpp
 	"Components.h"
 
-1498769931 source:c:\users\user\desktop\engine\src\componentsystem.cpp
+1498838144 source:c:\users\user\desktop\engine\src\componentsystem.cpp
 	"ComponentSystem.h"
 	<iterator>
 	"EntityManager.h"
@@ -952,7 +952,7 @@
 	<vector>
 	<stdio.h>
 
-1498081606 c:\users\user\desktop\engine\include\views.h
+1498837626 c:\users\user\desktop\engine\include\views.h
 	"Components.h"
 	"Entity.h"
 	"GoapAgent.h"
@@ -994,7 +994,7 @@
 	<SDL.h>
 	"Logs.h"
 
-1498778604 source:c:\users\user\desktop\engine\src\displaymanager.cpp
+1498854508 source:c:\users\user\desktop\engine\src\displaymanager.cpp
 	"DisplayManager.h"
 	<SDL.h>
 	<SDL_image.h>
@@ -1033,15 +1033,14 @@
 	"Structures.h"
 	"GoapPlanner.h"
 
-1498780943 source:c:\users\user\desktop\engine\src\fsmstate.cpp
+1498838420 source:c:\users\user\desktop\engine\src\fsmstate.cpp
 	"FSMState.h"
 	<SDL.h>
-	"FSM.h"
 	"WorldState.h"
 	"GoapAgent.h"
 	"Components.h"
 
-1498778604 source:c:\users\user\desktop\engine\src\gameinitializer.cpp
+1498854774 source:c:\users\user\desktop\engine\src\gameinitializer.cpp
 	"GameInitializer.h"
 	"Engine.h"
 	"EntityManager.h"
@@ -1068,12 +1067,13 @@
 	"GameInitializer.h"
 	"setups.h"
 
-1498742544 c:\users\user\desktop\engine\include\setups.h
+1498853945 c:\users\user\desktop\engine\include\setups.h
+	"LuaBridge.h"
 
 1498781652 source:c:\users\user\desktop\engine\src\goapagent.cpp
 	"GoapAgent.h"
 
-1498779227 source:c:\users\user\desktop\engine\src\goapplanner.cpp
+1498836794 source:c:\users\user\desktop\engine\src\goapplanner.cpp
 	"GoapPlanner.h"
 	<unordered_map>
 	<algorithm>
@@ -1088,7 +1088,7 @@
 	<SDL_image.h>
 	"Logs.h"
 
-1498770758 source:c:\users\user\desktop\engine\src\logs.cpp
+1498854540 source:c:\users\user\desktop\engine\src\logs.cpp
 	"Logs.h"
 	<cstdio>
 	<cstdarg>
@@ -1110,7 +1110,7 @@
 	<fstream>
 	<Logs.h>
 
-1498758535 source:c:\users\user\desktop\engine\src\objectfactory.cpp
+1498848012 source:c:\users\user\desktop\engine\src\objectfactory.cpp
 	"ObjectFactory.h"
 	"Entity.h"
 	"EntityManager.h"
@@ -1118,20 +1118,21 @@
 	"GoapAgent.h"
 	"StringIndexer.h"
 	"AIPackage.h"
+	"MiscFunctions.h"
 
 1498081606 source:c:\users\user\desktop\engine\src\resourcemanager.cpp
 	"ResourceManager.h"
 	"Logs.h"
 
-1498766348 source:c:\users\user\desktop\engine\src\scriptsystem.cpp
+1498855575 source:c:\users\user\desktop\engine\src\scriptsystem.cpp
 	"ScriptSystem.h"
 	"Engine.h"
 	"DisplayManager.h"
+	"setups.h"
 
-1498783275 source:c:\users\user\desktop\engine\src\setups.cpp
+1498853968 source:c:\users\user\desktop\engine\src\setups.cpp
 	"setups.h"
 	<memory>
-	"LuaBridge.h"
 	"Engine.h"
 	"Entity.h"
 	"Component.h"
@@ -1156,7 +1157,7 @@
 	<stdio.h>
 	<vector>
 
-1498778637 source:c:\users\user\desktop\engine\src\engine.cpp
+1498854695 source:c:\users\user\desktop\engine\src\engine.cpp
 	"Engine.h"
 	<SDL.h>
 	<stdio.h>
@@ -1170,7 +1171,6 @@
 	"Console.h"
 	"ComponentSystem.h"
 	"GameInitializer.h"
-	"setups.h"
 
 1498771877 c:\users\user\desktop\engine\include\actionexecutor.h
 	"LuaBridge.h"
@@ -1180,4 +1180,8 @@
 	"Engine.h"
 	"ScriptSystem.h"
 	"Logs.h"
+
+1498847848 c:\users\user\desktop\engine\include\tindex.h
+	<typeindex>
+	<typeinfo>
 

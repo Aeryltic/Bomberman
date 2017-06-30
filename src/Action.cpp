@@ -11,6 +11,8 @@
 
 #include "AIPackage.h"
 
+#include "MiscFunctions.h"
+
 ///STATIC
 using json = nlohmann::json;
 std::unordered_map<std::string, Action> Action::actions;
@@ -18,12 +20,13 @@ std::unordered_map<std::string, AIPackage> Action::ai_packages;
 
 void Action::init_actions() {
     logs::open("initializing actions...\n");
+
     std::string filename("data/actions.json");
     json j;
     file_to_json(j, filename);
 
     for(auto a : j) {
-        logs::open("next action\n");
+        //logs::open("next action\n");
         try {
             Action action(a["name"], a["cost"], a["target"]);
 
@@ -55,20 +58,20 @@ void Action::init_actions() {
 
             actions.insert({action.name, std::move(action)});
 
-            logs::close("\n");
+            //logs::close("\n");
         } catch(invalid_argument& e) {
-            logs::log("error while loading from data/actions.json: %s\n", e.what());
-            logs::close("error\n");
+            logs::log("error while loading from %s: %s\n", filename.c_str(), e.what());
+            //logs::close("error\n");
         }
     }
     logs::close("done!\n");
 }
+/// action packs
 void Action::init_action_packs() {
     logs::open("initializing ai_packs...\n");
-    /// action packs
+
     std::string filename("data/ai_packages.json");
     json j;
-
     file_to_json(j, filename);
 
     for(auto p : j) {
@@ -90,22 +93,15 @@ void Action::init_action_packs() {
             }
             ai_packages.insert({ai_pack.name, std::move(ai_pack)});
         } catch(invalid_argument& e) {
-            logs::log("error while loading from data/actions.json: %s\n", e.what());
+            logs::log("error while loading from %s: %s\n", filename.c_str(), e.what());
         } catch(domain_error& e) {
             logs::log("bad package: %s (%s)\n", e.what(), p.get<std::string>().c_str());
         }
     }
     logs::close("done!\n");
 }
+
 Action* Action::get_action(std::string name) {
-    /*
-    auto f = actions.find(name);
-    if(f == actions.end()) {
-        printf("bad action name: '%s'", name.c_str());
-        throw std::runtime_error("bad action name");
-    }
-    return f->second;
-    */
     return &actions.at(name);
 }
 
@@ -118,7 +114,7 @@ void Action::clear(){
     actions.clear();
 }
 
-/// NIE-STATIC
+/// NON-STATIC
 Action::Action(std::string name, int cost, std::string target_name): name(name), cost(cost), target_name(target_name), scanner(Engine::lua()->state()) {
     logs::log("new action: %s\n", name.c_str());
     needs_target = (target_name != "");
@@ -147,14 +143,6 @@ Action& Action::remove_effect(std::string name) {
     return *this;
 }
 
-//void Action::set_agent(GoapAgent* agent) {
-//    this->agent = agent;
-//}
-
-//Entity* Action::get_owner() {
-//    return agent->owner.lock().get();
-//}
-
 bool Action::is_doable(const WorldState &ws) {
     for(auto v : precondition.attrs) {
         auto f = ws.attrs.find(v.first);
@@ -172,22 +160,12 @@ WorldState Action::act_on(WorldState ws) {
     return ws;
 }
 
-/*
-void Action::reset() {
-    target.reset();
-    execute.stop();
-}
-*/
-bool Action::perform(Entity* agent, Entity* target, int ms_passed) { /// heavy
+bool Action::perform(Entity* agent, Entity* target, int ms_passed) {
     return execute(agent, target, ms_passed);
-//    if(execute(agent, target, ms_passed)) {
-//        //execute.stop();
-//        return true;
-//    }
-//    return false;
 }
+
 /*
-bool Action::is_in_range() { /// to nie powinno mieć dwóch implementacji (druga jest w GotoState)
+bool Action::is_in_range() {
     if(needs_target) {
         if(target.expired()) return false;
         CPhysicalForm* pf = get_owner()->get<CPhysicalForm>();

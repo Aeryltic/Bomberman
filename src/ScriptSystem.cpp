@@ -2,6 +2,8 @@
 #include "Engine.h"
 #include "DisplayManager.h"
 
+#include "setups.h"
+
 using namespace luabridge;
 using namespace std;
 
@@ -10,7 +12,6 @@ using namespace std;
 ScriptSystem::ScriptSystem() {
     logs::open("creating script system...\n");
     L = luaL_newstate();
-    //getGlobal(L, "non-existent-variable");
     luaL_openlibs(L);
 
     string filename("data/scripts/init.lua");
@@ -19,22 +20,30 @@ ScriptSystem::ScriptSystem() {
         lua_close(L);
         L = nullptr;
         active = false;
-    } else active = true;
+        logs::close("ERROR.\n");
+    } else {
+        active = true;
 
-    initialize();
+        setups::register_all(L);
 
-    logs::close("done\n");
+        try {
+            get("init_lua_side")();
+        } catch(LuaException& e) {
+            logs::log("LuaException doing \"init_lua_side\": %s.\n", e.what());
+        }
 
-    ///test
+        initialize();
 
+        logs::close("done.\n");
+    }
 }
 
 ScriptSystem::~ScriptSystem() {
     references.clear();
     if(L) {
-        logs::log("closing LuaState...");
+        logs::open("closing LuaState...\n");
         lua_close(L);
-        logs::log(" done.\n");
+        logs::close("done.\n");
     }
     logs::log("delete ScriptSystem\n");
 }
@@ -50,20 +59,22 @@ void ScriptSystem::update(int ms) {
 
 string ScriptSystem::execute(const string &command) {
     /// to by trzeba dopracować, żeby syfu nie robić
-    logs::log("executing: %s\n",command.c_str());
+    logs::open("executing: %s\n",command.c_str());
     try {
         if(luaL_dostring(L, command.c_str())) {
+            logs::close("ok?\n");
             return lua_tostring(L, -1);
         }
     } catch(LuaException const& e) {
-        logs::log("LuaException: %s\n", e.what());
+        logs::close("LuaException: %s\n", e.what());
         return e.what();
     }
+    logs::close("ok2?\n");
     return "";
 }
 
 LuaRef ScriptSystem::get(std::string rname) { /// najlepiej jakby wszystko szło przez to
-    logs::log("getting ref: %s\n", rname.c_str());
+    //logs::log("getting ref: %s\n", rname.c_str());
     auto it = references.find(rname);
     if(it == references.end()) {
         LuaRef r = getGlobal(L, rname.c_str());
@@ -80,4 +91,14 @@ bool ScriptSystem::do_file(const std::string& filename) {
         return false;
     }
     return true;
+}
+
+void ScriptSystem::refresh_refs() {
+    logs::open("refreshing references...\n");
+    
+    for(auto p: references) {
+        p.second = getGlobal(L, p.first.c_str()); // nie wiem czy to jest najwydajniejsza opcja, ale olać to teraz
+    }
+    
+    logs::close("done.\n");
 }
