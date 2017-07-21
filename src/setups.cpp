@@ -74,7 +74,7 @@ void register_entity(lua_State* L) {
 //            .addConstructor<void(*)()>()
             .addFunction("destroy_me", &Entity::destroy_me)
 
-            .addFunction("physical_form", &Entity::get<CTransform>)
+            .addFunction("transform", &Entity::get<CTransform>)
             .addFunction("movement", &Entity::get<CMovement>)
             .addFunction("energy_store", &Entity::get<CEnergyStore>)
             .addFunction("needs", &Entity::get<CNeeds>)
@@ -107,6 +107,7 @@ void register_components(lua_State* L) {
             .beginClass<CTransform>("CPhysicalForm")
 //                .addConstructor<void(*)(double x, double y, double z, double w, double h, double d)>()
                 .addProperty("pos", &CTransform::get_pos)
+                .addProperty("r", &CTransform::get_r)
             .endClass()
 
             .beginClass<CAspect>("CAspect")
@@ -117,8 +118,8 @@ void register_components(lua_State* L) {
 
             .beginClass<CMovement>("CMovement")
 //                .addConstructor<void(*)(float)>()
-//                .addProperty("max_speed", &CMovement::get_max_speed, &CMovement::set_max_speed)
-                .addFunction("set_speed", &CMovement::set_speed)
+                .addProperty("max_speed", &CMovement::get_max_speed, &CMovement::set_max_speed)
+                .addProperty("speed", &CMovement::get_speed, &CMovement::set_speed)
                 .addFunction("stop", &CMovement::stop)
             .endClass()
 
@@ -163,6 +164,7 @@ void register_misc(lua_State* L){
     getGlobalNamespace(L)
         .beginClass<vec3d>("vec3d")
             .addConstructor<void(*)(double, double, double)>()
+            .addFunction("dist", &vec3d::dist)
             .addFunction("movement_step", &vec3d::movement_step)
         .endClass()
     ;

@@ -1,11 +1,10 @@
 #include "Components.h"
 
 unordered_map<string, vector<weak_ptr<Entity>>> CActionTarget::targets;
-
-std::weak_ptr<Entity> CActionTarget::closest_target(std::string target_name, Entity* entity) {
+std::weak_ptr<Entity> CActionTarget::find_target(std::string target_name) {
     std::weak_ptr<Entity> closest;
     double dist = 0;
-    auto opf = entity->get<CTransform>();
+    auto opf = get_owner()->get<CTransform>();
     if(opf) {
         for(auto target: targets[target_name]) {
             if(!target.expired()) {

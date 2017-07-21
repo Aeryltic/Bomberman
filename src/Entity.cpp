@@ -61,15 +61,7 @@ void Entity::destroy_me() {
 void Entity::set_manager(EntityManager *manager) {
     entityManager = manager;
 }
-/*
-void Entity::setup()
-{
-    lua_State* L = ScriptSystem::getInstance()->getLuaState();
-    getGlobalNamespace(L)
-            .beginClass<Entity>("Entity")
-                .addConstructor<void(*)()>()
-                .addFunction("destroy_me", &Entity::destroy_me)
-                .addFunction("energy_store", &Entity::get<CEnergyStore>)
-            .endClass();
+
+bool is_operable(std::weak_ptr<Entity>& entity) {
+    return !entity.expired() && entity.lock()->is_active();
 }
-*/

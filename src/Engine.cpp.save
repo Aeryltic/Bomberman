@@ -75,7 +75,7 @@ int Engine::run() {
     _instance->main_loop();
 
     logs::open("stopping engine...\n");
-    delete _instance;
+     delete _instance;
     logs::close("engine stopped\n");
 
     return 0;

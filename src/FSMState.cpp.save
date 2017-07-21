@@ -53,8 +53,8 @@ void PlanExecutionState::update(int ms) {
         return;
     }
     if(action()->does_need_target()) {
-        weak_ptr<Entity> target = CActionTarget::closest_target(action()->get_target_name(), get_owner());
-        if(is_operable(target)) {
+        weak_ptr<Entity> target = CActionTarget::closest_target(action()->get_target_name());
+        if(!target.expired()) {
             agent->push_state<PerformActionState>(action(), target);
         } else {
             agent->pop_state();
@@ -115,20 +115,10 @@ PerformActionState::PerformActionState(GoapAgent *agent, FSMState* parent, Actio
 }
 PerformActionState::~PerformActionState() {}
 
-void PerformActionState::update(int ms) { /// nie podoba mi się wykonanie tego tu
+void PerformActionState::update(int ms) {
     action_perform_time += ms;
     try {
-        if(action->does_need_target()) {
-            if(!is_operable(target)) {
-                agent->pop_state();
-                return;
-            } else if(action->perform(get_owner(), target.lock().get(), ms)) {
-                agent->ws = action->act_on(agent->ws); /// tego tu być nie winno
-                static_cast<PlanExecutionState*>(parent)->next_action();
-                agent->pop_state();
-                return;
-            }
-        } else if(action->perform(get_owner(), nullptr, ms)) {
+        if(action->perform(get_owner(), target.expired() ? nullptr : target.lock().get(), ms)) {
             agent->ws = action->act_on(agent->ws); /// tego tu być nie winno
             static_cast<PlanExecutionState*>(parent)->next_action();
             agent->pop_state();

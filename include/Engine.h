@@ -39,12 +39,12 @@ private:
     Console         *console;
     EventManager    *eventManager;
 
-    int timerID; // SDL_timer_ID
+//    int timerID; // SDL_timer_ID
 
-    Engine();
     bool working;
     bool paused;
 
+    Engine();
     int init();
 
     void quit();

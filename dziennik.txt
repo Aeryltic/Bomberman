@@ -1,54 +1,54 @@
 16.05.2017
-	1. mrówki chodz¹ do ziaren, zbieraj¹ je, ale póki co jest sieczka
-	2. nie chce mi siê naprawiaæ, ale kilku mo¿e nosiæ ten sam obiekt, a nawet jak ktoœ nosi, to ca³y czas wywo³uje to kolizje - masakra
-	3. zrobiæ ¿eby chodzili za tym co w followed_scent
+	1. mrÃ³wki chodzÄ… do ziaren, zbierajÄ… je, ale pÃ³ki co jest sieczka
+	2. nie chce mi siÄ™ naprawiaÄ‡, ale kilku moÅ¼e nosiÄ‡ ten sam obiekt, a nawet jak ktoÅ› nosi, to caÅ‚y czas wywoÅ‚uje to kolizje - masakra
+	3. zrobiÄ‡ Å¼eby chodzili za tym co w followed_scent
 17.05.2017
-	1. dziwne zamieszanie - czêœæ mrówek z póŸniejszego okresu zatrzymuje siê w po³owie drogi i kr¹¿¹ w miejscu
-	2. MYŒLEÆ NAD IMPLEMENTACJ¥ AKCJI
-	3. akcje kumulacyjne - jeœli nie mo¿na zrobiæ czegoœ za jednym zamachem, robimy to co najbardziej nas przybli¿y do celu
-	4. warto przeanalizowaæ to dok³adnie: https://gamedevelopment.tutsplus.com/tutorials/goal-oriented-action-planning-for-a-smarter-ai--cms-20793
-	5. olaæ "wêch" - uproœciæ, ¿eby szybko wprowadziæ pierwszy, prosty GOAP
+	1. dziwne zamieszanie - czÄ™Å›Ä‡ mrÃ³wek z pÃ³Åºniejszego okresu zatrzymuje siÄ™ w poÅ‚owie drogi i krÄ…Å¼Ä… w miejscu
+	2. MYÅšLEÄ† NAD IMPLEMENTACJÄ„ AKCJI
+	3. akcje kumulacyjne - jeÅ›li nie moÅ¼na zrobiÄ‡ czegoÅ› za jednym zamachem, robimy to co najbardziej nas przybliÅ¼y do celu
+	4. warto przeanalizowaÄ‡ to dokÅ‚adnie: https://gamedevelopment.tutsplus.com/tutorials/goal-oriented-action-planning-for-a-smarter-ai--cms-20793
+	5. olaÄ‡ "wÄ™ch" - uproÅ›ciÄ‡, Å¼eby szybko wprowadziÄ‡ pierwszy, prosty GOAP
 	6. Idle, GoTo, PerformAction
 18.05.2017
-	1. doda³em obiekty, ale bez implementacji metod, ani w ogóle wszystkich metod... ale wszystkie obiekty potrzebne chyba s¹
+	1. dodaÅ‚em obiekty, ale bez implementacji metod, ani w ogÃ³le wszystkich metod... ale wszystkie obiekty potrzebne chyba sÄ…
 19.05.2017
-	1. jakieœ funkcje, które testuj¹ "WorldSpace" i ustawiaj¹ odpowiadaj¹ce wartoœci w WorldState
-	3. dla lepszej heurystyki ustaliæ jakiœ tam koszt zmiany ka¿dego stanu?
-	4. i jednak od koñca
+	1. jakieÅ› funkcje, ktÃ³re testujÄ… "WorldSpace" i ustawiajÄ… odpowiadajÄ…ce wartoÅ›ci w WorldState
+	3. dla lepszej heurystyki ustaliÄ‡ jakiÅ› tam koszt zmiany kaÅ¼dego stanu?
+	4. i jednak od koÅ„ca
 20.05.2017
-	1. zrobiæ, ¿eby czujniki ustawia³y wartoœci w WorldState'ach - chyba po jednym na ka¿d¹ zmienn¹
-	2. pierwszy GOAPPlanner zaimplementowany - ciekawe tylko czy dzia³a
-	3. planner chyba dzia³a, przynajmniej na tym jednym przyk³adzie
-	4. teraz zrobiæ ActionHandler'y lub coœ, które maj¹:
-		- ustalaæ cel akcji
-		- sprawdzaæ preconditionale
-		- ewentualnie ustalaæ koszt (wspomagaæ plannera)
-		- sterowaæ wykonaniem akcji
-	5. jak zrobiæ ustalanie celów?
-	6. kiedyœ tam pewnie przyda siê uogólnienie tego A*... chocia¿ pewnie proœciej bêdzie przepisaæ go dla nowego u¿ytku... chocia¿ kiedyœ mo¿e...
-	7. stworzyæ PACZKI z dostêpnymi akcjami dla AI
-	8. oraz definicje akcji... mo¿e Lua w koñcu siê przyda?
+	1. zrobiÄ‡, Å¼eby czujniki ustawiaÅ‚y wartoÅ›ci w WorldState'ach - chyba po jednym na kaÅ¼dÄ… zmiennÄ…
+	2. pierwszy GOAPPlanner zaimplementowany - ciekawe tylko czy dziaÅ‚a
+	3. planner chyba dziaÅ‚a, przynajmniej na tym jednym przykÅ‚adzie
+	4. teraz zrobiÄ‡ ActionHandler'y lub coÅ›, ktÃ³re majÄ…:
+		- ustalaÄ‡ cel akcji
+		- sprawdzaÄ‡ preconditionale
+		- ewentualnie ustalaÄ‡ koszt (wspomagaÄ‡ plannera)
+		- sterowaÄ‡ wykonaniem akcji
+	5. jak zrobiÄ‡ ustalanie celÃ³w?
+	6. kiedyÅ› tam pewnie przyda siÄ™ uogÃ³lnienie tego A*... chociaÅ¼ pewnie proÅ›ciej bÄ™dzie przepisaÄ‡ go dla nowego uÅ¼ytku... chociaÅ¼ kiedyÅ› moÅ¼e...
+	7. stworzyÄ‡ PACZKI z dostÄ™pnymi akcjami dla AI
+	8. oraz definicje akcji... moÅ¼e Lua w koÅ„cu siÄ™ przyda?
 21.05.2017
-	1. stany porz¹dane okreœlaj¹ce cele: "jestem zdrowy", "jestem bezpieczny" itp...
-	2. dodaæ funkcjê move_towards()
-	3. zredukowaæ to rozdrobnienie komponentów, bo to chore i utrudnia tylko
-	4. przemianowaæ CPhysicalForm na Transform
+	1. stany porzÄ…dane okreÅ›lajÄ…ce cele: "jestem zdrowy", "jestem bezpieczny" itp...
+	2. dodaÄ‡ funkcjÄ™ move_towards()
+	3. zredukowaÄ‡ to rozdrobnienie komponentÃ³w, bo to chore i utrudnia tylko
+	4. przemianowaÄ‡ CPhysicalForm na Transform
 26.05.2017
-	1. zrobiæ ¿eby akcje jako takie by³y w tylko jednym miejscu, a byty posiada³y jedynie jakieœ ³¹czniki wskazuj¹ce, ¿e potrafi¹ je wykonywaæ, ewentualnie jakieœ dane w tych ³¹cznikach jeœli potrzeba (o celu itp) ActionHandle/ActionLink
+	1. zrobiÄ‡ Å¼eby akcje jako takie byÅ‚y w tylko jednym miejscu, a byty posiadaÅ‚y jedynie jakieÅ› Å‚Ä…czniki wskazujÄ…ce, Å¼e potrafiÄ… je wykonywaÄ‡, ewentualnie jakieÅ› dane w tych Å‚Ä…cznikach jeÅ›li potrzeba (o celu itp) ActionHandle/ActionLink
 28.05.2017
-	1. stworzyæ jakaœ pamiêæ "krótkotrwa³¹" która zapamiêtywa³aby, które akcje siê nie powiod³y tak by planista nie próbowa³ robiæ ci¹gle tego samego przy niepowodzeniu
-	2. OPRACOWAÆ MECHANIZMY POZWALAJ¥CE NA CZYSZCZENIE - USUWANIE OBIEKTÓW, ICH KOMPONENTÓW ITP.
-	3. no mi³o - mrówki chodz¹ w tê i z powrotem, ale nic z tego nie wynika, zrobiæ ¿eby nosi³y ziarna i odk³ada³y je
-	4. dodaæ jakieœ ActionNode'y - pole na które siê wchodzi i mo¿na wykonywaæ tam akcjê na targecie
-	5. co jeœli któraœ mrówka zabierze siê za podnoszenie ziarna, które chcia³a podnieœæ inna?
+	1. stworzyÄ‡ jakaÅ› pamiÄ™Ä‡ "krÃ³tkotrwaÅ‚Ä…" ktÃ³ra zapamiÄ™tywaÅ‚aby, ktÃ³re akcje siÄ™ nie powiodÅ‚y tak by planista nie prÃ³bowaÅ‚ robiÄ‡ ciÄ…gle tego samego przy niepowodzeniu
+	2. OPRACOWAÄ† MECHANIZMY POZWALAJÄ„CE NA CZYSZCZENIE - USUWANIE OBIEKTÃ“W, ICH KOMPONENTÃ“W ITP.
+	3. no miÅ‚o - mrÃ³wki chodzÄ… w tÄ™ i z powrotem, ale nic z tego nie wynika, zrobiÄ‡ Å¼eby nosiÅ‚y ziarna i odkÅ‚adaÅ‚y je
+	4. dodaÄ‡ jakieÅ› ActionNode'y - pole na ktÃ³re siÄ™ wchodzi i moÅ¼na wykonywaÄ‡ tam akcjÄ™ na targecie
+	5. co jeÅ›li ktÃ³raÅ› mrÃ³wka zabierze siÄ™ za podnoszenie ziarna, ktÃ³re chciaÅ‚a podnieÅ›Ä‡ inna?
 29.05.2017
-	1. DANE w jakimœ JSONie lub czymœ nawet l¿ejszym
+	1. DANE w jakimÅ› JSONie lub czymÅ› nawet lÅ¼ejszym
 	2. podstawowy json dodany - akcje z pliku
-	4. jakieœ wygodne narzêdzie do generowania jsonów
-	5. przebudowaæ wszystkie komponenty na mapy przechowuj¹ce dowolne dane?
-	6. definiowanie obiektów jednak poprzez skrypty
-	7. przerzuciæ make_entity i make_component do ObjectFactory zamiast EntityManagera
-	8. ¿eby ka¿da akcja sk³ada³a siê z (niepodzilnych, atomowych) czynnoœci, które sprawiaj¹ zmiany w worldstate?
+	4. jakieÅ› wygodne narzÄ™dzie do generowania jsonÃ³w
+	5. przebudowaÄ‡ wszystkie komponenty na mapy przechowujÄ…ce dowolne dane?
+	6. definiowanie obiektÃ³w jednak poprzez skrypty
+	7. przerzuciÄ‡ make_entity i make_component do ObjectFactory zamiast EntityManagera
+	8. Å¼eby kaÅ¼da akcja skÅ‚adaÅ‚a siÄ™ z (niepodzilnych, atomowych) czynnoÅ›ci, ktÃ³re sprawiajÄ… zmiany w worldstate?
 	9. ciekawe:
 		template <typename T, typename... Ts>
 		void Push(const T value, const Ts... values) {
@@ -56,129 +56,132 @@
 			Push(values...);
 		}
 31.05.2017
-	1. pozbyæ siê GotoState i zast¹piæ go zwyk³¹ akcj¹?
-	2. klasa Systems/States czy coœ w tym stylu przechowuj¹ca systemy i ich stany, zwraca instancje aktualnego systemu
-	3. MUS NAPRAWIÆ USUWANIE OBIEKTÓW
-	4. stworzyæ coœ specjalnego dla komponentów? by usuwaæ je automatycznie zewsz¹d kiedy ginie entity - np. klasa dziedzicz¹ca z shared_ptr, która przy counterze==0 usuwa wpis z tablicy komponentów
-		albo po prostu usuwaæ martwe pointery przy wykryciu...
-	5. trzeba usuwaæ te martwe komponenty bo crashe
+	1. pozbyÄ‡ siÄ™ GotoState i zastÄ…piÄ‡ go zwykÅ‚Ä… akcjÄ…?
+	2. klasa Systems/States czy coÅ› w tym stylu przechowujÄ…ca systemy i ich stany, zwraca instancje aktualnego systemu
+	3. MUS NAPRAWIÄ† USUWANIE OBIEKTÃ“W
+	4. stworzyÄ‡ coÅ› specjalnego dla komponentÃ³w? by usuwaÄ‡ je automatycznie zewszÄ…d kiedy ginie entity - np. klasa dziedziczÄ…ca z shared_ptr, ktÃ³ra przy counterze==0 usuwa wpis z tablicy komponentÃ³w
+		albo po prostu usuwaÄ‡ martwe pointery przy wykryciu...
+	5. trzeba usuwaÄ‡ te martwe komponenty bo crashe
 	6. remember: BULLET-PROOF CODE
-	7. ciekawe, ¿e jak dochodz¹ do celu a okazuje siê ¿e celu nie ma to szukaj¹ na nowo :D
-	8. entity umieraj¹c powinien zadbaæ ¿e jego komponenty znikn¹
-	9. crashe s¹ jak wiêcej ni¿ jeden czeka na zakoñczenie akcji na tym samym targecie - tak to jest du¿y problem
-		edit: po poprawce albo goœæ siê zapêtla, albo crash
-	10. wróciæ do obmyœlania entitów na nowo, ¿eby to usuwanie dzia³a³o.
+	7. ciekawe, Å¼e jak dochodzÄ… do celu a okazuje siÄ™ Å¼e celu nie ma to szukajÄ… na nowo :D
+	8. entity umierajÄ…c powinien zadbaÄ‡ Å¼e jego komponenty zniknÄ…
+	9. crashe sÄ… jak wiÄ™cej niÅ¼ jeden czeka na zakoÅ„czenie akcji na tym samym targecie - tak to jest duÅ¼y problem
+		edit: po poprawce albo goÅ›Ä‡ siÄ™ zapÄ™tla, albo crash
+	10. wrÃ³ciÄ‡ do obmyÅ›lania entitÃ³w na nowo, Å¼eby to usuwanie dziaÅ‚aÅ‚o.
 02.06.2017
-	1. komponenty siê teoretycznie usuwaj¹
-	2. nie wiem co powoduje te crashe, ale to ma zwi¹zek z usuwaniem obiektów
-	3. nadal dwaj mog¹ usun¹æ ten sam obiekt w "skypcie" akcji - wina tego, ¿e nie usuwam obiektu od razu... to by trzeba jakoœ naprawiæ
-	4. LOGI W osobnym w¹tku, by nie spowalniaæ aplikacji
-	5. przywróciæ deaktywacjê entity'ów?
-	6. ten mechanizm, który dla ka¿dego stringa zwraca jego id by siê przyda³ - do wszystkiego praktycznie
-	7. jakieœ "wy³¹czanie" i komponentów i entity'ów zrobiæ zanim je usuwamy z pamiêci, tylko... jak zrobiæ to wydajnie? najlepiej tak ¿eby nie by³o ich po prostu widaæ
-		mo¿e listy z identyfikatorami aktywnych, a same komponenty w ci¹g³ej pamiêci...
-		nie to chyba nie jest dobry pomys³
-	8. prawdopodobnie bêdzie trzeba myœleæ jeszcze raz o pozyskiwaniu komponentów z entity'ów:
+	1. komponenty siÄ™ teoretycznie usuwajÄ…
+	2. nie wiem co powoduje te crashe, ale to ma zwiÄ…zek z usuwaniem obiektÃ³w
+	3. nadal dwaj mogÄ… usunÄ…Ä‡ ten sam obiekt w "skypcie" akcji - wina tego, Å¼e nie usuwam obiektu od razu... to by trzeba jakoÅ› naprawiÄ‡
+	4. LOGI W osobnym wÄ…tku, by nie spowalniaÄ‡ aplikacji
+	5. przywrÃ³ciÄ‡ deaktywacjÄ™ entity'Ã³w?
+	6. ten mechanizm, ktÃ³ry dla kaÅ¼dego stringa zwraca jego id by siÄ™ przydaÅ‚ - do wszystkiego praktycznie
+	7. jakieÅ› "wyÅ‚Ä…czanie" i komponentÃ³w i entity'Ã³w zrobiÄ‡ zanim je usuwamy z pamiÄ™ci, tylko... jak zrobiÄ‡ to wydajnie? najlepiej tak Å¼eby nie byÅ‚o ich po prostu widaÄ‡
+		moÅ¼e listy z identyfikatorami aktywnych, a same komponenty w ciÄ…gÅ‚ej pamiÄ™ci...
+		nie to chyba nie jest dobry pomysÅ‚
+	8. prawdopodobnie bÄ™dzie trzeba myÅ›leÄ‡ jeszcze raz o pozyskiwaniu komponentÃ³w z entity'Ã³w:
 		"I've seen a library (Ashley, java-based) use bits for component types implementation. 
 		It seems clever since it allows to make complex component type tests in a pretty optimized way (e.g. does this entity have type A, B & C = one bitwise & operation, as long as you have <64 component types).
-	9. ale t¹ deaktywacjê, a dopiero potem garbage collector trzeba zrobiæ...
+	9. ale tÄ… deaktywacjÄ™, a dopiero potem garbage collector trzeba zrobiÄ‡...
 03.06.2017
-	1. jakiœ rodzaj SmartPointera? trzymanie syrowych identyfikatorów te¿ jest niefajne, bo weŸmy sytuacjê: entity jest celem jakieœ akcji, jego id jest trzymany przez drugie entity, któr¹ t¹ akcjê na nim wykonuje, entity #1 znika, jego id jest wrzucone do worka i zaraz po tym inny obiekt stworzyny dostaje jego id i akcja zostaje wykonana na innym obiekcie
-	2. pozbyæ siê type_index (edit. chyba siê nie da)
-	3. chyba pozby³em siê crashy w trakcie, ale za to pojawi³y siê crashe na koniec: doda³em do ka¿dego entity bool'a aktywnoœci
-	4. przenios³em czêœæ wykonania akcji na skrypty, teraz tylko to usprawniæ i doprowadziæ do porz¹danego stanu
-	5. nastêpny krok - przenieœæ definicje bytów do skryptów, by mo¿na stworzyæ edytor
+	1. jakiÅ› rodzaj SmartPointera? trzymanie syrowych identyfikatorÃ³w teÅ¼ jest niefajne, bo weÅºmy sytuacjÄ™: entity jest celem jakieÅ› akcji, jego id jest trzymany przez drugie entity, ktÃ³rÄ… tÄ… akcjÄ™ na nim wykonuje, entity #1 znika, jego id jest wrzucone do worka i zaraz po tym inny obiekt stworzyny dostaje jego id i akcja zostaje wykonana na innym obiekcie
+	2. pozbyÄ‡ siÄ™ type_index (edit. chyba siÄ™ nie da)
+	3. chyba pozbyÅ‚em siÄ™ crashy w trakcie, ale za to pojawiÅ‚y siÄ™ crashe na koniec: dodaÅ‚em do kaÅ¼dego entity bool'a aktywnoÅ›ci
+	4. przeniosÅ‚em czÄ™Å›Ä‡ wykonania akcji na skrypty, teraz tylko to usprawniÄ‡ i doprowadziÄ‡ do porzÄ…danego stanu
+	5. nastÄ™pny krok - przenieÅ›Ä‡ definicje bytÃ³w do skryptÃ³w, by moÅ¼na stworzyÄ‡ edytor
 04.06.2017
-	1. utworzyæ paczki zachowañ (np. utrzymywanie przy ¿yciu, praca jako ktoœ, walka itd), które bêd¹ przekazywane konstruktorowi GoapAgenta i to bêdzie ³adne, tylko ¿e ka¿da klasa bytów musi mieæ w³asn¹ implementacjê zachowañ (np. pozyskiwanie po¿ywienia przez roœlino¿erców i miêso¿erców, mimo ¿e z zewn¹trz to bêdzie po prostu "pozyskiwanie po¿ywienia")
-	2. funkcje zwracaj¹ce funkcje przy wykonywaniu akcji przez skrypty
-	3. myœleæ nad wielow¹tkowoœci¹?
-	4. funkcje update'uj¹ce wykonanie akcji musz¹ przyjmowaæ wykonawce, cel oraz czas, który up³yn¹³
+	1. utworzyÄ‡ paczki zachowaÅ„ (np. utrzymywanie przy Å¼yciu, praca jako ktoÅ›, walka itd), ktÃ³re bÄ™dÄ… przekazywane konstruktorowi GoapAgenta i to bÄ™dzie Å‚adne, tylko Å¼e kaÅ¼da klasa bytÃ³w musi mieÄ‡ wÅ‚asnÄ… implementacjÄ™ zachowaÅ„ (np. pozyskiwanie poÅ¼ywienia przez roÅ›linoÅ¼ercÃ³w i miÄ™soÅ¼ercÃ³w, mimo Å¼e z zewnÄ…trz to bÄ™dzie po prostu "pozyskiwanie poÅ¼ywienia")
+	2. funkcje zwracajÄ…ce funkcje przy wykonywaniu akcji przez skrypty
+	3. myÅ›leÄ‡ nad wielowÄ…tkowoÅ›ciÄ…?
+	4. funkcje update'ujÄ…ce wykonanie akcji muszÄ… przyjmowaÄ‡ wykonawce, cel oraz czas, ktÃ³ry upÅ‚ynÄ…Å‚
 	5. std::remove_if - dla garbage collectora
 05.06.2017
-	trzeba przebudowaæ tak ¿eby przerzucaæ raw pointery do Lua'y
+	trzeba przebudowaÄ‡ tak Å¼eby przerzucaÄ‡ raw pointery do Lua'y
 06.06.2017
-	zmieniæ g³ówn¹ pêtlê na bardziej singlow¹ ni¿ multikow¹
-	logika za akcjami wrzucona ca³kowicie do skryptów, jestem ciekaw jak bêdzie z wydajnoœci¹ - ale to nie jest do koñca fajne
-	dodaæ w jakiœ sposób szukanie nowych celów jeœli gonienie za aktualnym trwa za d³ugo
-	no grubo HeapCorruptionException - to pewnie przez Lua'e... czasem jest to, a czasem zamyka siê ³adnie
-	pozbyæ siê tego lagu kiedy trac¹ target
-	mniej regularne checki czy cel jest nadal aktywny... to by trzeba jednak iœæ za punktem a nie Entity'em konkretnym.... to póŸnej
-	dodaæ te "procedural precondition checkers"
-	jakiœ wygodniejszy sposób generowania tych wrapperów - najlepiej ¿eby pomin¹æ je, a robiæ tylko w³asciwe funkcje... tylko jak wtedy z tymi zmiennymi tworzonymi we wrapperze?
+	zmieniÄ‡ gÅ‚Ã³wnÄ… pÄ™tlÄ™ na bardziej singlowÄ… niÅ¼ multikowÄ…
+	logika za akcjami wrzucona caÅ‚kowicie do skryptÃ³w, jestem ciekaw jak bÄ™dzie z wydajnoÅ›ciÄ… - ale to nie jest do koÅ„ca fajne
+	dodaÄ‡ w jakiÅ› sposÃ³b szukanie nowych celÃ³w jeÅ›li gonienie za aktualnym trwa za dÅ‚ugo
+	no grubo HeapCorruptionException - to pewnie przez Lua'e... czasem jest to, a czasem zamyka siÄ™ Å‚adnie
+	pozbyÄ‡ siÄ™ tego lagu kiedy tracÄ… target
+	mniej regularne checki czy cel jest nadal aktywny... to by trzeba jednak iÅ›Ä‡ za punktem a nie Entity'em konkretnym.... to pÃ³Åºnej
+	dodaÄ‡ te "procedural precondition checkers"
+	jakiÅ› wygodniejszy sposÃ³b generowania tych wrapperÃ³w - najlepiej Å¼eby pominÄ…Ä‡ je, a robiÄ‡ tylko wÅ‚asciwe funkcje... tylko jak wtedy z tymi zmiennymi tworzonymi we wrapperze?
 09.06.2017
-	nie wiem jak rozwi¹zaæ tworzenie komponentów po stronie Lua'y
-!	czy w ogóle te smart pointery maj¹ sens w tym projekcie? no okej, maj¹... chocia¿ pewnie gdyby konstrukcja systemu by³a lepsza to by potrzebne nie by³y
+	nie wiem jak rozwiÄ…zaÄ‡ tworzenie komponentÃ³w po stronie Lua'y
+!	czy w ogÃ³le te smart pointery majÄ… sens w tym projekcie? no okej, majÄ…... chociaÅ¼ pewnie gdyby konstrukcja systemu byÅ‚a lepsza to by potrzebne nie byÅ‚y
 10.06.2017
-	jakiœ komponent "Automat", który by po prostu ca³y czas dzia³a³ jakimœ skryptem
+	jakiÅ› komponent "Automat", ktÃ³ry by po prostu caÅ‚y czas dziaÅ‚aÅ‚ jakimÅ› skryptem
 13.06.2017
-	zmieniæ podejœcie do skryptów AI
-	zmini³em, ale nie wiem czy to nie utrudni pracy (chocia¿ no skrypty wygl¹daj¹ ³adniej)
-	zrobiæ, ¿eby GotoState ustawia³ tylko prêdkoœci, a samo poruszanie by³o ju¿ na zewn¹trz
-!	zdaje siê ¿e jest jakiœ drobny wyciek pamiêci
-	zamiast pickup/deliver grain/water -> deliver resource. chocia¿ nie, to zbyt abstrakcyjne dla planisty, nie wiem jak to zaprogramowaæ póki co
-!	HEAPCORRUPTION NADAL SIÊ POJAWIA
+	zmieniÄ‡ podejÅ›cie do skryptÃ³w AI
+	zminiÅ‚em, ale nie wiem czy to nie utrudni pracy (chociaÅ¼ no skrypty wyglÄ…dajÄ… Å‚adniej)
+	zrobiÄ‡, Å¼eby GotoState ustawiaÅ‚ tylko prÄ™dkoÅ›ci, a samo poruszanie byÅ‚o juÅ¼ na zewnÄ…trz
+!	zdaje siÄ™ Å¼e jest jakiÅ› drobny wyciek pamiÄ™ci
+	zamiast pickup/deliver grain/water -> deliver resource. chociaÅ¼ nie, to zbyt abstrakcyjne dla planisty, nie wiem jak to zaprogramowaÄ‡ pÃ³ki co
+!	HEAPCORRUPTION NADAL SIÄ˜ POJAWIA
 14.06.2017
-!	inaczej rozwi¹zaæ poruszanie siê AI, bo nie wszystkie akcje wymagaj¹ poruszania siê do celu by coœ stoj¹c zrobiæ, niektóre to ruch sam w sobie (uciekanie przed czymœ) lub powinny byæ wykonywane w ruchu
-	poruszanie siê powinno byæ przezroczyœcie wpecione w AI nie jako osobny stan
-	zmerge'owaæ GotoState z PerformActionState...
-	a mo¿e jeszcze inaczej - wpleœæ w same skrypty
+!	inaczej rozwiÄ…zaÄ‡ poruszanie siÄ™ AI, bo nie wszystkie akcje wymagajÄ… poruszania siÄ™ do celu by coÅ› stojÄ…c zrobiÄ‡, niektÃ³re to ruch sam w sobie (uciekanie przed czymÅ›) lub powinny byÄ‡ wykonywane w ruchu
+	poruszanie siÄ™ powinno byÄ‡ przezroczyÅ›cie wpecione w AI nie jako osobny stan
+	zmerge'owaÄ‡ GotoState z PerformActionState...
+	a moÅ¼e jeszcze inaczej - wpleÅ›Ä‡ w same skrypty
 15.06.2017
-	komponenty skupiaj¹ce inne komponenty? np. ogólna "fizycznoœæ" na któr¹ sk³ada³yby siê Transformation, RigidBody, Aspect, Movement, Mass(?) itp.
+	komponenty skupiajÄ…ce inne komponenty? np. ogÃ³lna "fizycznoÅ›Ä‡" na ktÃ³rÄ… skÅ‚adaÅ‚yby siÄ™ Transformation, RigidBody, Aspect, Movement, Mass(?) itp.
 	odrobina dziedziczenia w komponentach DynamicBody, StaticBody, KinematicBody
 17.06.2017
-	dodaæ jakieœ wagi do worldstate'ów czy coœ ¿eby np. zaznaczyæ poziom g³odu, ¿e jeszcze nie jest a¿ tak du¿y mo¿na zaj¹æ siê czymœ innym, ale jeœli bêdzie za du¿y to nie ma wyboru trzeba jeœæ
-+	scannery w aktualnej formie nie maj¹ odpowiedniego zasiêgu (tylko agent) (DOSTÊP Z POZIOMU SKRYPTÓW DO WSZYSTKICH OBIEKTÓW) +++ naprawiane przez rejestracjê Engine'u do Lua'y
-	zrobiæ ¿eby przestali chodziæ gdy nie potrzeba
-+	naprawiæ ten heapcorruption
-	jak zrobiæ ¿eby mrówka by³a jedzeniem ale ¿eby mrówki jej nie jad³y, tylko potwór?
-	JAKAŒ HIERARCHIA W ACTIONHANDLERZE? ¿eby ró¿n¹ iloœæ argumentów przyjmowa³y czy coœ
-	naprawiæ "beztargetowe" akcje
-	rzadko s¹ g³odni, a zmêczeni to ju¿ wcale
+	dodaÄ‡ jakieÅ› wagi do worldstate'Ã³w czy coÅ› Å¼eby np. zaznaczyÄ‡ poziom gÅ‚odu, Å¼e jeszcze nie jest aÅ¼ tak duÅ¼y moÅ¼na zajÄ…Ä‡ siÄ™ czymÅ› innym, ale jeÅ›li bÄ™dzie za duÅ¼y to nie ma wyboru trzeba jeÅ›Ä‡
++	scannery w aktualnej formie nie majÄ… odpowiedniego zasiÄ™gu (tylko agent) (DOSTÄ˜P Z POZIOMU SKRYPTÃ“W DO WSZYSTKICH OBIEKTÃ“W) +++ naprawiane przez rejestracjÄ™ Engine'u do Lua'y
+	zrobiÄ‡ Å¼eby przestali chodziÄ‡ gdy nie potrzeba
++	naprawiÄ‡ ten heapcorruption
+	jak zrobiÄ‡ Å¼eby mrÃ³wka byÅ‚a jedzeniem ale Å¼eby mrÃ³wki jej nie jadÅ‚y, tylko potwÃ³r?
+	JAKAÅš HIERARCHIA W ACTIONHANDLERZE? Å¼eby rÃ³Å¼nÄ… iloÅ›Ä‡ argumentÃ³w przyjmowaÅ‚y czy coÅ›
+	naprawiÄ‡ "beztargetowe" akcje
+	rzadko sÄ… gÅ‚odni, a zmÄ™czeni to juÅ¼ wcale
 18.06.2017
-	akcje akcjami, ale handlery powinny byæ jakoœ osobno, bo inaczej jada wilk, a inaczej owca
-+	HeapCorruptionException oczywiœcie przed usuwaniem ScriptSystemu
-	tego jsona "objects.json" trzeba przeparsowaæ tak aby tworzyæ jakieœ szkielety obiektów, a potem tylko je instancjonowaæ
-	ZBUDOWAÆ JAKIŒ £ADNY SYSTEM DLA LOGÓW
-	okej, praktycznie wszystko kontekstowe przeniesione do skryptów
-	chyba pope³niam b³¹d wyrzucaj¹c to wszystko poza g³ówny kod ju¿ teraz...
-+++	NIEBEZPOŒREDNI DOSTÊP DO SKRYPTÓW - w ScriptSystem mapa <string, LuaRef> przez ni¹ odwo³ania... tylko czy to nie spowolni a¿ za bardzo?
+	akcje akcjami, ale handlery powinny byÄ‡ jakoÅ› osobno, bo inaczej jada wilk, a inaczej owca
++	HeapCorruptionException oczywiÅ›cie przed usuwaniem ScriptSystemu
+	tego jsona "objects.json" trzeba przeparsowaÄ‡ tak aby tworzyÄ‡ jakieÅ› szkielety obiektÃ³w, a potem tylko je instancjonowaÄ‡
+	ZBUDOWAÄ† JAKIÅš ÅADNY SYSTEM DLA LOGÃ“W
+	okej, praktycznie wszystko kontekstowe przeniesione do skryptÃ³w
+	chyba popeÅ‚niam bÅ‚Ä…d wyrzucajÄ…c to wszystko poza gÅ‚Ã³wny kod juÅ¼ teraz...
++++	NIEBEZPOÅšREDNI DOSTÄ˜P DO SKRYPTÃ“W - w ScriptSystem mapa <string, LuaRef> przez niÄ… odwoÅ‚ania... tylko czy to nie spowolni aÅ¼ za bardzo?
 19.06.2017
-++	skrypty akcji musz¹ przyjmowaæ deltê czasu
-	jak ustawiæ niestandardowe parametry?
-	do definicji dodaæ coœ w stylu "base" który przechowywa³by nazwê typu(typów) który ten dany rozszerza... tylko ¿e to nie jest takie ³atwe (to potem)
+++	skrypty akcji muszÄ… przyjmowaÄ‡ deltÄ™ czasu
+	jak ustawiÄ‡ niestandardowe parametry?
+	do definicji dodaÄ‡ coÅ› w stylu "base" ktÃ³ry przechowywaÅ‚by nazwÄ™ typu(typÃ³w) ktÃ³ry ten dany rozszerza... tylko Å¼e to nie jest takie Å‚atwe (to potem)
 20.06.2017
-!	DODAÆ DO DEFINICJI OBIEKTÓW ODNOŒNIK DO SKRYPTU INICJALIZUJ¥CEGO ODPOWIEDNIE WARTOŒCI - to chyba dotyczy³o CProperties itp
-	niech skrypt akcji decyduje czy trzeba chodziæ + jak to robiæ
-	ró¿ne skrypty do wykonywania akcji dla ró¿nych typów obiektów? za du¿o roboty ¿eby to wszystko na go³ych danych parowaæ - trzeba narzêdzia i "bazy danych"
-###	STWORZYÆ NARZÊDZIE UMO¯LIWIAJ¥CE TWORZENIE I EDYCJÊ DANYCH (w tym skryptów - prosty edytor) I PRZEDE WSZYSTKIM DAJ¥CE CZYTELNY POGL¥D NA WSZELKIE POWI¥ZANIA
-!	rekalkulacja priorytetów - jakiœ skrypt dla ka¿dego info o œwiecie - nowe dane, które trzeba sformalizowaæ i potworzyæ
-++	sensory sprawdzaj¹ce warunki dla wykonania akcji to jedno, a sensory skanuj¹ce œwiat i ustawiaj¹ce worldstaty to drugie
+!	DODAÄ† DO DEFINICJI OBIEKTÃ“W ODNOÅšNIK DO SKRYPTU INICJALIZUJÄ„CEGO ODPOWIEDNIE WARTOÅšCI - to chyba dotyczyÅ‚o CProperties itp
+	niech skrypt akcji decyduje czy trzeba chodziÄ‡ + jak to robiÄ‡
+	rÃ³Å¼ne skrypty do wykonywania akcji dla rÃ³Å¼nych typÃ³w obiektÃ³w? za duÅ¼o roboty Å¼eby to wszystko na goÅ‚ych danych parowaÄ‡ - trzeba narzÄ™dzia i "bazy danych"
+###	STWORZYÄ† NARZÄ˜DZIE UMOÅ»LIWIAJÄ„CE TWORZENIE I EDYCJÄ˜ DANYCH (w tym skryptÃ³w - prosty edytor) I PRZEDE WSZYSTKIM DAJÄ„CE CZYTELNY POGLÄ„D NA WSZELKIE POWIÄ„ZANIA
+!	rekalkulacja priorytetÃ³w - jakiÅ› skrypt dla kaÅ¼dego info o Å›wiecie - nowe dane, ktÃ³re trzeba sformalizowaÄ‡ i potworzyÄ‡
+++	sensory sprawdzajÄ…ce warunki dla wykonania akcji to jedno, a sensory skanujÄ…ce Å›wiat i ustawiajÄ…ce worldstaty to drugie
 21.06.2017
-!!!	od nowa zaimplementowaæ wykonywanie akcji ¿eby nie by³o GotoState bo zmusza do ró¿nych dziwnych sztuczek i strasznie ogranicza
-	dane o celu trzymaæ po stronie Lua'y? bo to w sumie jest doœæ zale¿ne od samej akcji, nie wszystkie musz¹ mieæ cel
-	jakiœ dynamiczny system indeksowania obiektów, czy chocia¿ kategorii ¿eby poszukiwanie celów by³o szybsze - czy coœ
-!	zredukowaæ u¿ycie smart pointerów
-nie wiem co ja tu robiê...
-!!! potrzeba jakiœ zmiennych do sterowania skryptami po stronie Lua'y
+!!!	od nowa zaimplementowaÄ‡ wykonywanie akcji Å¼eby nie byÅ‚o GotoState bo zmusza do rÃ³Å¼nych dziwnych sztuczek i strasznie ogranicza
+	dane o celu trzymaÄ‡ po stronie Lua'y? bo to w sumie jest doÅ›Ä‡ zaleÅ¼ne od samej akcji, nie wszystkie muszÄ… mieÄ‡ cel
+	jakiÅ› dynamiczny system indeksowania obiektÃ³w, czy chociaÅ¼ kategorii Å¼eby poszukiwanie celÃ³w byÅ‚o szybsze - czy coÅ›
+!	zredukowaÄ‡ uÅ¼ycie smart pointerÃ³w
+nie wiem co ja tu robiÄ™...
+!!! potrzeba jakiÅ› zmiennych do sterowania skryptami po stronie Lua'y
 29.06.2017
-++	trochê przebudowa³em ca³y system, powinno byæ wygodniej
-++	pozby³em siê te¿ wszelkich crashy przy zamykaniu (nie ma ju¿ heap corruption exception ani nic)
-	OBOWI¥ZKI I CZAS WOLNY
-++	akcje to ju¿ tylko dane - nie maj¹ ¿adnego zwi¹zku z "posiadaczem"
-	gdzie umieœciæ poruszanie siê, ¿eby nie trzeba do ka¿dego skryptu tego wciskaæ? ale zarazem ¿eby nie by³o tak jak wczeœniej, czyli sztywny GotoState...
+++	trochÄ™ przebudowaÅ‚em caÅ‚y system, powinno byÄ‡ wygodniej
+++	pozbyÅ‚em siÄ™ teÅ¼ wszelkich crashy przy zamykaniu (nie ma juÅ¼ heap corruption exception ani nic)
+	OBOWIÄ„ZKI I CZAS WOLNY
+++	akcje to juÅ¼ tylko dane - nie majÄ… Å¼adnego zwiÄ…zku z "posiadaczem"
+	gdzie umieÅ›ciÄ‡ poruszanie siÄ™, Å¼eby nie trzeba do kaÅ¼dego skryptu tego wciskaÄ‡? ale zarazem Å¼eby nie byÅ‚o tak jak wczeÅ›niej, czyli sztywny GotoState...
 	akcje wykonywane w ruchu...
-#	z tymi ró¿nymi skryptami do wykonywania akcji przez ka¿dy typ bytu to trochê przesada - tak na dobr¹ sprawê to chodzi po prostu o inn¹ animacjê w wiêkszoœci przypadków, bo w reszcie to ju¿ po prostu inna akcja
-	po prostu wpleœæ gdzieœ minimalny zasiêg i wykonywaæ, gdy jest w zasiêgu...
-	zasiêg zale¿y od "narzêdzia"
-#	hmm... zasiêg d³oni, kija, miecza, dzidy, grabii, toporka, ³uku...
-##	skrypt wykonywaæ nawet jeœli poza zasiêgiem - mo¿e to nie byæ potrzebne, albo jakaœ reakcja gdy jest poza zasiêgiem, lub zrobienie czegoœ w czasie podchodzenia
-	to mo¿e byæ to.
-##	za poruszanie siê i tak bêd¹ odpowiadaæ skrypty... jakieœ style poruszania siê czy coœ - osobna kategoria skryptów? hmmm... chyba tak
-	nadal widzê miejsce dla tych "mikroakcji"...
-##	jakiœ rodzaj niezale¿nej od g³ównego Goap'a warstwy AI, która odpowiada³aby za ró¿ne podstawowe czynnoœci jak np. chodzenie, odbieranie czynników, skanowanie otoczenia?
+#	z tymi rÃ³Å¼nymi skryptami do wykonywania akcji przez kaÅ¼dy typ bytu to trochÄ™ przesada - tak na dobrÄ… sprawÄ™ to chodzi po prostu o innÄ… animacjÄ™ w wiÄ™kszoÅ›ci przypadkÃ³w, bo w reszcie to juÅ¼ po prostu inna akcja
+	po prostu wpleÅ›Ä‡ gdzieÅ› minimalny zasiÄ™g i wykonywaÄ‡, gdy jest w zasiÄ™gu...
+	zasiÄ™g zaleÅ¼y od "narzÄ™dzia"
+#	hmm... zasiÄ™g dÅ‚oni, kija, miecza, dzidy, grabii, toporka, Å‚uku...
+##	skrypt wykonywaÄ‡ nawet jeÅ›li poza zasiÄ™giem - moÅ¼e to nie byÄ‡ potrzebne, albo jakaÅ› reakcja gdy jest poza zasiÄ™giem, lub zrobienie czegoÅ› w czasie podchodzenia
+	to moÅ¼e byÄ‡ to.
+##	za poruszanie siÄ™ i tak bÄ™dÄ… odpowiadaÄ‡ skrypty... jakieÅ› style poruszania siÄ™ czy coÅ› - osobna kategoria skryptÃ³w? hmmm... chyba tak
+	nadal widzÄ™ miejsce dla tych "mikroakcji"...
+##	jakiÅ› rodzaj niezaleÅ¼nej od gÅ‚Ã³wnego Goap'a warstwy AI, ktÃ³ra odpowiadaÅ‚aby za rÃ³Å¼ne podstawowe czynnoÅ›ci jak np. chodzenie, odbieranie czynnikÃ³w, skanowanie otoczenia?
 30.06.2017
-	mo¿e kiedyœ siê ca³oœæ AI przeniesie do skryptów - mniej skakania miêdzy C++ a Lu¹
-####	"NARZÊDZIA" - ten pomys³ z narzêdziami... to jest dobry pomys³ - bardzo dobry: mo¿na "nauczyæ" ich obs³ugi narzêdzi, a akcje bêd¹ wykonywaæ wtedy ju¿ "instyktownie", jak np. "u¿yj d³oni/widelca/dzidy (wszystkie daj¹ mo¿liwoœæ przemieszczania obiektów o pewnych w³asnoœciach, tzn. "miekkich") by umieœciæ pokarm w ustach", skrypt ogranicza siê wtedy do "u¿yj narzêdzia by umieœciæ pokarm w ustach", a jakie to narzêdzie to bêdzie... to ju¿ mnie nie obchodzi :D
-	mo¿na bêdzie po prostu dodawaæ narzêdzia, uczyæ obs³ugi (która te¿ bêdzie w wielu przypadkach powieleniem jednego skryptu lub drobny dostosowaniem do konkretnego warunku)
-	czy CELE akcji potrzebuj¹ te¿ takich pojêæ? na razie nie wiem
-	³¹czenie narzêdzi: rêka trzyma miecz/widelec
+	moÅ¼e kiedyÅ› siÄ™ caÅ‚oÅ›Ä‡ AI przeniesie do skryptÃ³w - mniej skakania miÄ™dzy C++ a LuÄ…
+####	"NARZÄ˜DZIA": moÅ¼na "nauczyÄ‡" ich obsÅ‚ugi narzÄ™dzi, a akcje bÄ™dÄ… wykonywaÄ‡ wtedy juÅ¼ "instyktownie", jak np. "uÅ¼yj dÅ‚oni/widelca/dzidy (wszystkie dajÄ… moÅ¼liwoÅ›Ä‡ przemieszczania obiektÃ³w o pewnych wÅ‚asnoÅ›ciach, tzn. "miekkich") by umieÅ›ciÄ‡ pokarm w ustach", skrypt ogranicza siÄ™ wtedy do "uÅ¼yj narzÄ™dzia by umieÅ›ciÄ‡ pokarm w ustach", a jakie to narzÄ™dzie to bÄ™dzie to juÅ¼ nie waÅ¼ne
+	moÅ¼na bÄ™dzie po prostu dodawaÄ‡ narzÄ™dzia, uczyÄ‡ obsÅ‚ugi (ktÃ³ra teÅ¼ bÄ™dzie w wielu przypadkach powieleniem jednego skryptu lub drobny dostosowaniem do konkretnego warunku)
+	czy CELE akcji potrzebujÄ… teÅ¼ takich pojÄ™Ä‡? na razie nie wiem
+	Å‚Ä…czenie narzÄ™dzi: rÄ™ka trzyma miecz/widelec
+01.07.2017
+	nie zaÅ›miecaÄ‡ skryptÃ³w rzeczami typu "idÅº tam", tylko wykonanie akcji - a to czy wykonywana byÄ‡ moÅ¼e powinno byÄ‡ zdecydowane wyÅ¼ej
+###	intrumenty udostÄ™pniajÄ… interfejsy typu: "zÅ‚ap", "przenieÅ›", "rzuÄ‡" itp?

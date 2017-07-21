@@ -80,4 +80,7 @@ bool Entity::remove() {
     return false;
 }
 
+// other
+
+bool is_operable(std::weak_ptr<Entity>& entity);
 #endif // ENTITY_H

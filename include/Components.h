@@ -26,6 +26,7 @@ struct CTransform : public Component {
     virtual ~CTransform() {/*printf("pf_destr\n");*/}
 
     vec3d get_pos() const {return pos;}
+    double get_r() const {return vol.x/2;}
 };
 //-----------------------------------------------------------------------------------------------------------------------------------------------------
 /// to jest uzasadnione żeby trzymać pojemnik tych jointów...
@@ -40,8 +41,8 @@ struct CJoints : public Component {
 //-----------------------------------------------------------------------------------------------------------------------------------------------------
 /// ... ale to? to chyba inaczej powinno działać
 /// to chyba w tej formie nie jest takie do końca super, bo wszystko może być instrumentem (tzn. powinno być)
-struct CInstrument : public Component{ /// to będzie w obiekcie, który może być "instrumentem", definiuje jego własności jako instrumentu
-    LuaRef handle;
+struct CInstrument : public Component { /// to będzie w obiekcie, który może być "instrumentem", definiuje jego własności jako instrumentu
+//    LuaRef handle;
 };
 /// to poniżej powinno być częścią jakiejś innej klasy, która już tych intrumentów używa - tego niskiego AI czy coś
 struct CInstrumentHandler : public Component { /// to te "intrumenty" mają odpowiadać za wykonywanie akcji. i znowu - jedno Entity, dowolna ilość intrumentów
@@ -98,9 +99,14 @@ struct CMovement : public Component {
         this->max_speed = max_speed;
     }
     virtual ~CMovement() {};
-
-    void set_speed(double x, double y, double z) {
-        speed = {x, y, z};
+    /*
+        void set_speed(double x, double y, double z) {
+            speed = {x, y, z};
+        }
+        */
+    vec3d get_speed() const { return speed;}
+    void set_speed(vec3d speed) {
+        this->speed = speed;
     }
     void stop() {
         speed = {0,0,0};
@@ -135,6 +141,8 @@ struct CActionTarget : public Component { /// to nie jest chyba dobry pomysł (n
             targets[s].erase(it);
         }
     }
+
+    static std::weak_ptr<Entity> closest_target(std::string target_name, Entity* entity);
 };
 
 
